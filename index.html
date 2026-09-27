@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Permite cargar vistas previas de servidores externos sin bloqueo de seguridad -->
+  <meta name="referrer" content="no-referrer">
   <title>Mi Playbook Multimedia</title>
   <style>
     :root {
@@ -53,8 +55,8 @@
     .card { background: var(--surface); border-radius: 14px; overflow: hidden; border: 1px solid var(--surface-border); display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; position: relative; }
     .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.3); border-color: rgba(56, 189, 248, 0.4); }
     .media-container { width: 100%; height: 210px; background: #000; overflow: hidden; position: relative; cursor: pointer; }
-    .media-container img, .media-container video { width: 100%; height: 100%; object-fit: cover; }
-    .badge-type { position: absolute; top: 10px; right: 10px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--primary); }
+    .media-container img, .media-container video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .badge-type { position: absolute; top: 10px; right: 10px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--primary); z-index: 2; }
 
     .card-body { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
     .card-title { font-size: 0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
@@ -67,7 +69,7 @@
     .modal.active { display: flex; }
     .modal-content { max-width: 90vw; max-height: 85vh; border-radius: 12px; overflow: hidden; position: relative; }
     .modal-content img, .modal-content video { max-width: 100%; max-height: 85vh; display: block; }
-    .modal-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; }
+    .modal-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; z-index: 10; }
 
     .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); grid-column: 1 / -1; }
   </style>
@@ -123,7 +125,7 @@
 
       let fileUrl = null;
 
-      // Método 1: Subida con tmpfiles.org (Excelente para videos pesados y admite CORS)
+      // Método 1: Subida con tmpfiles.org
       try {
         const formData = new FormData();
         formData.append('file', file);
@@ -135,14 +137,13 @@
 
         const json = await response.json();
         if (json.status === 'success' && json.data && json.data.url) {
-          // Convertir URL de página a URL directa de transmisión
           fileUrl = json.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
         }
       } catch (err) {
-        console.warn("Fallo método 1, intentando servidor secundario Catbox...", err);
+        console.warn("Fallo método 1...", err);
       }
 
-      // Método 2: Catbox con Proxy Secundario si falla el primero
+      // Método 2: Catbox
       if (!fileUrl) {
         try {
           const formData = new FormData();
@@ -164,7 +165,6 @@
         }
       }
 
-      // Resultado final
       if (fileUrl) {
         guardarEnHistorial({ 
           url: fileUrl, 
@@ -174,7 +174,7 @@
         status.innerText = "¡Subida exitosa!";
         status.style.color = "#4ade80";
       } else {
-        alert('No se pudo completar la subida. Comprueba la conexión o intenta con un video más ligero.');
+        alert('No se pudo completar la subida.');
         status.innerText = "Error en la subida";
         status.style.color = "#ef4444";
       }
@@ -227,8 +227,8 @@
         const tipoTexto = esImagen ? 'FOTO' : 'VIDEO';
 
         let mediaHtml = esImagen 
-          ? `<img src="${item.url}" loading="lazy" alt="${item.name}">`
-          : `<video src="${item.url}" controls preload="metadata"></video>`;
+          ? `<img src="${item.url}" referrerpolicy="no-referrer" loading="lazy" alt="${item.name}">`
+          : `<video src="${item.url}" referrerpolicy="no-referrer" controls preload="metadata"></video>`;
 
         card.innerHTML = `
           <div class="media-container" onclick="abrirModal('${item.url}', '${item.type}')">
@@ -268,9 +268,9 @@
       const modalBody = document.getElementById('modalBody');
 
       if (type && type.startsWith('image/')) {
-        modalBody.innerHTML = `<img src="${url}" alt="Vista previa">`;
+        modalBody.innerHTML = `<img src="${url}" referrerpolicy="no-referrer" alt="Vista previa">`;
       } else {
-        modalBody.innerHTML = `<video src="${url}" controls autoplay></video>`;
+        modalBody.innerHTML = `<video src="${url}" referrerpolicy="no-referrer" controls autoplay></video>`;
       }
 
       modal.classList.add('active');
