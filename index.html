@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Playbook Personal</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
+    header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid #334155; margin-bottom: 20px; }
+    h1 { font-size: 1.5rem; color: #38bdf8; }
+    
+    /* Zona de carga */
+    .upload-card { background: #1e293b; border: 2px dashed #475569; border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 30px; cursor: pointer; }
+    .upload-card:hover { border-color: #38bdf8; }
+    input[type="file"] { display: none; }
+    .btn { background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .btn:hover { background: #0369a1; }
+
+    /* Galería Visual estilo Playbook */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .card { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; display: flex; flex-direction: column; }
+    .card-media { width: 100%; height: 200px; object-fit: cover; background: #000; }
+    .card-info { padding: 12px; font-size: 0.85rem; color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Galería Playbook</h1>
+    <span id="status">Conectado a la Nube</span>
+  </header>
+
+  <!-- Área para subir archivos -->
+  <div class="upload-card" onclick="document.getElementById('fileInput').click()">
+    <p>Haz clic o arrastra fotos y videos aquí para subirlos a la nube</p>
+    <button class="btn">Seleccionar Archivo</button>
+    <input type="file" id="fileInput" accept="image/*,video/*" onchange="subirArchivo(event)">
+  </div>
+
+  <!-- Contenedor de la Galería -->
+  <div class="grid" id="galeria">
+    <!-- Aquí aparecerán los archivos -->
+  </div>
+
+  <script>
+    // Configura tu User Hash de Catbox aquí
+    const CATBOX_USERHASH = '8a35ed95b49a130d9fd23c02a';
+
+    // Cargar galería al iniciar desde el almacenamiento local
+    document.addEventListener('DOMContentLoaded', cargarGaleria);
+
+    async function subirArchivo(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const status = document.getElementById('status');
+      status.innerText = "Subiendo archivo...";
+
+      const formData = new FormData();
+      formData.append('reqtype', 'fileupload');
+      formData.append('userhash', CATBOX_USERHASH);
+      formData.append('fileToUpload', file);
+
+      try {
+        // Petición a la API de Catbox
+        const response = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://catbox.moe/user/api.php'), {
+          method: 'POST',
+          body: formData
+        });
+
+        const fileUrl = await response.text();
+
+        if (fileUrl.startsWith('http')) {
+          guardarEnHistorial({ url: fileUrl, name: file.name, type: file.type });
+          status.innerText = "¡Subida exitosa!";
+        } else {
+          alert('Error en la subida: ' + fileUrl);
+          status.innerText = "Error";
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error de conexión al subir el archivo.');
+        status.innerText = "Error";
+      }
+    }
+
+    function guardarEnHistorial(item) {
+      let items = JSON.parse(localStorage.getItem('my_playbook_assets') || '[]');
+      items.unshift(item);
+      localStorage.setItem('my_playbook_assets', JSON.stringify(items));
+      cargarGaleria();
+    }
+
+    function cargarGaleria() {
+      const galeria = document.getElementById('galeria');
+      galeria.innerHTML = '';
+      let items = JSON.parse(localStorage.getItem('my_playbook_assets') || '[]');
+
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        let mediaHtml = '';
+        if (item.type.startsWith('image/')) {
+          mediaHtml = `<img src="${item.url}" class="card-media" loading="lazy">`;
+        } else if (item.type.startsWith('video/')) {
+          mediaHtml = `<video src="${item.url}" class="card-media" controls></video>`;
+        }
+
+        card.innerHTML = `
+          ${mediaHtml}
+          <div class="card-info">
+            <p><strong>${item.name}</strong></p>
+            <a href="${item.url}" target="_blank" style="color: #38bdf8;">Abrir enlace directo</a>
+          </div>
+        `;
+        galeria.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
