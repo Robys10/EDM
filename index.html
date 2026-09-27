@@ -46,7 +46,6 @@
   <div id="result"></div>
 
   <script>
-    // Tu Userhash de Catbox configurado
     const CATBOX_USERHASH = '1d51c806d2bb826e0f6bc5db8'; 
 
     async function uploadFile() {
@@ -70,26 +69,43 @@
       uploadBtn.disabled = true;
       resultDiv.innerHTML = 'Subiendo archivo, por favor espera...';
 
-      // Proxy CORS gratuito sin clave API requerida
-      const proxyUrl = 'https://corsproxy.org/?' + encodeURIComponent('https://catbox.moe/user/api.php');
-
+      // 1. Intento directo a la API de Catbox
       try {
-        const response = await fetch(proxyUrl, {
+        const response = await fetch('https://catbox.moe/user/api.php', {
           method: 'POST',
           body: formData
         });
 
         if (response.ok) {
           const fileUrl = await response.text();
-          resultDiv.innerHTML = `<strong>¡Archivo subido con éxito!</strong><br><a href="${fileUrl.trim()}" target="_blank">${fileUrl.trim()}</a>`;
+          if (fileUrl.startsWith('https://files.catbox.moe/')) {
+            resultDiv.innerHTML = `<strong>¡Archivo subido con éxito!</strong><br><a href="${fileUrl.trim()}" target="_blank">${fileUrl.trim()}</a>`;
+            uploadBtn.disabled = false;
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('La subida directa falló por CORS, intentando método secundario...', e);
+      }
+
+      // 2. Método alternativo si falla la petición directa
+      try {
+        const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent('https://catbox.moe/user/api.php');
+        const response = await fetch(proxyUrl, {
+          method: 'POST',
+          body: formData
+        });
+
+        const resText = await response.text();
+        if (response.ok && resText.includes('files.catbox.moe')) {
+          resultDiv.innerHTML = `<strong>¡Archivo subido con éxito!</strong><br><a href="${resText.trim()}" target="_blank">${resText.trim()}</a>`;
         } else {
-          const errText = await response.text();
-          alert('Error en la subida:\n' + errText);
+          alert('Error en la subida:\n' + resText);
           resultDiv.innerHTML = 'Error al subir el archivo.';
         }
       } catch (error) {
         console.error(error);
-        alert('Ocurrió un error de conexión: ' + error.message);
+        alert('Error de conexión al subir el archivo: ' + error.message);
         resultDiv.innerHTML = 'Error de conexión.';
       } finally {
         uploadBtn.disabled = false;
