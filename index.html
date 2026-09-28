@@ -1,502 +1,302 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Playbook Multimedia Pro</title>
-  <style>
-    :root {
-      --bg: #090d16;
-      --bg-gradient: radial-gradient(circle at 50% 0%, #1e293b 0%, #090d16 70%);
-      --surface: #131c2e;
-      --surface-card: #1a263d;
-      --surface-border: #2a3a58;
-      --primary: #38bdf8;
-      --primary-glow: rgba(56, 189, 248, 0.25);
-      --primary-hover: #0284c7;
-      --accent: #818cf8;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --danger: #f43f5e;
-      --success: #34d399;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-    
-    body { 
-      background: var(--bg-gradient); 
-      color: var(--text); 
-      padding: 24px; 
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .app-container {
-      width: 100%;
-      max-width: 1200px;
-    }
-
-    header { 
-      display: flex; 
-      flex-wrap: wrap; 
-      justify-content: space-between; 
-      align-items: center; 
-      padding: 16px 24px; 
-      background: rgba(19, 28, 46, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--surface-border);
-      border-radius: 20px;
-      gap: 16px; 
-      margin-bottom: 24px; 
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    }
-
-    .brand { display: flex; align-items: center; gap: 14px; }
-    .brand-icon {
-      font-size: 1.8rem;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .brand h1 { font-size: 1.4rem; color: var(--text); font-weight: 800; letter-spacing: -0.02em; }
-
-    .status-badge { 
-      background: rgba(56, 189, 248, 0.1); 
-      color: var(--primary); 
-      padding: 6px 16px; 
-      border-radius: 99px; 
-      font-size: 0.85rem; 
-      font-weight: 600;
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
-
-    .controls { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
-    
-    .upload-zone { 
-      background: linear-gradient(180deg, rgba(26, 38, 61, 0.5) 0%, rgba(19, 28, 46, 0.5) 100%); 
-      border: 2px dashed var(--surface-border); 
-      border-radius: 20px; 
-      padding: 36px 20px; 
-      text-align: center; 
-      cursor: pointer; 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-    }
-    .upload-zone:hover { 
-      border-color: var(--primary); 
-      background: rgba(26, 38, 61, 0.8);
-      box-shadow: 0 0 30px var(--primary-glow);
-      transform: translateY(-2px);
-    }
-    .upload-icon { font-size: 2.8rem; margin-bottom: 10px; display: inline-block; transition: transform 0.3s; }
-    .upload-zone:hover .upload-icon { transform: scale(1.1) translateY(-4px); }
-    .upload-title { font-weight: 700; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
-    .upload-subtitle { font-size: 0.85rem; color: var(--text-muted); }
-    input[type="file"] { display: none; }
-
-    .filter-bar { 
-      display: flex; 
-      flex-wrap: wrap; 
-      justify-content: space-between; 
-      align-items: center; 
-      gap: 16px; 
-      background: var(--surface);
-      padding: 12px 16px;
-      border-radius: 16px;
-      border: 1px solid var(--surface-border);
-    }
-    .search-box { 
-      flex: 1; 
-      min-width: 220px; 
-      background: rgba(9, 13, 22, 0.6); 
-      border: 1px solid var(--surface-border); 
-      border-radius: 10px; 
-      padding: 10px 16px; 
-      color: var(--text); 
-      font-size: 0.9rem; 
-      outline: none; 
-      transition: border-color 0.2s;
-    }
-    .search-box:focus { border-color: var(--primary); }
-
-    .filter-buttons { display: flex; gap: 8px; }
-    .filter-btn { 
-      background: rgba(9, 13, 22, 0.6); 
-      border: 1px solid var(--surface-border); 
-      color: var(--text-muted); 
-      padding: 8px 18px; 
-      border-radius: 10px; 
-      font-size: 0.85rem; 
-      font-weight: 600;
-      cursor: pointer; 
-      transition: all 0.2s; 
-    }
-    .filter-btn.active, .filter-btn:hover { 
-      background: var(--primary); 
-      color: #090d16; 
-      border-color: var(--primary); 
-      box-shadow: 0 0 12px var(--primary-glow);
-    }
-
-    .grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-      gap: 24px; 
-    }
-    .card { 
-      background: var(--surface-card); 
-      border-radius: 18px; 
-      overflow: hidden; 
-      border: 1px solid var(--surface-border); 
-      display: flex; 
-      flex-direction: column; 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-      position: relative; 
-    }
-    .card:hover { 
-      transform: translateY(-6px); 
-      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4); 
-      border-color: rgba(56, 189, 248, 0.5); 
-    }
-    .media-container { 
-      width: 100%; 
-      height: 220px; 
-      background: #000; 
-      overflow: hidden; 
-      position: relative; 
-      cursor: pointer; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-    }
-    .media-container img, .media-container video { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-      display: block; 
-    }
-
-    .play-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .media-container:hover .play-overlay { opacity: 1; }
-    .play-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(56, 189, 248, 0.9);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      font-size: 1.2rem;
-      padding-left: 3px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    }
-
-    .badge-type { 
-      position: absolute; 
-      top: 12px; 
-      right: 12px; 
-      background: rgba(9, 13, 22, 0.75); 
-      backdrop-filter: blur(6px); 
-      padding: 4px 10px; 
-      border-radius: 8px; 
-      font-size: 0.7rem; 
-      text-transform: uppercase; 
-      font-weight: 800; 
-      letter-spacing: 0.05em;
-      color: var(--primary); 
-      z-index: 2; 
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .card-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-    .card-title { font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
-    .card-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); }
-    .action-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
-    .action-btn:hover { color: var(--primary); }
-    .action-btn.delete:hover { color: var(--danger); }
-
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 1000; justify-content: center; align-items: center; padding: 24px; }
-    .modal.active { display: flex; animation: fadeIn 0.2s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .modal-content { max-width: 90vw; max-height: 85vh; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); border: 1px solid var(--surface-border); background: #000; }
-    .modal-content img { max-width: 90vw; max-height: 85vh; object-fit: contain; display: block; }
-    .modal-content video { max-width: 90vw; max-height: 85vh; display: block; outline: none; }
-    .modal-close { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: white; width: 38px; height: 38px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
-    .modal-close:hover { background: var(--danger); }
-
-    .empty-state { text-align: center; padding: 80px 20px; color: var(--text-muted); grid-column: 1 / -1; }
-    .empty-state-icon { font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.6; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Multimedia Local</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
 
-  <div class="app-container">
-    <header>
-      <div class="brand">
-        <span class="brand-icon">✦</span>
-        <h1>Mi Playbook Multimedia Pro</h1>
-      </div>
-      <div class="status-badge" id="status">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Cargando...</span>
-      </div>
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-photo-film text-xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Galería Local</h1>
+                    <p class="text-xs text-slate-400" id="storage-status">Almacenamiento Local (IndexedDB)</p>
+                </div>
+            </div>
+
+            <!-- Botones de Acción principales -->
+            <div class="flex items-center gap-3">
+                <label for="file-input" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg cursor-pointer transition flex items-center gap-2 text-sm shadow-md">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Subir Archivos</span>
+                </label>
+                <input type="file" id="file-input" multiple accept="image/*,video/*" class="hidden">
+            </div>
+        </div>
     </header>
 
-    <div class="controls">
-      <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-        <span class="upload-icon">☁️</span>
-        <div class="upload-title">Haz clic o arrastra fotos y videos aquí</div>
-        <div class="upload-subtitle">Se sincronizarán automáticamente con tu celular</div>
-        <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="subirMultimedia(event)">
-      </div>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
 
-      <div class="filter-bar">
-        <input type="text" class="search-box" id="searchInput" placeholder="Buscar por nombre..." oninput="filtrarGaleria()">
-        <div class="filter-buttons">
-          <button class="filter-btn active" onclick="setFiltro('todos', this)">Todos</button>
-          <button class="filter-btn" onclick="setFiltro('image', this)">Fotos</button>
-          <button class="filter-btn" onclick="setFiltro('video', this)">Videos</button>
+        <!-- Barra de herramientas (Filtros y Búsqueda) -->
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8 bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
+            <!-- Filtros -->
+            <div class="flex items-center gap-2">
+                <button onclick="setFilter('all')" id="btn-filter-all" class="filter-btn active px-3 py-1.5 rounded-lg text-sm font-medium transition bg-indigo-600 text-white">
+                    Todos
+                </button>
+                <button onclick="setFilter('image')" id="btn-filter-image" class="filter-btn px-3 py-1.5 rounded-lg text-sm font-medium transition bg-slate-700 hover:bg-slate-600 text-slate-300">
+                    <i class="fa-regular fa-image mr-1"></i> Fotos
+                </button>
+                <button onclick="setFilter('video')" id="btn-filter-video" class="filter-btn px-3 py-1.5 rounded-lg text-sm font-medium transition bg-slate-700 hover:bg-slate-600 text-slate-300">
+                    <i class="fa-solid fa-video mr-1"></i> Videos
+                </button>
+            </div>
+
+            <!-- Contador de elementos -->
+            <div class="text-sm text-slate-400">
+                Total: <span id="item-count" class="font-bold text-slate-200">0</span> elementos
+            </div>
         </div>
-      </div>
+
+        <!-- Estado Vacío -->
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center">
+            <div class="bg-slate-800 p-6 rounded-full text-slate-500 mb-4 border border-slate-700">
+                <i class="fa-regular fa-folder-open text-5xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-300">No hay archivos en tu galería</h3>
+            <p class="text-slate-500 text-sm max-w-sm mt-1">Sube imágenes o videos utilizando el botón superior. Se guardarán localmente en tu navegador.</p>
+        </div>
+
+        <!-- Grid de Galería -->
+        <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Las tarjetas de archivos se insertarán dinámicamente aquí -->
+        </div>
+    </main>
+
+    <!-- Modal para Visualización Fullscreen -->
+    <div id="media-modal" class="fixed inset-0 bg-black/90 z-50 hidden flex-col justify-between p-4 backdrop-blur-sm">
+        <div class="flex justify-between items-center text-white px-4 py-2">
+            <span id="modal-filename" class="text-sm font-medium truncate max-w-md text-slate-300"></span>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-white p-2 rounded-lg transition text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="flex-1 flex items-center justify-center overflow-hidden my-2" id="modal-content">
+            <!-- El contenido multimedia se inyectará aquí -->
+        </div>
+
+        <div class="flex justify-center gap-4 py-2">
+            <button id="modal-delete-btn" class="bg-rose-600/80 hover:bg-rose-600 text-white px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                <i class="fa-solid fa-trash"></i> Eliminar
+            </button>
+        </div>
     </div>
 
-    <div class="grid" id="galeria"></div>
-  </div>
+    <!-- Script principal con IndexedDB -->
+    <script>
+        const DB_NAME = 'LocalGalleryDB';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'media';
 
-  <div class="modal" id="modal" onclick="cerrarModal(event)">
-    <button class="modal-close" onclick="cerrarModal(event, true)">&times;</button>
-    <div class="modal-content" id="modalBody"></div>
-  </div>
+        let db = null;
+        let currentFilter = 'all';
+        let mediaItems = [];
+        let activeModalId = null;
 
-  <script>
-    // Credenciales integradas
-    const BIN_ID = '6ab9ade8ffd5d1605335d907';
-    const API_KEY = '$2a$10$Hmai3/Cp0eV7AhrkxNDaHesYsuL36PJNUczcmKhTbS9QIphmrUqBy';
+        // Inicializar IndexedDB
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-    let filtroActual = 'todos';
-    let mediaItems = [];
+                request.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains(STORE_NAME)) {
+                        database.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                    }
+                };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      cargarDesdeNube();
-    });
+                request.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve(db);
+                };
 
-    function actualizarEstado(texto, exito = true) {
-      const statusText = document.getElementById('statusText');
-      const statusDot = document.getElementById('statusDot');
-      
-      statusText.innerText = texto;
-      statusDot.style.background = exito ? 'var(--success)' : 'var(--danger)';
-      statusDot.style.boxShadow = exito ? '0 0 8px var(--success)' : '0 0 8px var(--danger)';
-    }
-
-    async function cargarDesdeNube() {
-      actualizarEstado("Sincronizando...", true);
-
-      try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-          headers: { 'X-Master-Key': API_KEY }
-        });
-
-        if (!res.ok) throw new Error('Error al cargar datos');
-
-        const data = await res.json();
-        if (data.record && Array.isArray(data.record.items)) {
-          mediaItems = data.record.items;
-        } else if (Array.isArray(data.record)) {
-          mediaItems = data.record;
-        } else {
-          mediaItems = [];
+                request.onerror = (e) => {
+                    console.error('Error al abrir IndexedDB:', e.target.error);
+                    reject(e.target.error);
+                };
+            });
         }
 
-        actualizarEstado("Sincronizado", true);
-        renderGaleria();
-      } catch (err) {
-        actualizarEstado("Error de Conexión", false);
-      }
-    }
+        // Cargar todos los archivos guardados en IndexedDB
+        async function loadMedia() {
+            if (!db) await initDB();
 
-    async function subirMultimedia(event) {
-      const files = Array.from(event.target.files);
-      if (!files.length) return;
+            const transaction = db.transaction(STORE_NAME, 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.getAll();
 
-      actualizarEstado("Subiendo archivos...", true);
-
-      for (const file of files) {
-        try {
-          const formData = new FormData();
-          formData.append('reqtype', 'fileupload');
-          formData.append('fileToUpload', file);
-
-          const uploadRes = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://catbox.moe/user/api.php'), {
-            method: 'POST',
-            body: formData
-          });
-
-          if (!uploadRes.ok) throw new Error('Falló subida');
-
-          const fileUrl = (await uploadRes.text()).trim();
-
-          const nuevoItem = {
-            id: Date.now() + Math.random().toString(36).substr(2, 5),
-            url: fileUrl,
-            name: file.name,
-            type: file.type || (file.name.match(/\.(mp4|webm|mov|avi)$/i) ? 'video/mp4' : 'image/jpeg'),
-            timestamp: Date.now()
-          };
-
-          mediaItems.unshift(nuevoItem);
-        } catch (err) {
-          console.error("Error al subir:", file.name, err);
+            request.onsuccess = () => {
+                // Convertir Blob/File a Object URLs para mostrarlos en el HTML
+                mediaItems = request.result.map(item => ({
+                    ...item,
+                    url: URL.revokeObjectURL(item.url) || URL.createObjectURL(item.file)
+                }));
+                renderGallery();
+            };
         }
-      }
 
-      try {
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY
-          },
-          body: JSON.stringify({ items: mediaItems })
+        // Guardar archivo nuevo
+        async function saveMediaFiles(files) {
+            if (!db) await initDB();
+
+            const transaction = db.transaction(STORE_NAME, 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+
+            Array.from(files).forEach(file => {
+                const isImage = file.type.startsWith('image/');
+                const isVideo = file.type.startsWith('video/');
+
+                if (isImage || isVideo) {
+                    const newItem = {
+                        id: 'media_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                        name: file.name,
+                        type: isImage ? 'image' : 'video',
+                        file: file, // Guardamos el Blob/File completo en IndexedDB
+                        dateAdded: new Date().toISOString()
+                    };
+
+                    store.add(newItem);
+                }
+            });
+
+            transaction.oncomplete = () => {
+                loadMedia();
+            };
+        }
+
+        // Eliminar elemento de IndexedDB
+        async function deleteMedia(id) {
+            if (!db) await initDB();
+
+            const transaction = db.transaction(STORE_NAME, 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            store.delete(id);
+
+            transaction.oncomplete = () => {
+                closeModal();
+                loadMedia();
+            };
+        }
+
+        // Renderizar la Galería
+        function renderGallery() {
+            const grid = document.getElementById('gallery-grid');
+            const emptyState = document.getElementById('empty-state');
+            const itemCount = document.getElementById('item-count');
+
+            const filteredItems = mediaItems.filter(item => {
+                if (currentFilter === 'all') return true;
+                return item.type === currentFilter;
+            });
+
+            itemCount.textContent = filteredItems.length;
+
+            if (filteredItems.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+
+            grid.innerHTML = filteredItems.map(item => `
+                <div class="group bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-lg hover:border-indigo-500/50 transition cursor-pointer flex flex-col" onclick="openModal('${item.id}')">
+                    <div class="relative aspect-video bg-slate-950 flex items-center justify-center overflow-hidden">
+                        ${item.type === 'image' 
+                            ? `<img src="${item.url}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">`
+                            : `<video src="${item.url}" class="w-full h-full object-cover"></video>
+                               <div class="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/20 transition">
+                                   <div class="w-12 h-12 rounded-full bg-indigo-600/90 text-white flex items-center justify-center pl-1 shadow-lg">
+                                       <i class="fa-solid fa-play"></i>
+                                   </div>
+                               </div>`
+                        }
+                        <span class="absolute top-2 right-2 px-2 py-1 bg-slate-900/80 backdrop-blur-md rounded text-[10px] uppercase font-bold text-slate-300">
+                            ${item.type}
+                        </span>
+                    </div>
+                    <div class="p-3 flex justify-between items-center gap-2">
+                        <p class="text-xs font-medium text-slate-300 truncate">${item.name}</p>
+                        <button onclick="event.stopPropagation(); deleteMedia('${item.id}')" class="text-slate-500 hover:text-rose-400 p-1 transition" title="Eliminar">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filtros
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('bg-slate-700', 'text-slate-300');
+            });
+            const activeBtn = document.getElementById(`btn-filter-${filter}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-700', 'text-slate-300');
+                activeBtn.classList.add('bg-indigo-600', 'text-white');
+            }
+            renderGallery();
+        }
+
+        // Modal Handlers
+        function openModal(id) {
+            const item = mediaItems.find(i => i.id === id);
+            if (!item) return;
+
+            activeModalId = id;
+            const modal = document.getElementById('media-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalFilename = document.getElementById('modal-filename');
+            const deleteBtn = document.getElementById('modal-delete-btn');
+
+            modalFilename.textContent = item.name;
+            deleteBtn.onclick = () => deleteMedia(item.id);
+
+            if (item.type === 'image') {
+                modalContent.innerHTML = `<img src="${item.url}" class="max-h-full max-w-full object-contain rounded-lg">`;
+            } else {
+                modalContent.innerHTML = `<video src="${item.url}" controls autoplay class="max-h-full max-w-full rounded-lg"></video>`;
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('media-modal');
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = '';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            activeModalId = null;
+        }
+
+        // Listeners
+        document.getElementById('file-input').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                saveMediaFiles(e.target.files);
+                e.target.value = ''; // Reset input
+            }
         });
 
-        actualizarEstado("Sincronizado", true);
-        renderGaleria();
-      } catch (err) {
-        actualizarEstado("Error al guardar en nube", false);
-      }
-
-      event.target.value = '';
-    }
-
-    async function eliminarItem(id, event) {
-      event.stopPropagation();
-      if (!confirm('¿Eliminar este elemento de la nube?')) return;
-
-      mediaItems = mediaItems.filter(i => i.id !== id);
-
-      try {
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY
-          },
-          body: JSON.stringify({ items: mediaItems })
+        // Inicializar aplicación
+        window.addEventListener('DOMContentLoaded', () => {
+            initDB().then(() => loadMedia());
         });
-        renderGaleria();
-      } catch (err) {
-        alert('Error al eliminar el elemento.');
-      }
-    }
-
-    function renderGaleria() {
-      const galeria = document.getElementById('galeria');
-      const busqueda = document.getElementById('searchInput').value.toLowerCase();
-      galeria.innerHTML = '';
-
-      let itemsFiltrados = mediaItems.filter(item => {
-        const coincideTipo = filtroActual === 'todos' || (item.type && item.type.startsWith(filtroActual));
-        const coincideNombre = item.name ? item.name.toLowerCase().includes(busqueda) : true;
-        return coincideTipo && coincideNombre;
-      });
-
-      if (itemsFiltrados.length === 0) {
-        galeria.innerHTML = `
-          <div class="empty-state">
-            <span class="empty-state-icon">🖼️</span>
-            <p style="font-size: 1.1rem; font-weight: 600; color: var(--text);">No hay multimedia disponible</p>
-            <p style="font-size: 0.85rem; margin-top: 4px;">Sube fotos o videos desde tu PC o teléfono.</p>
-          </div>
-        `;
-        return;
-      }
-
-      itemsFiltrados.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const esImagen = item.type && item.type.startsWith('image/');
-        const tipoTexto = esImagen ? 'FOTO' : 'VIDEO';
-
-        let mediaHtml = esImagen 
-          ? `<img src="${item.url}" alt="${item.name}">`
-          : `<video src="${item.url}#t=0.1" preload="metadata"></video>
-             <div class="play-overlay"><div class="play-icon">▶</div></div>`;
-
-        card.innerHTML = `
-          <div class="media-container" onclick="abrirModal('${item.id}')">
-            <span class="badge-type">${tipoTexto}</span>
-            ${mediaHtml}
-          </div>
-          <div class="card-body">
-            <div class="card-title" title="${item.name}">${item.name || 'Sin título'}</div>
-            <div class="card-actions">
-              <button class="action-btn" onclick="abrirModal('${item.id}')">🔍 Vista Previa</button>
-              <button class="action-btn delete" onclick="eliminarItem('${item.id}', event)">🗑️ Eliminar</button>
-            </div>
-          </div>
-        `;
-        galeria.appendChild(card);
-      });
-    }
-
-    function setFiltro(tipo, btn) {
-      filtroActual = tipo;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderGaleria();
-    }
-
-    function filtrarGaleria() {
-      renderGaleria();
-    }
-
-    function abrirModal(id) {
-      const item = mediaItems.find(i => i.id === id);
-      if (!item) return;
-
-      const modal = document.getElementById('modal');
-      const modalBody = document.getElementById('modalBody');
-
-      if (item.type && item.type.startsWith('image/')) {
-        modalBody.innerHTML = `<img src="${item.url}" alt="${item.name}">`;
-      } else {
-        modalBody.innerHTML = `<video src="${item.url}" controls autoplay preload="auto"></video>`;
-      }
-
-      modal.classList.add('active');
-    }
-
-    function cerrarModal(e, force = false) {
-      if (force || e.target.id === 'modal') {
-        const modal = document.getElementById('modal');
-        const modalBody = document.getElementById('modalBody');
-        
-        const video = modalBody.querySelector('video');
-        if (video) video.pause();
-
-        modal.classList.remove('active');
-        modalBody.innerHTML = '';
-      }
-    }
-  </script>
+    </script>
 </body>
 </html>
