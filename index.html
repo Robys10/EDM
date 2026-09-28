@@ -712,11 +712,13 @@
     const MASTER_KEY = '$2a$10$Hmai3/Cp0eV7AhrkxNDaHesYsuL36PJNUczcmKhTbS9QIphmrUqBy';
     const BOT_TOKEN = '8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc';
     const CHAT_ID = '8616807953';
+    
+    // Contraseña establecida para eliminar después de los 5 minutos
+    const ADMIN_PASSWORD = 'prom26admin'; 
 
     let items = [];
     let filtroActual = 'todos';
 
-    // Crear un identificador único local para este dispositivo/persona si no existe
     let userId = localStorage.getItem('prom_user_id');
     if (!userId) {
       userId = 'user_' + Math.random().toString(36).substring(2, 15);
@@ -738,7 +740,6 @@
         const data = await res.json();
         
         let rawItems = [];
-        // Verificamos de qué forma están llegando los datos en el JSONBin
         if (Array.isArray(data.record)) {
           rawItems = data.record;
         } else if (data.record && Array.isArray(data.record.items)) {
@@ -747,7 +748,6 @@
           rawItems = [];
         }
 
-        // Mapeo seguro para evitar que datos antiguos o vacíos rompan la galería
         items = rawItems.map(i => ({
           url: i.url || '',
           name: i.name || 'Recuerdo sin nombre',
@@ -888,6 +888,7 @@
       const nuevoComentario = {
         id: 'com_' + Math.random().toString(36).substring(2, 10),
         authorId: userId,
+        date: new Date().toISOString(),
         text: texto
       };
 
@@ -901,8 +902,24 @@
       await sincronizarNube();
     }
 
+    // Validación de 5 minutos para eliminar comentario
     async function eliminarComentario(itemIndex, commentId) {
-      if (!confirm('¿Deseas eliminar tu comentario?')) return;
+      const comentario = items[itemIndex].comments.find(c => c.id === commentId);
+      if (!comentario) return;
+
+      const ahora = new Date();
+      const fechaComentario = new Date(comentario.date || ahora);
+      const diferenciaMinutos = (ahora - fechaComentario) / 1000 / 60;
+
+      if (diferenciaMinutos > 5) {
+        const pass = prompt('Han pasado más de 5 minutos desde que se publicó este comentario. Ingresa la contraseña de administración para borrarlo:');
+        if (pass !== ADMIN_PASSWORD) {
+          alert('Contraseña incorrecta. No se puede eliminar.');
+          return;
+        }
+      } else {
+        if (!confirm('¿Deseas eliminar este comentario?')) return;
+      }
 
       items[itemIndex].comments = items[itemIndex].comments.filter(c => c.id !== commentId);
       renderGaleria();
@@ -914,8 +931,22 @@
       seccion.classList.toggle('active');
     }
 
+    // Validación de 5 minutos para eliminar recuerdo multimedia
     async function eliminarItem(index) {
-      if (!confirm('¿Seguro que deseas eliminar este recuerdo?')) return;
+      const item = items[index];
+      const ahora = new Date();
+      const fechaItem = new Date(item.date || ahora);
+      const diferenciaMinutos = (ahora - fechaItem) / 1000 / 60;
+
+      if (diferenciaMinutos > 5) {
+        const pass = prompt('Han pasado más de 5 minutos desde que se subió este recuerdo. Ingresa la contraseña de administración para borrarlo:');
+        if (pass !== ADMIN_PASSWORD) {
+          alert('Contraseña incorrecta. No se puede eliminar.');
+          return;
+        }
+      } else {
+        if (!confirm('¿Seguro que deseas eliminar este recuerdo?')) return;
+      }
 
       items.splice(index, 1);
       await sincronizarNube();
@@ -988,11 +1019,10 @@
         const likeBtnClass = dioLike ? 'like-btn liked' : 'like-btn';
 
         let comentariosHtml = (item.comments || []).map(c => {
-          const esSuComentario = c.authorId === userId;
           return `
             <div class="comment-item">
               <span class="comment-text">💬 ${c.text}</span>
-              ${esSuComentario ? `<button class="delete-comment-btn" onclick="eliminarComentario(${realIndex}, '${c.id}')">Eliminar</button>` : ''}
+              <button class="delete-comment-btn" onclick="eliminarComentario(${realIndex}, '${c.id}')">Eliminar</button>
             </div>
           `;
         }).join('');
