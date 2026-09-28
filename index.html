@@ -16,10 +16,10 @@
       --gold-bright: #d8b258;
       --text-dark: #2a1b1e;
       --text-muted: #6e5c5f;
-      --glass-bg: rgba(255, 253, 248, 0.72);
-      --glass-bg-hover: rgba(255, 253, 248, 0.90);
-      --glass-border: rgba(255, 255, 255, 0.85);
-      --glass-shadow: 0 12px 32px 0 rgba(104, 27, 40, 0.12);
+      --glass-bg: rgba(255, 253, 248, 0.78);
+      --glass-bg-hover: rgba(255, 253, 248, 0.92);
+      --glass-border: rgba(255, 255, 255, 0.9);
+      --glass-shadow: 0 16px 40px 0 rgba(104, 27, 40, 0.14);
       --danger: #d93838;
     }
 
@@ -28,7 +28,7 @@
     body { 
       background-color: var(--bg-cream); 
       background-image: 
-        radial-gradient(at 10% 20%, rgba(216, 178, 88, 0.22) 0px, transparent 50%),
+        radial-gradient(at 10% 20%, rgba(216, 178, 88, 0.25) 0px, transparent 50%),
         radial-gradient(at 90% 80%, rgba(104, 27, 40, 0.18) 0px, transparent 50%),
         radial-gradient(at 50% 50%, rgba(244, 238, 226, 0.5) 0px, transparent 100%);
       background-attachment: fixed;
@@ -37,7 +37,7 @@
       min-height: 100vh; 
     }
 
-    /* Header iOS Liquid Glass */
+    /* Header iOS Liquid Glass Centrado y Destacado */
     header { 
       max-width: 1100px;
       margin: 0 auto 28px auto;
@@ -45,45 +45,55 @@
       backdrop-filter: blur(25px) saturate(180%);
       -webkit-backdrop-filter: blur(25px) saturate(180%);
       border: 1px solid var(--glass-border);
-      border-radius: 32px;
-      padding: 28px 24px;
+      border-radius: 36px;
+      padding: 36px 24px;
       box-shadow: var(--glass-shadow);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       text-align: center;
-      gap: 16px;
+      gap: 20px;
     }
 
+    /* Marco de Logo Grande y Limpio */
     .logo-frame {
-      width: 160px;
-      height: 160px;
-      border-radius: 32px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(10px);
-      border: 2px solid var(--gold-bright);
-      box-shadow: 0 12px 28px rgba(104, 27, 40, 0.18);
+      width: 100%;
+      max-width: 280px;
+      height: 280px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8px;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin: 0 auto;
+      padding: 12px;
+      background: rgba(255, 253, 248, 0.45);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 2px solid rgba(216, 178, 88, 0.6);
+      border-radius: 36px;
+      box-shadow: 
+        0 14px 30px rgba(104, 27, 40, 0.15),
+        inset 0 0 20px rgba(255, 255, 255, 0.6);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
     }
 
     .logo-frame:hover {
-      transform: scale(1.05) rotate(1deg);
+      transform: scale(1.05);
       border-color: var(--wine-main);
+      box-shadow: 
+        0 20px 40px rgba(104, 27, 40, 0.22),
+        inset 0 0 25px rgba(255, 255, 255, 0.8);
     }
 
     .logo-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
+      filter: drop-shadow(0px 8px 16px rgba(104, 27, 40, 0.2));
     }
 
     .brand h1 { 
-      font-size: 2.1rem; 
+      font-size: 2.3rem; 
       color: var(--wine-main); 
       font-weight: 800; 
       letter-spacing: 1.5px; 
@@ -91,21 +101,22 @@
       background: linear-gradient(135deg, var(--wine-main) 0%, var(--wine-dark) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-top: 4px;
     }
 
     .brand p { 
       color: var(--text-muted); 
-      font-size: 0.98rem; 
+      font-size: 1.05rem; 
       font-weight: 600;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
     .status-badge { 
       background: rgba(104, 27, 40, 0.08); 
       color: var(--wine-main); 
-      padding: 6px 18px; 
+      padding: 8px 22px; 
       border-radius: 20px; 
-      font-size: 0.85rem; 
+      font-size: 0.88rem; 
       border: 1px solid rgba(104, 27, 40, 0.15); 
       font-weight: 700; 
       letter-spacing: 0.3px;
@@ -123,7 +134,7 @@
 
     /* Banner Telegram Liquid Glass */
     .telegram-banner {
-      background: rgba(104, 27, 40, 0.90);
+      background: rgba(104, 27, 40, 0.92);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border: 1px solid rgba(216, 178, 88, 0.45);
@@ -474,12 +485,22 @@
       color: var(--text-muted); 
       grid-column: 1 / -1; 
     }
+
+    @media (max-width: 600px) {
+      .logo-frame {
+        max-width: 220px;
+        height: 220px;
+      }
+      .brand h1 {
+        font-size: 1.7rem;
+      }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <!-- Marco de Logo en Vidrio Líquido llamando a logo.png -->
+    <!-- Marco de Logo Ampliado y Centrado -->
     <div class="logo-frame">
       <img src="logo.png" alt="Logo Estrella de la Mañana '26" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'14\'>PROM 26</text></svg>';">
     </div>
