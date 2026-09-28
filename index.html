@@ -37,7 +37,6 @@
       min-height: 100vh; 
     }
 
-    /* Header iOS Liquid Glass Centrado y Destacado */
     header { 
       max-width: 1100px;
       margin: 0 auto 28px auto;
@@ -56,7 +55,6 @@
       gap: 20px;
     }
 
-    /* Marco de Logo Grande y Limpio */
     .logo-frame {
       width: 100%;
       max-width: 280px;
@@ -122,6 +120,63 @@
       letter-spacing: 0.3px;
     }
 
+    /* Carrusel / Destacados Top */
+    .featured-carousel {
+      max-width: 1100px;
+      margin: 0 auto 24px auto;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--glass-shadow);
+      display: none;
+    }
+    .featured-carousel.active { display: block; }
+    .featured-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--wine-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .featured-container {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+    .featured-item {
+      min-width: 180px;
+      height: 110px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid rgba(216, 178, 88, 0.4);
+      flex-shrink: 0;
+    }
+    .featured-item img, .featured-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .featured-item span {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(67, 16, 25, 0.8);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .controls { 
       display: flex; 
       flex-direction: column; 
@@ -132,7 +187,6 @@
       margin-right: auto; 
     }
 
-    /* Banner Telegram Liquid Glass */
     .telegram-banner {
       background: rgba(104, 27, 40, 0.92);
       backdrop-filter: blur(25px);
@@ -183,7 +237,6 @@
       box-shadow: 0 8px 24px rgba(184, 146, 66, 0.55);
     }
 
-    /* Area de Subida Web */
     .upload-zone { 
       background: var(--glass-bg);
       backdrop-filter: blur(20px);
@@ -265,7 +318,6 @@
       transform: translateY(-1px);
     }
 
-    /* Buscador y Filtros */
     .filter-bar { 
       display: flex; 
       flex-wrap: wrap; 
@@ -325,7 +377,6 @@
       box-shadow: 0 4px 10px rgba(104, 27, 40, 0.25);
     }
 
-    /* Muro de Tarjetas */
     .grid { 
       display: grid; 
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
@@ -407,6 +458,102 @@
       color: var(--wine-dark); 
     }
 
+    .card-actions-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .like-btn {
+      background: rgba(104, 27, 40, 0.06);
+      border: 1px solid rgba(104, 27, 40, 0.12);
+      padding: 6px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--wine-main);
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .like-btn:hover { background: rgba(104, 27, 40, 0.12); transform: scale(1.05); }
+    .like-btn.liked {
+      background: var(--wine-main);
+      color: #fff;
+      border-color: var(--wine-main);
+    }
+
+    .comments-section {
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 12px;
+      padding: 8px;
+      margin-top: 6px;
+      font-size: 0.82rem;
+      display: none;
+    }
+    .comments-section.active { display: block; }
+    .comments-list {
+      max-height: 90px;
+      overflow-y: auto;
+      margin-bottom: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .comment-item {
+      background: rgba(244, 238, 226, 0.85);
+      padding: 6px 10px;
+      border-radius: 8px;
+      color: var(--text-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .comment-text {
+      word-break: break-word;
+      flex: 1;
+    }
+    .delete-comment-btn {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 4px;
+    }
+    .delete-comment-btn:hover { text-decoration: underline; }
+
+    .comment-form {
+      display: flex;
+      gap: 4px;
+    }
+    .comment-input {
+      flex: 1;
+      border: 1px solid rgba(104, 27, 40, 0.2);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      outline: none;
+      background: #fff;
+    }
+    .comment-submit {
+      background: var(--wine-main);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .comment-submit:hover { background: var(--wine-dark); }
+
     .card-actions { 
       display: flex; 
       justify-content: space-between; 
@@ -432,7 +579,6 @@
     .action-btn:hover { color: var(--wine-main); }
     .action-btn.delete:hover { color: var(--danger); }
 
-    /* Modal Visor */
     .modal { 
       display: none; 
       position: fixed; 
@@ -500,7 +646,6 @@
 <body>
 
   <header>
-    <!-- Marco de Logo Ampliado y Centrado -->
     <div class="logo-frame">
       <img src="logo.png" alt="Logo Estrella de la Mañana '26" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'14\'>PROM 26</text></svg>';">
     </div>
@@ -512,9 +657,13 @@
     <div class="status-badge" id="status">Sincronizando recuerdos...</div>
   </header>
 
+  <!-- Carrusel / Destacados -->
+  <div class="featured-carousel" id="featuredCarousel">
+    <div class="featured-title">⭐ Recuerdos Destacados (Más votados)</div>
+    <div class="featured-container" id="featuredContainer"></div>
+  </div>
+
   <div class="controls">
-    
-    <!-- Banner para videos largos de Telegram -->
     <div class="telegram-banner">
       <div class="telegram-info">
         <h3>🎬 ¿Quieres subir un video largo (EN DESARROLLO)?</h3>
@@ -525,7 +674,6 @@
       </a>
     </div>
 
-    <!-- Subida directa de fotos/videos cortos -->
     <div class="upload-zone">
       <span class="upload-icon">✨</span>
       <div class="upload-title">Selecciona fotos o videos desde tu galería</div>
@@ -568,6 +716,13 @@
     let items = [];
     let filtroActual = 'todos';
 
+    // Crear un identificador único local para este dispositivo/persona si no existe
+    let userId = localStorage.getItem('prom_user_id');
+    if (!userId) {
+      userId = 'user_' + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('prom_user_id', userId);
+    }
+
     document.addEventListener('DOMContentLoaded', cargarDesdeNube);
 
     async function cargarDesdeNube() {
@@ -582,21 +737,50 @@
         if (!res.ok) throw new Error('Error al conectar con la base de datos');
         const data = await res.json();
         
+        let rawItems = [];
+        // Verificamos de qué forma están llegando los datos en el JSONBin
         if (Array.isArray(data.record)) {
-          items = data.record;
+          rawItems = data.record;
         } else if (data.record && Array.isArray(data.record.items)) {
-          items = data.record.items;
+          rawItems = data.record.items;
         } else {
-          items = [];
+          rawItems = [];
         }
 
+        // Mapeo seguro para evitar que datos antiguos o vacíos rompan la galería
+        items = rawItems.map(i => ({
+          url: i.url || '',
+          name: i.name || 'Recuerdo sin nombre',
+          type: i.type || 'image/jpeg',
+          date: i.date || new Date().toISOString(),
+          likes: typeof i.likes === 'number' ? i.likes : 0,
+          likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
+          comments: Array.isArray(i.comments) ? i.comments : []
+        }));
+
         renderGaleria();
+        renderCarrusel();
         status.innerText = "Sincronizado al instante";
         status.style.color = "#2e7d32";
       } catch (err) {
         console.error(err);
         status.innerText = "Error de sincronización";
         status.style.color = "#d93838";
+      }
+    }
+
+    async function sincronizarNube() {
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': MASTER_KEY
+          },
+          body: JSON.stringify({ items: items })
+        });
+      } catch (e) {
+        console.error('Error al actualizar la nube', e);
       }
     }
 
@@ -647,26 +831,22 @@
           url: fileUrl,
           name: customName,
           type: esVideo ? 'video/mp4' : 'image/jpeg',
-          date: new Date().toISOString()
+          date: new Date().toISOString(),
+          likes: 0,
+          likedBy: [],
+          comments: []
         };
 
         items.unshift(nuevoElemento);
-
         status.innerText = "Guardando en el mural...";
 
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': MASTER_KEY
-          },
-          body: JSON.stringify({ items: items })
-        });
+        await sincronizarNube();
 
         status.innerText = "¡Recuerdo añadido!";
         status.style.color = "#2e7d32";
         titleInput.value = '';
         renderGaleria();
+        renderCarrusel();
 
       } catch (err) {
         console.error(err);
@@ -676,24 +856,98 @@
       }
     }
 
+    async function toggleLike(index) {
+      if (!items[index].likedBy) {
+        items[index].likedBy = [];
+      }
+
+      const dioLike = items[index].likedBy.includes(userId);
+
+      if (dioLike) {
+        items[index].likedBy = items[index].likedBy.filter(id => id !== userId);
+        items[index].likes = Math.max(0, (items[index].likes || 1) - 1);
+      } else {
+        items[index].likedBy.push(userId);
+        items[index].likes = (items[index].likes || 0) + 1;
+      }
+
+      renderGaleria();
+      renderCarrusel();
+      await sincronizarNube();
+    }
+
+    async function agregarComentario(event, index) {
+      event.preventDefault();
+      const input = document.getElementById(`comment-input-${index}`);
+      const texto = input.value.trim();
+      if (!texto) return;
+
+      const seguro = confirm(`¿Estás seguro de enviar esta dedicatoria:\n\n"${texto}"?`);
+      if (!seguro) return;
+
+      const nuevoComentario = {
+        id: 'com_' + Math.random().toString(36).substring(2, 10),
+        authorId: userId,
+        text: texto
+      };
+
+      if (!items[index].comments) {
+        items[index].comments = [];
+      }
+
+      items[index].comments.push(nuevoComentario);
+      input.value = '';
+      renderGaleria();
+      await sincronizarNube();
+    }
+
+    async function eliminarComentario(itemIndex, commentId) {
+      if (!confirm('¿Deseas eliminar tu comentario?')) return;
+
+      items[itemIndex].comments = items[itemIndex].comments.filter(c => c.id !== commentId);
+      renderGaleria();
+      await sincronizarNube();
+    }
+
+    function toggleComentarios(index) {
+      const seccion = document.getElementById(`comments-section-${index}`);
+      seccion.classList.toggle('active');
+    }
+
     async function eliminarItem(index) {
       if (!confirm('¿Seguro que deseas eliminar este recuerdo?')) return;
 
       items.splice(index, 1);
+      await sincronizarNube();
+      renderGaleria();
+      renderCarrusel();
+    }
 
-      try {
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': MASTER_KEY
-          },
-          body: JSON.stringify({ items: items })
-        });
-        renderGaleria();
-      } catch (e) {
-        alert('Error al eliminar en la nube.');
+    function renderCarrusel() {
+      const carousel = document.getElementById('featuredCarousel');
+      const container = document.getElementById('featuredContainer');
+      container.innerHTML = '';
+
+      const destacados = [...items].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 5);
+
+      if (destacados.length === 0 || destacados[0].likes === 0) {
+        carousel.classList.remove('active');
+        return;
       }
+
+      carousel.classList.add('active');
+      destacados.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'featured-item';
+        div.onclick = () => abrirModal(item.url, item.type);
+        
+        const esImagen = item.type && item.type.startsWith('image/');
+        div.innerHTML = esImagen 
+          ? `<img src="${item.url}" alt="${item.name}">` 
+          : `<video src="${item.url}"></video>`;
+        div.innerHTML += `<span>❤️ ${item.likes} - ${item.name}</span>`;
+        container.appendChild(div);
+      });
     }
 
     function renderGaleria() {
@@ -718,6 +972,7 @@
       }
 
       itemsFiltrados.forEach((item, index) => {
+        const realIndex = items.indexOf(item);
         const card = document.createElement('div');
         card.className = 'card';
 
@@ -728,6 +983,20 @@
           ? `<img src="${item.url}" alt="${item.name}" loading="lazy">`
           : `<video src="${item.url}" controls preload="metadata"></video>`;
 
+        const likedBy = item.likedBy || [];
+        const dioLike = likedBy.includes(userId);
+        const likeBtnClass = dioLike ? 'like-btn liked' : 'like-btn';
+
+        let comentariosHtml = (item.comments || []).map(c => {
+          const esSuComentario = c.authorId === userId;
+          return `
+            <div class="comment-item">
+              <span class="comment-text">💬 ${c.text}</span>
+              ${esSuComentario ? `<button class="delete-comment-btn" onclick="eliminarComentario(${realIndex}, '${c.id}')">Eliminar</button>` : ''}
+            </div>
+          `;
+        }).join('');
+
         card.innerHTML = `
           <div class="media-container" onclick="abrirModal('${item.url}', '${item.type}')">
             <span class="badge-type">${tipoTexto}</span>
@@ -735,9 +1004,25 @@
           </div>
           <div class="card-body">
             <div class="card-title" title="${item.name}">${item.name}</div>
+            
+            <div class="card-actions-top">
+              <button class="${likeBtnClass}" onclick="toggleLike(${realIndex})">❤️ ${dioLike ? 'Te gusta' : 'Me gusta'} (${item.likes || 0})</button>
+              <button class="action-btn" onclick="toggleComentarios(${realIndex})">💬 Comentarios (${(item.comments || []).length})</button>
+            </div>
+
+            <div class="comments-section" id="comments-section-${realIndex}">
+              <div class="comments-list">
+                ${comentariosHtml || '<div style="color:var(--text-muted); text-align:center; padding:4px;">Sé el primero en comentar</div>'}
+              </div>
+              <form class="comment-form" onsubmit="agregarComentario(event, ${realIndex})">
+                <input type="text" class="comment-input" id="comment-input-${realIndex}" placeholder="Escribe una dedicatoria...">
+                <button type="submit" class="comment-submit">Enviar</button>
+              </form>
+            </div>
+
             <div class="card-actions">
               <button class="action-btn" onclick="copiarEnlace('${item.url}')">🔗 Copiar Link</button>
-              <button class="action-btn delete" onclick="eliminarItem(${index})">🗑️ Eliminar</button>
+              <button class="action-btn delete" onclick="eliminarItem(${realIndex})">🗑️ Eliminar</button>
             </div>
           </div>
         `;
