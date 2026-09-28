@@ -42,13 +42,13 @@
       color: var(--wine-main);
       width: 42px;
       height: 42px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 1.2rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
     
     .menu-toggle-btn.hidden {
@@ -57,7 +57,7 @@
       pointer-events: none;
     }
 
-    /* BARRA LATERAL (SIDEBAR) LIGERA */
+    /* BARRA LATERAL */
     sidebar {
       width: 260px;
       background: var(--card-bg);
@@ -71,12 +71,10 @@
       left: 0;
       z-index: 200;
       box-shadow: 5px 0 20px rgba(0,0,0,0.05);
-      transition: transform 0.25s ease-in-out;
-      will-change: transform;
     }
 
     sidebar.collapsed {
-      transform: translateX(-100%);
+      display: none;
     }
 
     .sidebar-header {
@@ -99,7 +97,7 @@
       height: 40px;
       background: #fff;
       border: 1px solid var(--gold-main);
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -112,7 +110,7 @@
     .sidebar-brand-title { font-size: 0.8rem; font-weight: 800; color: var(--wine-main); text-transform: uppercase; }
     .sidebar-brand-sub { font-size: 0.65rem; font-weight: 700; color: var(--gold-main); }
 
-    .sidebar-close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; padding: 4px; }
+    .sidebar-close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; padding: 4px; border-radius: 6px; }
 
     .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 6px; }
 
@@ -129,13 +127,12 @@
     }
 
     .sidebar-item:hover { background: rgba(104, 27, 40, 0.05); color: var(--wine-main); }
-    .sidebar-item.active { background: var(--wine-main); color: #fff; }
+    .sidebar-item.active { background: var(--wine-main); color: #fff; box-shadow: 0 4px 10px rgba(104, 27, 40, 0.2); }
 
     /* CONTENEDOR PRINCIPAL */
     .main-wrapper {
       flex: 1;
       margin-left: 260px;
-      transition: margin-left 0.25s ease-in-out;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -220,6 +217,11 @@
       cursor: pointer;
     }
 
+    .home-card:hover {
+      border-color: var(--gold-main);
+      box-shadow: 0 4px 12px rgba(104, 27, 40, 0.05);
+    }
+
     .home-card h3 { color: var(--wine-main); font-size: 0.95rem; margin-bottom: 4px; font-weight: 700; }
     .home-card p { color: var(--text-muted); font-size: 0.82rem; margin: 0; }
 
@@ -239,7 +241,7 @@
     .featured-item {
       min-width: 140px;
       height: 95px;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
       position: relative;
       cursor: pointer;
@@ -309,6 +311,7 @@
       width: 100%;
       outline: none;
     }
+    .input-title:focus { border-color: var(--wine-main); }
 
     .btn-select-file {
       margin-top: 10px; 
@@ -330,6 +333,7 @@
       border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px; 
       color: var(--text-dark); font-size: 0.88rem; outline: none;
     }
+    .search-box:focus { border-color: var(--wine-main); }
 
     .filter-buttons { 
       display: flex; gap: 4px; background: var(--card-bg);
@@ -348,6 +352,7 @@
     .card { 
       background: var(--card-bg); border-radius: 16px; 
       overflow: hidden; border: 1px solid var(--border-color); display: flex; flex-direction: column; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
     }
 
     .media-container { width: 100%; height: 200px; background: #000; overflow: hidden; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -382,10 +387,12 @@
 
     .comment-form { display: flex; gap: 4px; }
     .comment-input { flex: 1; border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 6px; font-size: 0.8rem; outline: none; background: #fff; }
+    .comment-input:focus { border-color: var(--wine-main); }
     .comment-submit { background: var(--wine-main); color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem; }
 
     .card-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border-color); }
     .action-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+    .action-btn:hover { color: var(--wine-main); }
     .action-btn.delete { color: #b54a4a; }
 
     /* BUZÓN */
@@ -395,6 +402,7 @@
       border-radius: 16px;
       padding: 14px;
       margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
     }
     .tweet-composer textarea {
       width: 100%;
@@ -408,6 +416,7 @@
       resize: none;
       height: 80px;
     }
+    .tweet-composer textarea:focus { border-color: var(--wine-main); }
     .tweet-composer-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
     .tweet-counter { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
     .btn-tweet {
@@ -430,6 +439,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
     .tweet-header { display: flex; justify-content: space-between; align-items: center; }
     .tweet-user { font-weight: 800; color: var(--wine-main); font-size: 0.85rem; }
@@ -442,7 +452,16 @@
     .tweet-action-btn.delete { color: #b54a4a; }
 
     /* MODAL */
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 12px; }
+    .modal { 
+      display: none; 
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0, 0, 0, 0.8); 
+      z-index: 1000; 
+      justify-content: center; 
+      align-items: center; 
+      padding: 12px;
+    }
     .modal.active { display: flex; }
     .modal-content { max-width: 100%; max-height: 85vh; border-radius: 14px; overflow: hidden; position: relative; }
     .modal-content img, .modal-content video { max-width: 100%; max-height: 85vh; display: block; }
@@ -454,8 +473,10 @@
 
     .empty-state { text-align: center; padding: 30px 14px; color: var(--text-muted); }
 
-    /* ADAPTACIÓN ESCRITORIO (PANTALLAS GRANDES) */
+    /* ADAPTACIÓN ESCRITORIO */
     @media (min-width: 851px) {
+      sidebar { display: flex !important; }
+      .menu-toggle-btn { display: none !important; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
       .home-cards-grid { grid-template-columns: repeat(3, 1fr); }
       .filter-bar { flex-direction: row; justify-content: space-between; align-items: center; }
@@ -492,13 +513,13 @@
     <ul class="sidebar-menu">
       <li class="sidebar-item active" onclick="cambiarSeccion('inicio', this)">🏠 Inicio</li>
       <li class="sidebar-item" onclick="cambiarSeccion('galeria', this)">📸 Galería</li>
-      <li class="sidebar-item" onclick="cambiarSeccion('eventos', this)">📅 Cronograma</li>
+      <li class="sidebar-item" onclick="cambiarSeccion('eventos', this)">🎧 Soundtrack</li>
       <li class="sidebar-item" onclick="cambiarSeccion('mensajes', this)">💬 Buzón</li>
     </ul>
   </sidebar>
 
   <!-- CONTENEDOR PRINCIPAL -->
-  <div class="main-wrapper expanded" id="mainWrapper">
+  <div class="main-wrapper" id="mainWrapper">
     <div class="main-content">
 
       <!-- 1. INICIO -->
@@ -516,7 +537,7 @@
 
         <div class="home-welcome">
           <h2>¡Bienvenidos al portal oficial!</h2>
-          <p>Un espacio optimizado y ligero para guardar cada momento inolvidable de nuestra promoción.</p>
+          <p>Un espacio optimizado y ultraligero para guardar cada momento inolvidable de nuestra promoción.</p>
           
           <div class="home-cards-grid">
             <div class="home-card" onclick="cambiarSeccion('galeria', document.querySelectorAll('.sidebar-item')[1])">
@@ -524,8 +545,8 @@
               <p>Sube tus fotos, da "me gusta" y comenta.</p>
             </div>
             <div class="home-card" onclick="cambiarSeccion('eventos', document.querySelectorAll('.sidebar-item')[2])">
-              <h3>📅 Fechas Clave</h3>
-              <p>Entérate de los próximos eventos.</p>
+              <h3>🎧 Soundtrack</h3>
+              <p>La música que nos identifica este año.</p>
             </div>
             <div class="home-card" onclick="cambiarSeccion('mensajes', document.querySelectorAll('.sidebar-item')[3])">
               <h3>💬 Buzón de Anécdotas</h3>
@@ -582,17 +603,40 @@
         <div class="grid" id="galeria"></div>
       </section>
 
-      <!-- 3. CRONOGRAMA -->
+      <!-- 3. SOUNDTRACK DE LA PROMO -->
       <section id="seccion-eventos" class="page-section">
         <header style="padding: 20px;">
           <div class="brand">
-            <h1>Cronograma de Eventos</h1>
-            <p>Actividades de la Promoción '26</p>
+            <h1>Soundtrack de la Promo</h1>
+            <p>La música que nos define este año</p>
           </div>
         </header>
-        <div class="home-welcome">
-          <h3 style="color: var(--wine-main); margin-bottom: 6px; font-size: 1.05rem;">🚀 Próximas Actividades</h3>
-          <p>Próximamente publicaremos las fechas de ensayos y reuniones generales.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          
+          <!-- Mini Reproductor de Spotify -->
+          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; text-align: center;">
+            <h3 style="color: var(--wine-main); font-size: 0.95rem; font-weight: 800; margin-bottom: 10px;">🎧 Playlist Oficial</h3>
+            <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);" id="spotifyContainer">
+              <!-- Se cargará automáticamente -->
+            </div>
+          </div>
+
+          <!-- Himnos de la Promo -->
+          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px;">
+            <h3 style="color: var(--wine-main); font-size: 0.95rem; margin-bottom: 10px; font-weight: 800;">🔥 Himnos del Salón</h3>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="himnosContainer">
+              <!-- Se cargará automáticamente -->
+            </div>
+          </div>
+
+          <!-- Sugerencia rápida -->
+          <div style="background: var(--wine-dark); border: 1px solid var(--gold-main); border-radius: 16px; padding: 16px; color: #fff; text-align: center;">
+            <h3 style="color: var(--gold-bright); font-size: 0.95rem; font-weight: 800; margin-bottom: 6px;">¿Falta alguna canción?</h3>
+            <p style="font-size: 0.78rem; color: rgba(255,255,255,0.85); margin-bottom: 12px;">Escríbela en el buzón o mándala al grupo para sumarla al repertorio oficial.</p>
+            <a href="#" onclick="cambiarSeccion('mensajes', document.querySelectorAll('.sidebar-item')[3]); return false;" style="background: var(--gold-bright); color: var(--wine-dark); text-decoration: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 0.78rem; display: inline-block;">Ir al Buzón</a>
+          </div>
+
         </div>
       </section>
 
@@ -634,6 +678,15 @@
 
     let items = [];
     let tweets = [];
+    
+    // Configuración local de música con tu enlace integrado
+    let musicConfig = {
+      playlistUrl: 'https://open.spotify.com/embed/playlist/3lcbivzyUFBhKcmVi49W4J',
+      himnos: [
+        { titulo: "Canción Destacada", artista: "Promo 2026", etiqueta: "Favorita" }
+      ]
+    };
+
     let filtroActual = 'todos';
 
     let userId = localStorage.getItem('prom_user_id');
@@ -650,6 +703,13 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       cargarDesdeNube();
+      if (window.innerWidth > 850) {
+        document.getElementById('appSidebar').classList.remove('collapsed');
+        document.getElementById('mainWrapper').classList.remove('expanded');
+      } else {
+        document.getElementById('appSidebar').classList.add('collapsed');
+        document.getElementById('mainWrapper').classList.add('expanded');
+      }
     });
 
     function toggleSidebar() {
@@ -661,11 +721,6 @@
       
       if (window.innerWidth > 850) {
         wrapper.classList.toggle('expanded');
-        if (!sidebar.classList.contains('collapsed')) {
-          btnToggle.classList.add('hidden');
-        } else {
-          btnToggle.classList.remove('hidden');
-        }
       } else {
         if (!sidebar.classList.contains('collapsed')) {
           btnToggle.classList.add('hidden');
@@ -733,15 +788,26 @@
           likedBy: Array.isArray(t.likedBy) ? t.likedBy : []
         }));
 
+        // Si el JSONBin tiene configuración de música propia, la prioriza
+        if (record.music) {
+          if (record.music.playlistUrl) musicConfig.playlistUrl = record.music.playlistUrl;
+          if (Array.isArray(record.music.himnos) && record.music.himnos.length > 0) {
+            musicConfig.himnos = record.music.himnos;
+          }
+        }
+
         renderGaleria();
         renderCarrusel();
         renderTweets();
+        renderSoundtrack();
         status.innerText = "Sincronizado";
         status.style.color = "#2e7d32";
       } catch (err) {
         console.error(err);
         status.innerText = "Error de red";
         status.style.color = "#d93838";
+        // Aun si falla la red, renderizamos la música local configurada
+        renderSoundtrack();
       }
     }
 
@@ -753,11 +819,41 @@
             'Content-Type': 'application/json',
             'X-Master-Key': MASTER_KEY
           },
-          body: JSON.stringify({ items: items, tweets: tweets })
+          body: JSON.stringify({ items: items, tweets: tweets, music: musicConfig })
         });
       } catch (e) {
         console.error('Error al actualizar', e);
       }
+    }
+
+    function renderSoundtrack() {
+      const spotContainer = document.getElementById('spotifyContainer');
+      if (musicConfig.playlistUrl) {
+        spotContainer.innerHTML = `<iframe style="border-radius:12px" src="${musicConfig.playlistUrl}" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+      } else {
+        spotContainer.innerHTML = `<div style="padding: 20px; color: var(--text-muted); font-size: 0.82rem;">No hay playlist configurada aún.</div>`;
+      }
+
+      const himnosContainer = document.getElementById('himnosContainer');
+      himnosContainer.innerHTML = '';
+
+      if (!musicConfig.himnos || musicConfig.himnos.length === 0) {
+        himnosContainer.innerHTML = `<div style="padding: 10px; color: var(--text-muted); font-size: 0.82rem; text-align: center;">No hay himnos agregados.</div>`;
+        return;
+      }
+
+      musicConfig.himnos.forEach(himno => {
+        const div = document.createElement('div');
+        div.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #fff; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.82rem;";
+        div.innerHTML = `
+          <div>
+            <strong style="color: var(--text-dark); display: block;">${himno.titulo}</strong>
+            <span style="color: var(--text-muted); font-size: 0.75rem;">${himno.artista}</span>
+          </div>
+          <span style="font-size: 0.75rem; background: rgba(104,27,40,0.06); color: var(--wine-main); padding: 4px 8px; border-radius: 6px; font-weight: 700;">${himno.etiqueta || 'Himno'}</span>
+        `;
+        himnosContainer.appendChild(div);
+      });
     }
 
     async function subirMultimedia(event) {
@@ -1098,7 +1194,7 @@
     function cerrarModal(e, force = false) {
       if (force || e.target.id === 'modal' || e.target.classList.contains('modal-close')) {
         document.getElementById('modal').classList.remove('active');
-        setTimeout(() => { document.getElementById('modalBody').innerHTML = ''; }, 200);
+        document.getElementById('modalBody').innerHTML = '';
       }
     }
   </script>
