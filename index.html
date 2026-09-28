@@ -76,41 +76,6 @@
     }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
 
-    .sync-card {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    .sync-header { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .sync-inputs { display: flex; gap: 12px; flex-wrap: wrap; }
-    .sync-inputs input { 
-      flex: 1; 
-      min-width: 240px; 
-      background: rgba(9, 13, 22, 0.6); 
-      border: 1px solid var(--surface-border); 
-      padding: 10px 14px; 
-      border-radius: 10px; 
-      color: var(--text); 
-      font-size: 0.85rem; 
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .sync-inputs input:focus { border-color: var(--primary); }
-    .btn-sync { 
-      background: var(--primary); 
-      color: #090d16; 
-      font-weight: 700; 
-      border: none; 
-      padding: 10px 20px; 
-      border-radius: 10px; 
-      cursor: pointer; 
-      transition: all 0.2s;
-    }
-    .btn-sync:hover { background: var(--primary-hover); box-shadow: 0 0 15px var(--primary-glow); }
-
     .controls { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
     
     .upload-zone { 
@@ -290,24 +255,15 @@
       </div>
       <div class="status-badge" id="status">
         <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Configuración Requerida</span>
+        <span id="statusText">Cargando...</span>
       </div>
     </header>
-
-    <div class="sync-card">
-      <div class="sync-header">⚙️ Conexión de Sincronización (PC / Celular)</div>
-      <div class="sync-inputs">
-        <input type="text" id="binId" placeholder="BIN ID (Ej. 6ab9ade8ffd5d1605335d907)">
-        <input type="password" id="apiKey" placeholder="Master Key ($2a$10$...)">
-        <button class="btn-sync" onclick="guardarCredenciales()">Conectar y Cargar</button>
-      </div>
-    </div>
 
     <div class="controls">
       <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
         <span class="upload-icon">☁️</span>
         <div class="upload-title">Haz clic o arrastra fotos y videos aquí</div>
-        <div class="upload-subtitle">Se subirán a la nube y aparecerán instantáneamente en tu celular</div>
+        <div class="upload-subtitle">Se sincronizarán automáticamente con tu celular</div>
         <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="subirMultimedia(event)">
       </div>
 
@@ -330,21 +286,15 @@
   </div>
 
   <script>
+    // Credenciales integradas
+    const BIN_ID = '6ab9ade8ffd5d1605335d907';
+    const API_KEY = '$2a$10$Hmai3/Cp0eV7AhrkxNDaHesYsuL36PJNUczcmKhTbS9QIphmrUqBy';
+
     let filtroActual = 'todos';
     let mediaItems = [];
 
     document.addEventListener('DOMContentLoaded', () => {
-      const savedBin = localStorage.getItem('jb_bin_id') || '';
-      const savedKey = localStorage.getItem('jb_api_key') || '';
-      
-      document.getElementById('binId').value = savedBin;
-      document.getElementById('apiKey').value = savedKey;
-
-      if (savedBin && savedKey) {
-        cargarDesdeNube();
-      } else {
-        renderGaleria();
-      }
+      cargarDesdeNube();
     });
 
     function actualizarEstado(texto, exito = true) {
@@ -356,37 +306,17 @@
       statusDot.style.boxShadow = exito ? '0 0 8px var(--success)' : '0 0 8px var(--danger)';
     }
 
-    function guardarCredenciales() {
-      const binId = document.getElementById('binId').value.trim();
-      const apiKey = document.getElementById('apiKey').value.trim();
-
-      if (!binId || !apiKey) {
-        alert('Por favor ingresa tanto el BIN ID como el Master Key.');
-        return;
-      }
-
-      localStorage.setItem('jb_bin_id', binId);
-      localStorage.setItem('jb_api_key', apiKey);
-      cargarDesdeNube();
-    }
-
     async function cargarDesdeNube() {
-      const binId = localStorage.getItem('jb_bin_id');
-      const apiKey = localStorage.getItem('jb_api_key');
-
-      if (!binId || !apiKey) return;
-
       actualizarEstado("Sincronizando...", true);
 
       try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-          headers: { 'X-Master-Key': apiKey }
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: { 'X-Master-Key': API_KEY }
         });
 
         if (!res.ok) throw new Error('Error al cargar datos');
 
         const data = await res.json();
-        // Garantizar lectura adecuada de la estructura {"items": [...]}
         if (data.record && Array.isArray(data.record.items)) {
           mediaItems = data.record.items;
         } else if (Array.isArray(data.record)) {
@@ -405,14 +335,6 @@
     async function subirMultimedia(event) {
       const files = Array.from(event.target.files);
       if (!files.length) return;
-
-      const binId = localStorage.getItem('jb_bin_id');
-      const apiKey = localStorage.getItem('jb_api_key');
-
-      if (!binId || !apiKey) {
-        alert('Ingresa y guarda tu BIN ID y Master Key primero.');
-        return;
-      }
 
       actualizarEstado("Subiendo archivos...", true);
 
@@ -445,13 +367,12 @@
         }
       }
 
-      // Guardar lista actualizada respetando la estructura {"items": [...]}
       try {
-        await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            'X-Master-Key': apiKey
+            'X-Master-Key': API_KEY
           },
           body: JSON.stringify({ items: mediaItems })
         });
@@ -469,17 +390,14 @@
       event.stopPropagation();
       if (!confirm('¿Eliminar este elemento de la nube?')) return;
 
-      const binId = localStorage.getItem('jb_bin_id');
-      const apiKey = localStorage.getItem('jb_api_key');
-
       mediaItems = mediaItems.filter(i => i.id !== id);
 
       try {
-        await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            'X-Master-Key': apiKey
+            'X-Master-Key': API_KEY
           },
           body: JSON.stringify({ items: mediaItems })
         });
@@ -505,7 +423,7 @@
           <div class="empty-state">
             <span class="empty-state-icon">🖼️</span>
             <p style="font-size: 1.1rem; font-weight: 600; color: var(--text);">No hay multimedia disponible</p>
-            <p style="font-size: 0.85rem; margin-top: 4px;">Sube fotos o videos o verifica tus credenciales.</p>
+            <p style="font-size: 0.85rem; margin-top: 4px;">Sube fotos o videos desde tu PC o teléfono.</p>
           </div>
         `;
         return;
