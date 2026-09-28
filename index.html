@@ -18,7 +18,6 @@
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --danger: #f43f5e;
-      --danger-hover: #e11d48;
       --success: #34d399;
     }
 
@@ -45,12 +44,12 @@
       justify-content: space-between; 
       align-items: center; 
       padding: 16px 24px; 
-      background: rgba(19, 28, 46, 0.6);
+      background: rgba(19, 28, 46, 0.7);
       backdrop-filter: blur(12px);
       border: 1px solid var(--surface-border);
       border-radius: 20px;
       gap: 16px; 
-      margin-bottom: 28px; 
+      margin-bottom: 24px; 
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
 
@@ -77,18 +76,52 @@
     }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
 
+    .sync-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .sync-header { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .sync-inputs { display: flex; gap: 12px; flex-wrap: wrap; }
+    .sync-inputs input { 
+      flex: 1; 
+      min-width: 240px; 
+      background: rgba(9, 13, 22, 0.6); 
+      border: 1px solid var(--surface-border); 
+      padding: 10px 14px; 
+      border-radius: 10px; 
+      color: var(--text); 
+      font-size: 0.85rem; 
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .sync-inputs input:focus { border-color: var(--primary); }
+    .btn-sync { 
+      background: var(--primary); 
+      color: #090d16; 
+      font-weight: 700; 
+      border: none; 
+      padding: 10px 20px; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      transition: all 0.2s;
+    }
+    .btn-sync:hover { background: var(--primary-hover); box-shadow: 0 0 15px var(--primary-glow); }
+
     .controls { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
     
     .upload-zone { 
       background: linear-gradient(180deg, rgba(26, 38, 61, 0.5) 0%, rgba(19, 28, 46, 0.5) 100%); 
       border: 2px dashed var(--surface-border); 
       border-radius: 20px; 
-      padding: 40px 20px; 
+      padding: 36px 20px; 
       text-align: center; 
       cursor: pointer; 
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
-      overflow: hidden;
     }
     .upload-zone:hover { 
       border-color: var(--primary); 
@@ -96,15 +129,10 @@
       box-shadow: 0 0 30px var(--primary-glow);
       transform: translateY(-2px);
     }
-    .upload-icon { 
-      font-size: 3rem; 
-      margin-bottom: 12px; 
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
+    .upload-icon { font-size: 2.8rem; margin-bottom: 10px; display: inline-block; transition: transform 0.3s; }
     .upload-zone:hover .upload-icon { transform: scale(1.1) translateY(-4px); }
-    .upload-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 6px; color: var(--text); }
-    .upload-subtitle { font-size: 0.9rem; color: var(--text-muted); }
+    .upload-title { font-weight: 700; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
+    .upload-subtitle { font-size: 0.85rem; color: var(--text-muted); }
     input[type="file"] { display: none; }
 
     .filter-bar { 
@@ -187,9 +215,7 @@
       height: 100%; 
       object-fit: cover; 
       display: block; 
-      transition: transform 0.3s ease;
     }
-    .card:hover .media-container img { transform: scale(1.05); }
 
     .play-overlay {
       position: absolute;
@@ -260,20 +286,29 @@
     <header>
       <div class="brand">
         <span class="brand-icon">✦</span>
-        <h1>Mi Playbook Multimedia</h1>
+        <h1>Mi Playbook Multimedia Pro</h1>
       </div>
       <div class="status-badge" id="status">
-        <span class="status-dot"></span>
-        <span>Almacenamiento Ampliado (IndexedDB)</span>
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Configuración Requerida</span>
       </div>
     </header>
 
+    <div class="sync-card">
+      <div class="sync-header">⚙️ Conexión de Sincronización (PC / Celular)</div>
+      <div class="sync-inputs">
+        <input type="text" id="binId" placeholder="BIN ID (Ej. 6ab9ade8ffd5d1605335d907)">
+        <input type="password" id="apiKey" placeholder="Master Key ($2a$10$...)">
+        <button class="btn-sync" onclick="guardarCredenciales()">Conectar y Cargar</button>
+      </div>
+    </div>
+
     <div class="controls">
       <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-        <span class="upload-icon">✨</span>
-        <div class="upload-title">Selecciona o arrastra fotos y videos</div>
-        <div class="upload-subtitle">Guardado local de alta capacidad (sin límite de 5 MB)</div>
-        <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="subirArchivos(event)">
+        <span class="upload-icon">☁️</span>
+        <div class="upload-title">Haz clic o arrastra fotos y videos aquí</div>
+        <div class="upload-subtitle">Se subirán a la nube y aparecerán instantáneamente en tu celular</div>
+        <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="subirMultimedia(event)">
       </div>
 
       <div class="filter-bar">
@@ -297,111 +332,171 @@
   <script>
     let filtroActual = 'todos';
     let mediaItems = [];
-    let db;
 
-    // Inicializar IndexedDB para soporte de almacenamiento grande (hasta cientos de MBs/GBs)
-    function initDB() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open('PlaybookDB', 1);
-        request.onupgradeneeded = (e) => {
-          const database = e.target.result;
-          if (!database.objectStoreNames.contains('media')) {
-            database.createObjectStore('media', { keyPath: 'id' });
-          }
-        };
-        request.onsuccess = (e) => {
-          db = e.target.result;
-          resolve(db);
-        };
-        request.onerror = (e) => reject(e);
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Limpiar localStorage viejo que causaba el desbordamiento
-      localStorage.removeItem('my_playbook_assets');
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedBin = localStorage.getItem('jb_bin_id') || '';
+      const savedKey = localStorage.getItem('jb_api_key') || '';
       
-      await initDB();
-      await cargarDesdeDB();
+      document.getElementById('binId').value = savedBin;
+      document.getElementById('apiKey').value = savedKey;
+
+      if (savedBin && savedKey) {
+        cargarDesdeNube();
+      } else {
+        renderGaleria();
+      }
     });
 
-    async function subirArchivos(event) {
+    function actualizarEstado(texto, exito = true) {
+      const statusText = document.getElementById('statusText');
+      const statusDot = document.getElementById('statusDot');
+      
+      statusText.innerText = texto;
+      statusDot.style.background = exito ? 'var(--success)' : 'var(--danger)';
+      statusDot.style.boxShadow = exito ? '0 0 8px var(--success)' : '0 0 8px var(--danger)';
+    }
+
+    function guardarCredenciales() {
+      const binId = document.getElementById('binId').value.trim();
+      const apiKey = document.getElementById('apiKey').value.trim();
+
+      if (!binId || !apiKey) {
+        alert('Por favor ingresa tanto el BIN ID como el Master Key.');
+        return;
+      }
+
+      localStorage.setItem('jb_bin_id', binId);
+      localStorage.setItem('jb_api_key', apiKey);
+      cargarDesdeNube();
+    }
+
+    async function cargarDesdeNube() {
+      const binId = localStorage.getItem('jb_bin_id');
+      const apiKey = localStorage.getItem('jb_api_key');
+
+      if (!binId || !apiKey) return;
+
+      actualizarEstado("Sincronizando...", true);
+
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+          headers: { 'X-Master-Key': apiKey }
+        });
+
+        if (!res.ok) throw new Error('Error al cargar datos');
+
+        const data = await res.json();
+        // Garantizar lectura adecuada de la estructura {"items": [...]}
+        if (data.record && Array.isArray(data.record.items)) {
+          mediaItems = data.record.items;
+        } else if (Array.isArray(data.record)) {
+          mediaItems = data.record;
+        } else {
+          mediaItems = [];
+        }
+
+        actualizarEstado("Sincronizado", true);
+        renderGaleria();
+      } catch (err) {
+        actualizarEstado("Error de Conexión", false);
+      }
+    }
+
+    async function subirMultimedia(event) {
       const files = Array.from(event.target.files);
       if (!files.length) return;
 
-      const status = document.getElementById('status');
-      status.querySelector('span:last-child').innerText = "Guardando archivos...";
+      const binId = localStorage.getItem('jb_bin_id');
+      const apiKey = localStorage.getItem('jb_api_key');
 
-      for (const file of files) {
-        const item = {
-          id: Date.now() + Math.random().toString(36).substr(2, 9),
-          fileBlob: file, // Se guarda el objeto Blob/File original directamente en IndexedDB
-          name: file.name,
-          type: file.type || (file.name.match(/\.(mp4|webm|mov|avi)$/i) ? 'video/mp4' : 'image/jpeg'),
-          timestamp: Date.now()
-        };
-
-        await guardarEnDB(item);
+      if (!binId || !apiKey) {
+        alert('Ingresa y guarda tu BIN ID y Master Key primero.');
+        return;
       }
 
-      status.querySelector('span:last-child').innerText = "Almacenamiento Ampliado (IndexedDB)";
+      actualizarEstado("Subiendo archivos...", true);
+
+      for (const file of files) {
+        try {
+          const formData = new FormData();
+          formData.append('reqtype', 'fileupload');
+          formData.append('fileToUpload', file);
+
+          const uploadRes = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://catbox.moe/user/api.php'), {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!uploadRes.ok) throw new Error('Falló subida');
+
+          const fileUrl = (await uploadRes.text()).trim();
+
+          const nuevoItem = {
+            id: Date.now() + Math.random().toString(36).substr(2, 5),
+            url: fileUrl,
+            name: file.name,
+            type: file.type || (file.name.match(/\.(mp4|webm|mov|avi)$/i) ? 'video/mp4' : 'image/jpeg'),
+            timestamp: Date.now()
+          };
+
+          mediaItems.unshift(nuevoItem);
+        } catch (err) {
+          console.error("Error al subir:", file.name, err);
+        }
+      }
+
+      // Guardar lista actualizada respetando la estructura {"items": [...]}
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': apiKey
+          },
+          body: JSON.stringify({ items: mediaItems })
+        });
+
+        actualizarEstado("Sincronizado", true);
+        renderGaleria();
+      } catch (err) {
+        actualizarEstado("Error al guardar en nube", false);
+      }
+
       event.target.value = '';
-      await cargarDesdeDB();
-    }
-
-    function guardarEnDB(item) {
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction('media', 'readwrite');
-        const store = tx.objectStore('media');
-        const req = store.put(item);
-        req.onsuccess = () => resolve();
-        req.onerror = (err) => reject(err);
-      });
-    }
-
-    function cargarDesdeDB() {
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction('media', 'readonly');
-        const store = tx.objectStore('media');
-        const req = store.getAll();
-
-        req.onsuccess = () => {
-          // Liberar URLs antiguas en memoria
-          mediaItems.forEach(i => { if (i.objectUrl) URL.revokeObjectURL(i.objectUrl); });
-
-          // Mapear elementos e instanciar Object URLs frescos
-          mediaItems = req.result
-            .sort((a, b) => b.timestamp - a.timestamp)
-            .map(item => ({
-              ...item,
-              objectUrl: URL.createObjectURL(item.fileBlob)
-            }));
-
-          cargarGaleria();
-          resolve();
-        };
-        req.onerror = (err) => reject(err);
-      });
     }
 
     async function eliminarItem(id, event) {
       event.stopPropagation();
-      if (confirm('¿Eliminar este elemento de la galería?')) {
-        const tx = db.transaction('media', 'readwrite');
-        const store = tx.objectStore('media');
-        await store.delete(id);
-        await cargarDesdeDB();
+      if (!confirm('¿Eliminar este elemento de la nube?')) return;
+
+      const binId = localStorage.getItem('jb_bin_id');
+      const apiKey = localStorage.getItem('jb_api_key');
+
+      mediaItems = mediaItems.filter(i => i.id !== id);
+
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': apiKey
+          },
+          body: JSON.stringify({ items: mediaItems })
+        });
+        renderGaleria();
+      } catch (err) {
+        alert('Error al eliminar el elemento.');
       }
     }
 
-    function cargarGaleria() {
+    function renderGaleria() {
       const galeria = document.getElementById('galeria');
       const busqueda = document.getElementById('searchInput').value.toLowerCase();
       galeria.innerHTML = '';
 
       let itemsFiltrados = mediaItems.filter(item => {
         const coincideTipo = filtroActual === 'todos' || (item.type && item.type.startsWith(filtroActual));
-        const coincideNombre = item.name.toLowerCase().includes(busqueda);
+        const coincideNombre = item.name ? item.name.toLowerCase().includes(busqueda) : true;
         return coincideTipo && coincideNombre;
       });
 
@@ -409,8 +504,8 @@
         galeria.innerHTML = `
           <div class="empty-state">
             <span class="empty-state-icon">🖼️</span>
-            <p style="font-size: 1.1rem; font-weight: 600; color: var(--text);">No hay multimedia para mostrar</p>
-            <p style="font-size: 0.85rem; margin-top: 4px;">Sube fotos o videos para guardarlos localmente.</p>
+            <p style="font-size: 1.1rem; font-weight: 600; color: var(--text);">No hay multimedia disponible</p>
+            <p style="font-size: 0.85rem; margin-top: 4px;">Sube fotos o videos o verifica tus credenciales.</p>
           </div>
         `;
         return;
@@ -424,8 +519,8 @@
         const tipoTexto = esImagen ? 'FOTO' : 'VIDEO';
 
         let mediaHtml = esImagen 
-          ? `<img src="${item.objectUrl}" alt="${item.name}">`
-          : `<video src="${item.objectUrl}#t=0.1" preload="metadata"></video>
+          ? `<img src="${item.url}" alt="${item.name}">`
+          : `<video src="${item.url}#t=0.1" preload="metadata"></video>
              <div class="play-overlay"><div class="play-icon">▶</div></div>`;
 
         card.innerHTML = `
@@ -434,7 +529,7 @@
             ${mediaHtml}
           </div>
           <div class="card-body">
-            <div class="card-title" title="${item.name}">${item.name}</div>
+            <div class="card-title" title="${item.name}">${item.name || 'Sin título'}</div>
             <div class="card-actions">
               <button class="action-btn" onclick="abrirModal('${item.id}')">🔍 Vista Previa</button>
               <button class="action-btn delete" onclick="eliminarItem('${item.id}', event)">🗑️ Eliminar</button>
@@ -449,11 +544,11 @@
       filtroActual = tipo;
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      cargarGaleria();
+      renderGaleria();
     }
 
     function filtrarGaleria() {
-      cargarGaleria();
+      renderGaleria();
     }
 
     function abrirModal(id) {
@@ -464,9 +559,9 @@
       const modalBody = document.getElementById('modalBody');
 
       if (item.type && item.type.startsWith('image/')) {
-        modalBody.innerHTML = `<img src="${item.objectUrl}" alt="${item.name}">`;
+        modalBody.innerHTML = `<img src="${item.url}" alt="${item.name}">`;
       } else {
-        modalBody.innerHTML = `<video src="${item.objectUrl}" controls autoplay preload="auto"></video>`;
+        modalBody.innerHTML = `<video src="${item.url}" controls autoplay preload="auto"></video>`;
       }
 
       modal.classList.add('active');
