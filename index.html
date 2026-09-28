@@ -87,7 +87,7 @@
     <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
       <span class="upload-icon">☁️</span>
       <div class="upload-title">Haz clic o arrastra fotos y videos aquí</div>
-      <div class="upload-subtitle">Se guardarán en tu nube y sincronizarán con tu celular</div>
+      <div class="upload-subtitle">Se guardarán permanentemente y se sincronizarán con tu celular</div>
       <input type="file" id="fileInput" accept="image/*,video/*" onchange="subirMultimedia(event)">
     </div>
 
@@ -109,11 +109,9 @@
   </div>
 
   <script>
-    // Credenciales Integradas
+    // Credenciales de JSONBin
     const BIN_ID = '6ab9ade8ffd5d1605335d907';
     const MASTER_KEY = '$2a$10$Hmai3/Cp0eV7AhrkxNDaHesYsuL36PJNUczcmKhTbS9QIphmrUqBy';
-    const BOT_TOKEN = '8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc';
-    const CHAT_ID = '8616807953';
 
     let items = [];
     let filtroActual = 'todos';
@@ -129,14 +127,13 @@
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
           headers: { 'X-Master-Key': MASTER_KEY }
         });
-        if (!res.ok) throw new Error('Error al conectar con la base de datos');
+        if (!res.ok) throw new Error('Error de comunicación con JSONBin');
         const data = await res.json();
         
-        // Maneja tanto el formato directo como la estructura {"items": []}
-        if (Array.isArray(data.record)) {
-          items = data.record;
-        } else if (data.record && Array.isArray(data.record.items)) {
+        if (data.record && Array.isArray(data.record.items)) {
           items = data.record.items;
+        } else if (Array.isArray(data.record)) {
+          items = data.record;
         } else {
           items = [];
         }
@@ -156,46 +153,24 @@
       if (!file) return;
 
       const status = document.getElementById('status');
-      status.innerText = "Subiendo archivo a Telegram...";
+      status.innerText = "Subiendo archivo permanentemente...";
       status.style.color = "#38bdf8";
 
       try {
-        const esVideo = file.type.startsWith('video/') || file.name.match(/\.(mp4|webm|mov|avi)$/i);
-        const endpoint = esVideo ? 'sendVideo' : 'sendPhoto';
-        const fieldName = esVideo ? 'video' : 'photo';
-
+        // Subir archivo a Catbox
         const formData = new FormData();
-        formData.append('chat_id', CHAT_ID);
-        formData.append(fieldName, file);
+        formData.append('reqtype', 'fileupload');
+        formData.append('fileToUpload', file);
 
-        // Subir archivo al Bot de Telegram
-        const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${endpoint}`, {
+        const uploadRes = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://catbox.moe/user/api.php'), {
           method: 'POST',
           body: formData
         });
 
-        const tgData = await tgRes.json();
-        if (!tgData.ok) throw new Error('Error al enviar a Telegram');
+        if (!uploadRes.ok) throw new Error('Error al alojar el archivo');
+        const fileUrl = (await uploadRes.text()).trim();
 
-        // Obtener el file_id de Telegram
-        let fileId = '';
-        if (esVideo) {
-          fileId = tgData.result.video.file_id;
-        } else {
-          // Obtiene la versión con mejor resolución de la foto
-          const photos = tgData.result.photo;
-          fileId = photos[photos.length - 1].file_id;
-        }
-
-        // Obtener la ruta de descarga directa del archivo en los servidores de Telegram
-        const fileInfoRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
-        const fileInfoData = await fileInfoRes.json();
-        
-        if (!fileInfoData.ok) throw new Error('Error al obtener la ruta del archivo');
-        const filePath = fileInfoData.result.file_path;
-        
-        // URL final que reproduce directamente la foto o video en la web
-        const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
+        const esVideo = file.type.startsWith('video/') || file.name.match(/\.(mp4|webm|mov|avi)$/i);
 
         const nuevoElemento = {
           url: fileUrl,
@@ -206,9 +181,9 @@
 
         items.unshift(nuevoElemento);
 
-        status.innerText = "Guardando en tu base de datos...";
+        status.innerText = "Guardando en la lista compartida...";
 
-        // Actualizar la lista en JSONBin
+        // Guardar estructura persistente en JSONBin
         await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
           method: 'PUT',
           headers: {
@@ -218,13 +193,13 @@
           body: JSON.stringify({ items: items })
         });
 
-        status.innerText = "¡Subido y sincronizado!";
+        status.innerText = "¡Subido y sincronizado permanentemente!";
         status.style.color = "#4ade80";
         renderGaleria();
 
       } catch (err) {
         console.error(err);
-        alert('Ocurrió un error al procesar o subir el archivo.');
+        alert('Error al subir el archivo.');
         status.innerText = "Error en la subida";
         status.style.color = "#ef4444";
       }
