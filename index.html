@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="referrer" content="no-referrer" />
   <title>PROM ESTRELLA DE LA MAÑANA '26 — Mural Digital, Anuario & Galería Oficial</title>
-  <link rel="icon" type="image/png" href="logo.png" />
+  <meta name="description" content="Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM) con sincronización en la nube sin pérdida de datos." />
+  <meta property="og:title" content="PROM ESTRELLA DE LA MAÑANA '26 — Mural Digital, Anuario & Galería Oficial" />
+  <meta property="og:description" content="Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM)." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -70,20 +74,20 @@
     }
 
     .anim-section {
-      animation: fadeSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: fadeSlideUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
       will-change: transform, opacity;
     }
     .anim-card {
-      animation: fadeSlideUp 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
-      animation-delay: calc(min(var(--i, 0), 8) * 30ms);
-      transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease;
+      animation: fadeSlideUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: calc(min(var(--i, 0), 8) * 25ms);
+      transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), border-color 160ms ease;
       will-change: transform, opacity;
     }
     .anim-card:hover {
       transform: translate3d(0, -3px, 0);
     }
     .anim-modal {
-      animation: modalZoomIn 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: modalZoomIn 170ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
     .btn-interactive {
       transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease, border-color 160ms ease, opacity 160ms ease;
@@ -95,15 +99,13 @@
       transform: scale3d(0.97, 0.97, 1);
     }
     .like-pop {
-      animation: heartPop 260ms cubic-bezier(0.16, 1, 0.3, 1);
+      animation: heartPop 220ms cubic-bezier(0.16, 1, 0.3, 1);
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- =========================================================
-       TOP BAR
-  ========================================================= -->
+  <!-- TOP BAR (3-Zone Contract) -->
   <header class="sticky top-0 z-30 h-16 bg-[var(--card-bg)]/95 backdrop-blur-sm border-b border-[var(--border-color)] px-4 lg:px-8 flex items-center justify-between gap-4">
     <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="font-display text-lg md:text-xl font-bold tracking-tight text-[var(--wine-main)] whitespace-nowrap shrink-0">
       Estrella de la Mañana ’26
@@ -132,9 +134,7 @@
     </div>
   </header>
 
-  <!-- =========================================================
-       CUERPO PRINCIPAL: SIDEBAR + MAIN VIEWPORT
-  ========================================================= -->
+  <!-- CUERPO PRINCIPAL: SIDEBAR + MAIN VIEWPORT -->
   <div class="flex-1 flex max-w-[1440px] w-full mx-auto">
 
     <!-- SIDEBAR -->
@@ -143,10 +143,10 @@
         <div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]">
           <div class="flex items-center gap-3">
             <div class="w-12 h-12 rounded-xl bg-white border border-[var(--gold-main)] p-1 flex items-center justify-center shrink-0">
-              <img src="logo.png" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
+              <img src="logo.png" onerror="this.onerror=null; this.src=window.DEFAULT_LOGO_SVG || '';" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
             </div>
             <div>
-              <div class="text-xs font-extrabold uppercase tracking-wider text-[var(--wine-main)]">Estrella ’26</div>
+              <div class="text-xs font-extrabold text-[var(--wine-main)]">Estrella ’26</div>
               <div class="text-[11px] font-semibold text-[var(--gold-main)]">Promoción EDM</div>
             </div>
           </div>
@@ -203,8 +203,8 @@
       <!-- Estado de Nube y Tema -->
       <div class="pt-4 border-t border-[var(--border-color)] space-y-3">
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
-          <span id="statusText">Sincronizando...</span>
-          <button type="button" onclick="cargarDesdeNube()" class="btn-interactive font-semibold hover:text-[var(--wine-main)] cursor-pointer">Recargar</button>
+          <span id="statusText" class="truncate">Sincronizando...</span>
+          <button type="button" onclick="cargarDesdeNube(true)" class="btn-interactive font-semibold hover:text-[var(--wine-main)] cursor-pointer shrink-0">Recargar</button>
         </div>
         <button type="button" onclick="alternarTemaAzul()" class="btn-interactive w-full px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-dark)] hover:border-[var(--wine-main)] flex items-center justify-between cursor-pointer">
           <span id="themeBtnSideText">Tema Azul Real</span>
@@ -219,13 +219,11 @@
     <!-- MAIN CONTENT -->
     <main class="flex-1 min-w-0 px-4 py-6 md:px-8 md:py-8 max-w-5xl mx-auto w-full">
 
-      <!-- =========================================================
-           1. SECCIÓN INICIO
-      ========================================================= -->
+      <!-- 1. SECCIÓN INICIO -->
       <section id="seccion-inicio" class="page-section anim-section space-y-8">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
           <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2.5 flex items-center justify-center shrink-0">
-            <img src="logo.png" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
+            <img src="logo.png" onerror="this.onerror=null; this.src=window.DEFAULT_LOGO_SVG || '';" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
           </div>
           <div class="flex-1 text-center md:text-left space-y-3">
             <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs text-[var(--text-muted)]">
@@ -237,46 +235,46 @@
             </div>
             <h1 class="text-2xl md:text-4xl font-bold text-[var(--wine-main)] tracking-tight">Prom Estrella de la Mañana</h1>
             <p class="text-sm md:text-base text-[var(--text-muted)] max-w-2xl leading-relaxed">
-              Mural digital, anuario de integrantes, votaciones del salón, cápsula del tiempo y galería oficial 2026.
+              Mural digital, anuario de integrantes, votaciones del salón, cápsula del tiempo y galería oficial 2026 con guardado inteligente en tiempo real.
             </p>
             <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <button type="button" onclick="cambiarSeccion('miembros')" class="btn-interactive px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] cursor-pointer">
+              <button type="button" onclick="cambiarSeccion('miembros')" class="btn-interactive px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] cursor-pointer whitespace-nowrap">
                 Mural de Integrantes
               </button>
-              <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold cursor-pointer">
+              <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
                 Explorar Galería
               </button>
-              <button type="button" onclick="cambiarSeccion('premios')" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer">
-                🏆 Premios EDM
+              <button type="button" onclick="cambiarSeccion('premios')" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
+                Premios EDM
               </button>
             </div>
           </div>
         </div>
 
-        <!-- MEJORA #2: CUENTA REGRESIVA EN VIVO -->
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 md:p-6 shadow-sm">
+        <!-- CUENTA REGRESIVA EN VIVO -->
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 md:p-6">
           <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div class="space-y-1">
-              <div class="text-xs font-bold uppercase tracking-wider text-[var(--gold-main)]">⏳ Cuenta Regresiva Oficial Promo ’26</div>
+              <div class="text-xs font-semibold text-[var(--gold-main)]">Cuenta Regresiva Oficial · Promo ’26</div>
               <h2 id="nextEventTitle" class="text-lg md:text-xl font-bold text-[var(--wine-main)]">Ceremonia de Graduación y Fiesta de Gala EDM ’26</h2>
               <p id="nextEventMeta" class="text-xs text-[var(--text-muted)]">18 de diciembre de 2026 · Auditorio & Salón de Gala</p>
             </div>
             <div class="grid grid-cols-4 gap-2 sm:gap-3">
               <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
                 <div id="cdDays" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Días</div>
+                <div class="text-[11px] font-semibold text-[var(--text-muted)]">Días</div>
               </div>
               <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
                 <div id="cdHours" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Horas</div>
+                <div class="text-[11px] font-semibold text-[var(--text-muted)]">Horas</div>
               </div>
               <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
                 <div id="cdMins" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Min</div>
+                <div class="text-[11px] font-semibold text-[var(--text-muted)]">Min</div>
               </div>
               <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
                 <div id="cdSecs" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Seg</div>
+                <div class="text-[11px] font-semibold text-[var(--text-muted)]">Seg</div>
               </div>
             </div>
           </div>
@@ -316,7 +314,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <button type="button" onclick="cambiarSeccion('miembros')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">🎓 Mural de Integrantes</h3>
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Mural de Integrantes</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Conoce a todos los miembros de la promoción, sube tu foto oficial y descárgala como Postal Polaroid.</p>
             </div>
             <span class="text-xs font-semibold text-[var(--gold-main)]">Ver anuario →</span>
@@ -324,7 +322,7 @@
 
           <button type="button" onclick="cambiarSeccion('galeria')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">📸 Galería por Álbumes</h3>
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Galería por Álbumes</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Filtra fotos y videos por Jornada, Semana Santa, 15 Años o Fiesta y deja dedicatorias.</p>
             </div>
             <span class="text-xs font-semibold text-[var(--gold-main)]">Abrir galería →</span>
@@ -332,7 +330,7 @@
 
           <button type="button" onclick="cambiarSeccion('premios')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">🏆 Premios de la Promo ’26</h3>
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Premios de la Promo ’26</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Nomina a tus compañeros y vota en vivo en las categorías clásicas del salón.</p>
             </div>
             <span class="text-xs font-semibold text-[var(--gold-main)]">Ir a votar →</span>
@@ -340,7 +338,7 @@
 
           <button type="button" onclick="cambiarSeccion('capsula')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">🔒 Cápsula del Tiempo</h3>
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Cápsula del Tiempo</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Sella cartas o predicciones con candado hasta el día de la graduación o reencuentro.</p>
             </div>
             <span class="text-xs font-semibold text-[var(--gold-main)]">Abrir cápsula →</span>
@@ -348,7 +346,7 @@
 
           <button type="button" onclick="cambiarSeccion('eventos')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">🎵 Eventos & Soundtrack</h3>
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Eventos & Soundtrack</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Configura el cronograma 2026 de la promo, escucha la playlist en Spotify y añade himnos.</p>
             </div>
             <span class="text-xs font-semibold text-[var(--gold-main)]">Ver eventos y música →</span>
@@ -356,7 +354,7 @@
 
           <button type="button" onclick="cambiarSeccion('mensajes')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">💬 Buzón de Anécdotas</h3>
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Buzón de Anécdotas</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Comparte mensajes cortos, recuerdos de clases y sugerencias con toda la promo.</p>
             </div>
             <span class="text-xs font-semibold text-[var(--gold-main)]">Dejar mensaje →</span>
@@ -364,15 +362,13 @@
         </div>
       </section>
 
-      <!-- =========================================================
-           2. SECCIÓN MURAL DE INTEGRANTES (ANUARIO 3 EN FILA)
-      ========================================================= -->
+      <!-- 2. SECCIÓN MURAL DE INTEGRANTES -->
       <section id="seccion-miembros" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
           <div class="text-xs text-[var(--gold-main)] font-semibold">Anuario Oficial · Promoción 2026</div>
           <h1 class="text-2xl md:text-3xl font-bold text-[var(--wine-main)]">Mural de Integrantes Estrella de la Mañana</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
-            Agrega tu retrato oficial con tu nombre, apodo y frase célebre. Puedes descargar cualquier tarjeta como Postal Polaroid.
+            Agrega tu retrato oficial con tu nombre, apodo y frase célebre. Puedes editar o descargar cualquier tarjeta como Postal Polaroid.
           </p>
         </div>
 
@@ -402,9 +398,7 @@
         <div id="miembrosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
       </section>
 
-      <!-- =========================================================
-           3. SECCIÓN GALERÍA & ÁLBUMES
-      ========================================================= -->
+      <!-- 3. SECCIÓN GALERÍA & ÁLBUMES -->
       <section id="seccion-galeria" class="page-section hidden anim-section space-y-6">
         <div id="featuredContainer" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
           <div class="flex items-center justify-between">
@@ -444,12 +438,11 @@
               <p class="text-xs text-white/80 leading-relaxed">Envíalos directamente al bot de Telegram de la promoción para sincronizarlos automáticamente.</p>
             </div>
             <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="btn-interactive w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 whitespace-nowrap">
-              EN DESARROLLO ↗
+              Abrir @promedmbot ↗
             </a>
           </div>
         </div>
 
-        <!-- MEJORA #3: BARRA DE ÁLBUMES RÁPIDOS -->
         <div id="albumFilterBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
 
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
@@ -471,17 +464,15 @@
         <div id="galeria" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
       </section>
 
-      <!-- =========================================================
-           4. SECCIÓN PREMIOS DE LA PROMO '26 (MEJORA #1)
-      ========================================================= -->
+      <!-- 4. SECCIÓN PREMIOS DE LA PROMO '26 -->
       <section id="seccion-premios" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div class="text-xs font-bold text-[var(--gold-main)] uppercase tracking-wider">Votaciones Interactivas del Salón</div>
-            <h1 class="text-2xl font-bold text-[var(--wine-main)]">🏆 Los Premios de la Promo ’26</h1>
+            <div class="text-xs font-semibold text-[var(--gold-main)]">Votaciones Interactivas del Salón</div>
+            <h1 class="text-2xl font-bold text-[var(--wine-main)]">Los Premios de la Promo ’26</h1>
             <p class="text-xs md:text-sm text-[var(--text-muted)]">Nomina a tus compañeros y vota en cada categoría para coronar a los ganadores.</p>
           </div>
-          <button onclick="document.getElementById('newCategoryBox').classList.toggle('hidden')" class="btn-interactive px-4 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer self-start sm:self-auto">
+          <button onclick="document.getElementById('newCategoryBox').classList.toggle('hidden')" class="btn-interactive px-4 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer self-start sm:self-auto whitespace-nowrap">
             + Nueva Categoría
           </button>
         </div>
@@ -498,13 +489,11 @@
         <div id="awardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
       </section>
 
-      <!-- =========================================================
-           5. SECCIÓN CÁPSULA DEL TIEMPO (MEJORA #4)
-      ========================================================= -->
+      <!-- 5. SECCIÓN CÁPSULA DEL TIEMPO -->
       <section id="seccion-capsula" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
-          <div class="text-xs font-bold text-[var(--gold-main)] uppercase tracking-wider">Mensajes hacia el Futuro</div>
-          <h1 class="text-2xl font-bold text-[var(--wine-main)]">🔒 Cápsula del Tiempo EDM ’26</h1>
+          <div class="text-xs font-semibold text-[var(--gold-main)]">Mensajes hacia el Futuro</div>
+          <h1 class="text-2xl font-bold text-[var(--wine-main)]">Cápsula del Tiempo EDM ’26</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
             Sella una carta, promesa o predicción para el día de nuestra graduación o reencuentro. Los mensajes permanecen protegidos con candado hasta su fecha de apertura.
           </p>
@@ -515,7 +504,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <input id="capRecipientInput" type="text" value="Para toda la Promo ’26" maxlength="40" placeholder="Destinatario..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
             <input id="capDateInput" type="date" value="2026-12-18" class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
-            <button onclick="sellarCapsula()" class="btn-interactive px-5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">🔒 Sellar en la Cápsula</button>
+            <button onclick="sellarCapsula()" class="btn-interactive px-5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Sellar en la Cápsula</button>
           </div>
           <textarea id="capMessageInput" rows="3" maxlength="500" placeholder="Escribe tu carta o predicción para el futuro de la promoción..." class="w-full rounded-xl border border-[var(--border-color)] bg-white p-3.5 text-xs outline-none resize-none"></textarea>
         </div>
@@ -523,21 +512,18 @@
         <div id="capsulesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </section>
 
-      <!-- =========================================================
-           6. SECCIÓN EVENTOS & SOUNDTRACK
-      ========================================================= -->
+      <!-- 6. SECCIÓN EVENTOS & SOUNDTRACK -->
       <section id="seccion-eventos" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
           <h1 class="text-2xl font-bold text-[var(--wine-main)]">Cronograma 2026 & Soundtrack Oficial</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)]">Configura libremente las fechas importantes de nuestro año y la música que nos acompaña</p>
         </div>
 
-        <!-- Cronograma de Eventos 2026 (Formulario siempre disponible y borrado con 1 clic) -->
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-4">
           <div class="flex items-center justify-between gap-2">
             <div>
-              <h2 class="text-base font-bold text-[var(--wine-main)]">📅 Cronograma de Eventos 2026</h2>
-              <p class="text-xs text-[var(--text-muted)]">Agrega o borra libremente las fechas reales de la promoción</p>
+              <h2 class="text-base font-bold text-[var(--wine-main)]">Cronograma de Eventos 2026</h2>
+              <p class="text-xs text-[var(--text-muted)]">Agrega, edita o borra libremente las fechas reales de la promoción</p>
             </div>
           </div>
           <div id="addEventForm" class="p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -578,9 +564,7 @@
         </div>
       </section>
 
-      <!-- =========================================================
-           7. SECCIÓN BUZÓN DE ANÉCDOTAS
-      ========================================================= -->
+      <!-- 7. SECCIÓN BUZÓN DE ANÉCDOTAS -->
       <section id="seccion-mensajes" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
           <h1 class="text-2xl font-bold text-[var(--wine-main)]">Buzón de Anécdotas</h1>
@@ -616,10 +600,40 @@
     <div id="modalBody" class="anim-modal max-w-4xl max-h-[85vh] rounded-2xl overflow-hidden"></div>
   </div>
 
+  <!-- MODAL DE CONTRASEÑA ADMIN / EDICIÓN (Reemplaza window.prompt para no fallar en iframes/móviles) -->
+  <div id="adminPromptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4">
+    <div class="anim-modal w-full max-w-sm rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 space-y-4">
+      <h3 id="adminPromptTitle" class="text-base font-bold text-[var(--wine-main)]">Confirmar acción de administrador</h3>
+      <p id="adminPromptDesc" class="text-xs text-[var(--text-muted)]">Han pasado más de 2 minutos desde su creación. Ingresa la clave de administración para continuar:</p>
+      <input id="adminPromptInput" type="password" placeholder="Contraseña de administración..." class="w-full rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs outline-none focus:border-[var(--wine-main)]" />
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="cerrarAdminPrompt(false)" class="btn-interactive px-4 py-2 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Cancelar</button>
+        <button type="button" onclick="cerrarAdminPrompt(true)" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST -->
   <div id="toast" class="hidden anim-modal fixed bottom-5 right-5 z-50 rounded-xl bg-[var(--wine-dark)] text-white border border-[var(--gold-main)] px-4 py-2.5 text-xs font-semibold shadow-lg"></div>
 
   <script>
+    /* =========================================================
+       ESCUDO SVG DE RESPALDO (Evita imágenes rotas si no está logo.png local)
+    ========================================================= */
+    window.DEFAULT_LOGO_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#681b28"/>
+            <stop offset="100%" stop-color="#431019"/>
+          </linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="56" fill="url(#g)" stroke="#d8b258" stroke-width="4"/>
+        <polygon points="60,18 69,42 95,42 74,57 82,82 60,67 38,82 46,57 25,42 51,42" fill="#d8b258"/>
+        <text x="60" y="103" text-anchor="middle" fill="#fffdf8" font-family="Georgia, serif" font-weight="bold" font-size="14">EDM ’26</text>
+      </svg>
+    `);
+
     /* =========================================================
        CREDENCIALES REALES DE TU NUBE (JSONBin + Telegram)
     ========================================================= */
@@ -628,6 +642,9 @@
     const BOT_TOKEN = '8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc';
     const CHAT_ID = '8616807953';
     const ADMIN_PASSWORD = 'prom26admin';
+
+    const LOCAL_STORAGE_KEY = 'prom_edm26_state_v2';
+    const DELETED_IDS_KEY = 'prom_edm26_deleted_ids_v2';
 
     const ALBUM_OPTIONS = ['Todos', 'General', 'Jornada', 'Semana Santa', '15 Años', 'Fiesta', 'Viaje'];
     let albumActual = 'Todos';
@@ -643,15 +660,164 @@
     let items = [];
     let tweets = [];
     let members = [];
-    let awards = DEFAULT_AWARDS;
+    let awards = JSON.parse(JSON.stringify(DEFAULT_AWARDS));
     let capsules = [];
     let events = [];
     let musicConfig = {
       playlistUrl: 'https://open.spotify.com/embed/playlist/3lcbivzyUFBhKcmVi49W4J',
       himnos: [
-        { titulo: 'Canción Destacada', artista: 'Promo 2026', etiqueta: 'Favorita' }
+        { id: 'him_default', titulo: 'Canción Destacada', artista: 'Promo 2026', etiqueta: 'Favorita' }
       ]
     };
+
+    /* =========================================================
+       MOTOR ANTI-REVERSIÓN Y CONTROL DE VERSIONES (v2)
+       Soluciona:
+       1. Condiciones de carrera en peticiones PUT simultáneas
+       2. Pérdida de cambios cuando JSONBin aplica límite de peticiones (429)
+       3. Reaparición de elementos borrados o sobrescritura desde otra pestaña/bot
+       4. Caché viejo en GET /latest
+    ========================================================= */
+    let nubeCargada = false;
+    let cambiosPendientes = false;
+    let sincronizandoAhora = false;
+    let syncTimer = null;
+    let localRevision = Number(localStorage.getItem('prom_edm26_revision') || '0');
+    let deletedIds = new Set();
+
+    try {
+      const savedDeleted = JSON.parse(localStorage.getItem(DELETED_IDS_KEY) || '[]');
+      if (Array.isArray(savedDeleted)) savedDeleted.forEach(id => deletedIds.add(String(id)));
+    } catch (e) {}
+
+    function registrarEliminado(idOrUrl) {
+      if (!idOrUrl) return;
+      deletedIds.add(String(idOrUrl));
+      try {
+        localStorage.setItem(DELETED_IDS_KEY, JSON.stringify(Array.from(deletedIds)));
+      } catch (e) {}
+    }
+
+    function obtenerIdItem(i) {
+      return i.id || i.url || (i.name + '_' + i.date);
+    }
+
+    function guardarRespaldoLocal(incrementarVersion = true) {
+      if (incrementarVersion) {
+        localRevision = Date.now();
+        localStorage.setItem('prom_edm26_revision', String(localRevision));
+      }
+      const payload = {
+        revision: localRevision,
+        savedAt: new Date().toISOString(),
+        deletedIds: Array.from(deletedIds),
+        items,
+        tweets,
+        members,
+        awards,
+        capsules,
+        events,
+        music: musicConfig
+      };
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(payload));
+      } catch (e) {
+        console.warn('No se pudo guardar en localStorage:', e);
+      }
+    }
+
+    function restaurarDesdeRespaldoLocal() {
+      try {
+        const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (!raw) return false;
+        const data = JSON.parse(raw);
+        if (!data || typeof data !== 'object') return false;
+        if (Array.isArray(data.deletedIds)) data.deletedIds.forEach(id => deletedIds.add(String(id)));
+        if (Array.isArray(data.items)) items = data.items.filter(i => !deletedIds.has(obtenerIdItem(i)));
+        if (Array.isArray(data.tweets)) tweets = data.tweets.filter(t => !deletedIds.has(t.id));
+        if (Array.isArray(data.members)) members = data.members.filter(m => !deletedIds.has(m.id));
+        if (Array.isArray(data.awards) && data.awards.length > 0) awards = data.awards.filter(a => !deletedIds.has(a.id));
+        if (Array.isArray(data.capsules)) capsules = data.capsules.filter(c => !deletedIds.has(c.id));
+        if (Array.isArray(data.events)) events = data.events.filter(ev => !deletedIds.has(ev.id));
+        if (data.music) {
+          if (data.music.playlistUrl) musicConfig.playlistUrl = data.music.playlistUrl;
+          if (Array.isArray(data.music.himnos)) musicConfig.himnos = data.music.himnos;
+        }
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function fusionarListasPorId(listaLocal, listaNube, getKey) {
+      const mapa = new Map();
+      const ordenClaves = [];
+
+      // Primero insertamos los elementos locales (tienen prioridad en ediciones recientes)
+      (listaLocal || []).forEach(elem => {
+        if (!elem) return;
+        const k = String(getKey(elem));
+        if (!k || deletedIds.has(k)) return;
+        mapa.set(k, elem);
+        ordenClaves.push(k);
+      });
+
+      // Luego agregamos los de la nube que no estén borrados localmente
+      (listaNube || []).forEach(elem => {
+        if (!elem) return;
+        const k = String(getKey(elem));
+        if (!k || deletedIds.has(k)) return;
+        if (!mapa.has(k)) {
+          mapa.set(k, elem);
+          ordenClaves.push(k);
+        } else {
+          // Si existe en ambos, conservamos el que tenga más likes/comentarios o fecha de edición más reciente
+          const loc = mapa.get(k);
+          const locUpdated = Number(loc.updatedAt || 0);
+          const cloudUpdated = Number(elem.updatedAt || 0);
+          if (cloudUpdated > locUpdated) {
+            mapa.set(k, elem);
+          } else if (Array.isArray(elem.comments) && Array.isArray(loc.comments)) {
+            const comMap = new Map();
+            [...loc.comments, ...elem.comments].forEach(c => {
+              if (c && c.id && !deletedIds.has(c.id)) comMap.set(c.id, c);
+            });
+            loc.comments = Array.from(comMap.values());
+          }
+        }
+      });
+
+      return ordenClaves.map(k => mapa.get(k)).filter(Boolean);
+    }
+
+    function fusionarPremios(locales, nube) {
+      const catMap = new Map();
+      const orden = [];
+      [...(locales || []), ...(nube || [])].forEach(cat => {
+        if (!cat || !cat.id || deletedIds.has(cat.id)) return;
+        if (!catMap.has(cat.id)) {
+          catMap.set(cat.id, JSON.parse(JSON.stringify(cat)));
+          orden.push(cat.id);
+        } else {
+          const existente = catMap.get(cat.id);
+          const nomMap = new Map();
+          [...(existente.nominees || []), ...(cat.nominees || [])].forEach(n => {
+            if (!n || !n.name) return;
+            const nk = n.name.trim().toLowerCase();
+            if (!nomMap.has(nk)) {
+              nomMap.set(nk, n);
+            } else {
+              const prev = nomMap.get(nk);
+              const prevUpdated = Number(prev.updatedAt || 0);
+              const curUpdated = Number(n.updatedAt || 0);
+              if (curUpdated > prevUpdated) nomMap.set(nk, n);
+            }
+          });
+          existente.nominees = Array.from(nomMap.values());
+        }
+      });
+      return orden.map(id => catMap.get(id));
+    }
 
     let userId = localStorage.getItem('prom_user_id');
     if (!userId) {
@@ -666,9 +832,38 @@
 
     function mostrarToast(msg) {
       const t = document.getElementById('toast');
+      if (!t) return;
       t.innerText = msg;
       t.classList.remove('hidden');
-      setTimeout(() => t.classList.add('hidden'), 3200);
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.add('hidden'), 3200);
+    }
+
+    /* Modal propio para pedir contraseña de administrador (reemplaza window.prompt) */
+    let adminPromptResolve = null;
+    function solicitarClaveAdmin(descripcion) {
+      return new Promise(resolve => {
+        adminPromptResolve = resolve;
+        const modal = document.getElementById('adminPromptModal');
+        const descEl = document.getElementById('adminPromptDesc');
+        const input = document.getElementById('adminPromptInput');
+        if (descEl && descripcion) descEl.innerText = descripcion;
+        if (input) input.value = '';
+        modal.classList.remove('hidden');
+        setTimeout(() => input && input.focus(), 60);
+      });
+    }
+
+    function cerrarAdminPrompt(confirmado) {
+      const modal = document.getElementById('adminPromptModal');
+      const input = document.getElementById('adminPromptInput');
+      modal.classList.add('hidden');
+      if (adminPromptResolve) {
+        const val = confirmado ? (input ? input.value : '') : null;
+        const r = adminPromptResolve;
+        adminPromptResolve = null;
+        r(val);
+      }
     }
 
     function inferirAlbum(item) {
@@ -682,8 +877,253 @@
       return 'General';
     }
 
+    function renderTodo() {
+      renderMiembros();
+      renderBarraAlbumes();
+      renderGaleria();
+      renderCarrusel();
+      renderPremios();
+      renderCapsulas();
+      renderCronogramaEventos();
+      renderTweets();
+      renderSoundtrack();
+      actualizarEstadisticas();
+      actualizarCuentaRegresiva();
+    }
+
     /* =========================================================
-       MEJORA #5: COMPRESIÓN INTELIGENTE Y POSTAL POLAROID
+       LECTURA Y SINCRONIZACIÓN CON FUSIÓN INTELIGENTE (JSONBIN)
+    ========================================================= */
+    function normalizarRecordNube(record) {
+      if (Array.isArray(record.deletedIds)) {
+        record.deletedIds.forEach(id => deletedIds.add(String(id)));
+      }
+      const rawItems = Array.isArray(record) ? record : (record.items || []);
+      const cloudItems = rawItems.map(i => ({
+        id: i.id || i.url || ('item_' + Math.random().toString(36).substring(2, 8)),
+        url: i.url || '',
+        name: i.name || 'Recuerdo',
+        type: i.type || 'image/jpeg',
+        album: inferirAlbum(i),
+        date: i.date || new Date().toISOString(),
+        updatedAt: i.updatedAt || 0,
+        likes: typeof i.likes === 'number' ? i.likes : 0,
+        likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
+        comments: Array.isArray(i.comments) ? i.comments.filter(c => !deletedIds.has(c.id)) : []
+      })).filter(i => !deletedIds.has(obtenerIdItem(i)) && !deletedIds.has(i.url));
+
+      const cloudTweets = (Array.isArray(record.tweets) ? record.tweets : []).map(t => ({
+        id: t.id || 'tw_' + Math.random().toString(36).substring(2, 8),
+        author: t.author || 'Anónimo',
+        authorId: t.authorId || '',
+        text: t.text || '',
+        date: t.date || new Date().toISOString(),
+        updatedAt: t.updatedAt || 0,
+        likes: typeof t.likes === 'number' ? t.likes : 0,
+        likedBy: Array.isArray(t.likedBy) ? t.likedBy : []
+      })).filter(t => !deletedIds.has(t.id));
+
+      const cloudMembers = (Array.isArray(record.members) ? record.members : []).map(m => ({
+        id: m.id || 'mem_' + Math.random().toString(36).substring(2, 8),
+        name: m.name || 'Integrante Promo ’26',
+        apodo: m.apodo || '',
+        frase: m.frase || '',
+        photoUrl: m.photoUrl || '',
+        date: m.date || new Date().toISOString(),
+        updatedAt: m.updatedAt || 0,
+        likes: typeof m.likes === 'number' ? m.likes : 0,
+        likedBy: Array.isArray(m.likedBy) ? m.likedBy : []
+      })).filter(m => !deletedIds.has(m.id));
+
+      const cloudAwards = Array.isArray(record.awards) ? record.awards.filter(a => !deletedIds.has(a.id)) : [];
+      const cloudCapsules = Array.isArray(record.capsules) ? record.capsules.filter(c => !deletedIds.has(c.id)) : [];
+      const cloudEvents = Array.isArray(record.events) ? record.events.filter(ev => !deletedIds.has(ev.id)) : [];
+      const cloudHimnos = (record.music && Array.isArray(record.music.himnos))
+        ? record.music.himnos.map((h, idx) => ({ id: h.id || `${h.titulo}_${h.artista}_${idx}`, ...h })).filter(h => !deletedIds.has(h.id))
+        : [];
+
+      return {
+        cloudItems,
+        cloudTweets,
+        cloudMembers,
+        cloudAwards,
+        cloudCapsules,
+        cloudEvents,
+        cloudHimnos,
+        playlistUrl: record.music?.playlistUrl
+      };
+    }
+
+    async function cargarDesdeNube(manual = false) {
+      // Si hay cambios pendientes por subir, primero los protegemos antes de sobrescribir
+      if (cambiosPendientes && nubeCargada) {
+        await ejecutarSincronizacionNube();
+      }
+
+      document.getElementById('statusText').innerText = 'Sincronizando...';
+      document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
+
+      // Cargamos primero el respaldo local para respuesta inmediata y no perder ediciones locales
+      const teniaRespaldoLocal = restaurarDesdeRespaldoLocal();
+      if (teniaRespaldoLocal && !nubeCargada) {
+        renderTodo();
+      }
+
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?_t=${Date.now()}`, {
+          headers: {
+            'X-Master-Key': MASTER_KEY,
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache'
+          },
+          cache: 'no-store'
+        });
+        if (!res.ok) throw new Error('Error HTTP ' + res.status);
+        const data = await res.json();
+        const record = data.record || {};
+
+        const {
+          cloudItems,
+          cloudTweets,
+          cloudMembers,
+          cloudAwards,
+          cloudCapsules,
+          cloudEvents,
+          cloudHimnos,
+          playlistUrl
+        } = normalizarRecordNube(record);
+
+        if (teniaRespaldoLocal) {
+          // Fusión inteligente: conserva todo lo que agregaste/editaste localmente + lo nuevo de la nube, respetando borrados
+          items = fusionarListasPorId(items, cloudItems, obtenerIdItem);
+          tweets = fusionarListasPorId(tweets, cloudTweets, t => t.id);
+          members = fusionarListasPorId(members, cloudMembers, m => m.id);
+          awards = fusionarPremios(awards, cloudAwards.length ? cloudAwards : DEFAULT_AWARDS);
+          capsules = fusionarListasPorId(capsules, cloudCapsules, c => c.id);
+          events = fusionarListasPorId(events, cloudEvents, ev => ev.id);
+          if (cloudHimnos.length > 0) {
+            musicConfig.himnos = fusionarListasPorId(musicConfig.himnos, cloudHimnos, h => h.id || `${h.titulo}_${h.artista}`);
+          }
+          if (playlistUrl) musicConfig.playlistUrl = playlistUrl;
+        } else {
+          items = cloudItems;
+          tweets = cloudTweets;
+          members = cloudMembers;
+          if (cloudAwards.length > 0) awards = cloudAwards;
+          capsules = cloudCapsules;
+          events = cloudEvents;
+          if (cloudHimnos.length > 0) musicConfig.himnos = cloudHimnos;
+          if (playlistUrl) musicConfig.playlistUrl = playlistUrl;
+        }
+
+        nubeCargada = true;
+        guardarRespaldoLocal(false);
+        renderTodo();
+        document.getElementById('statusText').innerText = 'Sincronizado ✓';
+        document.getElementById('heroSyncBadge').innerText = 'Sincronizado ✓';
+        if (manual) mostrarToast('Sincronizado con la nube sin perder cambios');
+      } catch (err) {
+        console.error('Aviso al conectar con nube:', err);
+        nubeCargada = true; // Permitimos trabajar sobre el respaldo local
+        renderTodo();
+        document.getElementById('statusText').innerText = 'Guardado en dispositivo';
+        document.getElementById('heroSyncBadge').innerText = 'Modo local protegido';
+      }
+    }
+
+    async function sincronizarNube() {
+      actualizarEstadisticas();
+      guardarRespaldoLocal(true);
+      cambiosPendientes = true;
+      document.getElementById('statusText').innerText = 'Guardando cambios...';
+      document.getElementById('heroSyncBadge').innerText = 'Guardando...';
+
+      // Cola con debounce (450ms) para agrupar ediciones rápidas y evitar que peticiones PUT compitan entre sí
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => {
+        ejecutarSincronizacionNube();
+      }, 450);
+    }
+
+    async function ejecutarSincronizacionNube(forzarSobrescritura = false) {
+      if (sincronizandoAhora) return;
+      if (!nubeCargada && !forzarSobrescritura) return;
+
+      sincronizandoAhora = true;
+      cambiosPendientes = false;
+
+      try {
+        // Paso 1: Si no es forzado, leemos la última versión de la nube antes de hacer PUT para no pisar fotos del Bot de Telegram u otros compañeros
+        if (!forzarSobrescritura) {
+          try {
+            const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?_t=${Date.now()}`, {
+              headers: { 'X-Master-Key': MASTER_KEY, 'Cache-Control': 'no-cache' },
+              cache: 'no-store'
+            });
+            if (getRes.ok) {
+              const getData = await getRes.json();
+              const parsed = normalizarRecordNube(getData.record || {});
+              items = fusionarListasPorId(items, parsed.cloudItems, obtenerIdItem);
+              tweets = fusionarListasPorId(tweets, parsed.cloudTweets, t => t.id);
+              members = fusionarListasPorId(members, parsed.cloudMembers, m => m.id);
+              awards = fusionarPremios(awards, parsed.cloudAwards);
+              capsules = fusionarListasPorId(capsules, parsed.cloudCapsules, c => c.id);
+              events = fusionarListasPorId(events, parsed.cloudEvents, ev => ev.id);
+            }
+          } catch (mergeErr) {
+            console.warn('Continuando guardado directo:', mergeErr);
+          }
+        }
+
+        // Paso 2: Guardamos el estado unificado + registro de borrados (deletedIds) en JSONBin
+        const payload = {
+          revision: localRevision,
+          updatedAt: new Date().toISOString(),
+          deletedIds: Array.from(deletedIds).slice(-400),
+          items,
+          tweets,
+          members,
+          awards,
+          capsules,
+          events,
+          music: musicConfig
+        };
+
+        const putRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': MASTER_KEY
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!putRes.ok) {
+          throw new Error('JSONBin devolvió estado ' + putRes.status);
+        }
+
+        guardarRespaldoLocal(false);
+        document.getElementById('statusText').innerText = 'Guardado en nube ✓';
+        document.getElementById('heroSyncBadge').innerText = 'Guardado en nube ✓';
+      } catch (e) {
+        console.error('Error al sincronizar con JSONBin:', e);
+        cambiosPendientes = true;
+        document.getElementById('statusText').innerText = 'Respaldo local activo (Reintentando...)';
+        document.getElementById('heroSyncBadge').innerText = 'Guardado en dispositivo';
+        // Reintento automático en 6 segundos si hubo límite de peticiones (429) o microcorte
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => ejecutarSincronizacionNube(forzarSobrescritura), 6000);
+      } finally {
+        sincronizandoAhora = false;
+        if (cambiosPendientes) {
+          clearTimeout(syncTimer);
+          syncTimer = setTimeout(() => ejecutarSincronizacionNube(forzarSobrescritura), 2500);
+        }
+      }
+    }
+
+    /* =========================================================
+       COMPRESIÓN INTELIGENTE Y POSTAL POLAROID
     ========================================================= */
     async function comprimirImagenAntesDeSubir(file) {
       if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.size <= 500 * 1024) {
@@ -817,7 +1257,13 @@
 
     function actualizarLogosYTextosTema(esAzul) {
       const nuevoSrc = esAzul ? 'logo2.png' : 'logo.png';
-      document.querySelectorAll('.logo-dinamico').forEach(img => img.src = nuevoSrc);
+      document.querySelectorAll('.logo-dinamico').forEach(img => {
+        img.onerror = function () {
+          this.onerror = null;
+          this.src = window.DEFAULT_LOGO_SVG || '';
+        };
+        img.src = nuevoSrc;
+      });
       document.getElementById('themeBtnTopText').innerText = esAzul ? 'Tema Vino' : 'Tema Azul';
       document.getElementById('themeBtnSideText').innerText = esAzul ? 'Tema Vino Clásico' : 'Tema Azul Real';
     }
@@ -892,102 +1338,7 @@
     }
 
     /* =========================================================
-       CARGA Y SINCRONIZACIÓN CON TU JSONBIN
-    ========================================================= */
-    async function cargarDesdeNube() {
-      document.getElementById('statusText').innerText = 'Sincronizando...';
-      document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
-      try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-          headers: { 'X-Master-Key': MASTER_KEY },
-          cache: 'no-store'
-        });
-        if (!res.ok) throw new Error('Error al conectar');
-        const data = await res.json();
-        const record = data.record || {};
-
-        const rawItems = Array.isArray(record) ? record : (record.items || []);
-        items = rawItems.map(i => ({
-          url: i.url || '',
-          name: i.name || 'Recuerdo',
-          type: i.type || 'image/jpeg',
-          album: inferirAlbum(i),
-          date: i.date || new Date().toISOString(),
-          likes: typeof i.likes === 'number' ? i.likes : 0,
-          likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
-          comments: Array.isArray(i.comments) ? i.comments : []
-        }));
-
-        const rawTweets = Array.isArray(record.tweets) ? record.tweets : [];
-        tweets = rawTweets.map(t => ({
-          id: t.id || 'tw_' + Math.random().toString(36).substring(2, 8),
-          author: t.author || 'Anónimo',
-          authorId: t.authorId || '',
-          text: t.text || '',
-          date: t.date || new Date().toISOString(),
-          likes: typeof t.likes === 'number' ? t.likes : 0,
-          likedBy: Array.isArray(t.likedBy) ? t.likedBy : []
-        }));
-
-        const rawMembers = Array.isArray(record.members) ? record.members : [];
-        members = rawMembers.map(m => ({
-          id: m.id || 'mem_' + Math.random().toString(36).substring(2, 8),
-          name: m.name || 'Integrante Promo ’26',
-          apodo: m.apodo || '',
-          frase: m.frase || '',
-          photoUrl: m.photoUrl || '',
-          date: m.date || new Date().toISOString(),
-          likes: typeof m.likes === 'number' ? m.likes : 0,
-          likedBy: Array.isArray(m.likedBy) ? m.likedBy : []
-        }));
-
-        if (Array.isArray(record.awards)) awards = record.awards;
-        if (Array.isArray(record.capsules)) capsules = record.capsules;
-        if (Array.isArray(record.events)) events = record.events;
-
-        if (record.music) {
-          if (record.music.playlistUrl) musicConfig.playlistUrl = record.music.playlistUrl;
-          if (Array.isArray(record.music.himnos) && record.music.himnos.length > 0) {
-            musicConfig.himnos = record.music.himnos;
-          }
-        }
-
-        renderMiembros();
-        renderBarraAlbumes();
-        renderGaleria();
-        renderCarrusel();
-        renderPremios();
-        renderCapsulas();
-        renderCronogramaEventos();
-        renderTweets();
-        renderSoundtrack();
-        actualizarEstadisticas();
-        actualizarCuentaRegresiva();
-        document.getElementById('statusText').innerText = 'Sincronizado';
-        document.getElementById('heroSyncBadge').innerText = 'Sincronizado';
-      } catch (err) {
-        console.error(err);
-        document.getElementById('statusText').innerText = 'Error de red';
-        document.getElementById('heroSyncBadge').innerText = 'Modo local';
-        renderSoundtrack();
-      }
-    }
-
-    async function sincronizarNube() {
-      actualizarEstadisticas();
-      try {
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
-          body: JSON.stringify({ items, tweets, members, awards, capsules, events, music: musicConfig })
-        });
-      } catch (e) {
-        console.error('Error al sincronizar', e);
-      }
-    }
-
-    /* =========================================================
-       MEJORA #2: CUENTA REGRESIVA EN VIVO Y CRONOGRAMA
+       CUENTA REGRESIVA EN VIVO Y CRONOGRAMA
     ========================================================= */
     function actualizarCuentaRegresiva() {
       const ahora = Date.now();
@@ -1034,10 +1385,10 @@
           <div class="p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] flex flex-col justify-between gap-2">
             <div>
               <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-[var(--wine-main)] text-white font-mono-num">
+                <span class="text-xs font-semibold text-[var(--wine-main)] font-mono-num">
                   ${dias > 0 ? `Faltan ${dias} días` : dias === 0 ? '¡Es hoy!' : 'Realizado'}
                 </span>
-                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">🗑 Borrar</button>
+                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">Borrar</button>
               </div>
               <h4 class="text-sm font-bold text-[var(--wine-main)]">${ev.title}</h4>
               <p class="text-xs text-[var(--text-muted)] mt-1">${new Date(ev.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })} · ${ev.location}</p>
@@ -1052,25 +1403,26 @@
       const date = document.getElementById('evDateInput').value;
       const location = document.getElementById('evLocInput').value.trim() || 'Por confirmar';
       if (!title || !date) return mostrarToast('Completa el nombre y la fecha del evento');
-      events.push({ id: 'ev_' + Math.random().toString(36).substring(2, 8), title, date, location });
+      events.push({ id: 'ev_' + Math.random().toString(36).substring(2, 8), title, date, location, updatedAt: Date.now() });
       document.getElementById('evTitleInput').value = '';
       document.getElementById('evLocInput').value = '';
       renderCronogramaEventos();
       actualizarCuentaRegresiva();
       await sincronizarNube();
-      mostrarToast('Fecha añadida al cronograma');
+      mostrarToast('Fecha añadida y guardada');
     }
 
     async function eliminarEventoPromo(id) {
+      registrarEliminado(id);
       events = events.filter(e => e.id !== id);
       renderCronogramaEventos();
       actualizarCuentaRegresiva();
       await sincronizarNube();
-      mostrarToast('Evento eliminado del cronograma');
+      mostrarToast('Evento eliminado permanentemente');
     }
 
     /* =========================================================
-       MURAL DE INTEGRANTES (MIEMBROS)
+       MURAL DE INTEGRANTES (MIEMBROS + EDICIÓN DE DATOS)
     ========================================================= */
     function iniciarSubidaMiembro() {
       const nombre = document.getElementById('memberNameInput').value.trim();
@@ -1121,6 +1473,7 @@
           frase,
           photoUrl,
           date: new Date().toISOString(),
+          updatedAt: Date.now(),
           likes: 0,
           likedBy: []
         });
@@ -1181,23 +1534,49 @@
                 </div>
                 ${m.frase ? `<p class="text-xs text-[var(--text-muted)] italic leading-relaxed pt-1">&ldquo;${m.frase}&rdquo;</p>` : ''}
               </div>
+              <div id="edit-member-${m.id}" class="hidden space-y-2 pt-2 border-t border-[var(--border-color)]">
+                <input id="edit-name-${m.id}" type="text" value="${(m.name || '').replace(/"/g, '&quot;')}" placeholder="Nombre..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
+                <input id="edit-apodo-${m.id}" type="text" value="${(m.apodo || '').replace(/"/g, '&quot;')}" placeholder="Apodo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
+                <input id="edit-frase-${m.id}" type="text" value="${(m.frase || '').replace(/"/g, '&quot;')}" placeholder="Frase..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
+                <button onclick="guardarEdicionMiembro('${m.id}')" class="btn-interactive w-full py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar cambios</button>
+              </div>
               <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
                 <div class="flex items-center gap-1.5">
                   <button onclick="toggleLikeMiembro('${m.id}', this)" class="btn-interactive px-3 py-1.5 rounded-lg font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)]'}">
                     ♥ <span class="font-mono-num">${m.likes || 0}</span>
                   </button>
                   <button onclick="descargarPostalPolaroid('${m.photoUrl}', '${safeName}', '${safeSub}', 'Anuario 2026')" class="btn-interactive px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--gold-main)] text-[var(--wine-main)] hover:bg-[var(--wine-main)] hover:text-white cursor-pointer">
-                    📸 Postal
+                    Postal
                   </button>
                 </div>
-                <button onclick="eliminarMiembro('${m.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">
-                  Eliminar
-                </button>
+                <div class="flex items-center gap-2">
+                  <button onclick="document.getElementById('edit-member-${m.id}').classList.toggle('hidden')" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">
+                    Editar
+                  </button>
+                  <button onclick="eliminarMiembro('${m.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">
+                    Eliminar
+                  </button>
+                </div>
               </div>
             </div>
           </article>
         `;
       }).join('');
+    }
+
+    async function guardarEdicionMiembro(memberId) {
+      const m = members.find(x => x.id === memberId);
+      if (!m) return;
+      const nuevoNombre = document.getElementById(`edit-name-${memberId}`)?.value.trim();
+      const nuevoApodo = document.getElementById(`edit-apodo-${memberId}`)?.value.trim();
+      const nuevaFrase = document.getElementById(`edit-frase-${memberId}`)?.value.trim();
+      if (nuevoNombre) m.name = nuevoNombre;
+      m.apodo = nuevoApodo || '';
+      m.frase = nuevaFrase || '';
+      m.updatedAt = Date.now();
+      renderMiembros();
+      await sincronizarNube();
+      mostrarToast('Datos del integrante actualizados');
     }
 
     async function toggleLikeMiembro(memberId, btn) {
@@ -1217,6 +1596,7 @@
         m.likedBy.push(userId);
         m.likes = (m.likes || 0) + 1;
       }
+      m.updatedAt = Date.now();
       renderMiembros();
       await sincronizarNube();
     }
@@ -1226,20 +1606,22 @@
       if (!m) return;
       const mins = (new Date() - new Date(m.date || new Date())) / 60000;
       if (mins > 2) {
-        const pass = prompt('Han pasado más de 2 minutos. Ingresa la clave de administración:');
+        const pass = await solicitarClaveAdmin('Han pasado más de 2 minutos. Ingresa la clave de administración para eliminar este integrante:');
+        if (pass === null) return;
         if (pass !== ADMIN_PASSWORD) {
           mostrarToast('Contraseña incorrecta');
           return;
         }
       }
+      registrarEliminado(memberId);
       members = members.filter(x => x.id !== memberId);
       renderMiembros();
       await sincronizarNube();
-      mostrarToast('Integrante eliminado');
+      mostrarToast('Integrante eliminado permanentemente');
     }
 
     /* =========================================================
-       GALERÍA MULTIMEDIA & ÁLBUMES (MEJORA #3)
+       GALERÍA MULTIMEDIA & ÁLBUMES
     ========================================================= */
     function renderBarraAlbumes() {
       const bar = document.getElementById('albumFilterBar');
@@ -1247,7 +1629,7 @@
         const activo = albumActual === alb;
         return `
           <button onclick="setAlbumFiltro('${alb}')" class="btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer ${activo ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)] hover:border-[var(--wine-main)]'}">
-            ${alb === 'Todos' ? '📂 Todos los Álbumes' : '#' + alb}
+            ${alb === 'Todos' ? 'Todos los Álbumes' : '#' + alb}
           </button>
         `;
       }).join('');
@@ -1294,11 +1676,13 @@
         const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfoData.result.file_path}`;
 
         items.unshift({
+          id: 'item_' + Math.random().toString(36).substring(2, 9),
           url: fileUrl,
           name: customName,
           type: esVideo ? 'video/mp4' : 'image/jpeg',
           album: albumElegido,
           date: new Date().toISOString(),
+          updatedAt: Date.now(),
           likes: 0,
           likedBy: [],
           comments: []
@@ -1400,7 +1784,7 @@
             <div>
               <div class="flex items-center justify-between gap-2">
                 <h3 class="text-sm font-bold text-[var(--text-dark)] truncate">${item.name}</h3>
-                <span class="text-[10px] font-bold text-[var(--gold-main)] shrink-0">#${itemAlb}</span>
+                <span class="text-xs font-semibold text-[var(--gold-main)] shrink-0">#${itemAlb}</span>
               </div>
               <div class="text-xs text-[var(--text-muted)] mt-0.5">${esImagen ? 'Fotografía' : 'Video'} · <span class="font-mono-num">${fecha}</span></div>
             </div>
@@ -1417,7 +1801,7 @@
                 ${comentarios.length === 0 ? '<div class="text-center opacity-75">Sé el primero en dejar una dedicatoria</div>' : comentarios.map(c => `
                   <div class="bg-white rounded-lg px-2.5 py-1.5 border border-[#e6d8b5] flex justify-between gap-2">
                     <span class="break-words"><strong>${c.author || ''}:</strong> ${c.text}</span>
-                    <button onclick="eliminarComentario(${index}, '${c.id}')" class="text-[var(--danger)] font-bold">✕</button>
+                    <button onclick="eliminarComentario(${index}, '${c.id}')" class="text-[var(--danger)] font-bold cursor-pointer">✕</button>
                   </div>`).join('')}
               </div>
               <form onsubmit="agregarComentario(event, ${index})" class="flex gap-1.5">
@@ -1427,7 +1811,7 @@
             </div>
             <div class="mt-auto pt-2.5 border-t border-[var(--border-color)] flex justify-between items-center text-xs">
               <div class="flex items-center gap-2.5">
-                ${esImagen ? `<button onclick="descargarPostalPolaroid('${item.url}', '${safeTitle}', 'Álbum: ${itemAlb}', '${fecha}')" class="btn-interactive text-[var(--wine-main)] font-semibold cursor-pointer">📸 Postal</button>` : ''}
+                ${esImagen ? `<button onclick="descargarPostalPolaroid('${item.url}', '${safeTitle}', 'Álbum: ${itemAlb}', '${fecha}')" class="btn-interactive text-[var(--wine-main)] font-semibold cursor-pointer">Postal</button>` : ''}
                 <button onclick="navigator.clipboard.writeText('${item.url}'); mostrarToast('Enlace copiado');" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Enlace</button>
               </div>
               <button onclick="eliminarItem(${index})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Eliminar</button>
@@ -1453,6 +1837,7 @@
         items[index].likedBy.push(userId);
         items[index].likes = (items[index].likes || 0) + 1;
       }
+      items[index].updatedAt = Date.now();
       renderGaleria();
       renderCarrusel();
       await sincronizarNube();
@@ -1471,6 +1856,7 @@
         date: new Date().toISOString(),
         text
       });
+      items[index].updatedAt = Date.now();
       input.value = '';
       renderGaleria();
       document.getElementById(`comments-${index}`).classList.remove('hidden');
@@ -1481,28 +1867,38 @@
       const c = items[itemIndex].comments.find(x => x.id === commentId);
       if (!c) return;
       const mins = (new Date() - new Date(c.date || new Date())) / 60000;
-      if (mins > 2 && prompt('Contraseña de administración:') !== ADMIN_PASSWORD) {
-        return mostrarToast('Contraseña incorrecta');
+      if (mins > 2) {
+        const pass = await solicitarClaveAdmin('Ingresa la clave de administración para eliminar esta dedicatoria:');
+        if (pass === null) return;
+        if (pass !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
       }
+      registrarEliminado(commentId);
       items[itemIndex].comments = items[itemIndex].comments.filter(x => x.id !== commentId);
+      items[itemIndex].updatedAt = Date.now();
       renderGaleria();
       await sincronizarNube();
     }
 
     async function eliminarItem(index) {
-      const mins = (new Date() - new Date(items[index].date || new Date())) / 60000;
-      if (mins > 2 && prompt('Contraseña de administración:') !== ADMIN_PASSWORD) {
-        return mostrarToast('Contraseña incorrecta');
+      const target = items[index];
+      if (!target) return;
+      const mins = (new Date() - new Date(target.date || new Date())) / 60000;
+      if (mins > 2) {
+        const pass = await solicitarClaveAdmin('Ingresa la clave de administración para eliminar este recuerdo:');
+        if (pass === null) return;
+        if (pass !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
       }
+      registrarEliminado(obtenerIdItem(target));
+      if (target.url) registrarEliminado(target.url);
       items.splice(index, 1);
       renderGaleria();
       renderCarrusel();
       await sincronizarNube();
-      mostrarToast('Recuerdo eliminado');
+      mostrarToast('Recuerdo eliminado permanentemente');
     }
 
     /* =========================================================
-       MEJORA #1: PREMIOS DE LA PROMO '26
+       PREMIOS DE LA PROMO '26
     ========================================================= */
     function renderPremios() {
       const grid = document.getElementById('awardsGrid');
@@ -1515,10 +1911,10 @@
             <div>
               <div class="flex items-start justify-between gap-2 mb-3">
                 <div>
-                  <h3 class="text-base font-bold text-[var(--wine-main)]">🏆 ${cat.title}</h3>
+                  <h3 class="text-base font-bold text-[var(--wine-main)]">${cat.title}</h3>
                   ${cat.description ? `<p class="text-xs text-[var(--text-muted)]">${cat.description}</p>` : ''}
                 </div>
-                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">🗑 Borrar</button>
+                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">Borrar</button>
               </div>
               <div class="space-y-2 my-3">
                 ${ordenados.length === 0
@@ -1528,9 +1924,9 @@
                       const votado = (nom.votedBy || []).includes(userId);
                       return `
                         <button onclick="votarNominado('${cat.id}', '${nom.id}')" class="w-full text-left p-3 rounded-xl border transition relative overflow-hidden cursor-pointer ${votado ? 'border-[var(--wine-main)] bg-[var(--bg-cream)]' : 'border-[var(--border-color)] bg-white hover:border-[var(--gold-main)]'}">
-                          <div class="absolute inset-y-0 left-0 bg-[var(--gold-main)]/20 transition-all duration-500" style="width:${pct}%"></div>
+                          <div class="absolute inset-y-0 left-0 bg-[var(--gold-main)]/20 transition-all duration-300" style="width:${pct}%"></div>
                           <div class="relative flex items-center justify-between gap-2 text-xs">
-                            <span class="font-bold text-[var(--text-dark)]">${idx === 0 && nom.votes > 0 ? '👑 ' : ''}${nom.name} ${votado ? '✓' : ''}</span>
+                            <span class="font-bold text-[var(--text-dark)]">${idx === 0 && nom.votes > 0 ? '★ ' : ''}${nom.name} ${votado ? '✓' : ''}</span>
                             <span class="font-mono-num font-bold text-[var(--wine-main)]">${nom.votes || 0} votos (${pct}%)</span>
                           </div>
                         </button>
@@ -1551,7 +1947,7 @@
       const title = document.getElementById('newCatTitle').value.trim();
       const description = document.getElementById('newCatDesc').value.trim();
       if (!title) return mostrarToast('Escribe el título de la categoría');
-      awards.unshift({ id: 'cat_' + Math.random().toString(36).substring(2, 8), title, description, nominees: [] });
+      awards.unshift({ id: 'cat_' + Math.random().toString(36).substring(2, 8), title, description, updatedAt: Date.now(), nominees: [] });
       document.getElementById('newCatTitle').value = '';
       document.getElementById('newCatDesc').value = '';
       document.getElementById('newCategoryBox').classList.add('hidden');
@@ -1568,8 +1964,9 @@
       if (!cat) return;
       cat.nominees = cat.nominees || [];
       if (!cat.nominees.some(n => n.name.toLowerCase() === name.toLowerCase())) {
-        cat.nominees.push({ id: 'nom_' + Math.random().toString(36).substring(2, 8), name, votes: 1, votedBy: [userId] });
+        cat.nominees.push({ id: 'nom_' + Math.random().toString(36).substring(2, 8), name, votes: 1, votedBy: [userId], updatedAt: Date.now() });
       }
+      cat.updatedAt = Date.now();
       inp.value = '';
       renderPremios();
       await sincronizarNube();
@@ -1590,24 +1987,28 @@
             nom.votedBy.push(userId);
             nom.votes = (nom.votes || 0) + 1;
           }
+          nom.updatedAt = Date.now();
         } else if (yaVoto) {
           nom.votedBy = nom.votedBy.filter(u => u !== userId);
           nom.votes = Math.max(0, (nom.votes || 1) - 1);
+          nom.updatedAt = Date.now();
         }
       });
+      cat.updatedAt = Date.now();
       renderPremios();
       await sincronizarNube();
     }
 
     async function eliminarCategoriaPremio(catId) {
+      registrarEliminado(catId);
       awards = awards.filter(c => c.id !== catId);
       renderPremios();
       await sincronizarNube();
-      mostrarToast('Categoría eliminada');
+      mostrarToast('Categoría eliminada permanentemente');
     }
 
     /* =========================================================
-       MEJORA #4: CÁPSULA DEL TIEMPO
+       CÁPSULA DEL TIEMPO
     ========================================================= */
     async function sellarCapsula() {
       const recipient = document.getElementById('capRecipientInput').value.trim() || 'Para toda la Promo ’26';
@@ -1622,6 +2023,7 @@
         recipient,
         unlockDate,
         message,
+        updatedAt: Date.now(),
         createdAt: new Date().toLocaleDateString('es-ES')
       });
       document.getElementById('capMessageInput').value = '';
@@ -1643,17 +2045,17 @@
           <article class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 flex flex-col justify-between gap-3">
             <div>
               <div class="flex items-center justify-between gap-2 mb-2.5">
-                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md text-white ${abierta ? 'bg-emerald-600' : 'bg-[var(--wine-main)]'}">
-                  ${abierta ? '🔓 Abierta' : '🔒 Abre el ' + cap.unlockDate}
+                <span class="text-xs font-semibold ${abierta ? 'text-emerald-700' : 'text-[var(--wine-main)]'}">
+                  ${abierta ? 'Abierta' : 'Abre el ' + cap.unlockDate}
                 </span>
-                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">🗑 Borrar</button>
+                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">Borrar</button>
               </div>
               <h3 class="text-sm font-bold text-[var(--wine-main)]">${cap.recipient}</h3>
               <p class="text-xs text-[var(--gold-main)] font-semibold mb-3">Por: ${cap.author} · ${cap.createdAt}</p>
               ${abierta
                 ? `<p class="text-xs text-[var(--text-dark)] leading-relaxed bg-[var(--bg-cream)] p-3 rounded-xl border border-[var(--border-color)] whitespace-pre-wrap">&ldquo;${cap.message}&rdquo;</p>`
                 : `<div class="p-4 rounded-xl bg-[var(--bg-cream)] border border-dashed border-[var(--gold-main)] text-center space-y-1">
-                     <div class="text-xs font-bold text-[var(--wine-main)]">🔒 Carta Sellada</div>
+                     <div class="text-xs font-bold text-[var(--wine-main)]">Carta Sellada</div>
                      <p class="text-[11px] text-[var(--text-muted)]">Se desbloqueará el ${cap.unlockDate}</p>
                    </div>`}
             </div>
@@ -1663,10 +2065,11 @@
     }
 
     async function eliminarCapsula(id) {
+      registrarEliminado(id);
       capsules = capsules.filter(c => c.id !== id);
       renderCapsulas();
       await sincronizarNube();
-      mostrarToast('Cápsula eliminada');
+      mostrarToast('Cápsula eliminada permanentemente');
     }
 
     /* =========================================================
@@ -1674,17 +2077,24 @@
     ========================================================= */
     function renderSoundtrack() {
       const spot = document.getElementById('spotifyContainer');
-      spot.innerHTML = `<iframe src="${musicConfig.playlistUrl}" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+      if (spot && !spot.dataset.loadedUrl) {
+        spot.innerHTML = `<iframe src="${musicConfig.playlistUrl}" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+        spot.dataset.loadedUrl = musicConfig.playlistUrl;
+      }
 
       const hc = document.getElementById('himnosContainer');
-      hc.innerHTML = (musicConfig.himnos || []).map((h, i) => `
+      hc.innerHTML = (musicConfig.himnos || []).map((h, i) => {
+        const hid = h.id || `${h.titulo}_${h.artista}_${i}`;
+        return `
         <div class="py-3 flex items-center justify-between text-sm">
           <div>
             <div class="font-bold text-[var(--text-dark)]"><span class="font-mono-num text-xs text-[var(--text-muted)] mr-2">${String(i + 1).padStart(2, '0')}.</span>${h.titulo}</div>
             <div class="text-xs text-[var(--text-muted)] mt-0.5">${h.artista} · <span class="text-[var(--wine-main)] font-medium">${h.etiqueta || 'Himno'}</span></div>
           </div>
+          <button onclick="eliminarHimno('${hid.replace(/'/g, "\\'")}', ${i})" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Borrar</button>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     async function agregarHimno(e) {
@@ -1693,13 +2103,21 @@
       const artista = document.getElementById('himnoArtista').value.trim();
       const etiqueta = document.getElementById('himnoEtiqueta').value.trim() || 'Himno';
       if (!titulo || !artista) return mostrarToast('Completa título y artista');
-      musicConfig.himnos.push({ titulo, artista, etiqueta });
+      musicConfig.himnos.push({ id: 'him_' + Math.random().toString(36).substring(2, 8), titulo, artista, etiqueta, updatedAt: Date.now() });
       document.getElementById('himnoTitulo').value = '';
       document.getElementById('himnoArtista').value = '';
       document.getElementById('addHimnoForm').classList.add('hidden');
       renderSoundtrack();
       await sincronizarNube();
       mostrarToast('Canción añadida al repertorio');
+    }
+
+    async function eliminarHimno(hid, idx) {
+      registrarEliminado(hid);
+      musicConfig.himnos.splice(idx, 1);
+      renderSoundtrack();
+      await sincronizarNube();
+      mostrarToast('Canción eliminada');
     }
 
     function actualizarContador() {
@@ -1718,6 +2136,7 @@
         authorId: userId,
         text,
         date: new Date().toISOString(),
+        updatedAt: Date.now(),
         likes: 0,
         likedBy: []
       });
@@ -1764,6 +2183,7 @@
         t.likedBy.push(userId);
         t.likes = (t.likes || 0) + 1;
       }
+      t.updatedAt = Date.now();
       renderTweets();
       await sincronizarNube();
     }
@@ -1772,13 +2192,16 @@
       const t = tweets.find(x => x.id === id);
       if (!t) return;
       const mins = (new Date() - new Date(t.date || new Date())) / 60000;
-      if (mins > 2 && prompt('Contraseña de administración:') !== ADMIN_PASSWORD) {
-        return mostrarToast('Contraseña incorrecta');
+      if (mins > 2) {
+        const pass = await solicitarClaveAdmin('Ingresa la clave de administración para borrar este mensaje:');
+        if (pass === null) return;
+        if (pass !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
       }
+      registrarEliminado(id);
       tweets = tweets.filter(x => x.id !== id);
       renderTweets();
       await sincronizarNube();
-      mostrarToast('Mensaje eliminado');
+      mostrarToast('Mensaje eliminado permanentemente');
     }
 
     function abrirModal(url, type) {
@@ -1797,6 +2220,13 @@
         document.getElementById('modalBody').innerHTML = '';
       }
     }
+
+    // Sincronizar cambios pendientes si el usuario cierra o recarga la pestaña
+    window.addEventListener('beforeunload', () => {
+      if (cambiosPendientes) {
+        guardarRespaldoLocal(false);
+      }
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       actualizarUIUsuario();
