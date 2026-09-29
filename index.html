@@ -56,30 +56,16 @@
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
     /* =========================================================
-       ANIMACIONES 60FPS ACELERADAS POR GPU (solo transform y opacity)
+       ANIMACIONES 60FPS ACELERADAS POR GPU
     ========================================================= */
     @keyframes fadeSlideUp {
-      from {
-        opacity: 0;
-        transform: translate3d(0, 10px, 0);
-      }
-      to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-      }
+      from { opacity: 0; transform: translate3d(0, 10px, 0); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); }
     }
-
     @keyframes modalZoomIn {
-      from {
-        opacity: 0;
-        transform: scale3d(0.95, 0.95, 1);
-      }
-      to {
-        opacity: 1;
-        transform: scale3d(1, 1, 1);
-      }
+      from { opacity: 0; transform: scale3d(0.95, 0.95, 1); }
+      to { opacity: 1; transform: scale3d(1, 1, 1); }
     }
-
     @keyframes heartPop {
       0% { transform: scale3d(1, 1, 1); }
       45% { transform: scale3d(1.26, 1.26, 1); }
@@ -90,128 +76,126 @@
       animation: fadeSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
       will-change: transform, opacity;
     }
-
     .anim-card {
       animation: fadeSlideUp 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
       animation-delay: calc(min(var(--i, 0), 8) * 30ms);
       transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease;
       will-change: transform, opacity;
     }
-
     .anim-card:hover {
       transform: translate3d(0, -3px, 0);
     }
-
     .anim-modal {
       animation: modalZoomIn 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-
     .btn-interactive {
       transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease, border-color 160ms ease, opacity 160ms ease;
     }
-
     .btn-interactive:hover {
       transform: translate3d(0, -1px, 0);
     }
-
     .btn-interactive:active {
       transform: scale3d(0.97, 0.97, 1);
     }
-
     .like-pop {
-      animation: heartPop 220ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .anim-section, .anim-card, .anim-modal, .like-pop, .btn-interactive {
-        animation: none !important;
-        transition: none !important;
-        transform: none !important;
-      }
+      animation: heartPop 260ms cubic-bezier(0.16, 1, 0.3, 1);
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- BARRA SUPERIOR -->
+  <!-- =========================================================
+       TOP BAR
+  ========================================================= -->
   <header class="sticky top-0 z-30 h-16 bg-[var(--card-bg)]/95 backdrop-blur-sm border-b border-[var(--border-color)] px-4 lg:px-8 flex items-center justify-between gap-4">
     <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="font-display text-lg md:text-xl font-bold tracking-tight text-[var(--wine-main)] whitespace-nowrap shrink-0">
       Estrella de la Mañana ’26
     </a>
 
-    <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-[var(--text-muted)]">
-      <button onclick="cambiarSeccion('inicio')" data-nav="inicio" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 text-[var(--wine-main)] border-[var(--wine-main)]">Inicio</button>
-      <button onclick="cambiarSeccion('miembros')" data-nav="miembros" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Integrantes</button>
-      <button onclick="cambiarSeccion('galeria')" data-nav="galeria" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Galería</button>
-      <button onclick="cambiarSeccion('eventos')" data-nav="eventos" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Soundtrack</button>
-      <button onclick="cambiarSeccion('mensajes')" data-nav="mensajes" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Buzón</button>
+    <nav aria-label="Navegación principal" class="hidden md:flex items-center gap-6 text-sm font-semibold text-[var(--text-muted)]">
+      <button type="button" data-nav="inicio" onclick="cambiarSeccion('inicio')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 text-[var(--wine-main)] border-[var(--wine-main)]">Inicio</button>
+      <button type="button" data-nav="miembros" onclick="cambiarSeccion('miembros')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Integrantes</button>
+      <button type="button" data-nav="galeria" onclick="cambiarSeccion('galeria')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Galería</button>
+      <button type="button" data-nav="premios" onclick="cambiarSeccion('premios')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Premios</button>
+      <button type="button" data-nav="capsula" onclick="cambiarSeccion('capsula')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Cápsula</button>
     </nav>
 
     <div class="flex items-center gap-2.5 shrink-0">
-      <button onclick="alternarTemaAzul()" class="btn-interactive px-3.5 py-2 text-xs font-semibold rounded-lg border border-[var(--border-color)] text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+      <button type="button" onclick="alternarTemaAzul()" class="btn-interactive px-3.5 py-2 text-xs font-semibold rounded-lg border border-[var(--border-color)] text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
         <span id="themeBtnTopText">Tema Azul</span>
       </button>
 
-      <button onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[var(--wine-main)] hover:bg-[var(--wine-light)] rounded-lg whitespace-nowrap cursor-pointer">
-        <span>+ Subir Recuerdo</span>
+      <button type="button" onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[var(--wine-main)] hover:bg-[var(--wine-light)] rounded-lg whitespace-nowrap cursor-pointer">
+        <span>Subir Recuerdo</span>
       </button>
 
-      <button onclick="toggleMobileSidebar()" class="btn-interactive md:hidden w-10 h-10 rounded-lg border border-[var(--border-color)] text-[var(--wine-main)] flex items-center justify-center cursor-pointer font-bold">
+      <button type="button" onclick="toggleMobileSidebar()" aria-label="Abrir menú" class="btn-interactive md:hidden w-10 h-10 rounded-lg border border-[var(--border-color)] text-[var(--wine-main)] flex items-center justify-center cursor-pointer">
         ☰
       </button>
     </div>
   </header>
 
-  <!-- CONTENEDOR PRINCIPAL -->
+  <!-- =========================================================
+       CUERPO PRINCIPAL: SIDEBAR + MAIN VIEWPORT
+  ========================================================= -->
   <div class="flex-1 flex max-w-[1440px] w-full mx-auto">
-    <!-- BARRA LATERAL -->
+
+    <!-- SIDEBAR -->
     <aside id="appSidebar" class="hidden lg:flex lg:w-64 lg:shrink-0 flex-col justify-between bg-[var(--card-bg)] border-r border-[var(--border-color)] p-5 transition-colors">
       <div class="space-y-6">
         <div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]">
           <div class="flex items-center gap-3">
             <div class="w-12 h-12 rounded-xl bg-white border border-[var(--gold-main)] p-1 flex items-center justify-center shrink-0">
-              <img src="logo.png" alt="Escudo Promoción 2026" class="logo-dinamico w-full h-full object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'40\'>⭐</text></svg>';" />
+              <img src="logo.png" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
             </div>
             <div>
               <div class="text-xs font-extrabold uppercase tracking-wider text-[var(--wine-main)]">Estrella ’26</div>
               <div class="text-[11px] font-semibold text-[var(--gold-main)]">Promoción EDM</div>
             </div>
           </div>
-          <button onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 text-[var(--text-muted)] hover:text-[var(--text-dark)] cursor-pointer">✕</button>
+          <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 text-[var(--text-muted)] hover:text-[var(--text-dark)] cursor-pointer">✕</button>
         </div>
 
-        <div class="space-y-1.5">
-          <button onclick="cambiarSeccion('inicio')" data-side="inicio" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white">
-            <span>🏠 Inicio</span>
+        <div class="space-y-1">
+          <button type="button" data-side="inicio" onclick="cambiarSeccion('inicio')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white">
+            <span>Inicio</span>
           </button>
-          <button onclick="cambiarSeccion('miembros')" data-side="miembros" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
-            <span>🎓 Integrantes</span>
+          <button type="button" data-side="miembros" onclick="cambiarSeccion('miembros')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Integrantes</span>
             <span id="sideCountMiembros" class="text-xs font-mono-num">0</span>
           </button>
-          <button onclick="cambiarSeccion('galeria')" data-side="galeria" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
-            <span>📸 Galería</span>
+          <button type="button" data-side="galeria" onclick="cambiarSeccion('galeria')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Galería & Álbumes</span>
             <span id="sideCountGaleria" class="text-xs font-mono-num">0</span>
           </button>
-          <button onclick="cambiarSeccion('eventos')" data-side="eventos" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
-            <span>🎧 Soundtrack</span>
+          <button type="button" data-side="premios" onclick="cambiarSeccion('premios')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Premios Promo ’26</span>
+            <span id="sideCountPremios" class="text-xs font-mono-num">0</span>
+          </button>
+          <button type="button" data-side="capsula" onclick="cambiarSeccion('capsula')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Cápsula del Tiempo</span>
+            <span id="sideCountCapsula" class="text-xs font-mono-num">0</span>
+          </button>
+          <button type="button" data-side="eventos" onclick="cambiarSeccion('eventos')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Eventos & Soundtrack</span>
             <span id="sideCountHimnos" class="text-xs font-mono-num">0</span>
           </button>
-          <button onclick="cambiarSeccion('mensajes')" data-side="mensajes" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
-            <span>💬 Buzón</span>
+          <button type="button" data-side="mensajes" onclick="cambiarSeccion('mensajes')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Buzón de Anécdotas</span>
             <span id="sideCountBuzon" class="text-xs font-mono-num">0</span>
           </button>
         </div>
 
-        <!-- Firma del Miembro -->
-        <div class="pt-4 border-t border-[var(--border-color)]">
-          <div class="flex items-center justify-between text-xs text-[var(--text-muted)] mb-2">
+        <!-- Identidad del Miembro -->
+        <div class="pt-4 border-t border-[var(--border-color)] space-y-2">
+          <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
             <span class="font-medium">Tu firma en la promo</span>
-            <button onclick="abrirEditorNombre()" class="text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Editar</button>
+            <button type="button" onclick="abrirEditorNombre()" class="text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Editar</button>
           </div>
           <div id="userNameDisplay" class="text-sm font-semibold text-[var(--text-dark)] truncate"></div>
-          <form id="userNameForm" onsubmit="guardarNombreUsuario(event)" class="hidden space-y-2 mt-2">
+          <form id="userNameForm" onsubmit="guardarNombreUsuario(event)" class="hidden space-y-2 pt-1">
             <input id="userNameInput" type="text" maxlength="32" placeholder="Tu nombre o apodo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
-            <div class="flex items-center gap-1.5">
+            <div class="flex gap-1.5">
               <button type="submit" class="btn-interactive flex-1 py-1.5 text-xs font-semibold text-white bg-[var(--wine-main)] rounded-lg cursor-pointer">Guardar</button>
               <button type="button" onclick="cerrarEditorNombre()" class="btn-interactive px-2.5 py-1.5 text-xs font-semibold text-[var(--text-muted)] border border-[var(--border-color)] rounded-lg cursor-pointer">Cancelar</button>
             </div>
@@ -219,21 +203,23 @@
         </div>
       </div>
 
+      <!-- Estado de Nube y Tema -->
       <div class="pt-4 border-t border-[var(--border-color)] space-y-3">
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
           <span id="statusText">Sincronizando...</span>
-          <button onclick="cargarDesdeNube()" title="Sincronizar ahora" class="p-1.5 rounded-lg hover:text-[var(--wine-main)] cursor-pointer font-bold">↻</button>
+          <button type="button" onclick="cargarDesdeNube()" class="btn-interactive font-semibold hover:text-[var(--wine-main)] cursor-pointer">Recargar</button>
         </div>
-        <button onclick="alternarTemaAzul()" class="btn-interactive w-full px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center justify-between whitespace-nowrap cursor-pointer">
+        <button type="button" onclick="alternarTemaAzul()" class="btn-interactive w-full px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-dark)] hover:border-[var(--wine-main)] flex items-center justify-between cursor-pointer">
           <span id="themeBtnSideText">Tema Azul Real</span>
           <span class="text-[11px] text-[var(--text-muted)]">Cambiar</span>
         </button>
       </div>
     </aside>
 
+    <!-- Backdrop Móvil -->
     <div id="mobileBackdrop" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- MAIN CONTENT -->
     <main class="flex-1 min-w-0 px-4 py-6 md:px-8 md:py-8 max-w-5xl mx-auto w-full">
 
       <!-- =========================================================
@@ -241,8 +227,8 @@
       ========================================================= -->
       <section id="seccion-inicio" class="page-section anim-section space-y-8">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
-          <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2.5 flex items-center justify-center shrink-0 transition-transform duration-200 hover:scale-105">
-            <img src="logo.png" alt="Escudo Oficial" class="logo-dinamico w-full h-full object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'14\'>PROM 26</text></svg>';" />
+          <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2.5 flex items-center justify-center shrink-0">
+            <img src="logo.png" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
           </div>
           <div class="flex-1 text-center md:text-left space-y-3">
             <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs text-[var(--text-muted)]">
@@ -250,163 +236,221 @@
               <span>·</span>
               <span>EDM</span>
               <span>·</span>
-              <span id="heroSyncBadge">Sincronizando...</span>
+              <span id="heroSyncBadge">Sincronizado</span>
             </div>
             <h1 class="text-2xl md:text-4xl font-bold text-[var(--wine-main)] tracking-tight">Prom Estrella de la Mañana</h1>
             <p class="text-sm md:text-base text-[var(--text-muted)] max-w-2xl leading-relaxed">
-              Mural digital, anuario de integrantes y galería oficial 2026. Un espacio compartido para atesorar cada rostro, fotografía, video y anécdota inolvidable de nuestra promoción.
+              Mural digital, anuario de integrantes, votaciones del salón, cápsula del tiempo y galería oficial 2026.
             </p>
             <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <button onclick="cambiarSeccion('miembros')" class="btn-interactive px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] whitespace-nowrap cursor-pointer">
-                🎓 Mural de Integrantes
+              <button type="button" onclick="cambiarSeccion('miembros')" class="btn-interactive px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] cursor-pointer">
+                Mural de Integrantes
               </button>
-              <button onclick="cambiarSeccion('galeria')" class="btn-interactive px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold whitespace-nowrap cursor-pointer">
-                📸 Explorar Galería
+              <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold cursor-pointer">
+                Explorar Galería
+              </button>
+              <button type="button" onclick="cambiarSeccion('premios')" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer">
+                🏆 Premios EDM
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Métricas -->
+        <!-- MEJORA #2: CUENTA REGRESIVA EN VIVO -->
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 md:p-6 shadow-sm">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div class="space-y-1">
+              <div class="text-xs font-bold uppercase tracking-wider text-[var(--gold-main)]">⏳ Cuenta Regresiva Oficial Promo ’26</div>
+              <h2 id="nextEventTitle" class="text-lg md:text-xl font-bold text-[var(--wine-main)]">Ceremonia de Graduación y Fiesta de Gala EDM ’26</h2>
+              <p id="nextEventMeta" class="text-xs text-[var(--text-muted)]">18 de diciembre de 2026 · Auditorio & Salón de Gala</p>
+            </div>
+            <div class="grid grid-cols-4 gap-2 sm:gap-3">
+              <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
+                <div id="cdDays" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Días</div>
+              </div>
+              <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
+                <div id="cdHours" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Horas</div>
+              </div>
+              <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
+                <div id="cdMins" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Min</div>
+              </div>
+              <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
+                <div id="cdSecs" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Seg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumen Cuantitativo -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div style="--i:0" class="anim-card rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
             <div class="text-xs text-[var(--text-muted)]">Integrantes en Mural</div>
             <div id="statMembers" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
             <div class="text-xs text-[var(--text-muted)] mt-1">Anuario Promo ’26</div>
           </div>
-          <div style="--i:1" class="anim-card rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
             <div class="text-xs text-[var(--text-muted)]">Recuerdos en Galería</div>
             <div id="statTotalItems" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
             <div id="statBreakdown" class="text-xs text-[var(--text-muted)] mt-1 font-mono-num">0 fotos · 0 videos</div>
           </div>
-          <div style="--i:2" class="anim-card rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
-            <div class="text-xs text-[var(--text-muted)]">Anécdotas en Buzón</div>
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+            <div class="text-xs text-[var(--text-muted)]">Cápsula & Buzón</div>
             <div id="statTweets" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
             <div class="text-xs text-[var(--text-muted)] mt-1">Mensajes de la promo</div>
           </div>
-          <div style="--i:3" class="anim-card rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
             <div class="text-xs text-[var(--text-muted)]">Reacciones Totales</div>
             <div id="statLikes" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
             <div class="text-xs text-[var(--text-muted)] mt-1">Votos de compañeros</div>
           </div>
         </div>
 
-        <!-- 4 Tarjetas de Navegación -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button style="--i:0" onclick="cambiarSeccion('miembros')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+        <!-- Tarjetas de Acceso Directo -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <button type="button" onclick="cambiarSeccion('miembros')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
               <h3 class="text-base font-bold text-[var(--wine-main)]">🎓 Mural de Integrantes</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Conoce a todos los miembros de la promoción y sube tu foto con tu apodo y frase.</p>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Conoce a todos los miembros de la promoción, sube tu foto oficial y descárgala como Postal Polaroid.</p>
             </div>
-            <div class="text-xs font-semibold text-[var(--gold-main)]">Ver integrantes →</div>
+            <span class="text-xs font-semibold text-[var(--gold-main)]">Ver anuario →</span>
           </button>
-          <button style="--i:1" onclick="cambiarSeccion('galeria')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+
+          <button type="button" onclick="cambiarSeccion('galeria')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">📸 Ver la Galería</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Sube tus fotos y videos, reacciona con "me gusta" y deja dedicatorias.</p>
+              <h3 class="text-base font-bold text-[var(--wine-main)]">📸 Galería por Álbumes</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Filtra fotos y videos por Jornada, Semana Santa, 15 Años o Fiesta y deja dedicatorias.</p>
             </div>
-            <div class="text-xs font-semibold text-[var(--gold-main)]">Abrir galería →</div>
+            <span class="text-xs font-semibold text-[var(--gold-main)]">Abrir galería →</span>
           </button>
-          <button style="--i:2" onclick="cambiarSeccion('eventos')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+
+          <button type="button" onclick="cambiarSeccion('premios')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">🎧 Soundtrack Oficial</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Escucha la playlist en Spotify y consulta o añade los himnos del salón.</p>
+              <h3 class="text-base font-bold text-[var(--wine-main)]">🏆 Premios de la Promo ’26</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Nomina a tus compañeros y vota en vivo en las categorías clásicas del salón.</p>
             </div>
-            <div class="text-xs font-semibold text-[var(--gold-main)]">Escuchar música →</div>
+            <span class="text-xs font-semibold text-[var(--gold-main)]">Ir a votar →</span>
           </button>
-          <button style="--i:3" onclick="cambiarSeccion('mensajes')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+
+          <button type="button" onclick="cambiarSeccion('capsula')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-2">
+              <h3 class="text-base font-bold text-[var(--wine-main)]">🔒 Cápsula del Tiempo</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Sella cartas o predicciones con candado hasta el día de la graduación o reencuentro.</p>
+            </div>
+            <span class="text-xs font-semibold text-[var(--gold-main)]">Abrir cápsula →</span>
+          </button>
+
+          <button type="button" onclick="cambiarSeccion('eventos')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-2">
+              <h3 class="text-base font-bold text-[var(--wine-main)]">🎵 Eventos & Soundtrack</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Consulta el cronograma 2026, escucha la playlist oficial en Spotify y añade himnos.</p>
+            </div>
+            <span class="text-xs font-semibold text-[var(--gold-main)]">Escuchar música →</span>
+          </button>
+
+          <button type="button" onclick="cambiarSeccion('mensajes')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
               <h3 class="text-base font-bold text-[var(--wine-main)]">💬 Buzón de Anécdotas</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Comparte mensajes cortos, recuerdos de clases y sugerencias con la promo.</p>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Comparte mensajes cortos, recuerdos de clases y sugerencias con toda la promo.</p>
             </div>
-            <div class="text-xs font-semibold text-[var(--gold-main)]">Ir al buzón →</div>
+            <span class="text-xs font-semibold text-[var(--gold-main)]">Dejar mensaje →</span>
           </button>
         </div>
       </section>
 
       <!-- =========================================================
-           2. SECCIÓN MURAL DE INTEGRANTES (ANUARIO PROMO '26)
+           2. SECCIÓN MURAL DE INTEGRANTES (ANUARIO 3 EN FILA)
       ========================================================= -->
       <section id="seccion-miembros" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
-          <div class="text-xs text-[var(--gold-main)] font-semibold">🎓 Anuario Oficial · Promoción 2026</div>
+          <div class="text-xs text-[var(--gold-main)] font-semibold">Anuario Oficial · Promoción 2026</div>
           <h1 class="text-2xl md:text-3xl font-bold text-[var(--wine-main)]">Mural de Integrantes Estrella de la Mañana</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
-            Agrega tu retrato oficial con tu nombre, apodo o cargo y la frase que te representa en la promoción.
+            Agrega tu retrato oficial con tu nombre, apodo y frase célebre. Puedes descargar cualquier tarjeta como Postal Polaroid.
           </p>
         </div>
 
-        <!-- Formulario para subir foto de integrante -->
         <div class="rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-5 space-y-4">
           <div>
             <h2 class="text-base font-bold text-[var(--wine-main)]">Añadir integrante al mural de la promoción</h2>
             <p class="text-xs text-[var(--text-muted)]">Completa los datos del compañero(a) y selecciona su foto para publicarla</p>
           </div>
-
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <input type="text" id="memberNameInput" maxlength="50" placeholder="Nombre completo (obligatorio)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
-            <input type="text" id="memberApodoInput" maxlength="40" placeholder="Apodo o cargo (ej. El delegado)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
-            <input type="text" id="memberFraseInput" maxlength="120" placeholder="Frase célebre o dedicatoria..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+            <input id="memberNameInput" type="text" maxlength="50" placeholder="Nombre completo (obligatorio)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+            <input id="memberApodoInput" type="text" maxlength="40" placeholder="Apodo o cargo (ej. El delegado)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+            <input id="memberFraseInput" type="text" maxlength="120" placeholder="Frase célebre o dedicatoria..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
           </div>
-
           <div class="flex justify-end">
-            <button id="uploadMemberBtn" onclick="iniciarSubidaMiembro()" class="btn-interactive w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
-              📸 Elegir foto y publicar en el Mural
+            <button type="button" id="btnUploadMember" onclick="iniciarSubidaMiembro()" class="btn-interactive w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold cursor-pointer">
+              Subir foto y publicar en el Mural
             </button>
-            <input type="file" id="memberFileInput" accept="image/*" onchange="subirFotoMiembro(event)" class="hidden" />
+            <input id="memberFileInput" type="file" accept="image/*" class="hidden" onchange="subirFotoMiembro(event)" />
           </div>
         </div>
 
-        <!-- Buscador de integrantes -->
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <input type="text" id="memberSearchInput" oninput="renderMiembros()" placeholder="Buscar integrante por nombre, apodo o frase..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
-          <span id="memberCountLabel" class="text-xs text-[var(--text-muted)] font-mono-num">0 integrantes</span>
+          <input id="memberSearchInput" type="text" oninput="renderMiembros()" placeholder="Buscar integrante por nombre, apodo o frase..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+          <span id="memberCountLabel" class="text-xs text-[var(--text-muted)] font-mono-num">Mostrando 0 integrantes</span>
         </div>
 
-        <!-- Cuadrícula de Integrantes (3 por fila en escritorio) -->
         <div id="miembrosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
       </section>
 
       <!-- =========================================================
-           3. SECCIÓN GALERÍA MULTIMEDIA
+           3. SECCIÓN GALERÍA & ÁLBUMES
       ========================================================= -->
       <section id="seccion-galeria" class="page-section hidden anim-section space-y-6">
-        <div id="featuredCarousel" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
+        <div id="featuredContainer" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
           <div class="flex items-center justify-between">
-            <h2 class="text-sm font-bold text-[var(--wine-main)]">⭐ Recuerdos Más Votados de la Promo</h2>
+            <h2 class="text-sm font-bold text-[var(--wine-main)]">Recuerdos Más Votados de la Promo</h2>
+            <span class="text-xs text-[var(--text-muted)]">Destacados</span>
           </div>
-          <div id="featuredContainer" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
+          <div id="carouselTrack" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div class="lg:col-span-7 rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-5 flex flex-col justify-between gap-4">
             <div>
-              <h2 class="text-base font-bold text-[var(--wine-main)]">Sube fotos o videos al mural</h2>
-              <p class="text-xs text-[var(--text-muted)] mt-0.5">Se guardarán al instante en la galería compartida de la promoción.</p>
+              <h2 class="text-base font-bold text-[var(--wine-main)]">Sube fotos o videos al mural por álbum</h2>
+              <p class="text-xs text-[var(--text-muted)] mt-0.5">Compresión inteligente activa para subir fotos pesadas en segundos.</p>
             </div>
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-              <input type="text" id="customTitle" placeholder="Título del recuerdo (opcional)..." class="flex-1 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
-              <button id="uploadBtn" onclick="document.getElementById('fileInput').click()" class="btn-interactive px-4 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
-                Elegir archivo multimedia
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+              <input type="text" id="customFileName" placeholder="Título del recuerdo..." class="sm:col-span-5 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+              <select id="uploadAlbumSelect" class="sm:col-span-3 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2.5 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer">
+                <option value="General">Álbum: General</option>
+                <option value="Jornada">Álbum: Jornada</option>
+                <option value="Semana Santa">Álbum: Semana Santa</option>
+                <option value="15 Años">Álbum: 15 Años</option>
+                <option value="Fiesta">Álbum: Fiesta</option>
+                <option value="Viaje">Álbum: Viaje</option>
+              </select>
+              <button type="button" id="btnUploadMedia" onclick="document.getElementById('fileInput').click()" class="btn-interactive sm:col-span-4 px-4 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
+                Elegir archivo
               </button>
-              <input type="file" id="fileInput" accept="image/*,video/*" onchange="subirMultimedia(event)" class="hidden" />
+              <input type="file" id="fileInput" accept="image/*,video/*" class="hidden" onchange="subirArchivo(event)" />
             </div>
           </div>
 
           <div class="lg:col-span-5 rounded-2xl bg-[var(--wine-dark)] border border-[var(--gold-main)] p-5 text-white flex flex-col justify-between gap-4">
-            <div class="space-y-1">
+            <div class="space-y-1.5">
               <div class="text-xs font-semibold text-[var(--gold-bright)]">Bot Oficial de Telegram</div>
               <h3 class="text-base font-bold text-white">¿Tienes videos largos o pesados?</h3>
               <p class="text-xs text-white/80 leading-relaxed">Envíalos directamente al bot de Telegram de la promoción para sincronizarlos automáticamente.</p>
             </div>
             <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="btn-interactive w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 whitespace-nowrap">
-              EN DESARROLLO
+              Abrir @promedmbot en Telegram ↗
             </a>
           </div>
         </div>
 
+        <!-- MEJORA #3: BARRA DE ÁLBUMES RÁPIDOS -->
+        <div id="albumFilterBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
+
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-          <input type="text" id="searchInput" oninput="renderGaleria()" placeholder="Buscar recuerdo por título o dedicatoria..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+          <input type="text" id="searchInput" oninput="renderGaleria()" placeholder="Buscar recuerdo por título, álbum o dedicatoria..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
           <div class="flex flex-wrap items-center gap-2">
             <div class="flex items-center p-1 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)]">
               <button onclick="setFiltro('todos', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer">Todos</button>
@@ -425,12 +469,86 @@
       </section>
 
       <!-- =========================================================
-           4. SECCIÓN SOUNDTRACK
+           4. SECCIÓN PREMIOS DE LA PROMO '26 (MEJORA #1)
+      ========================================================= -->
+      <section id="seccion-premios" class="page-section hidden anim-section space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="text-xs font-bold text-[var(--gold-main)] uppercase tracking-wider">Votaciones Interactivas del Salón</div>
+            <h1 class="text-2xl font-bold text-[var(--wine-main)]">🏆 Los Premios de la Promo ’26</h1>
+            <p class="text-xs md:text-sm text-[var(--text-muted)]">Nomina a tus compañeros y vota en cada categoría para coronar a los ganadores.</p>
+          </div>
+          <button onclick="document.getElementById('newCategoryBox').classList.toggle('hidden')" class="btn-interactive px-4 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer self-start sm:self-auto">
+            + Nueva Categoría
+          </button>
+        </div>
+
+        <div id="newCategoryBox" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 space-y-3">
+          <h3 class="text-sm font-bold text-[var(--wine-main)]">Crear nueva categoría de votación</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input id="newCatTitle" type="text" maxlength="50" placeholder="Título (ej. El más puntual)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
+            <input id="newCatDesc" type="text" maxlength="90" placeholder="Descripción breve..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
+            <button onclick="crearCategoriaPremio()" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar Categoría</button>
+          </div>
+        </div>
+
+        <div id="awardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+      </section>
+
+      <!-- =========================================================
+           5. SECCIÓN CÁPSULA DEL TIEMPO (MEJORA #4)
+      ========================================================= -->
+      <section id="seccion-capsula" class="page-section hidden anim-section space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
+          <div class="text-xs font-bold text-[var(--gold-main)] uppercase tracking-wider">Mensajes hacia el Futuro</div>
+          <h1 class="text-2xl font-bold text-[var(--wine-main)]">🔒 Cápsula del Tiempo EDM ’26</h1>
+          <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
+            Sella una carta, promesa o predicción para el día de nuestra graduación o reencuentro. Los mensajes permanecen protegidos con candado hasta su fecha de apertura.
+          </p>
+        </div>
+
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-4">
+          <h2 class="text-base font-bold text-[var(--wine-main)]">Sellar nuevo recuerdo en la cápsula</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input id="capRecipientInput" type="text" value="Para toda la Promo ’26" maxlength="40" placeholder="Destinatario..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
+            <input id="capDateInput" type="date" value="2026-12-18" class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
+            <button onclick="sellarCapsula()" class="btn-interactive px-5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">🔒 Sellar en la Cápsula</button>
+          </div>
+          <textarea id="capMessageInput" rows="3" maxlength="500" placeholder="Escribe tu carta o predicción para el futuro de la promoción..." class="w-full rounded-xl border border-[var(--border-color)] bg-white p-3.5 text-xs outline-none resize-none"></textarea>
+        </div>
+
+        <div id="capsulesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </section>
+
+      <!-- =========================================================
+           6. SECCIÓN EVENTOS & SOUNDTRACK
       ========================================================= -->
       <section id="seccion-eventos" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
-          <h1 class="text-2xl font-bold text-[var(--wine-main)]">Soundtrack de la Promo ’26</h1>
-          <p class="text-xs md:text-sm text-[var(--text-muted)]">La música y los himnos que definen cada momento de nuestro año</p>
+          <h1 class="text-2xl font-bold text-[var(--wine-main)]">Cronograma 2026 & Soundtrack Oficial</h1>
+          <p class="text-xs md:text-sm text-[var(--text-muted)]">Las fechas importantes de nuestro año y la música que nos acompaña</p>
+        </div>
+
+        <!-- Cronograma de Eventos 2026 -->
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-[var(--wine-main)]">📅 Cronograma de Eventos 2026</h2>
+              <p class="text-xs text-[var(--text-muted)]">Fechas clave sincronizadas con la cuenta regresiva de Inicio</p>
+            </div>
+            <button onclick="document.getElementById('addEventForm').classList.toggle('hidden')" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">
+              + Añadir fecha
+            </button>
+          </div>
+          <div id="addEventForm" class="hidden p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input id="evTitleInput" type="text" placeholder="Evento (ej. Viaje de Promo)..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+            <input id="evDateInput" type="datetime-local" value="2026-12-18T19:00" class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+            <div class="flex gap-2">
+              <input id="evLocInput" type="text" placeholder="Lugar..." class="flex-1 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+              <button onclick="agregarEventoPromo()" class="btn-interactive px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
+            </div>
+          </div>
+          <div id="eventsTimelineGrid" class="grid grid-cols-1 md:grid-cols-3 gap-3.5"></div>
         </div>
 
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-3">
@@ -448,7 +566,6 @@
               + Añadir canción
             </button>
           </div>
-
           <form id="addHimnoForm" onsubmit="agregarHimno(event)" class="hidden p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
             <input id="himnoTitulo" type="text" placeholder="Título de la canción..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
             <input id="himnoArtista" type="text" placeholder="Artista o grupo..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
@@ -457,13 +574,12 @@
               <button type="submit" class="btn-interactive px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
             </div>
           </form>
-
           <div id="himnosContainer" class="divide-y divide-[var(--border-color)]"></div>
         </div>
       </section>
 
       <!-- =========================================================
-           5. SECCIÓN BUZÓN DE ANÉCDOTAS
+           7. SECCIÓN BUZÓN DE ANÉCDOTAS
       ========================================================= -->
       <section id="seccion-mensajes" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
@@ -491,7 +607,7 @@
 
   <!-- PIE DE PÁGINA -->
   <footer class="border-t border-[var(--border-color)] bg-[var(--card-bg)] py-5 px-6 text-center text-xs text-[var(--text-muted)]">
-    Promoción Estrella de la Mañana 2026 (EDM) · Mural Digital, Anuario y Galería Oficial
+    Promoción Estrella de la Mañana 2026 (EDM) · Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial
   </footer>
 
   <!-- MODAL LIGHTBOX -->
@@ -504,29 +620,50 @@
   <div id="toast" class="hidden anim-modal fixed bottom-5 right-5 z-50 rounded-xl bg-[var(--wine-dark)] text-white border border-[var(--gold-main)] px-4 py-2.5 text-xs font-semibold shadow-lg"></div>
 
   <script>
+    /* =========================================================
+       CREDENCIALES REALES DE TU NUBE (JSONBin + Telegram)
+    ========================================================= */
     const BIN_ID = '6ab9ade8ffd5d1605335d907';
     const MASTER_KEY = '$2a$10$Hmai3/Cp0eV7AhrkxNDaHesYsuL36PJNUczcmKhTbS9QIphmrUqBy';
     const BOT_TOKEN = '8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc';
     const CHAT_ID = '8616807953';
     const ADMIN_PASSWORD = 'prom26admin';
 
+    const ALBUM_OPTIONS = ['Todos', 'General', 'Jornada', 'Semana Santa', '15 Años', 'Fiesta', 'Viaje'];
+    let albumActual = 'Todos';
+    let filtroActual = 'todos';
+
+    const DEFAULT_AWARDS = [
+      { id: 'cat-fiesta', title: 'El Alma de la Fiesta', description: 'Quien nunca falta en la pista y prende todas las reuniones de la promo.', nominees: [] },
+      { id: 'cat-dormilon', title: 'El Más Dormilón del Salón', description: 'Capaz de quedarse dormido en plena clase o en cualquier recreo.', nominees: [] },
+      { id: 'cat-puntual', title: 'El que Siempre Llega al Límite', description: 'Especialista en entrar justo cuando suena el timbre.', nominees: [] },
+      { id: 'cat-dupla', title: 'La Mejor Dupla EDM ’26', description: 'Los inseparables del salón en trabajos, recreos y salidas.', nominees: [] }
+    ];
+
+    const DEFAULT_EVENTS = [
+      { id: 'ev-fotos', title: 'Sesión de Fotos Oficial y Anuario', date: '2026-10-24T09:00:00', location: 'Patio Principal / Estudio' },
+      { id: 'ev-viaje', title: 'Viaje de Promoción Estrella ’26', date: '2026-11-15T06:00:00', location: 'Punto de Encuentro Oficial' },
+      { id: 'ev-graduacion', title: 'Ceremonia de Graduación y Fiesta de Gala', date: '2026-12-18T19:00:00', location: 'Auditorio & Salón de Gala' }
+    ];
+
     let items = [];
     let tweets = [];
     let members = [];
+    let awards = DEFAULT_AWARDS;
+    let capsules = [];
+    let events = DEFAULT_EVENTS;
     let musicConfig = {
       playlistUrl: 'https://open.spotify.com/embed/playlist/3lcbivzyUFBhKcmVi49W4J',
       himnos: [
         { titulo: 'Canción Destacada', artista: 'Promo 2026', etiqueta: 'Favorita' }
       ]
     };
-    let filtroActual = 'todos';
 
     let userId = localStorage.getItem('prom_user_id');
     if (!userId) {
       userId = 'user_' + Math.random().toString(36).substring(2, 15);
       localStorage.setItem('prom_user_id', userId);
     }
-
     let userName = localStorage.getItem('prom_user_name');
     if (!userName) {
       userName = 'Miembro Promo ' + Math.floor(Math.random() * 900 + 100);
@@ -538,6 +675,111 @@
       t.innerText = msg;
       t.classList.remove('hidden');
       setTimeout(() => t.classList.add('hidden'), 3200);
+    }
+
+    function inferirAlbum(item) {
+      if (item.album && item.album.trim()) return item.album.trim();
+      const lower = (item.name || '').toLowerCase();
+      if (lower.includes('jornada')) return 'Jornada';
+      if (lower.includes('semana santa')) return 'Semana Santa';
+      if (lower.includes('15')) return '15 Años';
+      if (lower.includes('fiesta')) return 'Fiesta';
+      if (lower.includes('viaje')) return 'Viaje';
+      return 'General';
+    }
+
+    /* =========================================================
+       MEJORA #5: COMPRESIÓN INTELIGENTE Y POSTAL POLAROID
+    ========================================================= */
+    async function comprimirImagenAntesDeSubir(file) {
+      if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.size <= 500 * 1024) {
+        return file;
+      }
+      return new Promise(resolve => {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          const maxDim = 1600;
+          let w = img.width, h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+            else { w = Math.round((w * maxDim) / h); h = maxDim; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return resolve(file);
+          ctx.drawImage(img, 0, 0, w, h);
+          canvas.toBlob(blob => {
+            if (!blob || blob.size >= file.size) return resolve(file);
+            resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+          }, 'image/jpeg', 0.84);
+        };
+        img.onerror = () => { URL.revokeObjectURL(objectUrl); resolve(file); };
+        img.src = objectUrl;
+      });
+    }
+
+    async function descargarPostalPolaroid(imageUrl, title, subtitle, dateStr) {
+      mostrarToast('Generando Postal Polaroid...');
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1350;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#FCF9F2';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = '#D8B258';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(36, 36, canvas.width - 72, canvas.height - 72);
+
+      const bx = 78, by = 78, bw = 924, bh = 924;
+      ctx.fillStyle = '#181214';
+      ctx.fillRect(bx, by, bw, bh);
+
+      const cargarImg = (u) => new Promise((res, rej) => {
+        const im = new Image();
+        im.crossOrigin = 'anonymous';
+        im.onload = () => res(im);
+        im.onerror = rej;
+        im.src = u;
+      });
+
+      try {
+        let img;
+        try { img = await cargarImg(imageUrl); }
+        catch { img = await cargarImg('https://images.weserv.nl/?url=' + encodeURIComponent(imageUrl) + '&w=1000&output=jpg'); }
+        const ir = img.width / img.height;
+        let sx = 0, sy = 0, sw = img.width, sh = img.height;
+        if (ir > 1) { sw = img.height; sx = (img.width - sw) / 2; }
+        else { sh = img.width; sy = (img.height - sh) / 2; }
+        ctx.drawImage(img, sx, sy, sw, sh, bx, by, bw, bh);
+      } catch {
+        ctx.fillStyle = '#D8B258';
+        ctx.font = 'bold 42px Georgia, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('ESTRELLA DE LA MAÑANA ’26', canvas.width / 2, by + bh / 2);
+      }
+
+      ctx.fillStyle = '#681B28';
+      ctx.font = 'bold 46px Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(String(title || '').slice(0, 36), canvas.width / 2, 1085);
+
+      ctx.fillStyle = '#6E5C5F';
+      ctx.font = 'italic 30px Georgia, serif';
+      ctx.fillText(String(subtitle || '').slice(0, 54), canvas.width / 2, 1142);
+
+      ctx.fillStyle = '#B89242';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText(`★ PROMOCIÓN ESTRELLA DE LA MAÑANA ’26  •  ${dateStr || '2026'} ★`, canvas.width / 2, 1245);
+
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = 'Postal_EDM26_' + String(title || 'Recuerdo').replace(/[^a-z0-9]/gi, '_').slice(0, 18) + '.png';
+      a.click();
     }
 
     function actualizarUIUsuario() {
@@ -619,9 +861,9 @@
 
       document.querySelectorAll('.side-link').forEach(btn => {
         if (btn.dataset.side === seccionId) {
-          btn.className = 'side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white';
+          btn.className = 'side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white';
         } else {
-          btn.className = 'side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]';
+          btn.className = 'side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]';
         }
       });
 
@@ -634,23 +876,30 @@
     function actualizarEstadisticas() {
       const fotos = items.filter(i => !i.type || i.type.startsWith('image')).length;
       const videos = items.filter(i => i.type && i.type.startsWith('video')).length;
+      const votosPremios = awards.reduce((acc, c) => acc + (c.nominees || []).reduce((s, n) => s + (n.votes || 0), 0), 0);
       const likes =
         items.reduce((a, i) => a + (i.likes || 0), 0) +
         tweets.reduce((a, t) => a + (t.likes || 0), 0) +
-        members.reduce((a, m) => a + (m.likes || 0), 0);
+        members.reduce((a, m) => a + (m.likes || 0), 0) +
+        votosPremios;
 
       document.getElementById('statMembers').innerText = members.length;
       document.getElementById('statTotalItems').innerText = items.length;
       document.getElementById('statBreakdown').innerText = `${fotos} fotos · ${videos} videos`;
-      document.getElementById('statTweets').innerText = tweets.length;
+      document.getElementById('statTweets').innerText = tweets.length + capsules.length;
       document.getElementById('statLikes').innerText = likes;
 
       document.getElementById('sideCountMiembros').innerText = members.length;
       document.getElementById('sideCountGaleria').innerText = items.length;
+      document.getElementById('sideCountPremios').innerText = awards.length;
+      document.getElementById('sideCountCapsula').innerText = capsules.length;
       document.getElementById('sideCountBuzon').innerText = tweets.length;
-      document.getElementById('sideCountHimnos').innerText = (musicConfig.himnos || []).length;
+      document.getElementById('sideCountHimnos').innerText = events.length;
     }
 
+    /* =========================================================
+       CARGA Y SINCRONIZACIÓN CON TU JSONBIN
+    ========================================================= */
     async function cargarDesdeNube() {
       document.getElementById('statusText').innerText = 'Sincronizando...';
       document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
@@ -661,12 +910,13 @@
         if (!res.ok) throw new Error('Error al conectar');
         const data = await res.json();
         const record = data.record || {};
-        const rawItems = Array.isArray(record) ? record : (record.items || []);
 
+        const rawItems = Array.isArray(record) ? record : (record.items || []);
         items = rawItems.map(i => ({
           url: i.url || '',
           name: i.name || 'Recuerdo',
           type: i.type || 'image/jpeg',
+          album: inferirAlbum(i),
           date: i.date || new Date().toISOString(),
           likes: typeof i.likes === 'number' ? i.likes : 0,
           likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
@@ -696,6 +946,10 @@
           likedBy: Array.isArray(m.likedBy) ? m.likedBy : []
         }));
 
+        if (Array.isArray(record.awards) && record.awards.length > 0) awards = record.awards;
+        if (Array.isArray(record.capsules)) capsules = record.capsules;
+        if (Array.isArray(record.events) && record.events.length > 0) events = record.events;
+
         if (record.music) {
           if (record.music.playlistUrl) musicConfig.playlistUrl = record.music.playlistUrl;
           if (Array.isArray(record.music.himnos) && record.music.himnos.length > 0) {
@@ -704,11 +958,16 @@
         }
 
         renderMiembros();
+        renderBarraAlbumes();
         renderGaleria();
         renderCarrusel();
+        renderPremios();
+        renderCapsulas();
+        renderCronogramaEventos();
         renderTweets();
         renderSoundtrack();
         actualizarEstadisticas();
+        actualizarCuentaRegresiva();
         document.getElementById('statusText').innerText = 'Sincronizado';
         document.getElementById('heroSyncBadge').innerText = 'Sincronizado';
       } catch (err) {
@@ -725,7 +984,7 @@
         await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
-          body: JSON.stringify({ items, tweets, members, music: musicConfig })
+          body: JSON.stringify({ items, tweets, members, awards, capsules, events, music: musicConfig })
         });
       } catch (e) {
         console.error('Error al sincronizar', e);
@@ -733,7 +992,80 @@
     }
 
     /* =========================================================
-       FUNCIONES DEL MURAL DE INTEGRANTES (MIEMBROS)
+       MEJORA #2: CUENTA REGRESIVA EN VIVO Y CRONOGRAMA
+    ========================================================= */
+    function actualizarCuentaRegresiva() {
+      const ahora = Date.now();
+      const proximo = [...events]
+        .map(ev => ({ ...ev, ts: new Date(ev.date).getTime() }))
+        .filter(ev => !isNaN(ev.ts) && ev.ts > ahora)
+        .sort((a, b) => a.ts - b.ts)[0] || {
+          title: 'Ceremonia de Graduación y Fiesta de Gala EDM ’26',
+          date: '2026-12-18T19:00:00',
+          location: 'Auditorio & Salón de Gala',
+          ts: new Date('2026-12-18T19:00:00').getTime()
+        };
+
+      document.getElementById('nextEventTitle').innerText = proximo.title;
+      document.getElementById('nextEventMeta').innerText =
+        new Date(proximo.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) +
+        ' · ' + proximo.location;
+
+      const diff = Math.max(0, proximo.ts - ahora);
+      document.getElementById('cdDays').innerText = String(Math.floor(diff / 86400000)).padStart(2, '0');
+      document.getElementById('cdHours').innerText = String(Math.floor((diff / 3600000) % 24)).padStart(2, '0');
+      document.getElementById('cdMins').innerText = String(Math.floor((diff / 60000) % 60)).padStart(2, '0');
+      document.getElementById('cdSecs').innerText = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+    }
+    setInterval(actualizarCuentaRegresiva, 1000);
+
+    function renderCronogramaEventos() {
+      const grid = document.getElementById('eventsTimelineGrid');
+      const ordenados = [...events].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      grid.innerHTML = ordenados.map(ev => {
+        const dias = Math.ceil((new Date(ev.date).getTime() - Date.now()) / 86400000);
+        return `
+          <div class="p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] flex flex-col justify-between gap-2">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-[var(--wine-main)] text-white font-mono-num">
+                  ${dias > 0 ? `Faltan ${dias} días` : dias === 0 ? '¡Es hoy!' : 'Realizado'}
+                </span>
+                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+              </div>
+              <h4 class="text-sm font-bold text-[var(--wine-main)]">${ev.title}</h4>
+              <p class="text-xs text-[var(--text-muted)] mt-1">${new Date(ev.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })} · ${ev.location}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function agregarEventoPromo() {
+      const title = document.getElementById('evTitleInput').value.trim();
+      const date = document.getElementById('evDateInput').value;
+      const location = document.getElementById('evLocInput').value.trim() || 'Por confirmar';
+      if (!title || !date) return mostrarToast('Completa el nombre y la fecha del evento');
+      events.push({ id: 'ev_' + Math.random().toString(36).substring(2, 8), title, date, location });
+      document.getElementById('evTitleInput').value = '';
+      document.getElementById('evLocInput').value = '';
+      document.getElementById('addEventForm').classList.add('hidden');
+      renderCronogramaEventos();
+      actualizarCuentaRegresiva();
+      await sincronizarNube();
+      mostrarToast('Fecha añadida al cronograma');
+    }
+
+    async function eliminarEventoPromo(id) {
+      if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
+      events = events.filter(e => e.id !== id);
+      renderCronogramaEventos();
+      actualizarCuentaRegresiva();
+      await sincronizarNube();
+    }
+
+    /* =========================================================
+       MURAL DE INTEGRANTES (MIEMBROS)
     ========================================================= */
     function iniciarSubidaMiembro() {
       const nombre = document.getElementById('memberNameInput').value.trim();
@@ -746,18 +1078,19 @@
     }
 
     async function subirFotoMiembro(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+      const rawFile = event.target.files[0];
+      if (!rawFile) return;
 
       const name = document.getElementById('memberNameInput').value.trim() || 'Integrante Promo ’26';
       const apodo = document.getElementById('memberApodoInput').value.trim();
       const frase = document.getElementById('memberFraseInput').value.trim();
-      const btn = document.getElementById('uploadMemberBtn');
 
-      btn.innerText = 'Subiendo foto del integrante...';
+      const btn = document.getElementById('btnUploadMember');
       btn.disabled = true;
+      btn.innerText = 'Optimizando y subiendo...';
 
       try {
+        const file = await comprimirImagenAntesDeSubir(rawFile);
         const formData = new FormData();
         formData.append('chat_id', CHAT_ID);
         formData.append('photo', file);
@@ -794,19 +1127,19 @@
 
         renderMiembros();
         await sincronizarNube();
-        mostrarToast(`${name} fue añadido al Mural de Integrantes.`);
+        mostrarToast(`${name} fue añadido al Mural de Integrantes`);
       } catch (err) {
-        mostrarToast('Error al subir integrante: ' + err.message);
+        console.error(err);
+        mostrarToast('No se pudo subir la foto del integrante');
       } finally {
-        btn.innerText = '📸 Elegir foto y publicar en el Mural';
         btn.disabled = false;
+        btn.innerText = 'Subir foto y publicar en el Mural';
       }
     }
 
     function renderMiembros() {
       const grid = document.getElementById('miembrosGrid');
       const query = (document.getElementById('memberSearchInput')?.value || '').toLowerCase().trim();
-      grid.innerHTML = '';
 
       const filtrados = members.filter(m =>
         !query ||
@@ -820,47 +1153,49 @@
       if (filtrados.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-12 text-center space-y-2">
-            <div class="text-sm font-bold text-[var(--text-dark)]">Aún no hay integrantes registrados en esta vista</div>
-            <p class="text-xs text-[var(--text-muted)]">Completa los datos arriba y sube la primera foto del anuario 2026.</p>
-          </div>
-        `;
+            <div class="text-sm font-bold text-[var(--text-dark)]">Aún no hay integrantes registrados con ese filtro</div>
+            <p class="text-xs text-[var(--text-muted)]">Usa el formulario superior para añadir a los miembros de la Promoción 2026.</p>
+          </div>`;
         return;
       }
 
-      filtrados.forEach((member, idx) => {
-        const dioLike = (member.likedBy || []).includes(userId);
-        const card = document.createElement('article');
-        card.style.setProperty('--i', idx);
-        card.className = 'anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
-        card.innerHTML = `
-          <div onclick="abrirModal('${member.photoUrl}', 'image/jpeg')" class="w-full h-64 bg-[#181214] overflow-hidden relative cursor-pointer group">
-            <img src="${member.photoUrl}" alt="${member.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105" />
-          </div>
-          <div class="p-4 flex-1 flex flex-col justify-between gap-3">
-            <div class="space-y-1.5">
-              <h3 class="text-base font-bold text-[var(--wine-main)] truncate">${member.name}</h3>
-              <div class="flex items-center gap-1.5 text-xs text-[var(--gold-main)] font-semibold">
-                <span>${member.apodo || 'Integrante Promo ’26'}</span>
-                <span>·</span>
-                <span>EDM 2026</span>
+      grid.innerHTML = filtrados.map((m, idx) => {
+        const dioLike = (m.likedBy || []).includes(userId);
+        const safeName = (m.name || '').replace(/'/g, "\\'");
+        const safeSub = (m.frase || m.apodo || 'Promoción EDM ’26').replace(/'/g, "\\'");
+        return `
+          <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col">
+            <div onclick="abrirModal('${m.photoUrl}', 'image/jpeg')" class="w-full h-64 bg-[#181214] overflow-hidden cursor-pointer group">
+              <img src="${m.photoUrl}" alt="${m.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
+            </div>
+            <div class="p-4 flex-1 flex flex-col justify-between gap-3">
+              <div class="space-y-1">
+                <h3 class="text-base font-bold text-[var(--wine-main)] truncate">${m.name}</h3>
+                <div class="text-xs font-semibold text-[var(--gold-main)]">
+                  ${m.apodo || 'Integrante Promo ’26'} · EDM 2026
+                </div>
+                ${m.frase ? `<p class="text-xs text-[var(--text-muted)] italic leading-relaxed pt-1">&ldquo;${m.frase}&rdquo;</p>` : ''}
               </div>
-              ${member.frase ? `<p class="text-xs text-[var(--text-muted)] italic leading-relaxed pt-1">“${member.frase}”</p>` : ''}
+              <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
+                <div class="flex items-center gap-1.5">
+                  <button onclick="toggleLikeMiembro('${m.id}', this)" class="btn-interactive px-3 py-1.5 rounded-lg font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)]'}">
+                    ♥ <span class="font-mono-num">${m.likes || 0}</span>
+                  </button>
+                  <button onclick="descargarPostalPolaroid('${m.photoUrl}', '${safeName}', '${safeSub}', 'Anuario 2026')" class="btn-interactive px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--gold-main)] text-[var(--wine-main)] hover:bg-[var(--wine-main)] hover:text-white cursor-pointer">
+                    📸 Postal
+                  </button>
+                </div>
+                <button onclick="eliminarMiembro('${m.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">
+                  Eliminar
+                </button>
+              </div>
             </div>
-            <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
-              <button onclick="toggleMemberLike('${member.id}', this)" class="btn-interactive px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--wine-main)] border-[var(--border-color)]'}">
-                ♥ ${member.likes || 0}
-              </button>
-              <button onclick="eliminarMiembro('${member.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">
-                Eliminar
-              </button>
-            </div>
-          </div>
+          </article>
         `;
-        grid.appendChild(card);
-      });
+      }).join('');
     }
 
-    async function toggleMemberLike(memberId, btn) {
+    async function toggleLikeMiembro(memberId, btn) {
       if (btn) {
         btn.classList.remove('like-pop');
         void btn.offsetWidth;
@@ -868,9 +1203,10 @@
       }
       const m = members.find(x => x.id === memberId);
       if (!m) return;
-      if (!m.likedBy) m.likedBy = [];
-      if (m.likedBy.includes(userId)) {
-        m.likedBy = m.likedBy.filter(u => u !== userId);
+      if (!Array.isArray(m.likedBy)) m.likedBy = [];
+      const yaDio = m.likedBy.includes(userId);
+      if (yaDio) {
+        m.likedBy = m.likedBy.filter(id => id !== userId);
         m.likes = Math.max(0, (m.likes || 1) - 1);
       } else {
         m.likedBy.push(userId);
@@ -885,35 +1221,55 @@
       if (!m) return;
       const mins = (new Date() - new Date(m.date || new Date())) / 60000;
       if (mins > 2) {
-        if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) {
-          return mostrarToast('Contraseña incorrecta');
+        const pass = prompt('Han pasado más de 2 minutos. Ingresa la clave de administración:');
+        if (pass !== ADMIN_PASSWORD) {
+          mostrarToast('Contraseña incorrecta');
+          return;
         }
-      } else if (!confirm(`¿Eliminar a ${m.name} del mural?`)) {
-        return;
       }
       members = members.filter(x => x.id !== memberId);
       renderMiembros();
       await sincronizarNube();
-      mostrarToast('Integrante eliminado del mural');
+      mostrarToast('Integrante eliminado');
     }
 
     /* =========================================================
-       FUNCIONES DE GALERÍA MULTIMEDIA
+       GALERÍA MULTIMEDIA & ÁLBUMES (MEJORA #3)
     ========================================================= */
-    async function subirMultimedia(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const titleInput = document.getElementById('customTitle');
-      const customName = titleInput.value.trim() || file.name.replace(/\.[^/.]+$/, '');
-      const btn = document.getElementById('uploadBtn');
-      btn.innerText = 'Subiendo archivo...';
+    function renderBarraAlbumes() {
+      const bar = document.getElementById('albumFilterBar');
+      bar.innerHTML = ALBUM_OPTIONS.map(alb => {
+        const activo = albumActual === alb;
+        return `
+          <button onclick="setAlbumFiltro('${alb}')" class="btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer ${activo ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)] hover:border-[var(--wine-main)]'}">
+            ${alb === 'Todos' ? '📂 Todos los Álbumes' : '#' + alb}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setAlbumFiltro(alb) {
+      albumActual = alb;
+      renderBarraAlbumes();
+      renderGaleria();
+    }
+
+    async function subirArchivo(event) {
+      const rawFile = event.target.files[0];
+      if (!rawFile) return;
+
+      const customName = document.getElementById('customFileName').value.trim() || rawFile.name.replace(/\.[^/.]+$/, '');
+      const albumElegido = document.getElementById('uploadAlbumSelect').value || 'General';
+      const btn = document.getElementById('btnUploadMedia');
       btn.disabled = true;
+      btn.innerText = 'Optimizando...';
+
+      const esVideo = rawFile.type.startsWith('video/');
+      const endpoint = esVideo ? 'sendVideo' : 'sendPhoto';
+      const fieldName = esVideo ? 'video' : 'photo';
 
       try {
-        const esVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov|avi)$/i.test(file.name);
-        const endpoint = esVideo ? 'sendVideo' : 'sendPhoto';
-        const fieldName = esVideo ? 'video' : 'photo';
-
+        const file = await comprimirImagenAntesDeSubir(rawFile);
         const formData = new FormData();
         formData.append('chat_id', CHAT_ID);
         formData.append(fieldName, file);
@@ -936,51 +1292,26 @@
           url: fileUrl,
           name: customName,
           type: esVideo ? 'video/mp4' : 'image/jpeg',
+          album: albumElegido,
           date: new Date().toISOString(),
           likes: 0,
           likedBy: [],
           comments: []
         });
 
-        titleInput.value = '';
+        document.getElementById('customFileName').value = '';
         event.target.value = '';
         renderGaleria();
         renderCarrusel();
         await sincronizarNube();
-        mostrarToast('¡Recuerdo añadido al mural!');
+        mostrarToast(`Recuerdo publicado en #${albumElegido}`);
       } catch (err) {
-        mostrarToast('Error al subir: ' + err.message);
+        console.error(err);
+        mostrarToast('Error al subir el archivo');
       } finally {
-        btn.innerText = 'Elegir archivo multimedia';
         btn.disabled = false;
+        btn.innerText = 'Elegir archivo';
       }
-    }
-
-    function renderCarrusel() {
-      const carousel = document.getElementById('featuredCarousel');
-      const container = document.getElementById('featuredContainer');
-      container.innerHTML = '';
-      const destacados = [...items].filter(i => (i.likes || 0) > 0).sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 6);
-      if (destacados.length === 0) {
-        carousel.classList.add('hidden');
-        return;
-      }
-      carousel.classList.remove('hidden');
-      destacados.forEach((item, idx) => {
-        const esImagen = !item.type || item.type.startsWith('image/');
-        const div = document.createElement('div');
-        div.style.setProperty('--i', idx);
-        div.className = 'anim-card w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-black';
-        div.onclick = () => abrirModal(item.url, item.type);
-        div.innerHTML = `
-          ${esImagen ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover" />` : `<video src="${item.url}" preload="metadata" class="w-full h-full object-cover"></video>`}
-          <div class="absolute inset-x-0 bottom-0 bg-black/80 px-2.5 py-1 text-[11px] text-white font-medium truncate flex items-center justify-between">
-            <span class="truncate">${item.name}</span>
-            <span class="font-mono-num text-[var(--gold-bright)] shrink-0">♥ ${item.likes}</span>
-          </div>
-        `;
-        container.appendChild(div);
-      });
     }
 
     function setFiltro(tipo, btn) {
@@ -992,68 +1323,109 @@
       renderGaleria();
     }
 
+    function renderCarrusel() {
+      const container = document.getElementById('featuredContainer');
+      const track = document.getElementById('carouselTrack');
+      const destacados = items
+        .map((item, idx) => ({ item, idx }))
+        .filter(x => (x.item.likes || 0) > 0)
+        .sort((a, b) => (b.item.likes || 0) - (a.item.likes || 0))
+        .slice(0, 6);
+
+      if (destacados.length === 0) {
+        container.classList.add('hidden');
+        return;
+      }
+      container.classList.remove('hidden');
+      track.innerHTML = destacados.map(({ item }) => {
+        const esImagen = !item.type || item.type.startsWith('image/');
+        return `
+          <div onclick="abrirModal('${item.url}', '${item.type}')" class="w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-[#181214]">
+            ${esImagen
+              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover" />`
+              : `<video src="${item.url}" muted playsinline preload="metadata" class="w-full h-full object-cover"></video>`}
+            <div class="absolute inset-x-0 bottom-0 bg-black/80 px-2.5 py-1 text-[11px] text-white font-medium flex justify-between">
+              <span class="truncate">${item.name}</span>
+              <span class="font-mono-num text-[var(--gold-bright)]">♥ ${item.likes}</span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
     function renderGaleria() {
       const galeria = document.getElementById('galeria');
-      const busqueda = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
-      const orden = document.getElementById('sortSelect')?.value || 'recientes';
-      galeria.innerHTML = '';
+      const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+      const sort = document.getElementById('sortSelect')?.value || 'recientes';
 
-      let filtrados = items.map((item, realIndex) => ({ item, realIndex })).filter(({ item }) => {
-        const coincideTipo = filtroActual === 'todos' || (item.type && item.type.startsWith(filtroActual));
-        const coincideTexto = !busqueda || item.name.toLowerCase().includes(busqueda) || (item.comments || []).some(c => c.text.toLowerCase().includes(busqueda));
-        return coincideTipo && coincideTexto;
+      let lista = items.map((item, index) => ({ item, index })).filter(({ item }) => {
+        const itemAlb = item.album || inferirAlbum(item);
+        const cumpleAlbum = albumActual === 'Todos' || itemAlb === albumActual;
+        const cumpleTipo = filtroActual === 'todos' || (item.type && item.type.startsWith(filtroActual));
+        const cumpleTexto = !query || item.name.toLowerCase().includes(query) || itemAlb.toLowerCase().includes(query) || (item.comments || []).some(c => c.text.toLowerCase().includes(query));
+        return cumpleAlbum && cumpleTipo && cumpleTexto;
       });
 
-      if (orden === 'populares') filtrados.sort((a, b) => (b.item.likes || 0) - (a.item.likes || 0));
-      if (orden === 'comentados') filtrados.sort((a, b) => (b.item.comments?.length || 0) - (a.item.comments?.length || 0));
+      if (sort === 'populares') lista.sort((a, b) => (b.item.likes || 0) - (a.item.likes || 0));
+      if (sort === 'comentados') lista.sort((a, b) => (b.item.comments?.length || 0) - (a.item.comments?.length || 0));
 
-      if (filtrados.length === 0) {
-        galeria.innerHTML = `<div class="col-span-full rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-10 text-center text-xs text-[var(--text-muted)]">No hay recuerdos en esta vista.</div>`;
+      if (lista.length === 0) {
+        galeria.innerHTML = `<div class="col-span-full rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-12 text-center text-xs text-[var(--text-muted)]">No se encontraron recuerdos en este álbum o vista.</div>`;
         return;
       }
 
-      filtrados.forEach(({ item, realIndex }, idx) => {
+      galeria.innerHTML = '';
+      lista.forEach(({ item, index }, visualIdx) => {
         const esImagen = !item.type || item.type.startsWith('image/');
         const dioLike = (item.likedBy || []).includes(userId);
-        const comments = item.comments || [];
+        const comentarios = item.comments || [];
+        const itemAlb = item.album || inferirAlbum(item);
+        const fecha = new Date(item.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+        const safeTitle = (item.name || 'Recuerdo').replace(/'/g, "\\'");
+
         const card = document.createElement('article');
-        card.style.setProperty('--i', idx);
+        card.style.setProperty('--i', visualIdx);
         card.className = 'anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
-
-        const comentariosHtml = comments.map(c => `
-          <div class="bg-white rounded-lg px-2.5 py-1.5 border border-[#e6d8b5] flex items-start justify-between gap-2">
-            <span class="break-words flex-1">${c.author ? `<strong>${c.author}:</strong> ` : ''}${c.text}</span>
-            <button onclick="eliminarComentario(${realIndex}, '${c.id}')" class="text-[var(--danger)] font-bold cursor-pointer">✕</button>
-          </div>
-        `).join('');
-
         card.innerHTML = `
-          <div onclick="abrirModal('${item.url}', '${item.type}')" class="w-full h-52 bg-[#181214] overflow-hidden relative cursor-pointer group">
-            ${esImagen ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105" />` : `<video src="${item.url}" preload="metadata" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"></video>`}
+          <div onclick="abrirModal('${item.url}', '${item.type}')" class="w-full h-52 bg-[#181214] overflow-hidden cursor-pointer relative group">
+            ${esImagen
+              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />`
+              : `<video src="${item.url}" preload="metadata" muted playsinline class="w-full h-full object-cover"></video>`}
           </div>
           <div class="p-4 flex-1 flex flex-col gap-3">
             <div>
-              <h3 class="text-sm font-bold text-[var(--text-dark)] truncate">${item.name}</h3>
-              <div class="text-xs text-[var(--text-muted)] mt-0.5">${esImagen ? 'Fotografía' : 'Video'}</div>
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="text-sm font-bold text-[var(--text-dark)] truncate">${item.name}</h3>
+                <span class="text-[10px] font-bold text-[var(--gold-main)] shrink-0">#${itemAlb}</span>
+              </div>
+              <div class="text-xs text-[var(--text-muted)] mt-0.5">${esImagen ? 'Fotografía' : 'Video'} · <span class="font-mono-num">${fecha}</span></div>
             </div>
             <div class="flex items-center justify-between gap-2">
-              <button onclick="toggleLike(${realIndex}, this)" class="btn-interactive px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--wine-main)] border-[var(--border-color)]'}">
-                ♥ Me gusta (${item.likes || 0})
+              <button onclick="toggleLike(${index}, this)" class="btn-interactive px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)]'}">
+                ♥ Me gusta (<span class="font-mono-num">${item.likes || 0}</span>)
               </button>
-              <button onclick="document.getElementById('comments-${realIndex}').classList.toggle('hidden')" class="btn-interactive px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
-                Dedicatorias (${comments.length})
+              <button onclick="document.getElementById('comments-${index}').classList.toggle('hidden')" class="btn-interactive text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
+                Dedicatorias (<span class="font-mono-num">${comentarios.length}</span>)
               </button>
             </div>
-            <div id="comments-${realIndex}" style="background-color: var(--crema-fijo); color: var(--crema-text);" class="hidden rounded-xl p-3 border border-[#e6d8b5] space-y-2 text-xs">
-              <div class="max-h-28 overflow-y-auto space-y-1.5">${comentariosHtml || '<div class="text-center opacity-75">Sé el primero en comentar</div>'}</div>
-              <form onsubmit="agregarComentario(event, ${realIndex})" class="flex gap-1.5">
-                <input id="comment-input-${realIndex}" type="text" placeholder="Escribe una dedicatoria..." class="flex-1 bg-white border border-[#e6d8b5] rounded-lg px-2.5 py-1.5 text-xs outline-none" />
-                <button type="submit" class="btn-interactive px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Enviar</button>
+            <div id="comments-${index}" class="hidden rounded-xl p-3 border border-[#e6d8b5] space-y-2 text-xs" style="background:var(--crema-fijo);color:var(--crema-text);">
+              <div class="max-h-28 overflow-y-auto space-y-1.5">
+                ${comentarios.length === 0 ? '<div class="text-center opacity-75">Sé el primero en dejar una dedicatoria</div>' : comentarios.map(c => `
+                  <div class="bg-white rounded-lg px-2.5 py-1.5 border border-[#e6d8b5] flex justify-between gap-2">
+                    <span class="break-words"><strong>${c.author || ''}:</strong> ${c.text}</span>
+                    <button onclick="eliminarComentario(${index}, '${c.id}')" class="text-[var(--danger)] font-bold">✕</button>
+                  </div>`).join('')}
+              </div>
+              <form onsubmit="agregarComentario(event, ${index})" class="flex gap-1.5">
+                <input type="text" id="comment-input-${index}" placeholder="Escribe una dedicatoria..." class="flex-1 bg-white border border-[#e6d8b5] rounded-lg px-2.5 py-1 text-xs outline-none" />
+                <button type="submit" class="btn-interactive px-3 py-1 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Enviar</button>
               </form>
             </div>
-            <div class="mt-auto pt-2.5 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
-              <button onclick="navigator.clipboard.writeText('${item.url}'); mostrarToast('Enlace copiado');" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Copiar enlace</button>
-              <button onclick="eliminarItem(${realIndex})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Eliminar</button>
+            <div class="mt-auto pt-2.5 border-t border-[var(--border-color)] flex justify-between items-center text-xs">
+              <div class="flex items-center gap-2.5">
+                ${esImagen ? `<button onclick="descargarPostalPolaroid('${item.url}', '${safeTitle}', 'Álbum: ${itemAlb}', '${fecha}')" class="btn-interactive text-[var(--wine-main)] font-semibold cursor-pointer">📸 Postal</button>` : ''}
+                <button onclick="navigator.clipboard.writeText('${item.url}'); mostrarToast('Enlace copiado');" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Enlace</button>
+              </div>
+              <button onclick="eliminarItem(${index})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Eliminar</button>
             </div>
           </div>
         `;
@@ -1124,9 +1496,181 @@
       mostrarToast('Recuerdo eliminado');
     }
 
+    /* =========================================================
+       MEJORA #1: PREMIOS DE LA PROMO '26
+    ========================================================= */
+    function renderPremios() {
+      const grid = document.getElementById('awardsGrid');
+      grid.innerHTML = awards.map(cat => {
+        const total = (cat.nominees || []).reduce((acc, n) => acc + (n.votes || 0), 0);
+        const ordenados = [...(cat.nominees || [])].sort((a, b) => (b.votes || 0) - (a.votes || 0));
+
+        return `
+          <article class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 flex flex-col justify-between gap-4">
+            <div>
+              <div class="flex items-start justify-between gap-2 mb-3">
+                <div>
+                  <h3 class="text-base font-bold text-[var(--wine-main)]">🏆 ${cat.title}</h3>
+                  ${cat.description ? `<p class="text-xs text-[var(--text-muted)]">${cat.description}</p>` : ''}
+                </div>
+                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+              </div>
+              <div class="space-y-2 my-3">
+                ${ordenados.length === 0
+                  ? `<div class="text-xs text-[var(--text-muted)] italic py-4 text-center bg-[var(--bg-cream)] rounded-xl border border-dashed border-[var(--border-color)]">Aún no hay nominados. ¡Escribe el nombre de un compañero abajo!</div>`
+                  : ordenados.map((nom, idx) => {
+                      const pct = total > 0 ? Math.round(((nom.votes || 0) / total) * 100) : 0;
+                      const votado = (nom.votedBy || []).includes(userId);
+                      return `
+                        <button onclick="votarNominado('${cat.id}', '${nom.id}')" class="w-full text-left p-3 rounded-xl border transition relative overflow-hidden cursor-pointer ${votado ? 'border-[var(--wine-main)] bg-[var(--bg-cream)]' : 'border-[var(--border-color)] bg-white hover:border-[var(--gold-main)]'}">
+                          <div class="absolute inset-y-0 left-0 bg-[var(--gold-main)]/20 transition-all duration-500" style="width:${pct}%"></div>
+                          <div class="relative flex items-center justify-between gap-2 text-xs">
+                            <span class="font-bold text-[var(--text-dark)]">${idx === 0 && nom.votes > 0 ? '👑 ' : ''}${nom.name} ${votado ? '✓' : ''}</span>
+                            <span class="font-mono-num font-bold text-[var(--wine-main)]">${nom.votes || 0} votos (${pct}%)</span>
+                          </div>
+                        </button>
+                      `;
+                    }).join('')}
+              </div>
+            </div>
+            <div class="pt-3 border-t border-[var(--border-color)] flex gap-2">
+              <input id="nomInput-${cat.id}" type="text" maxlength="36" placeholder="Nominar compañero(a)..." class="flex-1 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+              <button onclick="nominarCompanero('${cat.id}')" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Nominar</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function crearCategoriaPremio() {
+      const title = document.getElementById('newCatTitle').value.trim();
+      const description = document.getElementById('newCatDesc').value.trim();
+      if (!title) return mostrarToast('Escribe el título de la categoría');
+      awards.unshift({ id: 'cat_' + Math.random().toString(36).substring(2, 8), title, description, nominees: [] });
+      document.getElementById('newCatTitle').value = '';
+      document.getElementById('newCatDesc').value = '';
+      document.getElementById('newCategoryBox').classList.add('hidden');
+      renderPremios();
+      await sincronizarNube();
+      mostrarToast('Categoría creada');
+    }
+
+    async function nominarCompanero(catId) {
+      const inp = document.getElementById('nomInput-' + catId);
+      const name = (inp?.value || '').trim();
+      if (!name) return;
+      const cat = awards.find(c => c.id === catId);
+      if (!cat) return;
+      cat.nominees = cat.nominees || [];
+      if (!cat.nominees.some(n => n.name.toLowerCase() === name.toLowerCase())) {
+        cat.nominees.push({ id: 'nom_' + Math.random().toString(36).substring(2, 8), name, votes: 1, votedBy: [userId] });
+      }
+      inp.value = '';
+      renderPremios();
+      await sincronizarNube();
+      mostrarToast(`${name} nominado`);
+    }
+
+    async function votarNominado(catId, nomId) {
+      const cat = awards.find(c => c.id === catId);
+      if (!cat) return;
+      cat.nominees.forEach(nom => {
+        nom.votedBy = nom.votedBy || [];
+        const yaVoto = nom.votedBy.includes(userId);
+        if (nom.id === nomId) {
+          if (yaVoto) {
+            nom.votedBy = nom.votedBy.filter(u => u !== userId);
+            nom.votes = Math.max(0, (nom.votes || 1) - 1);
+          } else {
+            nom.votedBy.push(userId);
+            nom.votes = (nom.votes || 0) + 1;
+          }
+        } else if (yaVoto) {
+          nom.votedBy = nom.votedBy.filter(u => u !== userId);
+          nom.votes = Math.max(0, (nom.votes || 1) - 1);
+        }
+      });
+      renderPremios();
+      await sincronizarNube();
+    }
+
+    async function eliminarCategoriaPremio(catId) {
+      if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
+      awards = awards.filter(c => c.id !== catId);
+      renderPremios();
+      await sincronizarNube();
+    }
+
+    /* =========================================================
+       MEJORA #4: CÁPSULA DEL TIEMPO
+    ========================================================= */
+    async function sellarCapsula() {
+      const recipient = document.getElementById('capRecipientInput').value.trim() || 'Para toda la Promo ’26';
+      const unlockDate = document.getElementById('capDateInput').value || '2026-12-18';
+      const message = document.getElementById('capMessageInput').value.trim();
+      if (!message) return mostrarToast('Escribe tu carta antes de sellarla');
+
+      capsules.unshift({
+        id: 'cap_' + Math.random().toString(36).substring(2, 9),
+        author: userName,
+        authorId: userId,
+        recipient,
+        unlockDate,
+        message,
+        createdAt: new Date().toLocaleDateString('es-ES')
+      });
+      document.getElementById('capMessageInput').value = '';
+      renderCapsulas();
+      await sincronizarNube();
+      mostrarToast(`Cápsula sellada hasta el ${unlockDate}`);
+    }
+
+    function renderCapsulas() {
+      const grid = document.getElementById('capsulesGrid');
+      const hoy = new Date().toISOString().split('T')[0];
+      if (capsules.length === 0) {
+        grid.innerHTML = `<div class="col-span-full rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-10 text-center text-xs text-[var(--text-muted)]">Aún no hay cartas selladas en la cápsula del tiempo.</div>`;
+        return;
+      }
+      grid.innerHTML = capsules.map(cap => {
+        const abierta = hoy >= cap.unlockDate;
+        return `
+          <article class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 flex flex-col justify-between gap-3">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md text-white ${abierta ? 'bg-emerald-600' : 'bg-[var(--wine-main)]'}">
+                  ${abierta ? '🔓 Abierta' : '🔒 Abre el ' + cap.unlockDate}
+                </span>
+                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+              </div>
+              <h3 class="text-sm font-bold text-[var(--wine-main)]">${cap.recipient}</h3>
+              <p class="text-xs text-[var(--gold-main)] font-semibold mb-3">Por: ${cap.author} · ${cap.createdAt}</p>
+              ${abierta
+                ? `<p class="text-xs text-[var(--text-dark)] leading-relaxed bg-[var(--bg-cream)] p-3 rounded-xl border border-[var(--border-color)] whitespace-pre-wrap">&ldquo;${cap.message}&rdquo;</p>`
+                : `<div class="p-4 rounded-xl bg-[var(--bg-cream)] border border-dashed border-[var(--gold-main)] text-center space-y-1">
+                     <div class="text-xs font-bold text-[var(--wine-main)]">🔒 Carta Sellada</div>
+                     <p class="text-[11px] text-[var(--text-muted)]">Se desbloqueará el ${cap.unlockDate}</p>
+                   </div>`}
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function eliminarCapsula(id) {
+      if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
+      capsules = capsules.filter(c => c.id !== id);
+      renderCapsulas();
+      await sincronizarNube();
+    }
+
+    /* =========================================================
+       SOUNDTRACK Y BUZÓN DE ANÉCDOTAS
+    ========================================================= */
     function renderSoundtrack() {
       const spot = document.getElementById('spotifyContainer');
       spot.innerHTML = `<iframe src="${musicConfig.playlistUrl}" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
       const hc = document.getElementById('himnosContainer');
       hc.innerHTML = (musicConfig.himnos || []).map((h, i) => `
         <div class="py-3 flex items-center justify-between text-sm">
