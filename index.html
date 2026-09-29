@@ -55,9 +55,6 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* =========================================================
-       ANIMACIONES 60FPS ACELERADAS POR GPU
-    ========================================================= */
     @keyframes fadeSlideUp {
       from { opacity: 0; transform: translate3d(0, 10px, 0); }
       to { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -283,6 +280,12 @@
               </div>
             </div>
           </div>
+          <div class="mt-4 pt-3 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span id="countdownFooterHint" class="text-[var(--text-muted)]">Agrega las fechas reales de tu promo en Eventos & Soundtrack</span>
+            <button type="button" onclick="cambiarSeccion('eventos')" class="font-bold text-[var(--wine-main)] hover:underline cursor-pointer">
+              Editar Cronograma 2026 →
+            </button>
+          </div>
         </div>
 
         <!-- Resumen Cuantitativo -->
@@ -346,9 +349,9 @@
           <button type="button" onclick="cambiarSeccion('eventos')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
               <h3 class="text-base font-bold text-[var(--wine-main)]">🎵 Eventos & Soundtrack</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Consulta el cronograma 2026, escucha la playlist oficial en Spotify y añade himnos.</p>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Configura el cronograma 2026 de la promo, escucha la playlist en Spotify y añade himnos.</p>
             </div>
-            <span class="text-xs font-semibold text-[var(--gold-main)]">Escuchar música →</span>
+            <span class="text-xs font-semibold text-[var(--gold-main)]">Ver eventos y música →</span>
           </button>
 
           <button type="button" onclick="cambiarSeccion('mensajes')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
@@ -441,7 +444,7 @@
               <p class="text-xs text-white/80 leading-relaxed">Envíalos directamente al bot de Telegram de la promoción para sincronizarlos automáticamente.</p>
             </div>
             <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="btn-interactive w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 whitespace-nowrap">
-             EN DESARROLLO ↗
+              Abrir @promedmbot en Telegram ↗
             </a>
           </div>
         </div>
@@ -526,21 +529,18 @@
       <section id="seccion-eventos" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
           <h1 class="text-2xl font-bold text-[var(--wine-main)]">Cronograma 2026 & Soundtrack Oficial</h1>
-          <p class="text-xs md:text-sm text-[var(--text-muted)]">Las fechas importantes de nuestro año y la música que nos acompaña</p>
+          <p class="text-xs md:text-sm text-[var(--text-muted)]">Configura libremente las fechas importantes de nuestro año y la música que nos acompaña</p>
         </div>
 
-        <!-- Cronograma de Eventos 2026 -->
+        <!-- Cronograma de Eventos 2026 (Formulario siempre disponible y borrado con 1 clic) -->
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-4">
           <div class="flex items-center justify-between gap-2">
             <div>
               <h2 class="text-base font-bold text-[var(--wine-main)]">📅 Cronograma de Eventos 2026</h2>
-              <p class="text-xs text-[var(--text-muted)]">Fechas clave sincronizadas con la cuenta regresiva de Inicio</p>
+              <p class="text-xs text-[var(--text-muted)]">Agrega o borra libremente las fechas reales de la promoción</p>
             </div>
-            <button onclick="document.getElementById('addEventForm').classList.toggle('hidden')" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">
-              + Añadir fecha
-            </button>
           </div>
-          <div id="addEventForm" class="hidden p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div id="addEventForm" class="p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
             <input id="evTitleInput" type="text" placeholder="Evento (ej. Viaje de Promo)..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
             <input id="evDateInput" type="datetime-local" value="2026-12-18T19:00" class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
             <div class="flex gap-2">
@@ -640,18 +640,12 @@
       { id: 'cat-dupla', title: 'La Mejor Dupla EDM ’26', description: 'Los inseparables del salón en trabajos, recreos y salidas.', nominees: [] }
     ];
 
-    const DEFAULT_EVENTS = [
-      { id: 'ev-fotos', title: 'Sesión de Fotos Oficial y Anuario', date: '2026-10-24T09:00:00', location: 'Patio Principal / Estudio' },
-      { id: 'ev-viaje', title: 'Viaje de Promoción Estrella ’26', date: '2026-11-15T06:00:00', location: 'Punto de Encuentro Oficial' },
-      { id: 'ev-graduacion', title: 'Ceremonia de Graduación y Fiesta de Gala', date: '2026-12-18T19:00:00', location: 'Auditorio & Salón de Gala' }
-    ];
-
     let items = [];
     let tweets = [];
     let members = [];
     let awards = DEFAULT_AWARDS;
     let capsules = [];
-    let events = DEFAULT_EVENTS;
+    let events = [];
     let musicConfig = {
       playlistUrl: 'https://open.spotify.com/embed/playlist/3lcbivzyUFBhKcmVi49W4J',
       himnos: [
@@ -905,7 +899,8 @@
       document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-          headers: { 'X-Master-Key': MASTER_KEY }
+          headers: { 'X-Master-Key': MASTER_KEY },
+          cache: 'no-store'
         });
         if (!res.ok) throw new Error('Error al conectar');
         const data = await res.json();
@@ -946,9 +941,9 @@
           likedBy: Array.isArray(m.likedBy) ? m.likedBy : []
         }));
 
-        if (Array.isArray(record.awards) && record.awards.length > 0) awards = record.awards;
+        if (Array.isArray(record.awards)) awards = record.awards;
         if (Array.isArray(record.capsules)) capsules = record.capsules;
-        if (Array.isArray(record.events) && record.events.length > 0) events = record.events;
+        if (Array.isArray(record.events)) events = record.events;
 
         if (record.music) {
           if (record.music.playlistUrl) musicConfig.playlistUrl = record.music.playlistUrl;
@@ -1011,6 +1006,13 @@
         new Date(proximo.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) +
         ' · ' + proximo.location;
 
+      const hint = document.getElementById('countdownFooterHint');
+      if (hint) {
+        hint.innerText = events.length > 0
+          ? `Mostrando el próximo de ${events.length} eventos programados`
+          : 'Agrega las fechas reales de tu promo en Eventos & Soundtrack';
+      }
+
       const diff = Math.max(0, proximo.ts - ahora);
       document.getElementById('cdDays').innerText = String(Math.floor(diff / 86400000)).padStart(2, '0');
       document.getElementById('cdHours').innerText = String(Math.floor((diff / 3600000) % 24)).padStart(2, '0');
@@ -1022,6 +1024,10 @@
     function renderCronogramaEventos() {
       const grid = document.getElementById('eventsTimelineGrid');
       const ordenados = [...events].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      if (ordenados.length === 0) {
+        grid.innerHTML = `<div class="col-span-full p-6 rounded-xl bg-[var(--bg-cream)] border border-dashed border-[var(--border-color)] text-center text-xs text-[var(--text-muted)]">No hay eventos cargados en este momento. Usa el formulario de arriba para agregar las fechas reales de tu promoción.</div>`;
+        return;
+      }
       grid.innerHTML = ordenados.map(ev => {
         const dias = Math.ceil((new Date(ev.date).getTime() - Date.now()) / 86400000);
         return `
@@ -1031,7 +1037,7 @@
                 <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-[var(--wine-main)] text-white font-mono-num">
                   ${dias > 0 ? `Faltan ${dias} días` : dias === 0 ? '¡Es hoy!' : 'Realizado'}
                 </span>
-                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">🗑 Borrar</button>
               </div>
               <h4 class="text-sm font-bold text-[var(--wine-main)]">${ev.title}</h4>
               <p class="text-xs text-[var(--text-muted)] mt-1">${new Date(ev.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })} · ${ev.location}</p>
@@ -1049,7 +1055,6 @@
       events.push({ id: 'ev_' + Math.random().toString(36).substring(2, 8), title, date, location });
       document.getElementById('evTitleInput').value = '';
       document.getElementById('evLocInput').value = '';
-      document.getElementById('addEventForm').classList.add('hidden');
       renderCronogramaEventos();
       actualizarCuentaRegresiva();
       await sincronizarNube();
@@ -1057,11 +1062,11 @@
     }
 
     async function eliminarEventoPromo(id) {
-      if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
       events = events.filter(e => e.id !== id);
       renderCronogramaEventos();
       actualizarCuentaRegresiva();
       await sincronizarNube();
+      mostrarToast('Evento eliminado del cronograma');
     }
 
     /* =========================================================
@@ -1513,7 +1518,7 @@
                   <h3 class="text-base font-bold text-[var(--wine-main)]">🏆 ${cat.title}</h3>
                   ${cat.description ? `<p class="text-xs text-[var(--text-muted)]">${cat.description}</p>` : ''}
                 </div>
-                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">🗑 Borrar</button>
               </div>
               <div class="space-y-2 my-3">
                 ${ordenados.length === 0
@@ -1595,10 +1600,10 @@
     }
 
     async function eliminarCategoriaPremio(catId) {
-      if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
       awards = awards.filter(c => c.id !== catId);
       renderPremios();
       await sincronizarNube();
+      mostrarToast('Categoría eliminada');
     }
 
     /* =========================================================
@@ -1641,7 +1646,7 @@
                 <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md text-white ${abierta ? 'bg-emerald-600' : 'bg-[var(--wine-main)]'}">
                   ${abierta ? '🔓 Abierta' : '🔒 Abre el ' + cap.unlockDate}
                 </span>
-                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">🗑 Borrar</button>
               </div>
               <h3 class="text-sm font-bold text-[var(--wine-main)]">${cap.recipient}</h3>
               <p class="text-xs text-[var(--gold-main)] font-semibold mb-3">Por: ${cap.author} · ${cap.createdAt}</p>
@@ -1658,10 +1663,10 @@
     }
 
     async function eliminarCapsula(id) {
-      if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
       capsules = capsules.filter(c => c.id !== id);
       renderCapsulas();
       await sincronizarNube();
+      mostrarToast('Cápsula eliminada');
     }
 
     /* =========================================================
