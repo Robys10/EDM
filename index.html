@@ -18,6 +18,17 @@
       --card-bg: #fffdf8;
       --border-color: rgba(104, 27, 40, 0.15);
       --danger: #d93838;
+      /* Color crema fijo y protegido */
+      --crema-fijo: #fdf6e2;
+      --crema-text: #5c4a1e;
+    }
+
+    /* TEMA AZUL (Azul más oscuro y elegante, aplicando solo a lo que era rojo vino) */
+    body.blue-theme {
+      --wine-main: #1e3a8a;
+      --wine-dark: #111827;
+      --wine-light: #1d4ed8;
+      --border-color: rgba(30, 58, 138, 0.25);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -29,6 +40,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     /* BOTÓN FLOTANTE MÓVIL */
@@ -71,6 +83,7 @@
       left: 0;
       z-index: 200;
       box-shadow: 5px 0 20px rgba(0,0,0,0.05);
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     sidebar.collapsed {
@@ -126,8 +139,36 @@
       gap: 10px;
     }
 
-    .sidebar-item:hover { background: rgba(104, 27, 40, 0.05); color: var(--wine-main); }
-    .sidebar-item.active { background: var(--wine-main); color: #fff; box-shadow: 0 4px 10px rgba(104, 27, 40, 0.2); }
+    .sidebar-item:hover { background: rgba(30, 58, 138, 0.05); color: var(--wine-main); }
+    .sidebar-item.active { background: var(--wine-main); color: #fff; box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2); }
+
+    /* BOTÓN DE TEMA ESTÉTICO EN EL MENÚ */
+    .theme-toggle-menu-btn {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-dark);
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s ease;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .theme-toggle-menu-btn:hover {
+      background: rgba(30, 58, 138, 0.05);
+      border-color: var(--wine-main);
+      color: var(--wine-main);
+    }
+    .theme-toggle-menu-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
 
     /* CONTENEDOR PRINCIPAL */
     .main-wrapper {
@@ -164,6 +205,7 @@
       text-align: center;
       gap: 12px;
       margin-bottom: 16px;
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     .logo-frame {
@@ -190,7 +232,7 @@
     }
 
     .brand p { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px; }
-    .status-badge { background: rgba(104, 27, 40, 0.06); color: var(--wine-main); padding: 4px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; border: 1px solid var(--border-color); }
+    .status-badge { background: rgba(30, 58, 138, 0.06); color: var(--wine-main); padding: 4px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; border: 1px solid var(--border-color); }
 
     /* INICIO */
     .home-welcome {
@@ -201,6 +243,7 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.03);
       text-align: center;
       margin-bottom: 16px;
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     .home-welcome h2 { color: var(--wine-main); font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; }
@@ -209,7 +252,7 @@
     .home-cards-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
 
     .home-card {
-      background: #fff;
+      background: var(--card-bg);
       border: 1px solid var(--border-color);
       padding: 14px;
       border-radius: 14px;
@@ -219,7 +262,7 @@
 
     .home-card:hover {
       border-color: var(--gold-main);
-      box-shadow: 0 4px 12px rgba(104, 27, 40, 0.05);
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.05);
     }
 
     .home-card h3 { color: var(--wine-main); font-size: 0.95rem; margin-bottom: 4px; font-weight: 700; }
@@ -252,7 +295,7 @@
     .featured-item img, .featured-item video { width: 100%; height: 100%; object-fit: cover; }
     .featured-item span {
       position: absolute; bottom: 0; left: 0; right: 0;
-      background: rgba(67, 16, 25, 0.9); color: #fff; font-size: 0.65rem; font-weight: 600; padding: 3px 6px;
+      background: rgba(17, 24, 39, 0.9); color: #fff; font-size: 0.65rem; font-weight: 600; padding: 3px 6px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
@@ -288,7 +331,7 @@
 
     .upload-zone { 
       background: var(--card-bg);
-      border: 2px dashed rgba(104, 27, 40, 0.25); 
+      border: 2px dashed var(--border-color); 
       border-radius: 18px; 
       padding: 18px 14px; 
       text-align: center; 
@@ -302,7 +345,7 @@
 
     .custom-title-container { display: flex; justify-content: center; margin-top: 10px; width: 100%; }
     .input-title {
-      background: #fff;
+      background: var(--card-bg);
       border: 1px solid var(--border-color);
       color: var(--text-dark);
       padding: 10px 12px;
@@ -353,40 +396,59 @@
       background: var(--card-bg); border-radius: 16px; 
       overflow: hidden; border: 1px solid var(--border-color); display: flex; flex-direction: column; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     .media-container { width: 100%; height: 200px; background: #000; overflow: hidden; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .media-container img, .media-container video { width: 100%; height: 100%; object-fit: cover; }
 
     .badge-type { 
-      position: absolute; top: 10px; right: 10px; background: rgba(104, 27, 40, 0.9); 
+      position: absolute; top: 10px; right: 10px; background: rgba(30, 58, 138, 0.9); 
       padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; 
       color: var(--gold-bright); z-index: 2; 
     }
 
     .card-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-    .card-title { font-size: 0.9rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--wine-dark); }
+    .card-title { font-size: 0.9rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-dark); }
 
     .card-actions-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
 
     .like-btn {
-      background: rgba(104, 27, 40, 0.05); border: 1px solid var(--border-color);
+      background: var(--card-bg); border: 1px solid var(--border-color);
       padding: 6px 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px;
       color: var(--wine-main); font-weight: 700; font-size: 0.8rem;
     }
     .like-btn.liked { background: var(--wine-main); color: #fff; border-color: var(--wine-main); }
 
+    /* SECCIÓN DE COMENTARIOS PROTEGIDA CON COLOR CREMA FIJO */
     .comments-section {
-      background: #fdfbf7; border-radius: 10px; padding: 8px; margin-top: 2px;
-      font-size: 0.8rem; display: none; border: 1px solid var(--border-color);
+      background-color: var(--crema-fijo); 
+      color: var(--crema-text);
+      border-radius: 10px; 
+      padding: 8px; 
+      margin-top: 2px;
+      font-size: 0.8rem; 
+      display: none; 
+      border: 1px solid #e6d8b5;
     }
     .comments-section.active { display: block; }
     .comments-list { max-height: 80px; overflow-y: auto; margin-bottom: 6px; display: flex; flex-direction: column; gap: 4px; }
-    .comment-item { background: #f4eee2; padding: 5px 8px; border-radius: 6px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+    
+    .comment-item { 
+      background-color: #ffffff; 
+      color: var(--crema-text); 
+      padding: 5px 8px; 
+      border-radius: 6px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 4px; 
+      border: 1px solid #e6d8b5; 
+    }
     .delete-comment-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.75rem; font-weight: 700; }
 
     .comment-form { display: flex; gap: 4px; }
-    .comment-input { flex: 1; border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 6px; font-size: 0.8rem; outline: none; background: #fff; }
+    .comment-input { flex: 1; border: 1px solid #e6d8b5; padding: 6px 8px; border-radius: 6px; font-size: 0.8rem; outline: none; background: #ffffff; color: var(--crema-text); }
     .comment-input:focus { border-color: var(--wine-main); }
     .comment-submit { background: var(--wine-main); color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem; }
 
@@ -403,10 +465,11 @@
       padding: 14px;
       margin-bottom: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      transition: background-color 0.3s, border-color 0.3s;
     }
     .tweet-composer textarea {
       width: 100%;
-      background: #fff;
+      background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 10px;
@@ -440,6 +503,7 @@
       flex-direction: column;
       gap: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: background-color 0.3s, border-color 0.3s;
     }
     .tweet-header { display: flex; justify-content: space-between; align-items: center; }
     .tweet-user { font-weight: 800; color: var(--wine-main); font-size: 0.85rem; }
@@ -501,7 +565,7 @@
     <div class="sidebar-header">
       <div class="sidebar-brand-container">
         <div class="sidebar-logo-frame">
-          <img src="logo.png" alt="Logo" class="sidebar-logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'40\'>⭐</text></svg>';">
+          <img src="logo.png" alt="Logo" class="sidebar-logo-img logo-dinamico" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'40\'>⭐</text></svg>';">
         </div>
         <div class="sidebar-brand-text">
           <span class="sidebar-brand-title">Estrella '26</span>
@@ -516,6 +580,17 @@
       <li class="sidebar-item" onclick="cambiarSeccion('eventos', this)">🎧 Soundtrack</li>
       <li class="sidebar-item" onclick="cambiarSeccion('mensajes', this)">💬 Buzón</li>
     </ul>
+
+    <!-- BOTÓN MEJORADO PARA CAMBIAR TEMA -->
+    <button class="theme-toggle-menu-btn" onclick="alternarTemaAzul()" aria-label="Cambiar tema">
+      <span style="display: flex; align-items: center; gap: 8px;">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 0 1-4.4 4.4 5.38 5.38 0 0 1-4.4-4.4A9 9 0 0 1 12 3z"/>
+        </svg>
+        Tema Azul
+      </span>
+      <span style="font-size: 0.75rem; opacity: 0.7;">Cambiar</span>
+    </button>
   </sidebar>
 
   <!-- CONTENEDOR PRINCIPAL -->
@@ -526,13 +601,15 @@
       <section id="seccion-inicio" class="page-section active">
         <header>
           <div class="logo-frame">
-            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'14\'>PROM 26</text></svg>';">
+            <img src="logo.png" alt="Logo" class="logo-img logo-dinamico" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'14\'>PROM 26</text></svg>';">
           </div>
           <div class="brand">
             <h1>PROM ESTRELLA DE LA MAÑANA</h1>
             <p>Mural Digital & Galería Oficial 2026</p>
           </div>
-          <div class="status-badge" id="status">Sincronizando...</div>
+          <div style="display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap;">
+            <div class="status-badge" id="status">Sincronizando...</div>
+          </div>
         </header>
 
         <div class="home-welcome">
@@ -614,23 +691,16 @@
 
         <div style="display: flex; flex-direction: column; gap: 14px;">
           
-          <!-- Mini Reproductor de Spotify -->
-          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; text-align: center;">
+          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; text-align: center; transition: background-color 0.3s, border-color 0.3s;">
             <h3 style="color: var(--wine-main); font-size: 0.95rem; font-weight: 800; margin-bottom: 10px;">🎧 Playlist Oficial</h3>
-            <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);" id="spotifyContainer">
-              <!-- Se cargará automáticamente -->
-            </div>
+            <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);" id="spotifyContainer"></div>
           </div>
 
-          <!-- Himnos de la Promo -->
-          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px;">
+          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; transition: background-color 0.3s, border-color 0.3s;">
             <h3 style="color: var(--wine-main); font-size: 0.95rem; margin-bottom: 10px; font-weight: 800;">🔥 Himnos del Salón</h3>
-            <div style="display: flex; flex-direction: column; gap: 8px;" id="himnosContainer">
-              <!-- Se cargará automáticamente -->
-            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="himnosContainer"></div>
           </div>
 
-          <!-- Sugerencia rápida -->
           <div style="background: var(--wine-dark); border: 1px solid var(--gold-main); border-radius: 16px; padding: 16px; color: #fff; text-align: center;">
             <h3 style="color: var(--gold-bright); font-size: 0.95rem; font-weight: 800; margin-bottom: 6px;">¿Falta alguna canción?</h3>
             <p style="font-size: 0.78rem; color: rgba(255,255,255,0.85); margin-bottom: 12px;">Escríbela en el buzón o mándala al grupo para sumarla al repertorio oficial.</p>
@@ -679,7 +749,6 @@
     let items = [];
     let tweets = [];
     
-    // Configuración local de música con tu enlace integrado
     let musicConfig = {
       playlistUrl: 'https://open.spotify.com/embed/playlist/3lcbivzyUFBhKcmVi49W4J',
       himnos: [
@@ -702,6 +771,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      inicializarTemaAzul();
+
       cargarDesdeNube();
       if (window.innerWidth > 850) {
         document.getElementById('appSidebar').classList.remove('collapsed');
@@ -711,6 +782,36 @@
         document.getElementById('mainWrapper').classList.add('expanded');
       }
     });
+
+    function inicializarTemaAzul() {
+      const savedTheme = localStorage.getItem('promo-theme');
+      if (savedTheme === 'blue') {
+        document.body.classList.add('blue-theme');
+        actualizarLogos(true);
+      } else {
+        actualizarLogos(false);
+      }
+    }
+
+    function alternarTemaAzul() {
+      document.body.classList.toggle('blue-theme');
+      const esAzul = document.body.classList.contains('blue-theme');
+      
+      if (esAzul) {
+        localStorage.setItem('promo-theme', 'blue');
+        actualizarLogos(true);
+      } else {
+        localStorage.setItem('promo-theme', 'default');
+        actualizarLogos(false);
+      }
+    }
+
+    function actualizarLogos(esAzul) {
+      const nuevoSrc = esAzul ? 'logo2.png' : 'logo.png';
+      document.querySelectorAll('.logo-dinamico').forEach(img => {
+        img.src = nuevoSrc;
+      });
+    }
 
     function toggleSidebar() {
       const sidebar = document.getElementById('appSidebar');
@@ -788,7 +889,6 @@
           likedBy: Array.isArray(t.likedBy) ? t.likedBy : []
         }));
 
-        // Si el JSONBin tiene configuración de música propia, la prioriza
         if (record.music) {
           if (record.music.playlistUrl) musicConfig.playlistUrl = record.music.playlistUrl;
           if (Array.isArray(record.music.himnos) && record.music.himnos.length > 0) {
@@ -806,7 +906,6 @@
         console.error(err);
         status.innerText = "Error de red";
         status.style.color = "#d93838";
-        // Aun si falla la red, renderizamos la música local configurada
         renderSoundtrack();
       }
     }
@@ -844,13 +943,13 @@
 
       musicConfig.himnos.forEach(himno => {
         const div = document.createElement('div');
-        div.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #fff; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.82rem;";
+        div.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.82rem;";
         div.innerHTML = `
           <div>
             <strong style="color: var(--text-dark); display: block;">${himno.titulo}</strong>
             <span style="color: var(--text-muted); font-size: 0.75rem;">${himno.artista}</span>
           </div>
-          <span style="font-size: 0.75rem; background: rgba(104,27,40,0.06); color: var(--wine-main); padding: 4px 8px; border-radius: 6px; font-weight: 700;">${himno.etiqueta || 'Himno'}</span>
+          <span style="font-size: 0.75rem; background: rgba(30,58,138,0.06); color: var(--wine-main); padding: 4px 8px; border-radius: 6px; font-weight: 700;">${himno.etiqueta || 'Himno'}</span>
         `;
         himnosContainer.appendChild(div);
       });
@@ -1155,7 +1254,7 @@
 
             <div class="comments-section" id="comments-section-${realIndex}">
               <div class="comments-list">
-                ${comentariosHtml || '<div style="color:var(--text-muted); text-align:center; padding:2px;">Sé el primero en comentar</div>'}
+                ${comentariosHtml || '<div style="color:var(--crema-text); text-align:center; padding:2px; opacity: 0.8;">Sé el primero en comentar</div>'}
               </div>
               <form class="comment-form" onclick="event.stopPropagation()" onsubmit="agregarComentario(event, ${realIndex})">
                 <input type="text" class="comment-input" id="comment-input-${realIndex}" placeholder="Dedicatoria...">
