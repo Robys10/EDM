@@ -54,6 +54,81 @@
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* =========================================================
+       ANIMACIONES 60FPS ACELERADAS POR GPU (solo transform y opacity)
+    ========================================================= */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes modalZoomIn {
+      from {
+        opacity: 0;
+        transform: scale3d(0.95, 0.95, 1);
+      }
+      to {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+      }
+    }
+
+    @keyframes heartPop {
+      0% { transform: scale3d(1, 1, 1); }
+      45% { transform: scale3d(1.26, 1.26, 1); }
+      100% { transform: scale3d(1, 1, 1); }
+    }
+
+    .anim-section {
+      animation: fadeSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      will-change: transform, opacity;
+    }
+
+    .anim-card {
+      animation: fadeSlideUp 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: calc(min(var(--i, 0), 8) * 30ms);
+      transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease;
+      will-change: transform, opacity;
+    }
+
+    .anim-card:hover {
+      transform: translate3d(0, -3px, 0);
+    }
+
+    .anim-modal {
+      animation: modalZoomIn 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .btn-interactive {
+      transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease, border-color 160ms ease, opacity 160ms ease;
+    }
+
+    .btn-interactive:hover {
+      transform: translate3d(0, -1px, 0);
+    }
+
+    .btn-interactive:active {
+      transform: scale3d(0.97, 0.97, 1);
+    }
+
+    .like-pop {
+      animation: heartPop 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .anim-section, .anim-card, .anim-modal, .like-pop, .btn-interactive {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -73,15 +148,15 @@
     </nav>
 
     <div class="flex items-center gap-2.5 shrink-0">
-      <button onclick="alternarTemaAzul()" class="px-3.5 py-2 text-xs font-semibold rounded-lg border border-[var(--border-color)] text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+      <button onclick="alternarTemaAzul()" class="btn-interactive px-3.5 py-2 text-xs font-semibold rounded-lg border border-[var(--border-color)] text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
         <span id="themeBtnTopText">Tema Azul</span>
       </button>
 
-      <button onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[var(--wine-main)] hover:bg-[var(--wine-light)] rounded-lg transition-colors whitespace-nowrap cursor-pointer">
+      <button onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[var(--wine-main)] hover:bg-[var(--wine-light)] rounded-lg whitespace-nowrap cursor-pointer">
         <span>+ Subir Recuerdo</span>
       </button>
 
-      <button onclick="toggleMobileSidebar()" class="md:hidden w-10 h-10 rounded-lg border border-[var(--border-color)] text-[var(--wine-main)] flex items-center justify-center cursor-pointer font-bold">
+      <button onclick="toggleMobileSidebar()" class="btn-interactive md:hidden w-10 h-10 rounded-lg border border-[var(--border-color)] text-[var(--wine-main)] flex items-center justify-center cursor-pointer font-bold">
         ☰
       </button>
     </div>
@@ -106,22 +181,22 @@
         </div>
 
         <div class="space-y-1.5">
-          <button onclick="cambiarSeccion('inicio')" data-side="inicio" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white">
+          <button onclick="cambiarSeccion('inicio')" data-side="inicio" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white">
             <span>🏠 Inicio</span>
           </button>
-          <button onclick="cambiarSeccion('miembros')" data-side="miembros" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+          <button onclick="cambiarSeccion('miembros')" data-side="miembros" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
             <span>🎓 Integrantes</span>
             <span id="sideCountMiembros" class="text-xs font-mono-num">0</span>
           </button>
-          <button onclick="cambiarSeccion('galeria')" data-side="galeria" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+          <button onclick="cambiarSeccion('galeria')" data-side="galeria" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
             <span>📸 Galería</span>
             <span id="sideCountGaleria" class="text-xs font-mono-num">0</span>
           </button>
-          <button onclick="cambiarSeccion('eventos')" data-side="eventos" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+          <button onclick="cambiarSeccion('eventos')" data-side="eventos" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
             <span>🎧 Soundtrack</span>
             <span id="sideCountHimnos" class="text-xs font-mono-num">0</span>
           </button>
-          <button onclick="cambiarSeccion('mensajes')" data-side="mensajes" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+          <button onclick="cambiarSeccion('mensajes')" data-side="mensajes" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
             <span>💬 Buzón</span>
             <span id="sideCountBuzon" class="text-xs font-mono-num">0</span>
           </button>
@@ -137,8 +212,8 @@
           <form id="userNameForm" onsubmit="guardarNombreUsuario(event)" class="hidden space-y-2 mt-2">
             <input id="userNameInput" type="text" maxlength="32" placeholder="Tu nombre o apodo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
             <div class="flex items-center gap-1.5">
-              <button type="submit" class="flex-1 py-1.5 text-xs font-semibold text-white bg-[var(--wine-main)] rounded-lg cursor-pointer">Guardar</button>
-              <button type="button" onclick="cerrarEditorNombre()" class="px-2.5 py-1.5 text-xs font-semibold text-[var(--text-muted)] border border-[var(--border-color)] rounded-lg cursor-pointer">Cancelar</button>
+              <button type="submit" class="btn-interactive flex-1 py-1.5 text-xs font-semibold text-white bg-[var(--wine-main)] rounded-lg cursor-pointer">Guardar</button>
+              <button type="button" onclick="cerrarEditorNombre()" class="btn-interactive px-2.5 py-1.5 text-xs font-semibold text-[var(--text-muted)] border border-[var(--border-color)] rounded-lg cursor-pointer">Cancelar</button>
             </div>
           </form>
         </div>
@@ -149,7 +224,7 @@
           <span id="statusText">Sincronizando...</span>
           <button onclick="cargarDesdeNube()" title="Sincronizar ahora" class="p-1.5 rounded-lg hover:text-[var(--wine-main)] cursor-pointer font-bold">↻</button>
         </div>
-        <button onclick="alternarTemaAzul()" class="w-full px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center justify-between transition-colors whitespace-nowrap cursor-pointer">
+        <button onclick="alternarTemaAzul()" class="btn-interactive w-full px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center justify-between whitespace-nowrap cursor-pointer">
           <span id="themeBtnSideText">Tema Azul Real</span>
           <span class="text-[11px] text-[var(--text-muted)]">Cambiar</span>
         </button>
@@ -164,9 +239,9 @@
       <!-- =========================================================
            1. SECCIÓN INICIO
       ========================================================= -->
-      <section id="seccion-inicio" class="page-section space-y-8">
+      <section id="seccion-inicio" class="page-section anim-section space-y-8">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
-          <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2.5 flex items-center justify-center shrink-0">
+          <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2.5 flex items-center justify-center shrink-0 transition-transform duration-200 hover:scale-105">
             <img src="logo.png" alt="Escudo Oficial" class="logo-dinamico w-full h-full object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'14\'>PROM 26</text></svg>';" />
           </div>
           <div class="flex-1 text-center md:text-left space-y-3">
@@ -182,10 +257,10 @@
               Mural digital, anuario de integrantes y galería oficial 2026. Un espacio compartido para atesorar cada rostro, fotografía, video y anécdota inolvidable de nuestra promoción.
             </p>
             <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <button onclick="cambiarSeccion('miembros')" class="px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] transition-colors whitespace-nowrap cursor-pointer">
+              <button onclick="cambiarSeccion('miembros')" class="btn-interactive px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] whitespace-nowrap cursor-pointer">
                 🎓 Mural de Integrantes
               </button>
-              <button onclick="cambiarSeccion('galeria')" class="px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer">
+              <button onclick="cambiarSeccion('galeria')" class="btn-interactive px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold whitespace-nowrap cursor-pointer">
                 📸 Explorar Galería
               </button>
             </div>
@@ -194,22 +269,22 @@
 
         <!-- Métricas -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+          <div style="--i:0" class="anim-card rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
             <div class="text-xs text-[var(--text-muted)]">Integrantes en Mural</div>
             <div id="statMembers" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
             <div class="text-xs text-[var(--text-muted)] mt-1">Anuario Promo ’26</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+          <div style="--i:1" class="anim-card rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
             <div class="text-xs text-[var(--text-muted)]">Recuerdos en Galería</div>
             <div id="statTotalItems" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
             <div id="statBreakdown" class="text-xs text-[var(--text-muted)] mt-1 font-mono-num">0 fotos · 0 videos</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+          <div style="--i:2" class="anim-card rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
             <div class="text-xs text-[var(--text-muted)]">Anécdotas en Buzón</div>
             <div id="statTweets" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
             <div class="text-xs text-[var(--text-muted)] mt-1">Mensajes de la promo</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+          <div style="--i:3" class="anim-card rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
             <div class="text-xs text-[var(--text-muted)]">Reacciones Totales</div>
             <div id="statLikes" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
             <div class="text-xs text-[var(--text-muted)] mt-1">Votos de compañeros</div>
@@ -218,28 +293,28 @@
 
         <!-- 4 Tarjetas de Navegación -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button onclick="cambiarSeccion('miembros')" class="text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 transition-colors flex flex-col justify-between gap-4 cursor-pointer">
+          <button style="--i:0" onclick="cambiarSeccion('miembros')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
               <h3 class="text-base font-bold text-[var(--wine-main)]">🎓 Mural de Integrantes</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Conoce a todos los miembros de la promoción y sube tu foto con tu apodo y frase.</p>
             </div>
             <div class="text-xs font-semibold text-[var(--gold-main)]">Ver integrantes →</div>
           </button>
-          <button onclick="cambiarSeccion('galeria')" class="text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 transition-colors flex flex-col justify-between gap-4 cursor-pointer">
+          <button style="--i:1" onclick="cambiarSeccion('galeria')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
               <h3 class="text-base font-bold text-[var(--wine-main)]">📸 Ver la Galería</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Sube tus fotos y videos, reacciona con "me gusta" y deja dedicatorias.</p>
             </div>
             <div class="text-xs font-semibold text-[var(--gold-main)]">Abrir galería →</div>
           </button>
-          <button onclick="cambiarSeccion('eventos')" class="text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 transition-colors flex flex-col justify-between gap-4 cursor-pointer">
+          <button style="--i:2" onclick="cambiarSeccion('eventos')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
               <h3 class="text-base font-bold text-[var(--wine-main)]">🎧 Soundtrack Oficial</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Escucha la playlist en Spotify y consulta o añade los himnos del salón.</p>
             </div>
             <div class="text-xs font-semibold text-[var(--gold-main)]">Escuchar música →</div>
           </button>
-          <button onclick="cambiarSeccion('mensajes')" class="text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 transition-colors flex flex-col justify-between gap-4 cursor-pointer">
+          <button style="--i:3" onclick="cambiarSeccion('mensajes')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
             <div class="space-y-2">
               <h3 class="text-base font-bold text-[var(--wine-main)]">💬 Buzón de Anécdotas</h3>
               <p class="text-xs text-[var(--text-muted)] leading-relaxed">Comparte mensajes cortos, recuerdos de clases y sugerencias con la promo.</p>
@@ -252,7 +327,7 @@
       <!-- =========================================================
            2. SECCIÓN MURAL DE INTEGRANTES (ANUARIO PROMO '26)
       ========================================================= -->
-      <section id="seccion-miembros" class="page-section hidden space-y-6">
+      <section id="seccion-miembros" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
           <div class="text-xs text-[var(--gold-main)] font-semibold">🎓 Anuario Oficial · Promoción 2026</div>
           <h1 class="text-2xl md:text-3xl font-bold text-[var(--wine-main)]">Mural de Integrantes Estrella de la Mañana</h1>
@@ -275,7 +350,7 @@
           </div>
 
           <div class="flex justify-end">
-            <button id="uploadMemberBtn" onclick="iniciarSubidaMiembro()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer">
+            <button id="uploadMemberBtn" onclick="iniciarSubidaMiembro()" class="btn-interactive w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
               📸 Elegir foto y publicar en el Mural
             </button>
             <input type="file" id="memberFileInput" accept="image/*" onchange="subirFotoMiembro(event)" class="hidden" />
@@ -295,7 +370,7 @@
       <!-- =========================================================
            3. SECCIÓN GALERÍA MULTIMEDIA
       ========================================================= -->
-      <section id="seccion-galeria" class="page-section hidden space-y-6">
+      <section id="seccion-galeria" class="page-section hidden anim-section space-y-6">
         <div id="featuredCarousel" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
           <div class="flex items-center justify-between">
             <h2 class="text-sm font-bold text-[var(--wine-main)]">⭐ Recuerdos Más Votados de la Promo</h2>
@@ -311,7 +386,7 @@
             </div>
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
               <input type="text" id="customTitle" placeholder="Título del recuerdo (opcional)..." class="flex-1 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
-              <button id="uploadBtn" onclick="document.getElementById('fileInput').click()" class="px-4 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer">
+              <button id="uploadBtn" onclick="document.getElementById('fileInput').click()" class="btn-interactive px-4 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
                 Elegir archivo multimedia
               </button>
               <input type="file" id="fileInput" accept="image/*,video/*" onchange="subirMultimedia(event)" class="hidden" />
@@ -324,8 +399,8 @@
               <h3 class="text-base font-bold text-white">¿Tienes videos largos o pesados?</h3>
               <p class="text-xs text-white/80 leading-relaxed">Envíalos directamente al bot de Telegram de la promoción para sincronizarlos automáticamente.</p>
             </div>
-            <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-opacity whitespace-nowrap">
-              EN DESARROLLO
+            <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="btn-interactive w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 whitespace-nowrap">
+              Abrir @promedmbot en Telegram
             </a>
           </div>
         </div>
@@ -352,7 +427,7 @@
       <!-- =========================================================
            4. SECCIÓN SOUNDTRACK
       ========================================================= -->
-      <section id="seccion-eventos" class="page-section hidden space-y-6">
+      <section id="seccion-eventos" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
           <h1 class="text-2xl font-bold text-[var(--wine-main)]">Soundtrack de la Promo ’26</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)]">La música y los himnos que definen cada momento de nuestro año</p>
@@ -369,7 +444,7 @@
               <h2 class="text-base font-bold text-[var(--wine-main)]">Himnos del Salón</h2>
               <p class="text-xs text-[var(--text-muted)]">Canciones votadas y sugeridas por la promoción</p>
             </div>
-            <button onclick="document.getElementById('addHimnoForm').classList.toggle('hidden')" class="px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
+            <button onclick="document.getElementById('addHimnoForm').classList.toggle('hidden')" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
               + Añadir canción
             </button>
           </div>
@@ -379,7 +454,7 @@
             <input id="himnoArtista" type="text" placeholder="Artista o grupo..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
             <div class="flex items-center gap-2">
               <input id="himnoEtiqueta" type="text" value="Himno del Salón" placeholder="Categoría..." class="flex-1 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-              <button type="submit" class="px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
+              <button type="submit" class="btn-interactive px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
             </div>
           </form>
 
@@ -390,7 +465,7 @@
       <!-- =========================================================
            5. SECCIÓN BUZÓN DE ANÉCDOTAS
       ========================================================= -->
-      <section id="seccion-mensajes" class="page-section hidden space-y-6">
+      <section id="seccion-mensajes" class="page-section hidden anim-section space-y-6">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
           <h1 class="text-2xl font-bold text-[var(--wine-main)]">Buzón de Anécdotas</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)]">Comparte tus palabras, recuerdos de salón y dedicatorias con la Promoción 2026</p>
@@ -404,7 +479,7 @@
           <textarea id="tweetInput" maxlength="280" oninput="actualizarContador()" placeholder="¿Qué quieres decirle a la promo hoy?..." class="w-full h-24 rounded-xl border border-[var(--border-color)] bg-white p-3.5 text-sm text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)] resize-none"></textarea>
           <div class="flex items-center justify-between pt-1">
             <span id="tweetCounter" class="text-xs font-mono-num font-semibold text-[var(--text-muted)]">280 caracteres disponibles</span>
-            <button type="submit" class="px-5 py-2 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">Publicar en el Buzón</button>
+            <button type="submit" class="btn-interactive px-5 py-2 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">Publicar en el Buzón</button>
           </div>
         </form>
 
@@ -421,12 +496,12 @@
 
   <!-- MODAL LIGHTBOX -->
   <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
-    <button onclick="cerrarModal(event, true)" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-[var(--wine-main)] text-white text-lg font-bold flex items-center justify-center cursor-pointer z-10">✕</button>
-    <div id="modalBody" class="max-w-4xl max-h-[85vh] rounded-2xl overflow-hidden"></div>
+    <button onclick="cerrarModal(event, true)" class="btn-interactive absolute top-4 right-4 w-10 h-10 rounded-full bg-[var(--wine-main)] text-white text-lg font-bold flex items-center justify-center cursor-pointer z-10">✕</button>
+    <div id="modalBody" class="anim-modal max-w-4xl max-h-[85vh] rounded-2xl overflow-hidden"></div>
   </div>
 
   <!-- TOAST -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 rounded-xl bg-[var(--wine-dark)] text-white border border-[var(--gold-main)] px-4 py-2.5 text-xs font-semibold shadow-lg"></div>
+  <div id="toast" class="hidden anim-modal fixed bottom-5 right-5 z-50 rounded-xl bg-[var(--wine-dark)] text-white border border-[var(--gold-main)] px-4 py-2.5 text-xs font-semibold shadow-lg"></div>
 
   <script>
     const BIN_ID = '6ab9ade8ffd5d1605335d907';
@@ -528,7 +603,11 @@
 
     function cambiarSeccion(seccionId) {
       document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
-      document.getElementById('seccion-' + seccionId).classList.remove('hidden');
+      const target = document.getElementById('seccion-' + seccionId);
+      target.classList.remove('hidden');
+      target.classList.remove('anim-section');
+      void target.offsetWidth;
+      target.classList.add('anim-section');
 
       document.querySelectorAll('.nav-link').forEach(btn => {
         if (btn.dataset.nav === seccionId) {
@@ -540,9 +619,9 @@
 
       document.querySelectorAll('.side-link').forEach(btn => {
         if (btn.dataset.side === seccionId) {
-          btn.className = 'side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white';
+          btn.className = 'side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white';
         } else {
-          btn.className = 'side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]';
+          btn.className = 'side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]';
         }
       });
 
@@ -748,10 +827,11 @@
         return;
       }
 
-      filtrados.forEach(member => {
+      filtrados.forEach((member, idx) => {
         const dioLike = (member.likedBy || []).includes(userId);
         const card = document.createElement('article');
-        card.className = 'rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
+        card.style.setProperty('--i', idx);
+        card.className = 'anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
         card.innerHTML = `
           <div onclick="abrirModal('${member.photoUrl}', 'image/jpeg')" class="w-full h-64 bg-[#181214] overflow-hidden relative cursor-pointer group">
             <img src="${member.photoUrl}" alt="${member.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105" />
@@ -767,10 +847,10 @@
               ${member.frase ? `<p class="text-xs text-[var(--text-muted)] italic leading-relaxed pt-1">“${member.frase}”</p>` : ''}
             </div>
             <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
-              <button onclick="toggleMemberLike('${member.id}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--wine-main)] border-[var(--border-color)]'}">
+              <button onclick="toggleMemberLike('${member.id}', this)" class="btn-interactive px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--wine-main)] border-[var(--border-color)]'}">
                 ♥ ${member.likes || 0}
               </button>
-              <button onclick="eliminarMiembro('${member.id}')" class="text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">
+              <button onclick="eliminarMiembro('${member.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">
                 Eliminar
               </button>
             </div>
@@ -780,7 +860,12 @@
       });
     }
 
-    async function toggleMemberLike(memberId) {
+    async function toggleMemberLike(memberId, btn) {
+      if (btn) {
+        btn.classList.remove('like-pop');
+        void btn.offsetWidth;
+        btn.classList.add('like-pop');
+      }
       const m = members.find(x => x.id === memberId);
       if (!m) return;
       if (!m.likedBy) m.likedBy = [];
@@ -881,10 +966,11 @@
         return;
       }
       carousel.classList.remove('hidden');
-      destacados.forEach(item => {
+      destacados.forEach((item, idx) => {
         const esImagen = !item.type || item.type.startsWith('image/');
         const div = document.createElement('div');
-        div.className = 'w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-black';
+        div.style.setProperty('--i', idx);
+        div.className = 'anim-card w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-black';
         div.onclick = () => abrirModal(item.url, item.type);
         div.innerHTML = `
           ${esImagen ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover" />` : `<video src="${item.url}" preload="metadata" class="w-full h-full object-cover"></video>`}
@@ -926,12 +1012,13 @@
         return;
       }
 
-      filtrados.forEach(({ item, realIndex }) => {
+      filtrados.forEach(({ item, realIndex }, idx) => {
         const esImagen = !item.type || item.type.startsWith('image/');
         const dioLike = (item.likedBy || []).includes(userId);
         const comments = item.comments || [];
         const card = document.createElement('article');
-        card.className = 'rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
+        card.style.setProperty('--i', idx);
+        card.className = 'anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
 
         const comentariosHtml = comments.map(c => `
           <div class="bg-white rounded-lg px-2.5 py-1.5 border border-[#e6d8b5] flex items-start justify-between gap-2">
@@ -941,8 +1028,8 @@
         `).join('');
 
         card.innerHTML = `
-          <div onclick="abrirModal('${item.url}', '${item.type}')" class="w-full h-52 bg-[#181214] overflow-hidden relative cursor-pointer">
-            ${esImagen ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover" />` : `<video src="${item.url}" preload="metadata" class="w-full h-full object-cover"></video>`}
+          <div onclick="abrirModal('${item.url}', '${item.type}')" class="w-full h-52 bg-[#181214] overflow-hidden relative cursor-pointer group">
+            ${esImagen ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105" />` : `<video src="${item.url}" preload="metadata" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"></video>`}
           </div>
           <div class="p-4 flex-1 flex flex-col gap-3">
             <div>
@@ -950,10 +1037,10 @@
               <div class="text-xs text-[var(--text-muted)] mt-0.5">${esImagen ? 'Fotografía' : 'Video'}</div>
             </div>
             <div class="flex items-center justify-between gap-2">
-              <button onclick="toggleLike(${realIndex})" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--wine-main)] border-[var(--border-color)]'}">
+              <button onclick="toggleLike(${realIndex}, this)" class="btn-interactive px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--wine-main)] border-[var(--border-color)]'}">
                 ♥ Me gusta (${item.likes || 0})
               </button>
-              <button onclick="document.getElementById('comments-${realIndex}').classList.toggle('hidden')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
+              <button onclick="document.getElementById('comments-${realIndex}').classList.toggle('hidden')" class="btn-interactive px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
                 Dedicatorias (${comments.length})
               </button>
             </div>
@@ -961,12 +1048,12 @@
               <div class="max-h-28 overflow-y-auto space-y-1.5">${comentariosHtml || '<div class="text-center opacity-75">Sé el primero en comentar</div>'}</div>
               <form onsubmit="agregarComentario(event, ${realIndex})" class="flex gap-1.5">
                 <input id="comment-input-${realIndex}" type="text" placeholder="Escribe una dedicatoria..." class="flex-1 bg-white border border-[#e6d8b5] rounded-lg px-2.5 py-1.5 text-xs outline-none" />
-                <button type="submit" class="px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Enviar</button>
+                <button type="submit" class="btn-interactive px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Enviar</button>
               </form>
             </div>
             <div class="mt-auto pt-2.5 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
-              <button onclick="navigator.clipboard.writeText('${item.url}'); mostrarToast('Enlace copiado');" class="text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Copiar enlace</button>
-              <button onclick="eliminarItem(${realIndex})" class="text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Eliminar</button>
+              <button onclick="navigator.clipboard.writeText('${item.url}'); mostrarToast('Enlace copiado');" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Copiar enlace</button>
+              <button onclick="eliminarItem(${realIndex})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Eliminar</button>
             </div>
           </div>
         `;
@@ -974,7 +1061,12 @@
       });
     }
 
-    async function toggleLike(index) {
+    async function toggleLike(index, btn) {
+      if (btn) {
+        btn.classList.remove('like-pop');
+        void btn.offsetWidth;
+        btn.classList.add('like-pop');
+      }
       if (!items[index].likedBy) items[index].likedBy = [];
       const dioLike = items[index].likedBy.includes(userId);
       if (dioLike) {
@@ -1093,19 +1185,19 @@
         feed.innerHTML = `<div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-10 text-center text-xs text-[var(--text-muted)]">Aún no hay mensajes en el buzón.</div>`;
         return;
       }
-      feed.innerHTML = tweets.map(t => {
+      feed.innerHTML = tweets.map((t, idx) => {
         const dioLike = (t.likedBy || []).includes(userId);
         const fecha = new Date(t.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
         return `
-          <article class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
+          <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
             <div class="flex items-center justify-between">
               <div class="text-sm font-bold text-[var(--wine-main)]">${t.author}</div>
               <div class="text-xs font-mono-num text-[var(--text-muted)]">${fecha}</div>
             </div>
             <p class="text-sm text-[var(--text-dark)] whitespace-pre-line break-words">${t.text}</p>
             <div class="pt-2.5 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
-              <button onclick="toggleTweetLike('${t.id}')" class="font-semibold cursor-pointer ${dioLike ? 'text-[var(--danger)]' : 'text-[var(--text-muted)]'}">♥ ${t.likes || 0}</button>
-              <button onclick="eliminarTweet('${t.id}')" class="text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Borrar</button>
+              <button onclick="toggleTweetLike('${t.id}')" class="btn-interactive font-semibold cursor-pointer ${dioLike ? 'text-[var(--danger)]' : 'text-[var(--text-muted)]'}">♥ ${t.likes || 0}</button>
+              <button onclick="eliminarTweet('${t.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Borrar</button>
             </div>
           </article>
         `;
