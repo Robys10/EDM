@@ -10,6 +10,7 @@
   <meta property="og:description" content="Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM)." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" href="logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -438,7 +439,7 @@
               <p class="text-xs text-white/80 leading-relaxed">Envíalos directamente al bot de Telegram de la promoción para sincronizarlos automáticamente.</p>
             </div>
             <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="btn-interactive w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 whitespace-nowrap">
-              EN DESARROLLO ↗
+              Abrir @promedmbot ↗
             </a>
           </div>
         </div>
@@ -895,22 +896,30 @@
        LECTURA Y SINCRONIZACIÓN CON FUSIÓN INTELIGENTE (JSONBIN)
     ========================================================= */
     function normalizarRecordNube(record) {
+      while (record && record.record && typeof record.record === 'object' && !Array.isArray(record.record)) {
+        record = record.record;
+      }
       if (Array.isArray(record.deletedIds)) {
         record.deletedIds.forEach(id => deletedIds.add(String(id)));
       }
-      const rawItems = Array.isArray(record) ? record : (record.items || []);
+      const esItemUnicoMake = Boolean(record && typeof record === 'object' && !Array.isArray(record) && record.url && !Array.isArray(record.items));
+      const rawItems = Array.isArray(record)
+        ? record
+        : esItemUnicoMake
+          ? [record]
+          : (record.items || []);
       const cloudItems = rawItems.map(i => ({
         id: i.id || i.url || ('item_' + Math.random().toString(36).substring(2, 8)),
         url: i.url || '',
-        name: i.name || 'Recuerdo',
-        type: i.type || 'image/jpeg',
+        name: i.name || 'Recuerdo de la Promo',
+        type: i.type || (String(i.url || '').match(/\.(mp4|mov|webm)$/i) ? 'video/mp4' : 'image/jpeg'),
         album: inferirAlbum(i),
         date: i.date || new Date().toISOString(),
-        updatedAt: i.updatedAt || 0,
+        updatedAt: i.updatedAt || Date.now(),
         likes: typeof i.likes === 'number' ? i.likes : 0,
         likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
         comments: Array.isArray(i.comments) ? i.comments.filter(c => !deletedIds.has(c.id)) : []
-      })).filter(i => !deletedIds.has(obtenerIdItem(i)) && !deletedIds.has(i.url));
+      })).filter(i => i.url && !deletedIds.has(obtenerIdItem(i)) && !deletedIds.has(i.url));
 
       const cloudTweets = (Array.isArray(record.tweets) ? record.tweets : []).map(t => ({
         id: t.id || 'tw_' + Math.random().toString(36).substring(2, 8),
@@ -943,6 +952,7 @@
         : [];
 
       return {
+        esItemUnicoMake,
         cloudItems,
         cloudTweets,
         cloudMembers,
@@ -983,6 +993,7 @@
         const record = data.record || {};
 
         const {
+          esItemUnicoMake,
           cloudItems,
           cloudTweets,
           cloudMembers,
@@ -995,7 +1006,9 @@
 
         if (teniaRespaldoLocal) {
           // Fusión inteligente: conserva todo lo que agregaste/editaste localmente + lo nuevo de la nube, respetando borrados
-          items = fusionarListasPorId(items, cloudItems, obtenerIdItem);
+          items = esItemUnicoMake
+            ? fusionarListasPorId(cloudItems, items, obtenerIdItem)
+            : fusionarListasPorId(items, cloudItems, obtenerIdItem);
           tweets = fusionarListasPorId(tweets, cloudTweets, t => t.id);
           members = fusionarListasPorId(members, cloudMembers, m => m.id);
           awards = fusionarPremios(awards, cloudAwards.length ? cloudAwards : DEFAULT_AWARDS);
@@ -1017,17 +1030,78 @@
         }
 
         nubeCargada = true;
+        const huboNuevosTelegram = await sincronizarBotTelegramDirecto();
         guardarRespaldoLocal(false);
         renderTodo();
+        if ((esItemUnicoMake && teniaRespaldoLocal) || huboNuevosTelegram) {
+          ejecutarSincronizacionNube(true);
+        }
         document.getElementById('statusText').innerText = 'Sincronizado ✓';
         document.getElementById('heroSyncBadge').innerText = 'Sincronizado ✓';
         if (manual) mostrarToast('Sincronizado con la nube sin perder cambios');
       } catch (err) {
         console.error('Aviso al conectar con nube:', err);
         nubeCargada = true; // Permitimos trabajar sobre el respaldo local
+        const huboNuevosTelegram = await sincronizarBotTelegramDirecto();
+        if (huboNuevosTelegram) guardarRespaldoLocal(true);
         renderTodo();
         document.getElementById('statusText').innerText = 'Guardado en dispositivo';
         document.getElementById('heroSyncBadge').innerText = 'Modo local protegido';
+      }
+    }
+
+    async function sincronizarBotTelegramDirecto() {
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=30`);
+        if (!res.ok) return false; // Si el Webhook de Make está activo, Make se encarga vía JSONBin
+        const data = await res.json();
+        if (!data.ok || !Array.isArray(data.result) || data.result.length === 0) return false;
+
+        let huboNuevos = false;
+        for (const upd of data.result) {
+          const msg = upd.message || upd.channel_post;
+          if (!msg) continue;
+          const tgItemId = 'tg_msg_' + msg.message_id;
+          if (deletedIds.has(tgItemId)) continue;
+          if (items.some(i => i.id === tgItemId || i.tgMessageId === msg.message_id)) continue;
+
+          const esVideo = Boolean(msg.video || (msg.document && String(msg.document.mime_type || '').startsWith('video/')));
+          const esFoto = Boolean(msg.photo && msg.photo.length > 0);
+          if (!esVideo && !esFoto) continue;
+
+          const fileId = esVideo
+            ? (msg.video ? msg.video.file_id : msg.document.file_id)
+            : msg.photo[msg.photo.length - 1].file_id;
+
+          if (!fileId || deletedIds.has(fileId)) continue;
+
+          const fileRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
+          if (!fileRes.ok) continue;
+          const fileData = await fileRes.json();
+          if (!fileData.ok || !fileData.result?.file_path) continue;
+
+          const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
+          if (deletedIds.has(fileUrl) || items.some(i => i.url === fileUrl)) continue;
+
+          const caption = (msg.caption || '').trim() || (esVideo ? 'Video de la Promo' : 'Foto de la Promo');
+          items.unshift({
+            id: tgItemId,
+            tgMessageId: msg.message_id,
+            url: fileUrl,
+            name: caption,
+            type: esVideo ? 'video/mp4' : 'image/jpeg',
+            album: inferirAlbum({ name: caption, album: '' }),
+            date: msg.date ? new Date(msg.date * 1000).toISOString() : new Date().toISOString(),
+            updatedAt: Date.now(),
+            likes: 0,
+            likedBy: [],
+            comments: []
+          });
+          huboNuevos = true;
+        }
+        return huboNuevos;
+      } catch (e) {
+        return false;
       }
     }
 
