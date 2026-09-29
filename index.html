@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="referrer" content="no-referrer">
-  <title>PROM ESTRELLA DE LA MAÑANA '26</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="no-referrer" />
+  <title>PROM ESTRELLA DE LA MAÑANA '26 — Mural Digital & Galería Oficial</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
       --bg-cream: #f4eee2;
@@ -18,744 +23,363 @@
       --card-bg: #fffdf8;
       --border-color: rgba(104, 27, 40, 0.15);
       --danger: #d93838;
-      /* Color crema fijo y protegido */
       --crema-fijo: #fdf6e2;
       --crema-text: #5c4a1e;
     }
 
-    /* TEMA AZUL (Azul más oscuro y elegante, aplicando solo a lo que era rojo vino) */
     body.blue-theme {
       --wine-main: #1e3a8a;
       --wine-dark: #111827;
       --wine-light: #1d4ed8;
-      --border-color: rgba(30, 58, 138, 0.25);
+      --border-color: rgba(30, 58, 138, 0.22);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    
-    body { 
-      background-color: var(--bg-cream); 
-      color: var(--text-dark); 
-      display: flex;
-      min-height: 100vh;
-      overflow-x: hidden;
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
-    /* BOTÓN FLOTANTE MÓVIL */
-    .menu-toggle-btn {
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      z-index: 250;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--wine-main);
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    }
-    
-    .menu-toggle-btn.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
+    h1, h2, .font-display {
+      font-family: 'Fraunces', Georgia, serif;
+      text-wrap: balance;
     }
 
-    /* BARRA LATERAL */
-    sidebar {
-      width: 260px;
-      background: var(--card-bg);
-      border-right: 1px solid var(--border-color);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 200;
-      box-shadow: 5px 0 20px rgba(0,0,0,0.05);
-      transition: background-color 0.3s, border-color 0.3s;
+    .font-mono-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
     }
 
-    sidebar.collapsed {
-      display: none;
-    }
-
-    .sidebar-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .sidebar-brand-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .sidebar-logo-frame {
-      width: 40px;
-      height: 40px;
-      background: #fff;
-      border: 1px solid var(--gold-main);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2px;
-    }
-
-    .sidebar-logo-img { width: 100%; height: 100%; object-fit: contain; }
-
-    .sidebar-brand-text { display: flex; flex-direction: column; }
-    .sidebar-brand-title { font-size: 0.8rem; font-weight: 800; color: var(--wine-main); text-transform: uppercase; }
-    .sidebar-brand-sub { font-size: 0.65rem; font-weight: 700; color: var(--gold-main); }
-
-    .sidebar-close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; padding: 4px; border-radius: 6px; }
-
-    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-
-    .sidebar-item {
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .sidebar-item:hover { background: rgba(30, 58, 138, 0.05); color: var(--wine-main); }
-    .sidebar-item.active { background: var(--wine-main); color: #fff; box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2); }
-
-    /* BOTÓN DE TEMA ESTÉTICO EN EL MENÚ */
-    .theme-toggle-menu-btn {
-      background: none;
-      border: 1px solid var(--border-color);
-      color: var(--text-dark);
-      cursor: pointer;
-      padding: 10px 14px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-weight: 700;
-      font-size: 0.88rem;
-      transition: all 0.2s ease;
-      margin-top: 10px;
-      width: 100%;
-    }
-    .theme-toggle-menu-btn:hover {
-      background: rgba(30, 58, 138, 0.05);
-      border-color: var(--wine-main);
-      color: var(--wine-main);
-    }
-    .theme-toggle-menu-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    /* CONTENEDOR PRINCIPAL */
-    .main-wrapper {
-      flex: 1;
-      margin-left: 260px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      width: 100%;
-    }
-
-    .main-wrapper.expanded { margin-left: 0; }
-
-    .main-content {
-      flex: 1;
-      padding: 20px 14px;
-      max-width: 900px;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    .page-section { display: none; }
-    .page-section.active { display: block; }
-
-    header { 
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 24px 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-
-    .logo-frame {
-      width: 100px;
-      height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
-      background: #fff;
-      border: 1px solid var(--gold-main);
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-
-    .logo-img { width: 100%; height: 100%; object-fit: contain; }
-
-    .brand h1 { 
-      font-size: 1.3rem; 
-      font-weight: 800; 
-      color: var(--wine-main);
-      text-transform: uppercase;
-      line-height: 1.2;
-    }
-
-    .brand p { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px; }
-    .status-badge { background: rgba(30, 58, 138, 0.06); color: var(--wine-main); padding: 4px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; border: 1px solid var(--border-color); }
-
-    /* INICIO */
-    .home-welcome {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      padding: 20px 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-      text-align: center;
-      margin-bottom: 16px;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-
-    .home-welcome h2 { color: var(--wine-main); font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; }
-    .home-welcome p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 16px; }
-
-    .home-cards-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-
-    .home-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 14px;
-      border-radius: 14px;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .home-card:hover {
-      border-color: var(--gold-main);
-      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.05);
-    }
-
-    .home-card h3 { color: var(--wine-main); font-size: 0.95rem; margin-bottom: 4px; font-weight: 700; }
-    .home-card p { color: var(--text-muted); font-size: 0.82rem; margin: 0; }
-
-    /* CARRUSEL */
-    .featured-carousel {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 16px;
-      display: none;
-    }
-    .featured-carousel.active { display: block; }
-    .featured-title { font-size: 0.88rem; font-weight: 800; color: var(--wine-main); margin-bottom: 10px; }
-    .featured-container { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-    .featured-container::-webkit-scrollbar { display: none; }
-    .featured-item {
-      min-width: 140px;
-      height: 95px;
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      border: 1px solid var(--gold-main);
-      flex-shrink: 0;
-      background: #000;
-    }
-    .featured-item img, .featured-item video { width: 100%; height: 100%; object-fit: cover; }
-    .featured-item span {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: rgba(17, 24, 39, 0.9); color: #fff; font-size: 0.65rem; font-weight: 600; padding: 3px 6px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-
-    .controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
-
-    .telegram-banner {
-      background: var(--wine-dark);
-      border: 1px solid var(--gold-main);
-      border-radius: 18px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      color: #fff;
-    }
-
-    .telegram-info h3 { color: var(--gold-bright); font-size: 1rem; margin-bottom: 4px; font-weight: 800; }
-    .telegram-info p { color: rgba(255, 255, 255, 0.85); font-size: 0.82rem; line-height: 1.4; }
-
-    .btn-telegram {
-      background: var(--gold-bright);
-      color: var(--wine-dark);
-      font-weight: 800;
-      padding: 10px;
-      border-radius: 10px;
-      text-decoration: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-    }
-
-    .upload-zone { 
-      background: var(--card-bg);
-      border: 2px dashed var(--border-color); 
-      border-radius: 18px; 
-      padding: 18px 14px; 
-      text-align: center; 
-    }
-
-    .upload-icon { font-size: 1.8rem; margin-bottom: 4px; display: block; }
-    .upload-title { font-weight: 800; font-size: 0.95rem; color: var(--wine-main); margin-bottom: 2px; }
-    .upload-subtitle { font-size: 0.78rem; color: var(--text-muted); }
-
-    input[type="file"] { display: none; }
-
-    .custom-title-container { display: flex; justify-content: center; margin-top: 10px; width: 100%; }
-    .input-title {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-dark);
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      width: 100%;
-      outline: none;
-    }
-    .input-title:focus { border-color: var(--wine-main); }
-
-    .btn-select-file {
-      margin-top: 10px; 
-      background: var(--wine-main); 
-      border: none; 
-      color: #fff; 
-      padding: 10px; 
-      border-radius: 10px; 
-      font-weight: 800; 
-      font-size: 0.85rem;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .filter-bar { display: flex; flex-direction: column; gap: 10px; }
-
-    .search-box { 
-      width: 100%; background: var(--card-bg);
-      border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px; 
-      color: var(--text-dark); font-size: 0.88rem; outline: none;
-    }
-    .search-box:focus { border-color: var(--wine-main); }
-
-    .filter-buttons { 
-      display: flex; gap: 4px; background: var(--card-bg);
-      padding: 3px; border-radius: 10px; border: 1px solid var(--border-color);
-      width: 100%;
-    }
-
-    .filter-btn { 
-      flex: 1; background: transparent; border: none; color: var(--text-muted); padding: 7px; 
-      border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; text-align: center;
-    }
-    .filter-btn.active { background: var(--wine-main); color: #fff; }
-
-    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-
-    .card { 
-      background: var(--card-bg); border-radius: 16px; 
-      overflow: hidden; border: 1px solid var(--border-color); display: flex; flex-direction: column; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-
-    .media-container { width: 100%; height: 200px; background: #000; overflow: hidden; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .media-container img, .media-container video { width: 100%; height: 100%; object-fit: cover; }
-
-    .badge-type { 
-      position: absolute; top: 10px; right: 10px; background: rgba(30, 58, 138, 0.9); 
-      padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; 
-      color: var(--gold-bright); z-index: 2; 
-    }
-
-    .card-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-    .card-title { font-size: 0.9rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-dark); }
-
-    .card-actions-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
-
-    .like-btn {
-      background: var(--card-bg); border: 1px solid var(--border-color);
-      padding: 6px 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px;
-      color: var(--wine-main); font-weight: 700; font-size: 0.8rem;
-    }
-    .like-btn.liked { background: var(--wine-main); color: #fff; border-color: var(--wine-main); }
-
-    /* SECCIÓN DE COMENTARIOS PROTEGIDA CON COLOR CREMA FIJO */
-    .comments-section {
-      background-color: var(--crema-fijo); 
-      color: var(--crema-text);
-      border-radius: 10px; 
-      padding: 8px; 
-      margin-top: 2px;
-      font-size: 0.8rem; 
-      display: none; 
-      border: 1px solid #e6d8b5;
-    }
-    .comments-section.active { display: block; }
-    .comments-list { max-height: 80px; overflow-y: auto; margin-bottom: 6px; display: flex; flex-direction: column; gap: 4px; }
-    
-    .comment-item { 
-      background-color: #ffffff; 
-      color: var(--crema-text); 
-      padding: 5px 8px; 
-      border-radius: 6px; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      gap: 4px; 
-      border: 1px solid #e6d8b5; 
-    }
-    .delete-comment-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.75rem; font-weight: 700; }
-
-    .comment-form { display: flex; gap: 4px; }
-    .comment-input { flex: 1; border: 1px solid #e6d8b5; padding: 6px 8px; border-radius: 6px; font-size: 0.8rem; outline: none; background: #ffffff; color: var(--crema-text); }
-    .comment-input:focus { border-color: var(--wine-main); }
-    .comment-submit { background: var(--wine-main); color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem; }
-
-    .card-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border-color); }
-    .action-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 4px; }
-    .action-btn:hover { color: var(--wine-main); }
-    .action-btn.delete { color: #b54a4a; }
-
-    /* BUZÓN */
-    .tweet-composer {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-    .tweet-composer textarea {
-      width: 100%;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 0.9rem;
-      color: var(--text-dark);
-      outline: none;
-      resize: none;
-      height: 80px;
-    }
-    .tweet-composer textarea:focus { border-color: var(--wine-main); }
-    .tweet-composer-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-    .tweet-counter { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
-    .btn-tweet {
-      background: var(--wine-main);
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 0.82rem;
-      cursor: pointer;
-    }
-
-    .tweets-feed { display: flex; flex-direction: column; gap: 10px; }
-    .tweet-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-    .tweet-header { display: flex; justify-content: space-between; align-items: center; }
-    .tweet-user { font-weight: 800; color: var(--wine-main); font-size: 0.85rem; }
-    .tweet-time { font-size: 0.7rem; color: var(--text-muted); }
-    .tweet-text { font-size: 0.9rem; line-height: 1.4; color: var(--text-dark); word-break: break-word; }
-    .tweet-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 2px; }
-    .tweet-actions { display: flex; gap: 10px; align-items: center; }
-    .tweet-action-btn { background: none; border: none; cursor: pointer; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
-    .tweet-action-btn.liked { color: var(--danger); }
-    .tweet-action-btn.delete { color: #b54a4a; }
-
-    /* MODAL */
-    .modal { 
-      display: none; 
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0, 0, 0, 0.8); 
-      z-index: 1000; 
-      justify-content: center; 
-      align-items: center; 
-      padding: 12px;
-    }
-    .modal.active { display: flex; }
-    .modal-content { max-width: 100%; max-height: 85vh; border-radius: 14px; overflow: hidden; position: relative; }
-    .modal-content img, .modal-content video { max-width: 100%; max-height: 85vh; display: block; }
-    .modal-close { 
-      position: absolute; top: 10px; right: 10px; background: var(--wine-main); 
-      border: none; color: white; width: 36px; height: 36px; 
-      border-radius: 50%; font-size: 1.1rem; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
-    }
-
-    .empty-state { text-align: center; padding: 30px 14px; color: var(--text-muted); }
-
-    /* ADAPTACIÓN ESCRITORIO */
-    @media (min-width: 851px) {
-      sidebar { display: flex !important; }
-      .menu-toggle-btn { display: none !important; }
-      .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-      .home-cards-grid { grid-template-columns: repeat(3, 1fr); }
-      .filter-bar { flex-direction: row; justify-content: space-between; align-items: center; }
-      .search-box { flex: 1; max-width: 300px; width: auto; }
-      .filter-buttons { width: auto; }
-      .filter-btn { padding: 8px 16px; }
-      .telegram-banner { flex-direction: row; justify-content: space-between; align-items: center; padding: 20px 24px; }
-      .btn-telegram { width: auto; }
-      .btn-select-file { width: auto; }
-      .custom-title-container { max-width: 400px; margin: 10px auto 0 auto; }
-      header { padding: 32px 24px; }
-    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-  <!-- BOTÓN FLOTANTE MÓVIL -->
-  <button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleSidebar()">☰</button>
+  <!-- BARRA SUPERIOR -->
+  <header class="sticky top-0 z-30 h-16 bg-[var(--card-bg)]/95 backdrop-blur-sm border-b border-[var(--border-color)] px-4 lg:px-8 flex items-center justify-between gap-4">
+    <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="font-display text-lg md:text-xl font-bold tracking-tight text-[var(--wine-main)] whitespace-nowrap shrink-0">
+      Estrella de la Mañana ’26
+    </a>
 
-  <!-- BARRA LATERAL -->
-  <sidebar id="appSidebar" class="collapsed">
-    <div class="sidebar-header">
-      <div class="sidebar-brand-container">
-        <div class="sidebar-logo-frame">
-          <img src="logo.png" alt="Logo" class="sidebar-logo-img logo-dinamico" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'40\'>⭐</text></svg>';">
-        </div>
-        <div class="sidebar-brand-text">
-          <span class="sidebar-brand-title">Estrella '26</span>
-          <span class="sidebar-brand-sub">EDM</span>
-        </div>
-      </div>
-      <button class="sidebar-close-btn" onclick="toggleSidebar()">✕</button>
+    <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-[var(--text-muted)]">
+      <button onclick="cambiarSeccion('inicio')" data-nav="inicio" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 text-[var(--wine-main)] border-[var(--wine-main)]">Inicio</button>
+      <button onclick="cambiarSeccion('galeria')" data-nav="galeria" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Galería</button>
+      <button onclick="cambiarSeccion('eventos')" data-nav="eventos" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Soundtrack</button>
+      <button onclick="cambiarSeccion('mensajes')" data-nav="mensajes" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Buzón</button>
+    </nav>
+
+    <div class="flex items-center gap-2.5 shrink-0">
+      <button onclick="alternarTemaAzul()" class="px-3.5 py-2 text-xs font-semibold rounded-lg border border-[var(--border-color)] text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+        <span id="themeBtnTopText">Tema Azul</span>
+      </button>
+
+      <button onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[var(--wine-main)] hover:bg-[var(--wine-light)] rounded-lg transition-colors whitespace-nowrap cursor-pointer">
+        <span>+ Subir Recuerdo</span>
+      </button>
+
+      <button onclick="toggleMobileSidebar()" class="md:hidden w-10 h-10 rounded-lg border border-[var(--border-color)] text-[var(--wine-main)] flex items-center justify-center cursor-pointer font-bold">
+        ☰
+      </button>
     </div>
-    <ul class="sidebar-menu">
-      <li class="sidebar-item active" onclick="cambiarSeccion('inicio', this)">🏠 Inicio</li>
-      <li class="sidebar-item" onclick="cambiarSeccion('galeria', this)">📸 Galería</li>
-      <li class="sidebar-item" onclick="cambiarSeccion('eventos', this)">🎧 Soundtrack</li>
-      <li class="sidebar-item" onclick="cambiarSeccion('mensajes', this)">💬 Buzón</li>
-    </ul>
-
-    <!-- BOTÓN MEJORADO PARA CAMBIAR TEMA -->
-    <button class="theme-toggle-menu-btn" onclick="alternarTemaAzul()" aria-label="Cambiar tema">
-      <span style="display: flex; align-items: center; gap: 8px;">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 0 1-4.4 4.4 5.38 5.38 0 0 1-4.4-4.4A9 9 0 0 1 12 3z"/>
-        </svg>
-        Tema Azul
-      </span>
-      <span style="font-size: 0.75rem; opacity: 0.7;">Cambiar</span>
-    </button>
-  </sidebar>
+  </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
-  <div class="main-wrapper" id="mainWrapper">
-    <div class="main-content">
+  <div class="flex-1 flex max-w-[1440px] w-full mx-auto">
+    <!-- BARRA LATERAL -->
+    <aside id="appSidebar" class="hidden lg:flex lg:w-64 lg:shrink-0 flex-col justify-between bg-[var(--card-bg)] border-r border-[var(--border-color)] p-5 transition-colors">
+      <div class="space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-white border border-[var(--gold-main)] p-1 flex items-center justify-center shrink-0">
+              <img src="logo.png" alt="Escudo Promoción 2026" class="logo-dinamico w-full h-full object-contain" />
+            </div>
+            <div>
+              <div class="text-xs font-extrabold uppercase tracking-wider text-[var(--wine-main)]">Estrella ’26</div>
+              <div class="text-[11px] font-semibold text-[var(--gold-main)]">Promoción EDM</div>
+            </div>
+          </div>
+          <button onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 text-[var(--text-muted)] hover:text-[var(--text-dark)] cursor-pointer">✕</button>
+        </div>
 
-      <!-- 1. INICIO -->
-      <section id="seccion-inicio" class="page-section active">
-        <header>
-          <div class="logo-frame">
-            <img src="logo.png" alt="Logo" class="logo-img logo-dinamico" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'55%\' x=\'50%\' text-anchor=\'middle\' fill=\'%23681b28\' font-weight=\'bold\' font-size=\'14\'>PROM 26</text></svg>';">
-          </div>
-          <div class="brand">
-            <h1>PROM ESTRELLA DE LA MAÑANA</h1>
-            <p>Mural Digital & Galería Oficial 2026</p>
-          </div>
-          <div style="display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap;">
-            <div class="status-badge" id="status">Sincronizando...</div>
-          </div>
-        </header>
+        <div class="space-y-1.5">
+          <button onclick="cambiarSeccion('inicio')" data-side="inicio" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white">
+            <span>Inicio</span>
+          </button>
+          <button onclick="cambiarSeccion('galeria')" data-side="galeria" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Galería</span>
+            <span id="sideCountGaleria" class="text-xs font-mono-num">0</span>
+          </button>
+          <button onclick="cambiarSeccion('eventos')" data-side="eventos" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Soundtrack</span>
+            <span id="sideCountHimnos" class="text-xs font-mono-num">0</span>
+          </button>
+          <button onclick="cambiarSeccion('mensajes')" data-side="mensajes" class="side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
+            <span>Buzón</span>
+            <span id="sideCountBuzon" class="text-xs font-mono-num">0</span>
+          </button>
+        </div>
 
-        <div class="home-welcome">
-          <h2>¡Bienvenidos al portal oficial!</h2>
-          <p>Un espacio optimizado y ultraligero para guardar cada momento inolvidable de nuestra promoción.</p>
-          
-          <div class="home-cards-grid">
-            <div class="home-card" onclick="cambiarSeccion('galeria', document.querySelectorAll('.sidebar-item')[1])">
-              <h3>📸 Ver la Galería</h3>
-              <p>Sube tus fotos, da "me gusta" y comenta.</p>
+        <!-- Firma del Miembro -->
+        <div class="pt-4 border-t border-[var(--border-color)]">
+          <div class="flex items-center justify-between text-xs text-[var(--text-muted)] mb-2">
+            <span class="font-medium">Tu firma en la promo</span>
+            <button onclick="abrirEditorNombre()" class="text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Editar</button>
+          </div>
+          <div id="userNameDisplay" class="text-sm font-semibold text-[var(--text-dark)] truncate"></div>
+          <form id="userNameForm" onsubmit="guardarNombreUsuario(event)" class="hidden space-y-2 mt-2">
+            <input id="userNameInput" type="text" maxlength="32" placeholder="Tu nombre o apodo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+            <div class="flex items-center gap-1.5">
+              <button type="submit" class="flex-1 py-1.5 text-xs font-semibold text-white bg-[var(--wine-main)] rounded-lg cursor-pointer">Guardar</button>
+              <button type="button" onclick="cerrarEditorNombre()" class="px-2.5 py-1.5 text-xs font-semibold text-[var(--text-muted)] border border-[var(--border-color)] rounded-lg cursor-pointer">Cancelar</button>
             </div>
-            <div class="home-card" onclick="cambiarSeccion('eventos', document.querySelectorAll('.sidebar-item')[2])">
-              <h3>🎧 Soundtrack</h3>
-              <p>La música que nos identifica este año.</p>
+          </form>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-[var(--border-color)] space-y-3">
+        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
+          <span id="statusText">Sincronizando...</span>
+          <button onclick="cargarDesdeNube()" title="Sincronizar ahora" class="p-1.5 rounded-lg hover:text-[var(--wine-main)] cursor-pointer font-bold">↻</button>
+        </div>
+        <button onclick="alternarTemaAzul()" class="w-full px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center justify-between transition-colors whitespace-nowrap cursor-pointer">
+          <span id="themeBtnSideText">Tema Azul Real</span>
+          <span class="text-[11px] text-[var(--text-muted)]">Cambiar</span>
+        </button>
+      </div>
+    </aside>
+
+    <div id="mobileBackdrop" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1 min-w-0 px-4 py-6 md:px-8 md:py-8 max-w-5xl mx-auto w-full">
+
+      <!-- 1. SECCIÓN INICIO -->
+      <section id="seccion-inicio" class="page-section space-y-8">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
+          <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2.5 flex items-center justify-center shrink-0">
+            <img src="logo.png" alt="Escudo Oficial" class="logo-dinamico w-full h-full object-contain" />
+          </div>
+          <div class="flex-1 text-center md:text-left space-y-3">
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs text-[var(--text-muted)]">
+              <span>Promoción Oficial 2026</span>
+              <span>·</span>
+              <span>EDM</span>
+              <span>·</span>
+              <span id="heroSyncBadge">Sincronizando...</span>
             </div>
-            <div class="home-card" onclick="cambiarSeccion('mensajes', document.querySelectorAll('.sidebar-item')[3])">
-              <h3>💬 Buzón de Anécdotas</h3>
-              <p>Comparte mensajes cortos con la promo.</p>
+            <h1 class="text-2xl md:text-4xl font-bold text-[var(--wine-main)] tracking-tight">Prom Estrella de la Mañana</h1>
+            <p class="text-sm md:text-base text-[var(--text-muted)] max-w-2xl leading-relaxed">
+              Mural digital y galería oficial 2026. Un espacio compartido para atesorar cada fotografía, video, canción y anécdota inolvidable de nuestra promoción.
+            </p>
+            <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+              <button onclick="cambiarSeccion('galeria')" class="px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] transition-colors whitespace-nowrap cursor-pointer">
+                Explorar la Galería
+              </button>
+              <button onclick="cambiarSeccion('mensajes')" class="px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer">
+                Escribir en el Buzón
+              </button>
             </div>
           </div>
+        </div>
+
+        <!-- Métricas -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+            <div class="text-xs text-[var(--text-muted)]">Recuerdos en el Mural</div>
+            <div id="statTotalItems" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div id="statBreakdown" class="text-xs text-[var(--text-muted)] mt-1 font-mono-num">0 fotos · 0 videos</div>
+          </div>
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+            <div class="text-xs text-[var(--text-muted)]">Anécdotas en Buzón</div>
+            <div id="statTweets" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-xs text-[var(--text-muted)] mt-1">Mensajes de la promo</div>
+          </div>
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+            <div class="text-xs text-[var(--text-muted)]">Reacciones Totales</div>
+            <div id="statLikes" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-xs text-[var(--text-muted)] mt-1">Votos de compañeros</div>
+          </div>
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+            <div class="text-xs text-[var(--text-muted)]">Himnos del Salón</div>
+            <div id="statHimnos" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-xs text-[var(--text-muted)] mt-1">Repertorio 2026</div>
+          </div>
+        </div>
+
+        <!-- Accesos Rápidos -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button onclick="cambiarSeccion('galeria')" class="text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 transition-colors flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-2">
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Ver la Galería</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Sube tus fotos y videos, reacciona con "me gusta" y deja dedicatorias en cada recuerdo.</p>
+            </div>
+            <div class="text-xs font-semibold text-[var(--gold-main)]">Abrir galería →</div>
+          </button>
+          <button onclick="cambiarSeccion('eventos')" class="text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 transition-colors flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-2">
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Soundtrack Oficial</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Escucha la playlist oficial en Spotify y consulta o añade los himnos que nos identifican este año.</p>
+            </div>
+            <div class="text-xs font-semibold text-[var(--gold-main)]">Escuchar música →</div>
+          </button>
+          <button onclick="cambiarSeccion('mensajes')" class="text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 transition-colors flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-2">
+              <h3 class="text-base font-bold text-[var(--wine-main)]">Buzón de Anécdotas</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Comparte mensajes cortos, recuerdos de clases y sugerencias musicales con toda la promoción.</p>
+            </div>
+            <div class="text-xs font-semibold text-[var(--gold-main)]">Ir al buzón →</div>
+          </button>
         </div>
       </section>
 
-      <!-- 2. GALERÍA -->
-      <section id="seccion-galeria" class="page-section">
-        <div class="featured-carousel" id="featuredCarousel">
-          <div class="featured-title">⭐ Recuerdos Más Votados</div>
-          <div class="featured-container" id="featuredContainer"></div>
+      <!-- 2. SECCIÓN GALERÍA -->
+      <section id="seccion-galeria" class="page-section hidden space-y-6">
+        <div id="featuredCarousel" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold text-[var(--wine-main)]">Recuerdos Más Votados de la Promo</h2>
+          </div>
+          <div id="featuredContainer" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
         </div>
 
-        <div class="controls">
-          <div class="telegram-banner">
-            <div class="telegram-info">
-              <h3>🎬 ¿Videos largos?</h3>
-              <p>Envíaselo al bot de Telegram y aparecerá automáticamente aquí.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div class="lg:col-span-7 rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-5 flex flex-col justify-between gap-4">
+            <div>
+              <h2 class="text-base font-bold text-[var(--wine-main)]">Sube fotos o videos al mural</h2>
+              <p class="text-xs text-[var(--text-muted)] mt-0.5">Se guardarán al instante en la galería compartida de la promoción.</p>
             </div>
-            <a href="https://t.me/promedmbot" target="_blank" class="btn-telegram">
-              📲 EN DESARROLLO
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+              <input type="text" id="customTitle" placeholder="Título del recuerdo (opcional)..." class="flex-1 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+              <button id="uploadBtn" onclick="document.getElementById('fileInput').click()" class="px-4 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer">
+                Elegir archivo multimedia
+              </button>
+              <input type="file" id="fileInput" accept="image/*,video/*" onchange="subirMultimedia(event)" class="hidden" />
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 rounded-2xl bg-[var(--wine-dark)] border border-[var(--gold-main)] p-5 text-white flex flex-col justify-between gap-4">
+            <div class="space-y-1">
+              <div class="text-xs font-semibold text-[var(--gold-bright)]">Bot Oficial de Telegram</div>
+              <h3 class="text-base font-bold text-white">¿Tienes videos largos o pesados?</h3>
+              <p class="text-xs text-white/80 leading-relaxed">Envíalos directamente al bot de Telegram de la promoción para sincronizarlos automáticamente.</p>
+            </div>
+            <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-opacity whitespace-nowrap">
+              Abrir @promedmbot en Telegram
             </a>
           </div>
+        </div>
 
-          <div class="upload-zone">
-            <span class="upload-icon">✨</span>
-            <div class="upload-title">Sube fotos o videos</div>
-            <div class="upload-subtitle">Se guardarán al instante en el mural</div>
-            
-            <div class="custom-title-container" onclick="event.stopPropagation()">
-              <input type="text" id="customTitle" class="input-title" placeholder="Título del recuerdo (opcional)...">
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+          <input type="text" id="searchInput" oninput="renderGaleria()" placeholder="Buscar recuerdo por título o dedicatoria..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="flex items-center p-1 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)]">
+              <button onclick="setFiltro('todos', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer">Todos</button>
+              <button onclick="setFiltro('image', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Fotos</button>
+              <button onclick="setFiltro('video', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Videos</button>
             </div>
+            <select id="sortSelect" onchange="renderGaleria()" class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-3 py-2 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer">
+              <option value="recientes">Más recientes</option>
+              <option value="populares">Más gustados</option>
+              <option value="comentados">Más comentados</option>
+            </select>
+          </div>
+        </div>
 
-            <button class="btn-select-file" onclick="document.getElementById('fileInput').click()">
-              Elegir archivo multimedia
+        <div id="galeria" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      </section>
+
+      <!-- 3. SECCIÓN SOUNDTRACK -->
+      <section id="seccion-eventos" class="page-section hidden space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
+          <h1 class="text-2xl font-bold text-[var(--wine-main)]">Soundtrack de la Promo ’26</h1>
+          <p class="text-xs md:text-sm text-[var(--text-muted)]">La música y los himnos que definen cada momento de nuestro año</p>
+        </div>
+
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-3">
+          <h2 class="text-base font-bold text-[var(--wine-main)]">Playlist Oficial en Spotify</h2>
+          <div id="spotifyContainer" class="rounded-xl overflow-hidden border border-[var(--border-color)] bg-black"></div>
+        </div>
+
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-[var(--wine-main)]">Himnos del Salón</h2>
+              <p class="text-xs text-[var(--text-muted)]">Canciones votadas y sugeridas por la promoción</p>
+            </div>
+            <button onclick="document.getElementById('addHimnoForm').classList.toggle('hidden')" class="px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
+              + Añadir canción
             </button>
-
-            <input type="file" id="fileInput" accept="image/*,video/*" onchange="subirMultimedia(event)">
           </div>
 
-          <div class="filter-bar">
-            <input type="text" class="search-box" id="searchInput" placeholder="Buscar recuerdo..." oninput="filtrarGaleria()">
-            <div class="filter-buttons">
-              <button class="filter-btn active" onclick="setFiltro('todos', this)">Todos</button>
-              <button class="filter-btn" onclick="setFiltro('image', this)">Fotos</button>
-              <button class="filter-btn" onclick="setFiltro('video', this)">Videos</button>
+          <form id="addHimnoForm" onsubmit="agregarHimno(event)" class="hidden p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input id="himnoTitulo" type="text" placeholder="Título de la canción..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+            <input id="himnoArtista" type="text" placeholder="Artista o grupo..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+            <div class="flex items-center gap-2">
+              <input id="himnoEtiqueta" type="text" value="Himno del Salón" placeholder="Categoría..." class="flex-1 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+              <button type="submit" class="px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
             </div>
-          </div>
-        </div>
+          </form>
 
-        <div class="grid" id="galeria"></div>
-      </section>
-
-      <!-- 3. SOUNDTRACK DE LA PROMO -->
-      <section id="seccion-eventos" class="page-section">
-        <header style="padding: 20px;">
-          <div class="brand">
-            <h1>Soundtrack de la Promo</h1>
-            <p>La música que nos define este año</p>
-          </div>
-        </header>
-
-        <div style="display: flex; flex-direction: column; gap: 14px;">
-          
-          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; text-align: center; transition: background-color 0.3s, border-color 0.3s;">
-            <h3 style="color: var(--wine-main); font-size: 0.95rem; font-weight: 800; margin-bottom: 10px;">🎧 Playlist Oficial</h3>
-            <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);" id="spotifyContainer"></div>
-          </div>
-
-          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; transition: background-color 0.3s, border-color 0.3s;">
-            <h3 style="color: var(--wine-main); font-size: 0.95rem; margin-bottom: 10px; font-weight: 800;">🔥 Himnos del Salón</h3>
-            <div style="display: flex; flex-direction: column; gap: 8px;" id="himnosContainer"></div>
-          </div>
-
-          <div style="background: var(--wine-dark); border: 1px solid var(--gold-main); border-radius: 16px; padding: 16px; color: #fff; text-align: center;">
-            <h3 style="color: var(--gold-bright); font-size: 0.95rem; font-weight: 800; margin-bottom: 6px;">¿Falta alguna canción?</h3>
-            <p style="font-size: 0.78rem; color: rgba(255,255,255,0.85); margin-bottom: 12px;">Escríbela en el buzón o mándala al grupo para sumarla al repertorio oficial.</p>
-            <a href="#" onclick="cambiarSeccion('mensajes', document.querySelectorAll('.sidebar-item')[3]); return false;" style="background: var(--gold-bright); color: var(--wine-dark); text-decoration: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 0.78rem; display: inline-block;">Ir al Buzón</a>
-          </div>
-
+          <div id="himnosContainer" class="divide-y divide-[var(--border-color)]"></div>
         </div>
       </section>
 
-      <!-- 4. BUZÓN -->
-      <section id="seccion-mensajes" class="page-section">
-        <header style="padding: 20px;">
-          <div class="brand">
-            <h1>Buzón de Anécdotas</h1>
-            <p>Comparte tus palabras con la promo</p>
-          </div>
-        </header>
-
-        <div class="tweet-composer">
-          <textarea id="tweetInput" placeholder="¿Qué quieres decirle a la promo hoy?..." maxlength="280" oninput="actualizarContador()"></textarea>
-          <div class="tweet-composer-footer">
-            <span class="tweet-counter" id="tweetCounter">280</span>
-            <button class="btn-tweet" onclick="publicarTweet()">Publicar</button>
-          </div>
+      <!-- 4. SECCIÓN BUZÓN -->
+      <section id="seccion-mensajes" class="page-section hidden space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
+          <h1 class="text-2xl font-bold text-[var(--wine-main)]">Buzón de Anécdotas</h1>
+          <p class="text-xs md:text-sm text-[var(--text-muted)]">Comparte tus palabras, recuerdos de salón y dedicatorias con la Promoción 2026</p>
         </div>
 
-        <div class="tweets-feed" id="tweetsFeed"></div>
+        <form onsubmit="publicarTweet(event)" class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-3">
+          <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
+            <span>Publicando como <strong id="composerAuthor" class="text-[var(--wine-main)]"></strong></span>
+            <button type="button" onclick="abrirEditorNombre()" class="text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Cambiar firma</button>
+          </div>
+          <textarea id="tweetInput" maxlength="280" oninput="actualizarContador()" placeholder="¿Qué quieres decirle a la promo hoy?..." class="w-full h-24 rounded-xl border border-[var(--border-color)] bg-white p-3.5 text-sm text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)] resize-none"></textarea>
+          <div class="flex items-center justify-between pt-1">
+            <span id="tweetCounter" class="text-xs font-mono-num font-semibold text-[var(--text-muted)]">280 caracteres disponibles</span>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">Publicar en el Buzón</button>
+          </div>
+        </form>
+
+        <div id="tweetsFeed" class="space-y-3.5"></div>
       </section>
 
-    </div>
+    </main>
   </div>
 
-  <!-- MODAL -->
-  <div class="modal" id="modal" onclick="cerrarModal(event)">
-    <button class="modal-close" onclick="cerrarModal(event, true)">&times;</button>
-    <div class="modal-content" id="modalBody"></div>
+  <!-- PIE DE PÁGINA -->
+  <footer class="border-t border-[var(--border-color)] bg-[var(--card-bg)] py-5 px-6 text-center text-xs text-[var(--text-muted)]">
+    Promoción Estrella de la Mañana 2026 (EDM) · Mural Digital y Galería Oficial
+  </footer>
+
+  <!-- MODAL LIGHTBOX -->
+  <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
+    <button onclick="cerrarModal(event, true)" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-[var(--wine-main)] text-white text-lg font-bold flex items-center justify-center cursor-pointer z-10">✕</button>
+    <div id="modalBody" class="max-w-4xl max-h-[85vh] rounded-2xl overflow-hidden"></div>
   </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 rounded-xl bg-[var(--wine-dark)] text-white border border-[var(--gold-main)] px-4 py-2.5 text-xs font-semibold shadow-lg"></div>
 
   <script>
     const BIN_ID = '6ab9ade8ffd5d1605335d907';
     const MASTER_KEY = '$2a$10$Hmai3/Cp0eV7AhrkxNDaHesYsuL36PJNUczcmKhTbS9QIphmrUqBy';
     const BOT_TOKEN = '8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc';
     const CHAT_ID = '8616807953';
-    const ADMIN_PASSWORD = 'prom26admin'; 
+    const ADMIN_PASSWORD = 'prom26admin';
 
     let items = [];
     let tweets = [];
-    
     let musicConfig = {
       playlistUrl: 'https://open.spotify.com/embed/playlist/3lcbivzyUFBhKcmVi49W4J',
       himnos: [
-        { titulo: "Canción Destacada", artista: "Promo 2026", etiqueta: "Favorita" }
+        { titulo: 'Canción Destacada', artista: 'Promo 2026', etiqueta: 'Favorita' }
       ]
     };
-
     let filtroActual = 'todos';
 
     let userId = localStorage.getItem('prom_user_id');
@@ -770,104 +394,128 @@
       localStorage.setItem('prom_user_name', userName);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      inicializarTemaAzul();
+    function mostrarToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3000);
+    }
 
-      cargarDesdeNube();
-      if (window.innerWidth > 850) {
-        document.getElementById('appSidebar').classList.remove('collapsed');
-        document.getElementById('mainWrapper').classList.remove('expanded');
-      } else {
-        document.getElementById('appSidebar').classList.add('collapsed');
-        document.getElementById('mainWrapper').classList.add('expanded');
+    function actualizarUIUsuario() {
+      document.getElementById('userNameDisplay').innerText = userName;
+      document.getElementById('composerAuthor').innerText = userName;
+    }
+
+    function abrirEditorNombre() {
+      document.getElementById('userNameInput').value = userName;
+      document.getElementById('userNameForm').classList.remove('hidden');
+    }
+
+    function cerrarEditorNombre() {
+      document.getElementById('userNameForm').classList.add('hidden');
+    }
+
+    function guardarNombreUsuario(e) {
+      e.preventDefault();
+      const val = document.getElementById('userNameInput').value.trim();
+      if (val) {
+        userName = val;
+        localStorage.setItem('prom_user_name', userName);
+        actualizarUIUsuario();
+        cerrarEditorNombre();
+        mostrarToast('Firma actualizada: ' + userName);
       }
-    });
+    }
 
     function inicializarTemaAzul() {
-      const savedTheme = localStorage.getItem('promo-theme');
-      if (savedTheme === 'blue') {
-        document.body.classList.add('blue-theme');
-        actualizarLogos(true);
-      } else {
-        actualizarLogos(false);
-      }
+      const esAzul = localStorage.getItem('promo-theme') === 'blue';
+      if (esAzul) document.body.classList.add('blue-theme');
+      actualizarLogosYTextosTema(esAzul);
     }
 
     function alternarTemaAzul() {
       document.body.classList.toggle('blue-theme');
       const esAzul = document.body.classList.contains('blue-theme');
-      
-      if (esAzul) {
-        localStorage.setItem('promo-theme', 'blue');
-        actualizarLogos(true);
-      } else {
-        localStorage.setItem('promo-theme', 'default');
-        actualizarLogos(false);
-      }
+      localStorage.setItem('promo-theme', esAzul ? 'blue' : 'default');
+      actualizarLogosYTextosTema(esAzul);
     }
 
-    function actualizarLogos(esAzul) {
+    function actualizarLogosYTextosTema(esAzul) {
       const nuevoSrc = esAzul ? 'logo2.png' : 'logo.png';
-      document.querySelectorAll('.logo-dinamico').forEach(img => {
-        img.src = nuevoSrc;
-      });
+      document.querySelectorAll('.logo-dinamico').forEach(img => img.src = nuevoSrc);
+      document.getElementById('themeBtnTopText').innerText = esAzul ? 'Tema Vino' : 'Tema Azul';
+      document.getElementById('themeBtnSideText').innerText = esAzul ? 'Tema Vino Clásico' : 'Tema Azul Real';
     }
 
-    function toggleSidebar() {
-      const sidebar = document.getElementById('appSidebar');
-      const wrapper = document.getElementById('mainWrapper');
-      const btnToggle = document.getElementById('menuToggleBtn');
-      
-      sidebar.classList.toggle('collapsed');
-      
-      if (window.innerWidth > 850) {
-        wrapper.classList.toggle('expanded');
+    function toggleMobileSidebar() {
+      const sb = document.getElementById('appSidebar');
+      const bd = document.getElementById('mobileBackdrop');
+      const isHidden = sb.classList.contains('hidden');
+      if (isHidden) {
+        sb.classList.remove('hidden');
+        sb.classList.add('fixed', 'inset-y-0', 'left-0', 'z-40', 'w-72', 'flex');
+        bd.classList.remove('hidden');
       } else {
-        if (!sidebar.classList.contains('collapsed')) {
-          btnToggle.classList.add('hidden');
-        } else {
-          btnToggle.classList.remove('hidden');
-        }
+        sb.classList.add('hidden');
+        sb.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-40', 'w-72', 'flex');
+        bd.classList.add('hidden');
       }
     }
 
-    document.addEventListener('click', (e) => {
-      const sidebar = document.getElementById('appSidebar');
-      const btnToggle = document.getElementById('menuToggleBtn');
-      if (window.innerWidth <= 850 && !sidebar.classList.contains('collapsed')) {
-        if (!sidebar.contains(e.target) && !btnToggle.contains(e.target)) {
-          sidebar.classList.add('collapsed');
-          btnToggle.classList.remove('hidden');
+    function cambiarSeccion(seccionId) {
+      document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
+      document.getElementById('seccion-' + seccionId).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-link').forEach(btn => {
+        if (btn.dataset.nav === seccionId) {
+          btn.className = 'nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 text-[var(--wine-main)] border-[var(--wine-main)]';
+        } else {
+          btn.className = 'nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]';
         }
+      });
+
+      document.querySelectorAll('.side-link').forEach(btn => {
+        if (btn.dataset.side === seccionId) {
+          btn.className = 'side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white';
+        } else {
+          btn.className = 'side-link w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]';
+        }
+      });
+
+      if (window.innerWidth < 1024 && !document.getElementById('appSidebar').classList.contains('hidden')) {
+        toggleMobileSidebar();
       }
-    });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-    function cambiarSeccion(seccionId, elementoMenu) {
-      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(`seccion-${seccionId}`).classList.add('active');
+    function actualizarEstadisticas() {
+      const fotos = items.filter(i => !i.type || i.type.startsWith('image')).length;
+      const videos = items.filter(i => i.type && i.type.startsWith('video')).length;
+      const likes = items.reduce((a, i) => a + (i.likes || 0), 0) + tweets.reduce((a, t) => a + (t.likes || 0), 0);
 
-      document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-      if (elementoMenu) elementoMenu.classList.add('active');
+      document.getElementById('statTotalItems').innerText = items.length;
+      document.getElementById('statBreakdown').innerText = `${fotos} fotos · ${videos} videos`;
+      document.getElementById('statTweets').innerText = tweets.length;
+      document.getElementById('statLikes').innerText = likes;
+      document.getElementById('statHimnos').innerText = (musicConfig.himnos || []).length;
 
-      if (window.innerWidth <= 850) {
-        document.getElementById('appSidebar').classList.add('collapsed');
-        document.getElementById('menuToggleBtn').classList.remove('hidden');
-      }
+      document.getElementById('sideCountGaleria').innerText = items.length;
+      document.getElementById('sideCountBuzon').innerText = tweets.length;
+      document.getElementById('sideCountHimnos').innerText = (musicConfig.himnos || []).length;
     }
 
     async function cargarDesdeNube() {
-      const status = document.getElementById('status');
-      status.innerText = "Sincronizando...";
-
+      document.getElementById('statusText').innerText = 'Sincronizando...';
+      document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
           headers: { 'X-Master-Key': MASTER_KEY }
         });
         if (!res.ok) throw new Error('Error al conectar');
         const data = await res.json();
-        
-        let record = data.record || {};
-        let rawItems = Array.isArray(record) ? record : (record.items || []);
+        const record = data.record || {};
+        const rawItems = Array.isArray(record) ? record : (record.items || []);
+
         items = rawItems.map(i => ({
           url: i.url || '',
           name: i.name || 'Recuerdo',
@@ -878,7 +526,7 @@
           comments: Array.isArray(i.comments) ? i.comments : []
         }));
 
-        let rawTweets = Array.isArray(record.tweets) ? record.tweets : [];
+        const rawTweets = Array.isArray(record.tweets) ? record.tweets : [];
         tweets = rawTweets.map(t => ({
           id: t.id || 'tw_' + Math.random().toString(36).substring(2, 8),
           author: t.author || 'Anónimo',
@@ -900,72 +548,41 @@
         renderCarrusel();
         renderTweets();
         renderSoundtrack();
-        status.innerText = "Sincronizado";
-        status.style.color = "#2e7d32";
+        actualizarEstadisticas();
+        document.getElementById('statusText').innerText = 'Sincronizado';
+        document.getElementById('heroSyncBadge').innerText = 'Sincronizado';
       } catch (err) {
         console.error(err);
-        status.innerText = "Error de red";
-        status.style.color = "#d93838";
+        document.getElementById('statusText').innerText = 'Error de red';
+        document.getElementById('heroSyncBadge').innerText = 'Modo local';
         renderSoundtrack();
       }
     }
 
     async function sincronizarNube() {
+      actualizarEstadisticas();
       try {
         await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': MASTER_KEY
-          },
-          body: JSON.stringify({ items: items, tweets: tweets, music: musicConfig })
+          headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+          body: JSON.stringify({ items, tweets, music: musicConfig })
         });
       } catch (e) {
-        console.error('Error al actualizar', e);
+        console.error('Error al sincronizar', e);
       }
-    }
-
-    function renderSoundtrack() {
-      const spotContainer = document.getElementById('spotifyContainer');
-      if (musicConfig.playlistUrl) {
-        spotContainer.innerHTML = `<iframe style="border-radius:12px" src="${musicConfig.playlistUrl}" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
-      } else {
-        spotContainer.innerHTML = `<div style="padding: 20px; color: var(--text-muted); font-size: 0.82rem;">No hay playlist configurada aún.</div>`;
-      }
-
-      const himnosContainer = document.getElementById('himnosContainer');
-      himnosContainer.innerHTML = '';
-
-      if (!musicConfig.himnos || musicConfig.himnos.length === 0) {
-        himnosContainer.innerHTML = `<div style="padding: 10px; color: var(--text-muted); font-size: 0.82rem; text-align: center;">No hay himnos agregados.</div>`;
-        return;
-      }
-
-      musicConfig.himnos.forEach(himno => {
-        const div = document.createElement('div');
-        div.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.82rem;";
-        div.innerHTML = `
-          <div>
-            <strong style="color: var(--text-dark); display: block;">${himno.titulo}</strong>
-            <span style="color: var(--text-muted); font-size: 0.75rem;">${himno.artista}</span>
-          </div>
-          <span style="font-size: 0.75rem; background: rgba(30,58,138,0.06); color: var(--wine-main); padding: 4px 8px; border-radius: 6px; font-weight: 700;">${himno.etiqueta || 'Himno'}</span>
-        `;
-        himnosContainer.appendChild(div);
-      });
     }
 
     async function subirMultimedia(event) {
       const file = event.target.files[0];
       if (!file) return;
-
       const titleInput = document.getElementById('customTitle');
-      const customName = titleInput.value.trim() || file.name;
-      const status = document.getElementById('status');
-      status.innerText = "Subiendo...";
+      const customName = titleInput.value.trim() || file.name.replace(/\.[^/.]+$/, '');
+      const btn = document.getElementById('uploadBtn');
+      btn.innerText = 'Subiendo archivo...';
+      btn.disabled = true;
 
       try {
-        const esVideo = file.type.startsWith('video/') || file.name.match(/\.(mp4|webm|mov|avi)$/i);
+        const esVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov|avi)$/i.test(file.name);
         const endpoint = esVideo ? 'sendVideo' : 'sendPhoto';
         const fieldName = esVideo ? 'video' : 'photo';
 
@@ -977,16 +594,14 @@
           method: 'POST',
           body: formData
         });
-
         const tgData = await tgRes.json();
-        if (!tgData.ok) throw new Error(tgData.description || 'Error');
+        if (!tgData.ok) throw new Error(tgData.description || 'Error en Telegram');
 
-        let fileId = esVideo ? tgData.result.video.file_id : tgData.result.photo[tgData.result.photo.length - 1].file_id;
-
+        const fileId = esVideo ? tgData.result.video.file_id : tgData.result.photo[tgData.result.photo.length - 1].file_id;
         const fileInfoRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
         const fileInfoData = await fileInfoRes.json();
-        
-        if (!fileInfoData.ok) throw new Error('Error de enlace');
+        if (!fileInfoData.ok) throw new Error('Error al obtener enlace');
+
         const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfoData.result.file_path}`;
 
         items.unshift({
@@ -999,272 +614,116 @@
           comments: []
         });
 
-        await sincronizarNube();
-        status.innerText = "¡Añadido!";
         titleInput.value = '';
+        event.target.value = '';
         renderGaleria();
         renderCarrusel();
-
+        await sincronizarNube();
+        mostrarToast('¡Recuerdo añadido al mural!');
       } catch (err) {
-        console.error(err);
-        alert('Error al subir: ' + err.message);
-        status.innerText = "Error en subida";
+        mostrarToast('Error al subir: ' + err.message);
+      } finally {
+        btn.innerText = 'Elegir archivo multimedia';
+        btn.disabled = false;
       }
-    }
-
-    async function toggleLike(index, btnElement) {
-      if (!items[index].likedBy) items[index].likedBy = [];
-      const dioLike = items[index].likedBy.includes(userId);
-
-      if (dioLike) {
-        items[index].likedBy = items[index].likedBy.filter(id => id !== userId);
-        items[index].likes = Math.max(0, (items[index].likes || 1) - 1);
-      } else {
-        items[index].likedBy.push(userId);
-        items[index].likes = (items[index].likes || 0) + 1;
-      }
-
-      renderGaleria();
-      renderCarrusel();
-      await sincronizarNube();
-    }
-
-    async function agregarComentario(event, index) {
-      event.preventDefault();
-      const input = document.getElementById(`comment-input-${index}`);
-      const texto = input.value.trim();
-      if (!texto) return;
-
-      if (!items[index].comments) items[index].comments = [];
-      items[index].comments.push({
-        id: 'com_' + Math.random().toString(36).substring(2, 10),
-        authorId: userId,
-        date: new Date().toISOString(),
-        text: texto
-      });
-
-      input.value = '';
-      renderGaleria();
-      await sincronizarNube();
-    }
-
-    async function eliminarComentario(itemIndex, commentId) {
-      const comentario = items[itemIndex].comments.find(c => c.id === commentId);
-      if (!comentario) return;
-
-      const diferenciaMinutos = (new Date() - new Date(comentario.date || new Date())) / 1000 / 60;
-      if (diferenciaMinutos > 2) {
-        if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return alert('Contraseña incorrecta.');
-      } else if (!confirm('¿Eliminar comentario?')) return;
-
-      items[itemIndex].comments = items[itemIndex].comments.filter(c => c.id !== commentId);
-      renderGaleria();
-      await sincronizarNube();
-    }
-
-    function toggleComentarios(index) {
-      document.getElementById(`comments-section-${index}`).classList.toggle('active');
-    }
-
-    async function eliminarItem(index) {
-      const diferenciaMinutos = (new Date() - new Date(items[index].date || new Date())) / 1000 / 60;
-      if (diferenciaMinutos > 2) {
-        if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return alert('Contraseña incorrecta.');
-      } else if (!confirm('¿Eliminar este recuerdo?')) return;
-
-      items.splice(index, 1);
-      await sincronizarNube();
-      renderGaleria();
-      renderCarrusel();
-    }
-
-    function actualizarContador() {
-      const input = document.getElementById('tweetInput');
-      const counter = document.getElementById('tweetCounter');
-      const restantes = 280 - input.value.length;
-      counter.innerText = restantes;
-      counter.style.color = restantes < 20 ? 'var(--danger)' : 'var(--text-muted)';
-    }
-
-    async function publicarTweet() {
-      const input = document.getElementById('tweetInput');
-      const texto = input.value.trim();
-      if (!texto) return alert('Escribe un mensaje.');
-
-      tweets.unshift({
-        id: 'tw_' + Math.random().toString(36).substring(2, 8),
-        author: userName,
-        authorId: userId,
-        text: texto,
-        date: new Date().toISOString(),
-        likes: 0,
-        likedBy: []
-      });
-
-      input.value = '';
-      actualizarContador();
-      renderTweets();
-      await sincronizarNube();
-    }
-
-    async function toggleTweetLike(tweetId, btnElement) {
-      const tweet = tweets.find(t => t.id === tweetId);
-      if (!tweet) return;
-      if (!tweet.likedBy) tweet.likedBy = [];
-
-      const dioLike = tweet.likedBy.includes(userId);
-      if (dioLike) {
-        tweet.likedBy = tweet.likedBy.filter(id => id !== userId);
-        tweet.likes = Math.max(0, tweet.likes - 1);
-      } else {
-        tweet.likedBy.push(userId);
-        tweet.likes += 1;
-      }
-
-      renderTweets();
-      await sincronizarNube();
-    }
-
-    async function eliminarTweet(tweetId) {
-      const tweet = tweets.find(t => t.id === tweetId);
-      if (!tweet) return;
-
-      const diferenciaMinutos = (new Date() - new Date(tweet.date || new Date())) / 1000 / 60;
-      if (diferenciaMinutos > 2) {
-        if (prompt('Contraseña de administración:') !== ADMIN_PASSWORD) return alert('Contraseña incorrecta.');
-      } else if (!confirm('¿Eliminar mensaje?')) return;
-
-      tweets = tweets.filter(t => t.id !== tweetId);
-      renderTweets();
-      await sincronizarNube();
-    }
-
-    function renderTweets() {
-      const feed = document.getElementById('tweetsFeed');
-      feed.innerHTML = '';
-
-      if (tweets.length === 0) {
-        feed.innerHTML = `
-          <div class="empty-state">
-            <p style="font-size: 1.8rem; margin-bottom: 4px;">💬</p>
-            <p style="font-size: 0.88rem; font-weight: 600;">Aún no hay mensajes.</p>
-          </div>
-        `;
-        return;
-      }
-
-      tweets.forEach(t => {
-        const dioLike = (t.likedBy || []).includes(userId);
-        const fecha = new Date(t.date).toLocaleDateString('es-ES', { hour: '2-digit', minute: '2-digit' });
-        
-        const card = document.createElement('div');
-        card.className = 'tweet-card';
-        card.innerHTML = `
-          <div class="tweet-header">
-            <div class="tweet-user">⭐ ${t.author}</div>
-            <div class="tweet-time">${fecha}</div>
-          </div>
-          <div class="tweet-text">${t.text}</div>
-          <div class="tweet-footer">
-            <div class="tweet-actions">
-              <button class="tweet-action-btn ${dioLike ? 'liked' : ''}" onclick="toggleTweetLike('${t.id}', this)">
-                ❤️ ${t.likes || 0}
-              </button>
-            </div>
-            <button class="tweet-action-btn delete" onclick="eliminarTweet('${t.id}')">🗑️ Borrar</button>
-          </div>
-        `;
-        feed.appendChild(card);
-      });
     }
 
     function renderCarrusel() {
       const carousel = document.getElementById('featuredCarousel');
       const container = document.getElementById('featuredContainer');
       container.innerHTML = '';
-
-      const destacados = [...items].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 5);
-
-      if (destacados.length === 0 || destacados[0].likes === 0) {
-        carousel.classList.remove('active');
+      const destacados = [...items].filter(i => (i.likes || 0) > 0).sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 6);
+      if (destacados.length === 0) {
+        carousel.classList.add('hidden');
         return;
       }
-
-      carousel.classList.add('active');
+      carousel.classList.remove('hidden');
       destacados.forEach(item => {
+        const esImagen = !item.type || item.type.startsWith('image/');
         const div = document.createElement('div');
-        div.className = 'featured-item';
+        div.className = 'w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-black';
         div.onclick = () => abrirModal(item.url, item.type);
-        div.innerHTML = (item.type && item.type.startsWith('image/')) 
-          ? `<img src="${item.url}" alt="${item.name}" loading="lazy">` 
-          : `<video src="${item.url}" preload="metadata"></video>`;
-        div.innerHTML += `<span>❤️ ${item.likes} - ${item.name}</span>`;
+        div.innerHTML = `
+          ${esImagen ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover" />` : `<video src="${item.url}" preload="metadata" class="w-full h-full object-cover"></video>`}
+          <div class="absolute inset-x-0 bottom-0 bg-black/80 px-2.5 py-1 text-[11px] text-white font-medium truncate flex items-center justify-between">
+            <span class="truncate">${item.name}</span>
+            <span class="font-mono-num text-[var(--gold-bright)] shrink-0">♥ ${item.likes}</span>
+          </div>
+        `;
         container.appendChild(div);
       });
     }
 
+    function setFiltro(tipo, btn) {
+      filtroActual = tipo;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.className = 'filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer';
+      });
+      btn.className = 'filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer';
+      renderGaleria();
+    }
+
     function renderGaleria() {
       const galeria = document.getElementById('galeria');
-      const busqueda = document.getElementById('searchInput').value.toLowerCase();
+      const busqueda = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+      const orden = document.getElementById('sortSelect')?.value || 'recientes';
       galeria.innerHTML = '';
 
-      let itemsFiltrados = items.filter(item => {
+      let filtrados = items.map((item, realIndex) => ({ item, realIndex })).filter(({ item }) => {
         const coincideTipo = filtroActual === 'todos' || (item.type && item.type.startsWith(filtroActual));
-        const coincideNombre = item.name.toLowerCase().includes(busqueda);
-        return coincideTipo && coincideNombre;
+        const coincideTexto = !busqueda || item.name.toLowerCase().includes(busqueda) || (item.comments || []).some(c => c.text.toLowerCase().includes(busqueda));
+        return coincideTipo && coincideTexto;
       });
 
-      if (itemsFiltrados.length === 0) {
-        galeria.innerHTML = `
-          <div class="empty-state">
-            <p style="font-size: 1.8rem; margin-bottom: 4px;">⭐</p>
-            <p style="font-size: 0.88rem; font-weight: 600;">No hay recuerdos en esta sección.</p>
-          </div>
-        `;
+      if (orden === 'populares') filtrados.sort((a, b) => (b.item.likes || 0) - (a.item.likes || 0));
+      if (orden === 'comentados') filtrados.sort((a, b) => (b.item.comments?.length || 0) - (a.item.comments?.length || 0));
+
+      if (filtrados.length === 0) {
+        galeria.innerHTML = `<div class="col-span-full rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-10 text-center text-xs text-[var(--text-muted)]">No hay recuerdos en esta vista.</div>`;
         return;
       }
 
-      itemsFiltrados.forEach((item) => {
-        const realIndex = items.indexOf(item);
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const esImagen = item.type && item.type.startsWith('image/');
+      filtrados.forEach(({ item, realIndex }) => {
+        const esImagen = !item.type || item.type.startsWith('image/');
         const dioLike = (item.likedBy || []).includes(userId);
+        const comments = item.comments || [];
+        const card = document.createElement('article');
+        card.className = 'rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
 
-        let comentariosHtml = (item.comments || []).map(c => `
-          <div class="comment-item">
-            <span style="word-break: break-word; flex: 1;">💬 ${c.text}</span>
-            <button class="delete-comment-btn" onclick="eliminarComentario(${realIndex}, '${c.id}')">✕</button>
+        const comentariosHtml = comments.map(c => `
+          <div class="bg-white rounded-lg px-2.5 py-1.5 border border-[#e6d8b5] flex items-start justify-between gap-2">
+            <span class="break-words flex-1">${c.author ? `<strong>${c.author}:</strong> ` : ''}${c.text}</span>
+            <button onclick="eliminarComentario(${realIndex}, '${c.id}')" class="text-[var(--danger)] font-bold cursor-pointer">✕</button>
           </div>
         `).join('');
 
         card.innerHTML = `
-          <div class="media-container" onclick="abrirModal('${item.url}', '${item.type}')">
-            <span class="badge-type">${esImagen ? 'FOTO' : 'VIDEO'}</span>
-            ${esImagen ? `<img src="${item.url}" alt="${item.name}" loading="lazy">` : `<video src="${item.url}" preload="metadata"></video>`}
+          <div onclick="abrirModal('${item.url}', '${item.type}')" class="w-full h-52 bg-[#181214] overflow-hidden relative cursor-pointer">
+            ${esImagen ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover" />` : `<video src="${item.url}" preload="metadata" class="w-full h-full object-cover"></video>`}
           </div>
-          <div class="card-body">
-            <div class="card-title" title="${item.name}">${item.name}</div>
-            
-            <div class="card-actions-top">
-              <button class="like-btn ${dioLike ? 'liked' : ''}" onclick="toggleLike(${realIndex}, this)">❤️ Me gusta (${item.likes || 0})</button>
-              <button class="action-btn" onclick="toggleComentarios(${realIndex})">💬 (${(item.comments || []).length})</button>
+          <div class="p-4 flex-1 flex flex-col gap-3">
+            <div>
+              <h3 class="text-sm font-bold text-[var(--text-dark)] truncate">${item.name}</h3>
+              <div class="text-xs text-[var(--text-muted)] mt-0.5">${esImagen ? 'Fotografía' : 'Video'}</div>
             </div>
-
-            <div class="comments-section" id="comments-section-${realIndex}">
-              <div class="comments-list">
-                ${comentariosHtml || '<div style="color:var(--crema-text); text-align:center; padding:2px; opacity: 0.8;">Sé el primero en comentar</div>'}
-              </div>
-              <form class="comment-form" onclick="event.stopPropagation()" onsubmit="agregarComentario(event, ${realIndex})">
-                <input type="text" class="comment-input" id="comment-input-${realIndex}" placeholder="Dedicatoria...">
-                <button type="submit" class="comment-submit">Enviar</button>
+            <div class="flex items-center justify-between gap-2">
+              <button onclick="toggleLike(${realIndex})" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--wine-main)] border-[var(--border-color)]'}">
+                ♥ Me gusta (${item.likes || 0})
+              </button>
+              <button onclick="document.getElementById('comments-${realIndex}').classList.toggle('hidden')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
+                Dedicatorias (${comments.length})
+              </button>
+            </div>
+            <div id="comments-${realIndex}" style="background-color: var(--crema-fijo); color: var(--crema-text);" class="hidden rounded-xl p-3 border border-[#e6d8b5] space-y-2 text-xs">
+              <div class="max-h-28 overflow-y-auto space-y-1.5">${comentariosHtml || '<div class="text-center opacity-75">Sé el primero en comentar</div>'}</div>
+              <form onsubmit="agregarComentario(event, ${realIndex})" class="flex gap-1.5">
+                <input id="comment-input-${realIndex}" type="text" placeholder="Escribe una dedicatoria..." class="flex-1 bg-white border border-[#e6d8b5] rounded-lg px-2.5 py-1.5 text-xs outline-none" />
+                <button type="submit" class="px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Enviar</button>
               </form>
             </div>
-
-            <div class="card-actions">
-              <button class="action-btn" onclick="navigator.clipboard.writeText('${item.url}'); alert('¡Enlace copiado!');">🔗 Copiar</button>
-              <button class="action-btn delete" onclick="eliminarItem(${realIndex})">🗑️ Eliminar</button>
+            <div class="mt-auto pt-2.5 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
+              <button onclick="navigator.clipboard.writeText('${item.url}'); mostrarToast('Enlace copiado');" class="text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Copiar enlace</button>
+              <button onclick="eliminarItem(${realIndex})" class="text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Eliminar</button>
             </div>
           </div>
         `;
@@ -1272,30 +731,194 @@
       });
     }
 
-    function setFiltro(tipo, btn) {
-      filtroActual = tipo;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    async function toggleLike(index) {
+      if (!items[index].likedBy) items[index].likedBy = [];
+      const dioLike = items[index].likedBy.includes(userId);
+      if (dioLike) {
+        items[index].likedBy = items[index].likedBy.filter(id => id !== userId);
+        items[index].likes = Math.max(0, (items[index].likes || 1) - 1);
+      } else {
+        items[index].likedBy.push(userId);
+        items[index].likes = (items[index].likes || 0) + 1;
+      }
       renderGaleria();
+      renderCarrusel();
+      await sincronizarNube();
     }
 
-    function filtrarGaleria() { renderGaleria(); }
+    async function agregarComentario(e, index) {
+      e.preventDefault();
+      const input = document.getElementById(`comment-input-${index}`);
+      const text = input.value.trim();
+      if (!text) return;
+      if (!items[index].comments) items[index].comments = [];
+      items[index].comments.push({
+        id: 'com_' + Math.random().toString(36).substring(2, 10),
+        author: userName,
+        authorId: userId,
+        date: new Date().toISOString(),
+        text
+      });
+      input.value = '';
+      renderGaleria();
+      document.getElementById(`comments-${index}`).classList.remove('hidden');
+      await sincronizarNube();
+    }
+
+    async function eliminarComentario(itemIndex, commentId) {
+      const c = items[itemIndex].comments.find(x => x.id === commentId);
+      if (!c) return;
+      const mins = (new Date() - new Date(c.date || new Date())) / 60000;
+      if (mins > 2 && prompt('Contraseña de administración:') !== ADMIN_PASSWORD) {
+        return mostrarToast('Contraseña incorrecta');
+      }
+      items[itemIndex].comments = items[itemIndex].comments.filter(x => x.id !== commentId);
+      renderGaleria();
+      await sincronizarNube();
+    }
+
+    async function eliminarItem(index) {
+      const mins = (new Date() - new Date(items[index].date || new Date())) / 60000;
+      if (mins > 2 && prompt('Contraseña de administración:') !== ADMIN_PASSWORD) {
+        return mostrarToast('Contraseña incorrecta');
+      }
+      items.splice(index, 1);
+      renderGaleria();
+      renderCarrusel();
+      await sincronizarNube();
+      mostrarToast('Recuerdo eliminado');
+    }
+
+    function renderSoundtrack() {
+      const spot = document.getElementById('spotifyContainer');
+      spot.innerHTML = `<iframe src="${musicConfig.playlistUrl}" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+      const hc = document.getElementById('himnosContainer');
+      hc.innerHTML = (musicConfig.himnos || []).map((h, i) => `
+        <div class="py-3 flex items-center justify-between text-sm">
+          <div>
+            <div class="font-bold text-[var(--text-dark)]"><span class="font-mono-num text-xs text-[var(--text-muted)] mr-2">${String(i + 1).padStart(2, '0')}.</span>${h.titulo}</div>
+            <div class="text-xs text-[var(--text-muted)] mt-0.5">${h.artista} · <span class="text-[var(--wine-main)] font-medium">${h.etiqueta || 'Himno'}</span></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function agregarHimno(e) {
+      e.preventDefault();
+      const titulo = document.getElementById('himnoTitulo').value.trim();
+      const artista = document.getElementById('himnoArtista').value.trim();
+      const etiqueta = document.getElementById('himnoEtiqueta').value.trim() || 'Himno';
+      if (!titulo || !artista) return mostrarToast('Completa título y artista');
+      musicConfig.himnos.push({ titulo, artista, etiqueta });
+      document.getElementById('himnoTitulo').value = '';
+      document.getElementById('himnoArtista').value = '';
+      document.getElementById('addHimnoForm').classList.add('hidden');
+      renderSoundtrack();
+      await sincronizarNube();
+      mostrarToast('Canción añadida al repertorio');
+    }
+
+    function actualizarContador() {
+      const rest = 280 - document.getElementById('tweetInput').value.length;
+      document.getElementById('tweetCounter').innerText = `${rest} caracteres disponibles`;
+    }
+
+    async function publicarTweet(e) {
+      e.preventDefault();
+      const input = document.getElementById('tweetInput');
+      const text = input.value.trim();
+      if (!text) return;
+      tweets.unshift({
+        id: 'tw_' + Math.random().toString(36).substring(2, 8),
+        author: userName,
+        authorId: userId,
+        text,
+        date: new Date().toISOString(),
+        likes: 0,
+        likedBy: []
+      });
+      input.value = '';
+      actualizarContador();
+      renderTweets();
+      await sincronizarNube();
+      mostrarToast('Anécdota publicada');
+    }
+
+    function renderTweets() {
+      const feed = document.getElementById('tweetsFeed');
+      if (tweets.length === 0) {
+        feed.innerHTML = `<div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-10 text-center text-xs text-[var(--text-muted)]">Aún no hay mensajes en el buzón.</div>`;
+        return;
+      }
+      feed.innerHTML = tweets.map(t => {
+        const dioLike = (t.likedBy || []).includes(userId);
+        const fecha = new Date(t.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+        return `
+          <article class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-bold text-[var(--wine-main)]">${t.author}</div>
+              <div class="text-xs font-mono-num text-[var(--text-muted)]">${fecha}</div>
+            </div>
+            <p class="text-sm text-[var(--text-dark)] whitespace-pre-line break-words">${t.text}</p>
+            <div class="pt-2.5 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
+              <button onclick="toggleTweetLike('${t.id}')" class="font-semibold cursor-pointer ${dioLike ? 'text-[var(--danger)]' : 'text-[var(--text-muted)]'}">♥ ${t.likes || 0}</button>
+              <button onclick="eliminarTweet('${t.id}')" class="text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Borrar</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function toggleTweetLike(id) {
+      const t = tweets.find(x => x.id === id);
+      if (!t) return;
+      if (!t.likedBy) t.likedBy = [];
+      if (t.likedBy.includes(userId)) {
+        t.likedBy = t.likedBy.filter(u => u !== userId);
+        t.likes = Math.max(0, (t.likes || 1) - 1);
+      } else {
+        t.likedBy.push(userId);
+        t.likes = (t.likes || 0) + 1;
+      }
+      renderTweets();
+      await sincronizarNube();
+    }
+
+    async function eliminarTweet(id) {
+      const t = tweets.find(x => x.id === id);
+      if (!t) return;
+      const mins = (new Date() - new Date(t.date || new Date())) / 60000;
+      if (mins > 2 && prompt('Contraseña de administración:') !== ADMIN_PASSWORD) {
+        return mostrarToast('Contraseña incorrecta');
+      }
+      tweets = tweets.filter(x => x.id !== id);
+      renderTweets();
+      await sincronizarNube();
+      mostrarToast('Mensaje eliminado');
+    }
 
     function abrirModal(url, type) {
       const modal = document.getElementById('modal');
-      const modalBody = document.getElementById('modalBody');
-      modalBody.innerHTML = type && type.startsWith('image/') 
-        ? `<img src="${url}" alt="Vista previa">` 
-        : `<video src="${url}" controls autoplay></video>`;
-      modal.classList.add('active');
+      const body = document.getElementById('modalBody');
+      const esImagen = !type || type.startsWith('image/');
+      body.innerHTML = esImagen
+        ? `<img src="${url}" class="max-w-full max-h-[85vh] object-contain" />`
+        : `<video src="${url}" controls autoplay class="max-w-full max-h-[85vh] object-contain"></video>`;
+      modal.classList.remove('hidden');
     }
 
     function cerrarModal(e, force = false) {
-      if (force || e.target.id === 'modal' || e.target.classList.contains('modal-close')) {
-        document.getElementById('modal').classList.remove('active');
+      if (force || e.target.id === 'modal') {
+        document.getElementById('modal').classList.add('hidden');
         document.getElementById('modalBody').innerHTML = '';
       }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      actualizarUIUsuario();
+      inicializarTemaAzul();
+      cargarDesdeNube();
+    });
   </script>
 </body>
 </html>
