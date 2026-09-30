@@ -202,6 +202,37 @@
     .double-tap-heart {
       animation: doubleTapHeartBurst 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+    /* Desactiva la re-animación en actualizaciones posteriores para evitar parpadeos al refrescar datos */
+    .no-reanim .anim-card {
+      animation: none !important;
+    }
+    .story-ring {
+      background: linear-gradient(135deg, var(--gold-bright), var(--wine-main), #f8e3a3);
+      padding: 2.5px;
+    }
+    .polaroid-grid article {
+      padding: 10px 10px 14px 10px;
+      background: #fffdf9;
+      box-shadow: 0 10px 26px -10px rgba(67, 16, 25, 0.2);
+      border-color: rgba(216, 178, 88, 0.45);
+    }
+    .polaroid-grid article .media-thumb-box {
+      border-radius: 12px;
+    }
+    .modal-zoom-stage {
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+    }
+    .modal-zoom-img {
+      transform-origin: center center;
+      will-change: transform;
+      transition: transform 60ms linear;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col pb-16 md:pb-0">
@@ -517,7 +548,18 @@
       </section>
 
       <!-- 3. SECCIÓN GALERÍA & ÁLBUMES -->
-      <section id="seccion-galeria" class="page-section hidden anim-section space-y-6">
+      <section id="seccion-galeria" class="page-section hidden anim-section space-y-5">
+        <!-- Barra de Historias por Álbum (Estilo Social + Gala) -->
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[var(--wine-main)] uppercase tracking-wider">Historias y Álbumes de la Promo</span>
+            <button type="button" onclick="document.getElementById('uploadPanelWrapper').classList.toggle('hidden')" class="btn-interactive px-3.5 py-1.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-bold cursor-pointer">
+              + Subir Foto o Video
+            </button>
+          </div>
+          <div id="storiesAlbumBar" class="flex items-center gap-4 overflow-x-auto no-scrollbar pt-1 pb-0.5"></div>
+        </div>
+
         <div id="featuredContainer" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
           <div class="flex items-center justify-between">
             <h2 class="text-sm font-bold text-[var(--wine-main)]">Recuerdos Más Votados de la Promo</h2>
@@ -526,11 +568,11 @@
           <div id="carouselTrack" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div id="uploadPanelWrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div class="lg:col-span-7 rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-5 flex flex-col justify-between gap-4">
             <div>
               <h2 class="text-base font-bold text-[var(--wine-main)]">Sube una o varias fotos y videos por álbum</h2>
-              <p class="text-xs text-[var(--text-muted)] mt-0.5">Puedes seleccionar varios archivos a la vez. Compresión inteligente activa.</p>
+              <p class="text-xs text-[var(--text-muted)] mt-0.5">Compresor inteligente activo: si eliges un video pesado (>20 MB), la web reduce su peso automáticamente en HD para subirlo directo.</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
               <input type="text" id="customFileName" placeholder="Título opcional (o automático)..." class="sm:col-span-5 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
@@ -548,7 +590,7 @@
               <input type="file" id="fileInput" accept="image/*,video/*" multiple class="hidden" onchange="subirArchivo(event)" />
             </div>
             <div class="pt-1 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-2">
-              <span class="text-[11px] text-[var(--text-muted)]">¿Video gigante de más de 20 MB (100 MB, 1 GB)? Súbelo por Drive o YouTube:</span>
+              <span class="text-[11px] text-[var(--text-muted)]">¿Video muy largo (100 MB, 1 GB)? También puedes pegarlo por Drive o YouTube:</span>
               <button type="button" onclick="document.getElementById('externalVideoBox').classList.toggle('hidden')" class="text-xs font-bold text-[var(--wine-main)] hover:underline cursor-pointer">
                 + Pegar enlace de Google Drive / YouTube
               </button>
@@ -577,14 +619,14 @@
 
           <div class="lg:col-span-5 rounded-2xl bg-[var(--wine-dark)] border border-[var(--gold-main)] p-5 text-white flex flex-col justify-between gap-3">
             <div class="space-y-1.5">
-              <div class="text-xs font-semibold text-[var(--gold-bright)]">Bot Oficial · @PromedmBot</div>
-              <h3 class="text-base font-bold text-white">Subida rápida por Telegram (Hasta 20 MB)</h3>
+              <div class="text-xs font-semibold text-[var(--gold-bright)]">Compresor Web HD + @PromedmBot</div>
+              <h3 class="text-base font-bold text-white">Subida directa sin instalar nada</h3>
               <p class="text-xs text-white/80 leading-relaxed">
-                Tus compañeros <strong>NO necesitan tener Telegram para ver la galería</strong>. Si alguien envía un video al bot, debe pesar <strong>menos de 20 MB</strong> (eligiendo calidad <strong>720p o 480p</strong> en Telegram) para que se reproduzca directo en la web. Para videos de más de 20 MB usa el botón de <strong>Google Drive / YouTube</strong> de al lado.
+                Tus compañeros pueden subir fotos y videos <strong>directo desde el botón «Elegir archivos»</strong> de esta página. Si un video supera los 20 MB, la web lo optimiza automáticamente en calidad 720p para que todos lo vean al instante.
               </p>
             </div>
             <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="btn-interactive w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 whitespace-nowrap">
-              Abrir @promedmbot ↗
+              O enviar por @promedmbot ↗
             </a>
           </div>
         </div>
@@ -592,8 +634,11 @@
         <div id="albumFilterBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
 
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-          <input type="text" id="searchInput" oninput="renderGaleria()" placeholder="Buscar recuerdo por título, álbum o dedicatoria..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+          <input type="text" id="searchInput" oninput="renderGaleria(true)" placeholder="Buscar recuerdo por título, álbum o dedicatoria..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
           <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="alternarVistaPolaroid()" id="btnPolaroidToggle" class="btn-interactive px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-dark)] text-xs font-semibold cursor-pointer whitespace-nowrap">
+              🖼 Vista Polaroid
+            </button>
             <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--gold-main)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
               ✨ Al Azar
             </button>
@@ -605,7 +650,7 @@
               <button onclick="setFiltro('image', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Fotos</button>
               <button onclick="setFiltro('video', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Videos</button>
             </div>
-            <select id="sortSelect" onchange="renderGaleria()" class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-3 py-2 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer">
+            <select id="sortSelect" onchange="renderGaleria(true)" class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-3 py-2 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer">
               <option value="recientes">Más recientes</option>
               <option value="populares">Más gustados</option>
               <option value="comentados">Más comentados</option>
@@ -782,10 +827,10 @@
     </button>
   </nav>
 
-  <!-- MODAL LIGHTBOX CINEMATOGRÁFICO + MODO PRESENTACIÓN -->
-  <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-3 sm:p-6 select-none">
+  <!-- MODAL LIGHTBOX CINEMATOGRÁFICO + ZOOM INTERACTIVO + MODO PRESENTACIÓN -->
+  <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-between bg-black/95 p-2.5 sm:p-5 select-none" style="touch-action: none;">
     <!-- Barra superior del visor -->
-    <div class="w-full max-w-5xl flex items-center justify-between gap-3 pb-3 z-10" onclick="event.stopPropagation()">
+    <div class="w-full max-w-5xl flex flex-wrap items-center justify-between gap-2 pb-2 z-20" onclick="event.stopPropagation()">
       <div class="flex items-center gap-2.5 min-w-0">
         <span id="modalCounter" class="px-2.5 py-1 rounded-lg bg-white/10 text-white text-xs font-mono-num font-semibold shrink-0">1 / 1</span>
         <div class="min-w-0">
@@ -793,23 +838,33 @@
           <div id="modalSubtitle" class="text-[11px] text-[var(--gold-bright)] truncate">#General</div>
         </div>
       </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <button id="btnSlideshowToggle" type="button" onclick="toggleSlideshow(event)" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <!-- Controles de Zoom exclusivos para fotografías -->
+        <div id="modalZoomControls" class="flex items-center bg-white/10 border border-white/20 rounded-xl p-0.5">
+          <button type="button" onclick="ajustarZoomModal(-0.5, event)" title="Alejar foto" class="w-7 h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer">−</button>
+          <button type="button" id="modalZoomBadge" onclick="resetearZoomModal(event)" title="Restablecer zoom" class="px-2 h-7 rounded-lg hover:bg-white/20 text-[var(--gold-bright)] text-[11px] font-mono-num font-bold cursor-pointer">100%</button>
+          <button type="button" onclick="ajustarZoomModal(0.5, event)" title="Acercar foto" class="w-7 h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer">+</button>
+        </div>
+        <button id="btnSlideshowToggle" type="button" onclick="toggleSlideshow(event)" class="btn-interactive px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
           <span>▶ Presentación</span>
         </button>
         <button type="button" onclick="cerrarModal(event, true)" class="btn-interactive w-9 h-9 rounded-full bg-white/15 hover:bg-[var(--wine-main)] text-white text-base font-bold flex items-center justify-center cursor-pointer">✕</button>
       </div>
     </div>
 
-    <!-- Contenedor central con flechas de navegación -->
-    <div class="relative w-full max-w-5xl flex-1 flex items-center justify-center min-h-0">
-      <button id="modalPrevBtn" type="button" onclick="navegarModal(-1, event)" aria-label="Anterior" class="btn-interactive absolute left-1 sm:left-3 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-[var(--wine-main)] border border-white/20 text-white text-lg font-bold flex items-center justify-center cursor-pointer">
+    <!-- Contenedor central con flechas de navegación y lienzo de Zoom -->
+    <div id="modalStage" class="modal-zoom-stage relative w-full max-w-5xl flex-1 flex items-center justify-center min-h-0">
+      <button id="modalPrevBtn" type="button" onclick="navegarModal(-1, event)" aria-label="Anterior" class="btn-interactive absolute left-1 sm:left-3 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/65 hover:bg-[var(--wine-main)] border border-white/25 text-white text-lg font-bold flex items-center justify-center cursor-pointer">
         ←
       </button>
-      <div id="modalBody" onclick="event.stopPropagation()" class="anim-modal max-w-4xl max-h-[78vh] rounded-2xl overflow-hidden flex items-center justify-center"></div>
-      <button id="modalNextBtn" type="button" onclick="navegarModal(1, event)" aria-label="Siguiente" class="btn-interactive absolute right-1 sm:right-3 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-[var(--wine-main)] border border-white/20 text-white text-lg font-bold flex items-center justify-center cursor-pointer">
+      <div id="modalBody" onclick="event.stopPropagation()" class="anim-modal w-full h-full max-w-4xl max-h-[78vh] rounded-2xl overflow-hidden flex items-center justify-center relative"></div>
+      <button id="modalNextBtn" type="button" onclick="navegarModal(1, event)" aria-label="Siguiente" class="btn-interactive absolute right-1 sm:right-3 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/65 hover:bg-[var(--wine-main)] border border-white/25 text-white text-lg font-bold flex items-center justify-center cursor-pointer">
         →
       </button>
+    </div>
+
+    <div id="modalZoomHint" class="text-[11px] text-white/60 text-center pt-1 z-10 pointer-events-none">
+      Pellizca con 2 dedos, usa la rueda del mouse o toca 2 veces la foto para hacer zoom y arrastrar
     </div>
   </div>
 
@@ -889,7 +944,10 @@
       'tg_msg_147': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_108.mp4',
       'tg_msg_146': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_109.mp4',
       'tg_msg_145': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_110.mp4',
-      'tg_msg_140': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_111.mp4'
+      'tg_msg_140': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_111.mp4',
+      'tg_msg_175': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_171.mp4',
+      'tg_msg_174': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_170.mp4',
+      'tg_msg_210': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_186.mp4'
     };
 
     /* Mapa de file_id permanentes de Telegram: permite renovar automáticamente cualquier enlace vencido sin volver a subir la foto/video */
@@ -979,7 +1037,25 @@
       "tg_msg_175": {"f":"BAACAgEAAxkBAAOvarxxGA0ex5VCrAdFgk5ANI2fYWsAAh4IAAIDe-hFwTfgc6ANnGw9BA","p":"videos/file_171.mp4"},
       "videos/file_171.mp4": {"f":"BAACAgEAAxkBAAOvarxxGA0ex5VCrAdFgk5ANI2fYWsAAh4IAAIDe-hFwTfgc6ANnGw9BA","p":"videos/file_171.mp4"},
       "tg_msg_174": {"f":"BAACAgEAAxkBAAOuarxwiJUYZqma1T5XR87DSMn4GBcAAhwIAAIDe-hF7gABkI05oUfgPQQ","p":"videos/file_170.mp4"},
-      "videos/file_170.mp4": {"f":"BAACAgEAAxkBAAOuarxwiJUYZqma1T5XR87DSMn4GBcAAhwIAAIDe-hF7gABkI05oUfgPQQ","p":"videos/file_170.mp4"}
+      "videos/file_170.mp4": {"f":"BAACAgEAAxkBAAOuarxwiJUYZqma1T5XR87DSMn4GBcAAhwIAAIDe-hF7gABkI05oUfgPQQ","p":"videos/file_170.mp4"},
+      "item_f1chx9a": {"f":"BAACAgEAAxkDAAPsar2ZYeF4JVk3hxuGrVvdmO-YG7oAAgwIAALmzvBF6ghJdjcTjGI9BA","p":"videos/file_197.mp4"},
+      "videos/file_197.mp4": {"f":"BAACAgEAAxkDAAPsar2ZYeF4JVk3hxuGrVvdmO-YG7oAAgwIAALmzvBF6ghJdjcTjGI9BA","p":"videos/file_197.mp4"},
+      "item_zvoolm7": {"f":"BAACAgEAAxkDAAPrar2ZWNlXah36Fcm6lU09sgRbAaoAAgsIAALmzvBFGLsamJRD0as9BA","p":"videos/file_196.mp4"},
+      "videos/file_196.mp4": {"f":"BAACAgEAAxkDAAPrar2ZWNlXah36Fcm6lU09sgRbAaoAAgsIAALmzvBFGLsamJRD0as9BA","p":"videos/file_196.mp4"},
+      "item_221_r": {"f":"BAACAgEAAxkDAAPdaryNLlFOkI2uaK06gsrIY3O-GDkAAsURAALqMuFFUHvkAfGP3d49BA","p":"videos/file_194.mp4"},
+      "videos/file_194.mp4": {"f":"BAACAgEAAxkDAAPdaryNLlFOkI2uaK06gsrIY3O-GDkAAsURAALqMuFFUHvkAfGP3d49BA","p":"videos/file_194.mp4"},
+      "item_220_r": {"f":"AgACAgEAAxkDAAPcaryMkj4-b9sEXB8K_QS0wy00Q2EAAggNaxvqMuFFnY-b_pOn5VoBAAMCAAN5AAM9BA","p":"photos/file_193.jpg"},
+      "photos/file_193.jpg": {"f":"AgACAgEAAxkDAAPcaryMkj4-b9sEXB8K_QS0wy00Q2EAAggNaxvqMuFFnY-b_pOn5VoBAAMCAAN5AAM9BA","p":"photos/file_193.jpg"},
+      "item_219_r": {"f":"AgACAgEAAxkDAAPbaryMgo4FzjDCsd2UN6UYm1SihdYAAgcNaxvqMuFFmszCO0Jhr_kBAAMCAAN5AAM9BA","p":"photos/file_192.jpg"},
+      "photos/file_192.jpg": {"f":"AgACAgEAAxkDAAPbaryMgo4FzjDCsd2UN6UYm1SihdYAAgcNaxvqMuFFmszCO0Jhr_kBAAMCAAN5AAM9BA","p":"photos/file_192.jpg"},
+      "item_218_r": {"f":"AgACAgEAAxkDAAPaaryMdBwLXUqz-DPUCROE89C2X1sAAgYNaxvqMuFF-Vu4uN3yjnoBAAMCAAN5AAM9BA","p":"photos/file_191.jpg"},
+      "photos/file_191.jpg": {"f":"AgACAgEAAxkDAAPaaryMdBwLXUqz-DPUCROE89C2X1sAAgYNaxvqMuFF-Vu4uN3yjnoBAAMCAAN5AAM9BA","p":"photos/file_191.jpg"},
+      "item_216_r": {"f":"AgACAgEAAxkDAAPYaryMZDGtY52akTrUQl-UhgKQ5uMAAgUNaxvqMuFFXw09_SKvL3ABAAMCAAN5AAM9BA","p":"photos/file_190.jpg"},
+      "photos/file_190.jpg": {"f":"AgACAgEAAxkDAAPYaryMZDGtY52akTrUQl-UhgKQ5uMAAgUNaxvqMuFFXw09_SKvL3ABAAMCAAN5AAM9BA","p":"photos/file_190.jpg"},
+      "item_215_r": {"f":"AgACAgEAAxkDAAPXaryMVSkE7M3T81AZ8UXqHxpTghYAAgQNaxvqMuFFksX3rBxxukEBAAMCAAN4AAM9BA","p":"photos/file_189.jpg"},
+      "photos/file_189.jpg": {"f":"AgACAgEAAxkDAAPXaryMVSkE7M3T81AZ8UXqHxpTghYAAgQNaxvqMuFFksX3rBxxukEBAAMCAAN4AAM9BA","p":"photos/file_189.jpg"},
+      "tg_msg_210": {"f":"BAACAgEAAxkBAAPSaryLVAfy7rTTDkK9hWDE2D85OPcAAksIAAIDe-hFrF8GMsF_0Sc9BA","p":"videos/file_186.mp4"},
+      "videos/file_186.mp4": {"f":"BAACAgEAAxkBAAPSaryLVAfy7rTTDkK9hWDE2D85OPcAAksIAAIDe-hFrF8GMsF_0Sc9BA","p":"videos/file_186.mp4"}
     };
 
     const TG_FILE_PREFIX = `https://api.telegram.org/file/bot${BOT_TOKEN}/`;
@@ -1473,16 +1549,65 @@
       return 'General';
     }
 
-    function renderTodo() {
-      renderMiembros();
-      renderBarraAlbumes();
-      renderGaleria();
-      renderCarrusel();
-      renderPremios();
-      renderCapsulas();
-      renderCronogramaEventos();
-      renderTweets();
-      renderSoundtrack();
+    /* Renderizado Inteligente Sin Parpadeos: solo actualiza las secciones cuyo contenido realmente cambió */
+    let _huellaGaleria = '';
+    let _huellaMiembros = '';
+    let _huellaPremios = '';
+    let _huellaCapsulas = '';
+    let _huellaEventos = '';
+    let _huellaTweets = '';
+    let _huellaSoundtrack = '';
+
+    function obtenerHuellaGaleria() {
+      return items.map(i => `${i.id}:${i.name}:${i.album}:${i.likes}:${(i.likedBy || []).includes(userId) ? 1 : 0}:${(i.comments || []).map(c => c.id).join(',')}`).join('|');
+    }
+
+    function renderTodo(forzar = false) {
+      const hMiembros = JSON.stringify(members);
+      if (forzar || hMiembros !== _huellaMiembros) {
+        _huellaMiembros = hMiembros;
+        renderMiembros();
+      }
+
+      const hGaleria = obtenerHuellaGaleria();
+      if (forzar || hGaleria !== _huellaGaleria) {
+        _huellaGaleria = hGaleria;
+        renderBarraAlbumes();
+        renderHistoriasAlbumes();
+        renderGaleria();
+        renderCarrusel();
+      }
+
+      const hPremios = JSON.stringify(awards);
+      if (forzar || hPremios !== _huellaPremios) {
+        _huellaPremios = hPremios;
+        renderPremios();
+      }
+
+      const hCapsulas = JSON.stringify(capsules);
+      if (forzar || hCapsulas !== _huellaCapsulas) {
+        _huellaCapsulas = hCapsulas;
+        renderCapsulas();
+      }
+
+      const hEventos = JSON.stringify(events);
+      if (forzar || hEventos !== _huellaEventos) {
+        _huellaEventos = hEventos;
+        renderCronogramaEventos();
+      }
+
+      const hTweets = JSON.stringify(tweets);
+      if (forzar || hTweets !== _huellaTweets) {
+        _huellaTweets = hTweets;
+        renderTweets();
+      }
+
+      const hSoundtrack = JSON.stringify(musicConfig);
+      if (forzar || hSoundtrack !== _huellaSoundtrack) {
+        _huellaSoundtrack = hSoundtrack;
+        renderSoundtrack();
+      }
+
       actualizarEstadisticas();
       actualizarCuentaRegresiva();
     }
@@ -1745,8 +1870,8 @@
         for (const upd of data.result) {
           const msg = upd.message || upd.channel_post;
           if (!msg) continue;
-          // Todos los mensajes hasta el 184 ya están procesados en la nube; solo procesamos envíos nuevos (>184)
-          if (msg.message_id <= 184) continue;
+          // Todos los mensajes hasta el 238 ya están procesados en la nube; solo procesamos envíos nuevos (>238)
+          if (msg.message_id <= 238) continue;
           const tgItemId = 'tg_msg_' + msg.message_id;
           if (deletedIds.has(tgItemId)) continue;
           if (items.some(i => i.id === tgItemId || i.tgMessageId === msg.message_id)) continue;
@@ -1776,7 +1901,7 @@
                   body: JSON.stringify({
                     chat_id: msg.chat.id,
                     reply_to_message_id: msg.message_id,
-                    text: `⚠️ ¡Hola ${senderName}! Tu video pesa ${mbStr} MB.\n\nPara que tus compañeros puedan verlo directo en la página web SIN tener que instalar Telegram, el video debe pesar menos de 20 MB.\n\n💡 Por favor vuelve a enviarlo aquí eligiendo calidad 720p o 480p (el botón de calidad abajo al adjuntar el video) para que se publique al instante en la web.`
+                    text: `⚠️ ¡Hola ${senderName}! Tu video pesa ${mbStr} MB.\n\nPara que tus compañeros puedan verlo directo en la página web SIN tener que usar Telegram, el video debe pesar menos de 20 MB.\n\n💡 Tienes 2 opciones rápidas:\n1️⃣ Súbelo directo desde el botón «Elegir archivos» de la página web (tiene Compresor HD automático que reduce el peso sin perder calidad).\n2️⃣ O vuelve a enviarlo aquí eligiendo calidad 720p o 480p al adjuntarlo.`
                   })
                 }).catch(() => {});
               } catch (e) {}
@@ -1913,8 +2038,137 @@
     }
 
     /* =========================================================
-       COMPRESIÓN INTELIGENTE Y POSTAL POLAROID
+       COMPRESIÓN INTELIGENTE (FOTOS + VIDEOS >20MB EN NAVEGADOR) Y POSTAL POLAROID
     ========================================================= */
+    async function comprimirVideoPesadoEnNavegador(file, onProgress) {
+      if (!('MediaRecorder' in window)) {
+        throw new Error('Tu navegador no soporta compresión de video en vivo');
+      }
+      return new Promise((resolve, reject) => {
+        const video = document.createElement('video');
+        const objectUrl = URL.createObjectURL(file);
+        video.src = objectUrl;
+        video.playsInline = true;
+        video.muted = false;
+        video.volume = 0.001; // Necesario para capturar pista de audio sin sonar fuerte
+
+        const cleanup = () => {
+          try { video.pause(); video.src = ''; URL.revokeObjectURL(objectUrl); } catch (e) {}
+        };
+
+        video.onloadedmetadata = async () => {
+          const duration = Number(video.duration || 0);
+          if (!duration || !isFinite(duration) || duration > 420) {
+            cleanup();
+            return reject(new Error('El video dura más de 7 minutos; súbelo por enlace de Drive o YouTube'));
+          }
+
+          // Escalamos como máximo a 720p manteniendo proporción
+          const maxSide = 720;
+          let w = video.videoWidth || 720;
+          let h = video.videoHeight || 1280;
+          if (w > maxSide || h > maxSide) {
+            if (w > h) { h = Math.round((h * maxSide) / w); w = maxSide; }
+            else { w = Math.round((w * maxSide) / h); h = maxSide; }
+          }
+          w = w - (w % 2);
+          h = h - (h % 2);
+
+          // Calculamos bitrate objetivo para que el archivo resultante pese ~15.5 MB (siempre < 20 MB)
+          const targetBytes = 15.5 * 1024 * 1024;
+          const totalBitsPerSec = Math.floor((targetBytes * 8) / Math.max(duration, 5));
+          const audioBps = 96000;
+          const videoBps = Math.max(450000, Math.min(2100000, totalBitsPerSec - audioBps));
+
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          const canvasStream = canvas.captureStream(24);
+
+          // Intentamos conservar el audio original
+          try {
+            const vidStream = video.captureStream ? video.captureStream() : (video.mozCaptureStream ? video.mozCaptureStream() : null);
+            if (vidStream) {
+              vidStream.getAudioTracks().forEach(t => canvasStream.addTrack(t));
+            }
+          } catch (e) {}
+
+          const mimeTypes = [
+            'video/mp4;codecs=avc1',
+            'video/mp4',
+            'video/webm;codecs=vp8,opus',
+            'video/webm'
+          ];
+          const chosenMime = mimeTypes.find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
+
+          let recorder;
+          try {
+            recorder = new MediaRecorder(canvasStream, {
+              ...(chosenMime ? { mimeType: chosenMime } : {}),
+              videoBitsPerSecond: videoBps,
+              audioBitsPerSecond: audioBps
+            });
+          } catch (err) {
+            cleanup();
+            return reject(err);
+          }
+
+          const chunks = [];
+          recorder.ondataavailable = (ev) => {
+            if (ev.data && ev.data.size > 0) chunks.push(ev.data);
+          };
+
+          recorder.onstop = () => {
+            cleanup();
+            const ext = chosenMime.includes('mp4') ? '.mp4' : '.webm';
+            const outType = chosenMime.includes('mp4') ? 'video/mp4' : 'video/webm';
+            const blob = new Blob(chunks, { type: outType });
+            if (!blob.size || blob.size > 19.8 * 1024 * 1024) {
+              return reject(new Error('El video comprimido aún supera los 20 MB'));
+            }
+            const outName = file.name.replace(/\.[^.]+$/, '') + ext;
+            resolve(new File([blob], outName, { type: outType }));
+          };
+
+          recorder.onerror = (e) => {
+            cleanup();
+            reject(e);
+          };
+
+          let animId = null;
+          const drawFrame = () => {
+            if (!video.paused && !video.ended) {
+              ctx.drawImage(video, 0, 0, w, h);
+              if (onProgress && duration > 0) {
+                onProgress(Math.min(99, Math.round((video.currentTime / duration) * 100)));
+              }
+              animId = requestAnimationFrame(drawFrame);
+            }
+          };
+
+          video.onended = () => {
+            if (animId) cancelAnimationFrame(animId);
+            if (recorder.state === 'recording') recorder.stop();
+          };
+
+          try {
+            recorder.start(250);
+            await video.play();
+            drawFrame();
+          } catch (playErr) {
+            cleanup();
+            reject(playErr);
+          }
+        };
+
+        video.onerror = () => {
+          cleanup();
+          reject(new Error('No se pudo leer el video para comprimirlo'));
+        };
+      });
+    }
+
     async function comprimirImagenAntesDeSubir(file) {
       if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.size <= 500 * 1024) {
         return file;
@@ -2466,10 +2720,14 @@
     }
 
     /* =========================================================
-       GALERÍA MULTIMEDIA & ÁLBUMES
+       GALERÍA MULTIMEDIA, HISTORIAS POR ÁLBUM & MODO POLAROID
     ========================================================= */
+    let vistaPolaroidActiva = false;
+    let galeriaYaPintadaPrimeraVez = false;
+
     function renderBarraAlbumes() {
       const bar = document.getElementById('albumFilterBar');
+      if (!bar) return;
       bar.innerHTML = ALBUM_OPTIONS.map(alb => {
         const activo = albumActual === alb;
         return `
@@ -2480,10 +2738,65 @@
       }).join('');
     }
 
+    function renderHistoriasAlbumes() {
+      const container = document.getElementById('storiesAlbumBar');
+      if (!container) return;
+
+      container.innerHTML = ALBUM_OPTIONS.map(alb => {
+        const itemsAlbum = alb === 'Todos'
+          ? items
+          : items.filter(i => (i.album || inferirAlbum(i)) === alb);
+        const count = itemsAlbum.length;
+        const firstImgItem = itemsAlbum.find(i => !i.type || i.type.startsWith('image/')) || itemsAlbum[0];
+        const coverUrl = firstImgItem?.url || window.DEFAULT_LOGO_SVG;
+        const fid = firstImgItem?.fileId || '';
+        const iid = firstImgItem?.id || '';
+        const activo = albumActual === alb;
+
+        return `
+          <button type="button" onclick="abrirHistoriaOFiltrarAlbum('${alb}')" class="group flex flex-col items-center gap-1.5 shrink-0 cursor-pointer focus:outline-none">
+            <div class="story-ring rounded-full ${activo ? 'ring-2 ring-[var(--wine-main)] scale-105' : 'opacity-90 hover:opacity-100'} transition-transform">
+              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#181214] border-2 border-[var(--card-bg)] overflow-hidden relative flex items-center justify-center">
+                <img src="${coverUrl}" alt="${alb}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${coverUrl}', '${iid}', '${fid}')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" />
+                <span class="absolute bottom-0 inset-x-0 bg-black/70 text-[10px] font-mono-num font-bold text-[var(--gold-bright)] text-center leading-tight py-0.5">${count}</span>
+              </div>
+            </div>
+            <span class="text-[11px] font-bold ${activo ? 'text-[var(--wine-main)] underline' : 'text-[var(--text-dark)]'} max-w-[76px] truncate">
+              ${alb === 'Todos' ? 'Todos' : alb}
+            </span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function abrirHistoriaOFiltrarAlbum(alb) {
+      if (albumActual === alb && modalListaActual.length > 0) {
+        iniciarModoPresentacion();
+        return;
+      }
+      setAlbumFiltro(alb);
+    }
+
+    function alternarVistaPolaroid() {
+      vistaPolaroidActiva = !vistaPolaroidActiva;
+      const gal = document.getElementById('galeria');
+      const btn = document.getElementById('btnPolaroidToggle');
+      if (gal) {
+        gal.classList.toggle('polaroid-grid', vistaPolaroidActiva);
+      }
+      if (btn) {
+        btn.className = vistaPolaroidActiva
+          ? 'btn-interactive px-3 py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-xs font-semibold cursor-pointer whitespace-nowrap'
+          : 'btn-interactive px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-dark)] text-xs font-semibold cursor-pointer whitespace-nowrap';
+      }
+      mostrarToast(vistaPolaroidActiva ? '🖼 Vista Polaroid activada' : 'Vista Estándar activada');
+    }
+
     function setAlbumFiltro(alb) {
       albumActual = alb;
       renderBarraAlbumes();
-      renderGaleria();
+      renderHistoriasAlbumes();
+      renderGaleria(true);
     }
 
     async function subirArchivo(event) {
@@ -2508,7 +2821,7 @@
           const rawFile = fileList[i];
           const pctInicial = Math.round((i / fileList.length) * 100);
           btn.innerText = `Subiendo ${i + 1}/${fileList.length}...`;
-          if (progText) progText.innerText = `Optimizando y subiendo archivo ${i + 1} de ${fileList.length}...`;
+          if (progText) progText.innerText = `Preparando archivo ${i + 1} de ${fileList.length}...`;
           if (progPct) progPct.innerText = `${pctInicial}%`;
           if (progBar) progBar.style.width = `${Math.max(8, pctInicial)}%`;
 
@@ -2517,20 +2830,37 @@
             : rawFile.name.replace(/\.[^/.]+$/, '');
 
           const esVideo = rawFile.type.startsWith('video/');
+          let fileToUpload = rawFile;
+
           if (esVideo && rawFile.size > 20 * 1024 * 1024) {
-            const mb = (rawFile.size / (1024 * 1024)).toFixed(1);
-            mostrarToast(`El video pesa ${mb} MB (>20 MB). Pégalo por Google Drive o YouTube para reproducirlo en la web.`);
-            document.getElementById('externalVideoBox')?.classList.remove('hidden');
-            continue;
+            const mbOrig = (rawFile.size / (1024 * 1024)).toFixed(1);
+            try {
+              mostrarToast(`Optimizando video pesado (${mbOrig} MB) en HD para subirlo directo...`);
+              fileToUpload = await comprimirVideoPesadoEnNavegador(rawFile, (pctComp) => {
+                btn.innerText = `Comprimiendo ${pctComp}%...`;
+                if (progText) progText.innerText = `Comprimiendo video HD (${mbOrig} MB → <20 MB)...`;
+                if (progPct) progPct.innerText = `${pctComp}%`;
+                if (progBar) progBar.style.width = `${Math.max(10, pctComp)}%`;
+              });
+              const mbNuevo = (fileToUpload.size / (1024 * 1024)).toFixed(1);
+              if (progText) progText.innerText = `Video optimizado a ${mbNuevo} MB. Subiendo a la galería...`;
+            } catch (compErr) {
+              console.warn('No se pudo comprimir el video automáticamente:', compErr);
+              mostrarToast(`El video (${mbOrig} MB) es muy largo. Pégalo por Google Drive o YouTube abajo.`);
+              document.getElementById('externalVideoBox')?.classList.remove('hidden');
+              continue;
+            }
+          } else if (!esVideo) {
+            fileToUpload = await comprimirImagenAntesDeSubir(rawFile);
           }
+
           const endpoint = esVideo ? 'sendVideo' : 'sendPhoto';
           const fieldName = esVideo ? 'video' : 'photo';
 
           try {
-            const file = await comprimirImagenAntesDeSubir(rawFile);
             const formData = new FormData();
             formData.append('chat_id', CHAT_ID);
-            formData.append(fieldName, file);
+            formData.append(fieldName, fileToUpload);
 
             const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${endpoint}`, {
               method: 'POST',
@@ -2539,7 +2869,8 @@
             const tgData = await tgRes.json();
             if (!tgData.ok) throw new Error(tgData.description || 'Error en Telegram');
 
-            const fileId = esVideo ? tgData.result.video.file_id : tgData.result.photo[tgData.result.photo.length - 1].file_id;
+            const mediaResult = tgData.result.video || tgData.result.document || (tgData.result.photo && tgData.result.photo[tgData.result.photo.length - 1]);
+            const fileId = mediaResult?.file_id;
             const fileInfoRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
             const fileInfoData = await fileInfoRes.json().catch(() => ({}));
 
@@ -2575,6 +2906,7 @@
 
         document.getElementById('customFileName').value = '';
         event.target.value = '';
+        renderHistoriasAlbumes();
         renderGaleria();
         renderCarrusel();
         if (subidosExito > 0) {
@@ -2604,7 +2936,7 @@
         b.className = 'filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer';
       });
       btn.className = 'filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer';
-      renderGaleria();
+      renderGaleria(true);
     }
 
     function renderCarrusel() {
@@ -2638,8 +2970,18 @@
       observarVideosGaleria();
     }
 
-    function renderGaleria() {
+    function renderGaleria(esFiltroManual = false) {
+      _huellaGaleria = obtenerHuellaGaleria();
       const galeria = document.getElementById('galeria');
+      if (!galeria) return;
+
+      if (galeriaYaPintadaPrimeraVez && !esFiltroManual) {
+        galeria.classList.add('no-reanim');
+      } else {
+        galeria.classList.remove('no-reanim');
+      }
+      galeriaYaPintadaPrimeraVez = true;
+
       const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
       const sort = document.getElementById('sortSelect')?.value || 'recientes';
 
@@ -2663,19 +3005,22 @@
 
       galeria.innerHTML = '';
       const albumSelectOptions = ALBUM_OPTIONS.filter(a => a !== 'Todos');
+      const ahoraMs = Date.now();
       lista.forEach(({ item, index }, visualIdx) => {
         const esImagen = !item.type || item.type.startsWith('image/');
         const dioLike = (item.likedBy || []).includes(userId);
         const comentarios = item.comments || [];
         const itemAlb = item.album || inferirAlbum(item);
+        const itemDateMs = new Date(item.date).getTime() || 0;
+        const esReciente = (ahoraMs - itemDateMs) >= 0 && (ahoraMs - itemDateMs) < 86400000;
         const fecha = new Date(item.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
         const safeTitle = (item.name || 'Recuerdo').replace(/'/g, "\\'");
 
         const card = document.createElement('article');
-        card.style.setProperty('--i', visualIdx);
+        card.style.setProperty('--i', Math.min(visualIdx, 12));
         card.className = 'anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
         card.innerHTML = `
-          <div onclick="manejarToqueMediaGaleria(event, ${index})" class="w-full h-52 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
+          <div onclick="manejarToqueMediaGaleria(event, ${index})" class="media-thumb-box w-full h-52 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
             ${esImagen
               ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />`
               : item.externalEmbedUrl
@@ -2689,6 +3034,7 @@
                      <span class="w-11 h-11 rounded-full bg-black/70 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
                    </div>
                    <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/75 text-[var(--gold-bright)] text-[10px] font-bold tracking-wide">VIDEO</span>`}
+            ${esReciente ? `<span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[var(--wine-main)]/90 border border-[var(--gold-bright)] text-[var(--gold-bright)] text-[10px] font-bold shadow">✨ Recién subido</span>` : ''}
             <div id="heart-burst-${index}" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none z-10">
               <span class="double-tap-heart text-5xl text-white drop-shadow-lg">♥</span>
             </div>
@@ -3321,6 +3667,76 @@
       mostrarItemModalActual();
     }
 
+    /* =========================================================
+       MOTOR DE ZOOM Y PANEO EXCLUSIVO PARA FOTOS EN EL VISOR
+    ========================================================= */
+    let modalZoomScale = 1;
+    let modalZoomX = 0;
+    let modalZoomY = 0;
+    let modalIsDragging = false;
+    let modalDragStartX = 0;
+    let modalDragStartY = 0;
+    let modalPinchStartDist = 0;
+    let modalPinchStartScale = 1;
+    let modalLastTapTime = 0;
+
+    function configurarEstadoControlesZoom(esImagen) {
+      modalZoomScale = 1;
+      modalZoomX = 0;
+      modalZoomY = 0;
+      modalIsDragging = false;
+      const ctrl = document.getElementById('modalZoomControls');
+      const hint = document.getElementById('modalZoomHint');
+      const badge = document.getElementById('modalZoomBadge');
+      if (badge) badge.innerText = '100%';
+      if (ctrl) ctrl.classList.toggle('hidden', !esImagen);
+      if (hint) {
+        hint.innerText = esImagen
+          ? 'Pellizca con 2 dedos, usa la rueda del mouse o toca 2 veces la foto para hacer zoom y arrastrar'
+          : 'Desliza a los lados o usa las flechas para cambiar de recuerdo';
+      }
+    }
+
+    function aplicarTransformZoomModal(conTransicion = false) {
+      const img = document.getElementById('modalZoomTargetImg');
+      const badge = document.getElementById('modalZoomBadge');
+      if (modalZoomScale <= 1.02) {
+        modalZoomScale = 1;
+        modalZoomX = 0;
+        modalZoomY = 0;
+      } else {
+        modalZoomScale = Math.min(4, modalZoomScale);
+        const maxPanX = ((img ? img.clientWidth : 360) * (modalZoomScale - 1)) / 2 + 40;
+        const maxPanY = ((img ? img.clientHeight : 360) * (modalZoomScale - 1)) / 2 + 40;
+        modalZoomX = Math.max(-maxPanX, Math.min(maxPanX, modalZoomX));
+        modalZoomY = Math.max(-maxPanY, Math.min(maxPanY, modalZoomY));
+      }
+      if (badge) {
+        badge.innerText = `${Math.round(modalZoomScale * 100)}%`;
+      }
+      if (img) {
+        img.style.transition = conTransicion ? 'transform 180ms cubic-bezier(0.16, 1, 0.3, 1)' : 'none';
+        img.style.transform = `translate3d(${modalZoomX}px, ${modalZoomY}px, 0) scale(${modalZoomScale})`;
+        img.style.cursor = modalZoomScale > 1 ? (modalIsDragging ? 'grabbing' : 'grab') : 'zoom-in';
+      }
+    }
+
+    function ajustarZoomModal(delta, e) {
+      if (e) e.stopPropagation();
+      const img = document.getElementById('modalZoomTargetImg');
+      if (!img) return;
+      modalZoomScale = Math.max(1, Math.min(4, modalZoomScale + delta));
+      aplicarTransformZoomModal(true);
+    }
+
+    function resetearZoomModal(e) {
+      if (e) e.stopPropagation();
+      modalZoomScale = 1;
+      modalZoomX = 0;
+      modalZoomY = 0;
+      aplicarTransformZoomModal(true);
+    }
+
     function mostrarItemModalActual() {
       clearTimeout(slideshowTimer);
       const realIndex = modalListaActual[modalIndiceActual];
@@ -3339,6 +3755,8 @@
       const fecha = new Date(item.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
       const alb = item.album || inferirAlbum(item);
 
+      configurarEstadoControlesZoom(esImagen);
+
       if (counter) counter.innerText = `${modalIndiceActual + 1} / ${modalListaActual.length}`;
       if (titleEl) titleEl.innerText = item.name || 'Recuerdo de la Promo';
       if (subEl) subEl.innerText = `#${alb} · ${fecha} · ♥ ${item.likes || 0}`;
@@ -3346,7 +3764,7 @@
       if (nextBtn) nextBtn.classList.remove('hidden');
 
       if (esImagen) {
-        body.innerHTML = `<img src="${item.url}" alt="${item.name || ''}" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl" />`;
+        body.innerHTML = `<img id="modalZoomTargetImg" src="${item.url}" alt="${item.name || ''}" draggable="false" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="modal-zoom-img max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl cursor-zoom-in" />`;
         if (slideshowActivo) {
           slideshowTimer = setTimeout(() => navegarModal(1), 4200);
         }
@@ -3363,6 +3781,7 @@
         }
       }
       modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     }
 
     function navegarModal(direccion, e) {
@@ -3381,6 +3800,7 @@
       }
       clearTimeout(slideshowTimer);
       if (slideshowActivo) {
+        resetearZoomModal();
         mostrarToast('Modo Presentación activado');
         const vid = document.getElementById('modalVideoPlayer');
         if (vid && !vid.ended && !vid.paused) {
@@ -3407,27 +3827,31 @@
       const prevBtn = document.getElementById('modalPrevBtn');
       const nextBtn = document.getElementById('modalNextBtn');
 
+      const esImagen = !type || type.startsWith('image/');
+      configurarEstadoControlesZoom(esImagen);
+
       if (counter) counter.innerText = '1 / 1';
       if (titleEl) titleEl.innerText = customTitle;
       if (subEl) subEl.innerText = customSub;
       if (prevBtn) prevBtn.classList.add('hidden');
       if (nextBtn) nextBtn.classList.add('hidden');
 
-      const esImagen = !type || type.startsWith('image/');
       body.innerHTML = esImagen
-        ? `<img src="${url}" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${url}', '${itemId}', '${explicitFileId}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl" />`
+        ? `<img id="modalZoomTargetImg" src="${url}" draggable="false" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${url}', '${itemId}', '${explicitFileId}')" class="modal-zoom-img max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl cursor-zoom-in" />`
         : `<video src="${url}" controls autoplay playsinline onerror="window.repararVideoTelegram(this, '${url}', '${itemId}', '${explicitFileId}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
       modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     }
 
     function cerrarModal(e, force = false) {
-      if (force || (e && e.target && e.target.id === 'modal')) {
+      if (force || (e && e.target && (e.target.id === 'modal' || e.target.id === 'modalStage' || e.target.id === 'modalBody'))) {
         clearTimeout(slideshowTimer);
         slideshowActivo = false;
         const btn = document.getElementById('btnSlideshowToggle');
         if (btn) btn.innerHTML = '<span>▶ Presentación</span>';
         document.getElementById('modal').classList.add('hidden');
         document.getElementById('modalBody').innerHTML = '';
+        document.body.style.overflow = '';
       }
     }
 
@@ -3437,26 +3861,181 @@
       if (e.key === 'Escape') cerrarModal(null, true);
       if (e.key === 'ArrowRight') navegarModal(1);
       if (e.key === 'ArrowLeft') navegarModal(-1);
+      if (e.key === '+' || e.key === '=') ajustarZoomModal(0.5);
+      if (e.key === '-') ajustarZoomModal(-0.5);
+      if (e.key === '0') resetearZoomModal();
     });
 
-    /* Gestos táctiles Swipe izquierda/derecha en el visor para celulares (Mejora #1) */
+    /* Gestos en el visor: Pellizco con 2 dedos (Zoom a la foto SIN hacer zoom a la página), Arrastrar foto con zoom, Doble toque y Swipe */
     let touchStartX = 0;
     let touchStartY = 0;
-    document.getElementById('modal')?.addEventListener('touchstart', (e) => {
-      if (!e.changedTouches || !e.changedTouches[0]) return;
-      touchStartX = e.changedTouches[0].screenX;
-      touchStartY = e.changedTouches[0].screenY;
-    }, { passive: true });
+    let touchMovedWhileSingle = false;
 
-    document.getElementById('modal')?.addEventListener('touchend', (e) => {
-      if (!e.changedTouches || !e.changedTouches[0]) return;
-      const dx = e.changedTouches[0].screenX - touchStartX;
-      const dy = e.changedTouches[0].screenY - touchStartY;
-      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+    const modalEl = document.getElementById('modal');
+    const modalStageEl = document.getElementById('modalStage');
+
+    // Bloquea el zoom del navegador (Safari/Chrome) cuando el visor está abierto
+    ['gesturestart', 'gesturechange', 'gestureend'].forEach(evName => {
+      modalEl?.addEventListener(evName, (e) => {
+        e.preventDefault();
+      }, { passive: false });
+    });
+
+    // Rueda del mouse en PC: hace zoom a la foto y bloquea el scroll/zoom de la página
+    modalStageEl?.addEventListener('wheel', (e) => {
+      const img = document.getElementById('modalZoomTargetImg');
+      if (!img) return;
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.28 : -0.28;
+      modalZoomScale = Math.max(1, Math.min(4, modalZoomScale + delta));
+      aplicarTransformZoomModal(false);
+    }, { passive: false });
+
+    // Doble clic en PC sobre la foto: alterna entre 100% y 250% en el punto clickeado
+    modalStageEl?.addEventListener('dblclick', (e) => {
+      const img = document.getElementById('modalZoomTargetImg');
+      if (!img) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (modalZoomScale > 1.05) {
+        resetearZoomModal();
+      } else {
+        const rect = img.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        modalZoomScale = 2.5;
+        modalZoomX = (cx - e.clientX) * 1.1;
+        modalZoomY = (cy - e.clientY) * 1.1;
+        aplicarTransformZoomModal(true);
+      }
+    });
+
+    // Arrastrar con el mouse en PC cuando la foto tiene zoom (>100%)
+    modalStageEl?.addEventListener('mousedown', (e) => {
+      const img = document.getElementById('modalZoomTargetImg');
+      if (!img || modalZoomScale <= 1.02 || e.button !== 0) return;
+      e.preventDefault();
+      modalIsDragging = true;
+      modalDragStartX = e.clientX - modalZoomX;
+      modalDragStartY = e.clientY - modalZoomY;
+      aplicarTransformZoomModal(false);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!modalIsDragging) return;
+      modalZoomX = e.clientX - modalDragStartX;
+      modalZoomY = e.clientY - modalDragStartY;
+      aplicarTransformZoomModal(false);
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (modalIsDragging) {
+        modalIsDragging = false;
+        aplicarTransformZoomModal(false);
+      }
+    });
+
+    // Eventos táctiles en celulares (Pellizco 2 dedos + Arrastrar 1 dedo + Doble toque + Swipe)
+    modalStageEl?.addEventListener('touchstart', (e) => {
+      const img = document.getElementById('modalZoomTargetImg');
+
+      if (e.touches.length === 2 && img) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        modalPinchStartDist = Math.hypot(dx, dy);
+        modalPinchStartScale = modalZoomScale;
+        modalIsDragging = false;
+        return;
+      }
+
+      if (e.touches.length === 1) {
+        const t = e.touches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        touchMovedWhileSingle = false;
+
+        if (img && modalZoomScale > 1.02) {
+          modalIsDragging = true;
+          modalDragStartX = t.clientX - modalZoomX;
+          modalDragStartY = t.clientY - modalZoomY;
+        }
+      }
+    }, { passive: false });
+
+    modalStageEl?.addEventListener('touchmove', (e) => {
+      const img = document.getElementById('modalZoomTargetImg');
+
+      // Pellizco con 2 dedos: hace zoom a la foto y bloquea el zoom de la página
+      if (e.touches.length === 2 && img) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.hypot(dx, dy);
+        if (modalPinchStartDist > 0) {
+          const factor = dist / modalPinchStartDist;
+          modalZoomScale = Math.max(1, Math.min(4, modalPinchStartScale * factor));
+          aplicarTransformZoomModal(false);
+        }
+        return;
+      }
+
+      // Arrastrar con 1 dedo cuando la foto está con zoom
+      if (e.touches.length === 1 && img && modalZoomScale > 1.02 && modalIsDragging) {
+        e.preventDefault();
+        const t = e.touches[0];
+        if (Math.hypot(t.clientX - touchStartX, t.clientY - touchStartY) > 6) {
+          touchMovedWhileSingle = true;
+        }
+        modalZoomX = t.clientX - modalDragStartX;
+        modalZoomY = t.clientY - modalDragStartY;
+        aplicarTransformZoomModal(false);
+      }
+    }, { passive: false });
+
+    modalStageEl?.addEventListener('touchend', (e) => {
+      const img = document.getElementById('modalZoomTargetImg');
+
+      if (e.touches.length < 2) {
+        modalPinchStartDist = 0;
+      }
+      if (e.touches.length === 0) {
+        modalIsDragging = false;
+      }
+
+      if (!e.changedTouches || !e.changedTouches[0] || e.touches.length > 0) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+
+      // Doble toque rápido en celular sobre la foto para acercar/alejar
+      const ahora = Date.now();
+      if (img && Math.hypot(dx, dy) < 18 && !touchMovedWhileSingle) {
+        if ((ahora - modalLastTapTime) < 280) {
+          e.preventDefault();
+          modalLastTapTime = 0;
+          if (modalZoomScale > 1.05) {
+            resetearZoomModal();
+          } else {
+            const rect = img.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            modalZoomScale = 2.5;
+            modalZoomX = (cx - t.clientX) * 1.1;
+            modalZoomY = (cy - t.clientY) * 1.1;
+            aplicarTransformZoomModal(true);
+          }
+          return;
+        }
+        modalLastTapTime = ahora;
+      }
+
+      // Swipe izquierda/derecha para pasar de foto SOLO cuando no está con zoom (100%)
+      if (modalZoomScale <= 1.02 && Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.3) {
         if (dx < 0) navegarModal(1);
         else navegarModal(-1);
       }
-    }, { passive: true });
+    }, { passive: false });
 
     // Sincronizar cambios pendientes si el usuario cierra o recarga la pestaña
     window.addEventListener('beforeunload', () => {
