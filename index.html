@@ -15,6 +15,66 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    /* Escudos SVG definidos en <head> para que estén disponibles antes de cargar <body> en GitHub Pages */
+    window.DEFAULT_LOGO_VINO_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#681b28"/>
+            <stop offset="100%" stop-color="#431019"/>
+          </linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="56" fill="url(#g)" stroke="#d8b258" stroke-width="4"/>
+        <polygon points="60,18 69,42 95,42 74,57 82,82 60,67 38,82 46,57 25,42 51,42" fill="#d8b258"/>
+        <text x="60" y="103" text-anchor="middle" fill="#fffdf8" font-family="Georgia, serif" font-weight="bold" font-size="14">EDM ’26</text>
+      </svg>
+    `);
+    window.DEFAULT_LOGO_AZUL_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+        <defs>
+          <linearGradient id="gb" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1e3a8a"/>
+            <stop offset="100%" stop-color="#111827"/>
+          </linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="56" fill="url(#gb)" stroke="#d8b258" stroke-width="4"/>
+        <polygon points="60,18 69,42 95,42 74,57 82,82 60,67 38,82 46,57 25,42 51,42" fill="#d8b258"/>
+        <text x="60" y="103" text-anchor="middle" fill="#fffdf8" font-family="Georgia, serif" font-weight="bold" font-size="14">EDM ’26</text>
+      </svg>
+    `);
+    window.DEFAULT_LOGO_SVG = window.DEFAULT_LOGO_VINO_SVG;
+
+    window.manejarErrorLogo = function(img) {
+      const esAzul = document.body && document.body.classList.contains('blue-theme');
+      const step = Number(img.dataset.fallbackStep || '0');
+      if (step === 0) {
+        img.dataset.fallbackStep = '1';
+        img.src = esAzul ? 'Logo2.png' : 'Logo.png';
+      } else if (step === 1 && esAzul) {
+        img.dataset.fallbackStep = '2';
+        img.src = 'logo.png';
+      } else {
+        img.onerror = null;
+        img.src = esAzul ? window.DEFAULT_LOGO_AZUL_SVG : window.DEFAULT_LOGO_VINO_SVG;
+      }
+    };
+
+    window.repararImagenTelegram = function(img, rawUrl) {
+      if (!img || !rawUrl) return;
+      const step = Number(img.dataset.errStep || '0');
+      if (step === 0) {
+        img.dataset.errStep = '1';
+        img.src = 'https://wsrv.nl/?url=' + encodeURIComponent(rawUrl) + '&w=1000&output=jpg';
+      } else if (step === 1) {
+        img.dataset.errStep = '2';
+        img.src = 'https://images.weserv.nl/?url=' + encodeURIComponent(rawUrl) + '&w=1000&output=jpg';
+      } else {
+        img.onerror = null;
+        img.src = window.DEFAULT_LOGO_SVG;
+      }
+    };
+  </script>
   <style>
     :root {
       --bg-cream: #f4eee2;
@@ -60,6 +120,16 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+    /* Clases compatibles tanto con Tailwind v3 CDN (GitHub Pages) como Tailwind v4 */
+    .header-glass {
+      background-color: rgba(255, 253, 248, 0.94);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+    .award-progress-bar {
+      background-color: rgba(184, 146, 66, 0.22);
+    }
+
     @keyframes fadeSlideUp {
       from { opacity: 0; transform: translate3d(0, 10px, 0); }
       to { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -73,22 +143,28 @@
       45% { transform: scale3d(1.26, 1.26, 1); }
       100% { transform: scale3d(1, 1, 1); }
     }
+    @keyframes doubleTapHeartBurst {
+      0% { opacity: 0; transform: scale3d(0.4, 0.4, 1); }
+      30% { opacity: 1; transform: scale3d(1.25, 1.25, 1); }
+      75% { opacity: 1; transform: scale3d(1, 1, 1); }
+      100% { opacity: 0; transform: scale3d(1.4, 1.4, 1); }
+    }
 
+    /* Usamos backwards en vez de both/forwards para no bloquear :hover transform en GitHub Pages */
     .anim-section {
-      animation: fadeSlideUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
-      will-change: transform, opacity;
+      animation: fadeSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
     }
     .anim-card {
-      animation: fadeSlideUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
-      animation-delay: calc(min(var(--i, 0), 8) * 25ms);
-      transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), border-color 160ms ease;
-      will-change: transform, opacity;
+      animation: fadeSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+      animation-delay: calc(var(--i, 0) * 22ms);
+      transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease, box-shadow 180ms ease;
     }
     .anim-card:hover {
       transform: translate3d(0, -3px, 0);
+      box-shadow: 0 10px 24px -10px rgba(67, 16, 25, 0.16);
     }
     .anim-modal {
-      animation: modalZoomIn 170ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: modalZoomIn 180ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
     }
     .btn-interactive {
       transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease, border-color 160ms ease, opacity 160ms ease;
@@ -102,12 +178,15 @@
     .like-pop {
       animation: heartPop 220ms cubic-bezier(0.16, 1, 0.3, 1);
     }
+    .double-tap-heart {
+      animation: doubleTapHeartBurst 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col pb-16 md:pb-0">
 
   <!-- TOP BAR (3-Zone Contract) -->
-  <header class="sticky top-0 z-30 h-16 bg-[var(--card-bg)]/95 backdrop-blur-sm border-b border-[var(--border-color)] px-4 lg:px-8 flex items-center justify-between gap-4">
+  <header class="sticky top-0 z-30 h-16 header-glass border-b border-[var(--border-color)] px-4 lg:px-8 flex items-center justify-between gap-4">
     <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="font-display text-lg md:text-xl font-bold tracking-tight text-[var(--wine-main)] whitespace-nowrap shrink-0">
       Estrella de la Mañana ’26
     </a>
@@ -144,7 +223,7 @@
         <div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]">
           <div class="flex items-center gap-3">
             <div class="w-12 h-12 rounded-xl bg-white border border-[var(--gold-main)] p-1 flex items-center justify-center shrink-0">
-              <img src="logo.png" onerror="this.onerror=null; this.src=window.DEFAULT_LOGO_SVG || '';" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
+              <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
             </div>
             <div>
               <div class="text-xs font-extrabold text-[var(--wine-main)]">Estrella ’26</div>
@@ -224,7 +303,7 @@
       <section id="seccion-inicio" class="page-section anim-section space-y-8">
         <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
           <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2.5 flex items-center justify-center shrink-0">
-            <img src="logo.png" onerror="this.onerror=null; this.src=window.DEFAULT_LOGO_SVG || '';" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
+            <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
           </div>
           <div class="flex-1 text-center md:text-left space-y-3">
             <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs text-[var(--text-muted)]">
@@ -245,8 +324,11 @@
               <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
                 Explorar Galería
               </button>
-              <button type="button" onclick="cambiarSeccion('premios')" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
-                Premios EDM
+              <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
+                ✨ Recuerdo al Azar
+              </button>
+              <button type="button" onclick="iniciarModoPresentacion()" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--wine-dark)] text-[var(--gold-bright)] text-xs font-semibold cursor-pointer whitespace-nowrap">
+                ▶ Modo Presentación
               </button>
             </div>
           </div>
@@ -378,8 +460,14 @@
             <h2 class="text-base font-bold text-[var(--wine-main)]">Añadir integrante al mural de la promoción</h2>
             <p class="text-xs text-[var(--text-muted)]">Completa los datos del compañero(a) y selecciona su foto para publicarla</p>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <input id="memberNameInput" type="text" maxlength="50" placeholder="Nombre completo (obligatorio)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+            <select id="memberRoleInput" class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs font-semibold text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)] cursor-pointer">
+              <option value="Integrante">Rol: Integrante Promo ’26</option>
+              <option value="Directiva">Rol: Junta Directiva</option>
+              <option value="Tutor">Rol: Tutor(a) / Profesor(a)</option>
+              <option value="Padrino">Rol: Padrino / Madrina</option>
+            </select>
             <input id="memberApodoInput" type="text" maxlength="40" placeholder="Apodo o cargo (ej. El delegado)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
             <input id="memberFraseInput" type="text" maxlength="120" placeholder="Frase célebre o dedicatoria..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
           </div>
@@ -389,6 +477,14 @@
             </button>
             <input id="memberFileInput" type="file" accept="image/*" class="hidden" onchange="subirFotoMiembro(event)" />
           </div>
+        </div>
+
+        <div id="memberRoleFilterBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+          <button type="button" onclick="setRolMiembroFiltro('Todos', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white border-[var(--wine-main)]">Todos los Roles</button>
+          <button type="button" onclick="setRolMiembroFiltro('Integrante', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]">Integrantes</button>
+          <button type="button" onclick="setRolMiembroFiltro('Directiva', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]">★ Junta Directiva</button>
+          <button type="button" onclick="setRolMiembroFiltro('Tutor', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]">★ Tutores & Profesores</button>
+          <button type="button" onclick="setRolMiembroFiltro('Padrino', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]">★ Padrinos</button>
         </div>
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -412,11 +508,11 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div class="lg:col-span-7 rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-5 flex flex-col justify-between gap-4">
             <div>
-              <h2 class="text-base font-bold text-[var(--wine-main)]">Sube fotos o videos al mural por álbum</h2>
-              <p class="text-xs text-[var(--text-muted)] mt-0.5">Compresión inteligente activa para subir fotos pesadas en segundos.</p>
+              <h2 class="text-base font-bold text-[var(--wine-main)]">Sube una o varias fotos y videos por álbum</h2>
+              <p class="text-xs text-[var(--text-muted)] mt-0.5">Puedes seleccionar varios archivos a la vez. Compresión inteligente activa.</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
-              <input type="text" id="customFileName" placeholder="Título del recuerdo..." class="sm:col-span-5 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+              <input type="text" id="customFileName" placeholder="Título opcional (o automático)..." class="sm:col-span-5 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
               <select id="uploadAlbumSelect" class="sm:col-span-3 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2.5 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer">
                 <option value="General">Álbum: General</option>
                 <option value="Jornada">Álbum: Jornada</option>
@@ -426,17 +522,45 @@
                 <option value="Viaje">Álbum: Viaje</option>
               </select>
               <button type="button" id="btnUploadMedia" onclick="document.getElementById('fileInput').click()" class="btn-interactive sm:col-span-4 px-4 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
-                Elegir archivo
+                Elegir archivos
               </button>
-              <input type="file" id="fileInput" accept="image/*,video/*" class="hidden" onchange="subirArchivo(event)" />
+              <input type="file" id="fileInput" accept="image/*,video/*" multiple class="hidden" onchange="subirArchivo(event)" />
+            </div>
+            <div class="pt-1 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-2">
+              <span class="text-[11px] text-[var(--text-muted)]">¿Video gigante de más de 20 MB (100 MB, 1 GB)? Súbelo por Drive o YouTube:</span>
+              <button type="button" onclick="document.getElementById('externalVideoBox').classList.toggle('hidden')" class="text-xs font-bold text-[var(--wine-main)] hover:underline cursor-pointer">
+                + Pegar enlace de Google Drive / YouTube
+              </button>
+            </div>
+            <div id="externalVideoBox" class="hidden p-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] space-y-2">
+              <p class="text-[11px] text-[var(--text-muted)]">
+                Pega un enlace público de <strong>Google Drive</strong> (Cualquier persona con el enlace), <strong>YouTube</strong> o un link <code>.mp4</code> directo. Se reproducirá dentro de esta página sin límite de megas y sin instalar nada:
+              </p>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input id="externalVideoUrlInput" type="url" placeholder="https://drive.google.com/file/d/... o YouTube..." class="flex-1 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+                <button type="button" onclick="publicarVideoPorEnlace()" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer whitespace-nowrap">
+                  Publicar Video en Galería
+                </button>
+              </div>
+            </div>
+            <div id="uploadProgressBox" class="hidden space-y-1.5 pt-1">
+              <div class="flex items-center justify-between text-xs font-semibold text-[var(--wine-main)]">
+                <span id="uploadProgressText">Subiendo 1 de 1...</span>
+                <span id="uploadProgressPct" class="font-mono-num">0%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-[var(--bg-cream)] overflow-hidden border border-[var(--border-color)]">
+                <div id="uploadProgressBar" class="h-full bg-[var(--wine-main)] transition-all duration-300" style="width: 0%"></div>
+              </div>
             </div>
           </div>
 
-          <div class="lg:col-span-5 rounded-2xl bg-[var(--wine-dark)] border border-[var(--gold-main)] p-5 text-white flex flex-col justify-between gap-4">
+          <div class="lg:col-span-5 rounded-2xl bg-[var(--wine-dark)] border border-[var(--gold-main)] p-5 text-white flex flex-col justify-between gap-3">
             <div class="space-y-1.5">
-              <div class="text-xs font-semibold text-[var(--gold-bright)]">Bot Oficial de Telegram</div>
-              <h3 class="text-base font-bold text-white">¿Tienes videos largos o pesados?</h3>
-              <p class="text-xs text-white/80 leading-relaxed">Envíalos directamente al bot de Telegram de la promoción para sincronizarlos automáticamente.</p>
+              <div class="text-xs font-semibold text-[var(--gold-bright)]">Bot Oficial · @PromedmBot</div>
+              <h3 class="text-base font-bold text-white">Subida rápida por Telegram (Hasta 20 MB)</h3>
+              <p class="text-xs text-white/80 leading-relaxed">
+                Tus compañeros <strong>NO necesitan tener Telegram para ver la galería</strong>. Si alguien envía un video al bot, debe pesar <strong>menos de 20 MB</strong> (eligiendo calidad <strong>720p o 480p</strong> en Telegram) para que se reproduzca directo en la web. Para videos de más de 20 MB usa el botón de <strong>Google Drive / YouTube</strong> de al lado.
+              </p>
             </div>
             <a href="https://t.me/promedmbot" target="_blank" rel="noopener noreferrer" class="btn-interactive w-full py-2.5 px-4 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 whitespace-nowrap">
               Abrir @promedmbot ↗
@@ -449,6 +573,12 @@
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           <input type="text" id="searchInput" oninput="renderGaleria()" placeholder="Buscar recuerdo por título, álbum o dedicatoria..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
           <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--gold-main)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
+              ✨ Al Azar
+            </button>
+            <button type="button" onclick="iniciarModoPresentacion()" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-dark)] border border-[var(--gold-main)] text-[var(--gold-bright)] text-xs font-semibold cursor-pointer whitespace-nowrap">
+              ▶ Presentación
+            </button>
             <div class="flex items-center p-1 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)]">
               <button onclick="setFiltro('todos', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer">Todos</button>
               <button onclick="setFiltro('image', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Fotos</button>
@@ -485,6 +615,19 @@
             <input id="newCatDesc" type="text" maxlength="90" placeholder="Descripción breve..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
             <button onclick="crearCategoriaPremio()" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar Categoría</button>
           </div>
+        </div>
+
+        <div id="awardsPodium" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs font-semibold text-[var(--gold-main)]">Cuadro de Honor en Vivo</div>
+              <h2 class="text-base font-bold text-[var(--wine-main)]">Ganadores Actuales del Salón</h2>
+            </div>
+            <button type="button" onclick="lanzarConfetiDorado()" class="btn-interactive px-3 py-1.5 rounded-xl border border-[var(--gold-main)] text-xs font-semibold text-[var(--wine-main)] cursor-pointer">
+              🎉 Celebrar
+            </button>
+          </div>
+          <div id="awardsPodiumGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
         </div>
 
         <div id="awardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
@@ -595,10 +738,58 @@
     Promoción Estrella de la Mañana 2026 (EDM) · Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial
   </footer>
 
-  <!-- MODAL LIGHTBOX -->
-  <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
-    <button onclick="cerrarModal(event, true)" class="btn-interactive absolute top-4 right-4 w-10 h-10 rounded-full bg-[var(--wine-main)] text-white text-lg font-bold flex items-center justify-center cursor-pointer z-10">✕</button>
-    <div id="modalBody" class="anim-modal max-w-4xl max-h-[85vh] rounded-2xl overflow-hidden"></div>
+  <!-- BARRA DE NAVEGACIÓN INFERIOR NATIVA EN CELULARES (Mejora #1) -->
+  <nav id="mobileBottomNav" aria-label="Navegación móvil rápida" class="md:hidden fixed bottom-0 inset-x-0 z-30 h-16 header-glass border-t border-[var(--border-color)] px-2 flex items-center justify-around">
+    <button type="button" data-mob="inicio" onclick="cambiarSeccion('inicio')" class="mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-bold text-[var(--wine-main)] cursor-pointer">
+      <span class="text-base leading-none mb-0.5">⌂</span>
+      <span>Inicio</span>
+    </button>
+    <button type="button" data-mob="miembros" onclick="cambiarSeccion('miembros')" class="mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
+      <span class="text-base leading-none mb-0.5">★</span>
+      <span>Anuario</span>
+    </button>
+    <button type="button" onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive -mt-4 px-4 py-2.5 rounded-2xl bg-[var(--wine-main)] text-white border-2 border-[var(--gold-bright)] shadow-md text-xs font-bold flex items-center gap-1 cursor-pointer">
+      <span>+ Subir</span>
+    </button>
+    <button type="button" data-mob="galeria" onclick="cambiarSeccion('galeria')" class="mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
+      <span class="text-base leading-none mb-0.5">▣</span>
+      <span>Galería</span>
+    </button>
+    <button type="button" data-mob="premios" onclick="cambiarSeccion('premios')" class="mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
+      <span class="text-base leading-none mb-0.5">♛</span>
+      <span>Premios</span>
+    </button>
+  </nav>
+
+  <!-- MODAL LIGHTBOX CINEMATOGRÁFICO + MODO PRESENTACIÓN -->
+  <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-3 sm:p-6 select-none">
+    <!-- Barra superior del visor -->
+    <div class="w-full max-w-5xl flex items-center justify-between gap-3 pb-3 z-10" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span id="modalCounter" class="px-2.5 py-1 rounded-lg bg-white/10 text-white text-xs font-mono-num font-semibold shrink-0">1 / 1</span>
+        <div class="min-w-0">
+          <div id="modalTitle" class="text-sm sm:text-base font-bold text-white truncate">Recuerdo de la Promo</div>
+          <div id="modalSubtitle" class="text-[11px] text-[var(--gold-bright)] truncate">#General</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button id="btnSlideshowToggle" type="button" onclick="toggleSlideshow(event)" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
+          <span>▶ Presentación</span>
+        </button>
+        <button type="button" onclick="cerrarModal(event, true)" class="btn-interactive w-9 h-9 rounded-full bg-white/15 hover:bg-[var(--wine-main)] text-white text-base font-bold flex items-center justify-center cursor-pointer">✕</button>
+      </div>
+    </div>
+
+    <!-- Contenedor central con flechas de navegación -->
+    <div class="relative w-full max-w-5xl flex-1 flex items-center justify-center min-h-0">
+      <button id="modalPrevBtn" type="button" onclick="navegarModal(-1, event)" aria-label="Anterior" class="btn-interactive absolute left-1 sm:left-3 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-[var(--wine-main)] border border-white/20 text-white text-lg font-bold flex items-center justify-center cursor-pointer">
+        ←
+      </button>
+      <div id="modalBody" onclick="event.stopPropagation()" class="anim-modal max-w-4xl max-h-[78vh] rounded-2xl overflow-hidden flex items-center justify-center"></div>
+      <button id="modalNextBtn" type="button" onclick="navegarModal(1, event)" aria-label="Siguiente" class="btn-interactive absolute right-1 sm:right-3 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-[var(--wine-main)] border border-white/20 text-white text-lg font-bold flex items-center justify-center cursor-pointer">
+        →
+      </button>
+    </div>
   </div>
 
   <!-- MODAL DE CONTRASEÑA ADMIN / EDICIÓN (Reemplaza window.prompt para no fallar en iframes/móviles) -->
@@ -650,6 +841,11 @@
     const ALBUM_OPTIONS = ['Todos', 'General', 'Jornada', 'Semana Santa', '15 Años', 'Fiesta', 'Viaje'];
     let albumActual = 'Todos';
     let filtroActual = 'todos';
+    let rolMiembroActual = 'Todos';
+    let modalListaActual = [];
+    let modalIndiceActual = -1;
+    let slideshowActivo = false;
+    let slideshowTimer = null;
 
     const DEFAULT_AWARDS = [
       { id: 'cat-fiesta', title: 'El Alma de la Fiesta', description: 'Quien nunca falta en la pista y prende todas las reuniones de la promo.', nominees: [] },
@@ -658,7 +854,20 @@
       { id: 'cat-dupla', title: 'La Mejor Dupla EDM ’26', description: 'Los inseparables del salón en trabajos, recreos y salidas.', nominees: [] }
     ];
 
+    const RESCUED_HEAVY_VIDEOS_MAP = {
+      'tg_msg_147': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_108.mp4',
+      'tg_msg_146': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_109.mp4',
+      'tg_msg_145': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_110.mp4',
+      'tg_msg_140': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_111.mp4'
+    };
+
     const BASE_CLOUD_ITEMS = [
+      {"id":"tg_msg_147","tgMessageId":147,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_108.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:55:21.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_146","tgMessageId":146,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_109.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T00:51:43.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_145","tgMessageId":145,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_110.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T00:48:12.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_142","tgMessageId":142,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_91.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:22:25.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_140","tgMessageId":140,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_111.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:19:05.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_139","tgMessageId":139,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_90.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:17:39.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_msg_138","tgMessageId":138,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_87.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:12:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
       {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_89.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_89.mp4","name":"Video Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:08:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_file_86","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_86.mp4","name":"Video desde Telegram","type":"video/mp4","album":"General","date":"2026-09-29T23:31:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
@@ -764,7 +973,19 @@
         const data = JSON.parse(raw);
         if (!data || typeof data !== 'object') return false;
         if (Array.isArray(data.deletedIds)) data.deletedIds.forEach(id => deletedIds.add(String(id)));
-        if (Array.isArray(data.items)) items = data.items.filter(i => !deletedIds.has(obtenerIdItem(i)));
+        Object.keys(RESCUED_HEAVY_VIDEOS_MAP).forEach(k => deletedIds.delete(k));
+        if (Array.isArray(data.items)) {
+          items = data.items.map(i => {
+            if (i && RESCUED_HEAVY_VIDEOS_MAP[i.id]) {
+              i.url = RESCUED_HEAVY_VIDEOS_MAP[i.id];
+              i.type = 'video/mp4';
+              delete i.isHeavyVideo;
+              delete i.embedPost;
+              delete i.thumbUrl;
+            }
+            return i;
+          }).filter(i => i && !i.isHeavyVideo && !deletedIds.has(obtenerIdItem(i)));
+        }
         if (Array.isArray(data.tweets)) tweets = data.tweets.filter(t => !deletedIds.has(t.id));
         if (Array.isArray(data.members)) members = data.members.filter(m => !deletedIds.has(m.id));
         if (Array.isArray(data.awards) && data.awards.length > 0) awards = data.awards.filter(a => !deletedIds.has(a.id));
@@ -938,25 +1159,32 @@
         : esItemUnicoMake
           ? [record]
           : (record.items || []);
+      Object.keys(RESCUED_HEAVY_VIDEOS_MAP).forEach(id => deletedIds.delete(id));
+
       const cloudItems = rawItems.map(i => {
         const itemId = i.id || i.url || ('item_' + Math.random().toString(36).substring(2, 8));
-        if (String(itemId).startsWith('tg_msg_') && !deletedIds.has(String(itemId)) && i.url) {
-          deletedIds.delete(String(i.url));
+        const rescuedMp4 = RESCUED_HEAVY_VIDEOS_MAP[itemId];
+        const finalUrl = rescuedMp4 || i.url || '';
+        if (String(itemId).startsWith('tg_msg_') && !deletedIds.has(String(itemId)) && finalUrl) {
+          deletedIds.delete(String(finalUrl));
         }
         return {
           id: itemId,
           tgMessageId: i.tgMessageId,
-          url: i.url || '',
+          fileId: i.fileId || '',
+          externalEmbedUrl: i.externalEmbedUrl || '',
+          isHeavyVideo: rescuedMp4 ? false : Boolean(i.isHeavyVideo),
+          url: finalUrl,
           name: i.name || 'Recuerdo de la Promo',
-          type: i.type || (String(i.url || '').match(/\.(mp4|mov|webm)$/i) ? 'video/mp4' : 'image/jpeg'),
+          type: rescuedMp4 ? 'video/mp4' : (i.type || (String(finalUrl).match(/\.(mp4|mov|webm)$/i) || i.externalEmbedUrl ? 'video/mp4' : 'image/jpeg')),
           album: inferirAlbum(i),
           date: i.date || new Date().toISOString(),
-          updatedAt: i.updatedAt || Date.now(),
+          updatedAt: rescuedMp4 ? Math.max(Number(i.updatedAt || 0), 1790732500000) : (i.updatedAt || Date.now()),
           likes: typeof i.likes === 'number' ? i.likes : 0,
           likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
           comments: Array.isArray(i.comments) ? i.comments.filter(c => !deletedIds.has(c.id)) : []
         };
-      }).filter(i => i.url && !deletedIds.has(obtenerIdItem(i)));
+      }).filter(i => i.url && !i.isHeavyVideo && !deletedIds.has(obtenerIdItem(i)));
 
       const cloudTweets = (Array.isArray(record.tweets) ? record.tweets : []).map(t => ({
         id: t.id || 'tw_' + Math.random().toString(36).substring(2, 8),
@@ -972,6 +1200,7 @@
       const cloudMembers = (Array.isArray(record.members) ? record.members : []).map(m => ({
         id: m.id || 'mem_' + Math.random().toString(36).substring(2, 8),
         name: m.name || 'Integrante Promo ’26',
+        role: m.role || 'Integrante',
         apodo: m.apodo || '',
         frase: m.frase || '',
         photoUrl: m.photoUrl || '',
@@ -1087,17 +1316,97 @@
       }
     }
 
+    /* Convertidor de enlaces de Google Drive / YouTube para reproducir videos gigantes (>20MB hasta 2GB+) dentro de la web */
+    function convertirEnlaceVideoExterno(rawUrl) {
+      const u = String(rawUrl || '').trim();
+      if (!u) return null;
+
+      // Google Drive: https://drive.google.com/file/d/ID/view...
+      const driveMatch = u.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i) || u.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i);
+      if (driveMatch && driveMatch[1]) {
+        return {
+          embedUrl: `https://drive.google.com/file/d/${driveMatch[1]}/preview`,
+          thumbUrl: `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800`,
+          provider: 'Google Drive'
+        };
+      }
+
+      // YouTube: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/shorts/ID
+      const ytMatch = u.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+      if (ytMatch && ytMatch[1]) {
+        return {
+          embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`,
+          thumbUrl: `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`,
+          provider: 'YouTube'
+        };
+      }
+
+      // Enlace directo .mp4 / .webm / .mov
+      if (u.match(/\.(mp4|webm|mov)(\?.*)?$/i)) {
+        return {
+          directMp4: u,
+          provider: 'MP4 Directo'
+        };
+      }
+
+      return null;
+    }
+
+    async function publicarVideoPorEnlace() {
+      const inp = document.getElementById('externalVideoUrlInput');
+      const rawUrl = (inp?.value || '').trim();
+      if (!rawUrl) return mostrarToast('Pega primero el enlace de Google Drive o YouTube');
+
+      const info = convertirEnlaceVideoExterno(rawUrl);
+      if (!info) {
+        return mostrarToast('Enlace no reconocido. Usa un link de Google Drive, YouTube o .mp4');
+      }
+
+      const customName = document.getElementById('customFileName').value.trim() || `Video (${info.provider})`;
+      const albumElegido = document.getElementById('uploadAlbumSelect').value || 'General';
+
+      items.unshift({
+        id: 'ext_' + Math.random().toString(36).substring(2, 9),
+        url: info.directMp4 || info.thumbUrl || window.DEFAULT_LOGO_SVG,
+        externalEmbedUrl: info.embedUrl || '',
+        name: customName,
+        type: 'video/mp4',
+        album: albumElegido,
+        date: new Date().toISOString(),
+        updatedAt: Date.now(),
+        likes: 0,
+        likedBy: [],
+        comments: []
+      });
+
+      inp.value = '';
+      document.getElementById('customFileName').value = '';
+      document.getElementById('externalVideoBox').classList.add('hidden');
+      renderGaleria();
+      renderCarrusel();
+      lanzarConfetiDorado();
+      await sincronizarNube();
+      mostrarToast(`Video de ${info.provider} publicado en #${albumElegido}`);
+    }
+
     async function sincronizarBotTelegramDirecto() {
       try {
-        let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=30`);
+        // Limpiamos cualquier item viejo con isHeavyVideo que haya quedado en memoria local
+        items = items.filter(i => !i.isHeavyVideo);
+
+        let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=40`);
         if (res.status === 409) {
-          // Si hay un webhook de Make con error reteniendo el bot, lo liberamos automáticamente
           await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/deleteWebhook`);
-          res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=30`);
+          res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=40`);
         }
         if (!res.ok) return false;
         const data = await res.json();
         if (!data.ok || !Array.isArray(data.result) || data.result.length === 0) return false;
+
+        let notifiedMsgs = new Set();
+        try {
+          notifiedMsgs = new Set(JSON.parse(localStorage.getItem('prom_tg_notified_msgs') || '[]'));
+        } catch (e) {}
 
         let huboNuevos = false;
         for (const upd of data.result) {
@@ -1111,26 +1420,51 @@
           const esFoto = Boolean(msg.photo && msg.photo.length > 0);
           if (!esVideo && !esFoto) continue;
 
-          const fileId = esVideo
-            ? (msg.video ? msg.video.file_id : msg.document.file_id)
-            : msg.photo[msg.photo.length - 1].file_id;
+          const mediaObj = esVideo ? (msg.video || msg.document) : msg.photo[msg.photo.length - 1];
+          const fileId = mediaObj?.file_id;
+          const fileSize = Number(mediaObj?.file_size || 0);
+          const senderName = msg.from?.first_name || 'Compañero(a)';
 
           if (!fileId || deletedIds.has(fileId)) continue;
 
+          // Si el video pesa más de 20 MB, Telegram bloquea el .mp4 web directo. Avisamos al compañero en Telegram para que lo envíe en 720p/480p (<20MB) y no metemos el cuadro de instalar Telegram en la web.
+          if (esVideo && fileSize > 20 * 1024 * 1024) {
+            const mbStr = (fileSize / (1024 * 1024)).toFixed(1);
+            if (!notifiedMsgs.has(msg.message_id) && msg.chat?.id) {
+              notifiedMsgs.add(msg.message_id);
+              try {
+                localStorage.setItem('prom_tg_notified_msgs', JSON.stringify(Array.from(notifiedMsgs).slice(-100)));
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    chat_id: msg.chat.id,
+                    reply_to_message_id: msg.message_id,
+                    text: `⚠️ ¡Hola ${senderName}! Tu video pesa ${mbStr} MB.\n\nPara que tus compañeros puedan verlo directo en la página web SIN tener que instalar Telegram, el video debe pesar menos de 20 MB.\n\n💡 Por favor vuelve a enviarlo aquí eligiendo calidad 720p o 480p (el botón de calidad abajo al adjuntar el video) para que se publique al instante en la web.`
+                  })
+                }).catch(() => {});
+              } catch (e) {}
+            }
+            continue;
+          }
+
           const fileRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
-          if (!fileRes.ok) continue;
-          const fileData = await fileRes.json();
-          if (!fileData.ok || !fileData.result?.file_path) continue;
+          const fileData = await fileRes.json().catch(() => ({}));
+          if (!fileRes.ok || !fileData.ok || !fileData.result?.file_path) continue;
 
           const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
-          // Si el usuario volvió a enviar en un mensaje nuevo un archivo que antes había borrado, permitimos el nuevo mensaje
           deletedIds.delete(fileUrl);
-          if (items.some(i => i.id === tgItemId)) continue;
+          if (items.some(i => i.id === tgItemId || i.url === fileUrl)) continue;
 
-          const caption = (msg.caption || '').trim() || (esVideo ? 'Video de la Promo' : 'Foto de la Promo');
+          const defaultTitle = senderName && senderName !== 'Botedm2026'
+            ? `${esVideo ? 'Video' : 'Foto'} de ${senderName}`
+            : (esVideo ? 'Video de la Promo' : 'Foto de la Promo');
+          const caption = (msg.caption || '').trim() || defaultTitle;
+
           items.unshift({
             id: tgItemId,
             tgMessageId: msg.message_id,
+            fileId,
             url: fileUrl,
             name: caption,
             type: esVideo ? 'video/mp4' : 'image/jpeg',
@@ -1374,11 +1708,12 @@
     }
 
     function actualizarLogosYTextosTema(esAzul) {
+      window.DEFAULT_LOGO_SVG = esAzul ? window.DEFAULT_LOGO_AZUL_SVG : window.DEFAULT_LOGO_VINO_SVG;
       const nuevoSrc = esAzul ? 'logo2.png' : 'logo.png';
       document.querySelectorAll('.logo-dinamico').forEach(img => {
+        img.dataset.fallbackStep = '0';
         img.onerror = function () {
-          this.onerror = null;
-          this.src = window.DEFAULT_LOGO_SVG || '';
+          window.manejarErrorLogo(this);
         };
         img.src = nuevoSrc;
       });
@@ -1422,6 +1757,14 @@
           btn.className = 'side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white';
         } else {
           btn.className = 'side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]';
+        }
+      });
+
+      document.querySelectorAll('.mob-link').forEach(btn => {
+        if (btn.dataset.mob === seccionId) {
+          btn.className = 'mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-bold text-[var(--wine-main)] cursor-pointer';
+        } else {
+          btn.className = 'mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer';
         }
       });
 
@@ -1557,6 +1900,7 @@
       if (!rawFile) return;
 
       const name = document.getElementById('memberNameInput').value.trim() || 'Integrante Promo ’26';
+      const role = document.getElementById('memberRoleInput')?.value || 'Integrante';
       const apodo = document.getElementById('memberApodoInput').value.trim();
       const frase = document.getElementById('memberFraseInput').value.trim();
 
@@ -1587,6 +1931,7 @@
         members.unshift({
           id: 'mem_' + Math.random().toString(36).substring(2, 9),
           name,
+          role,
           apodo,
           frase,
           photoUrl,
@@ -1597,11 +1942,13 @@
         });
 
         document.getElementById('memberNameInput').value = '';
+        if (document.getElementById('memberRoleInput')) document.getElementById('memberRoleInput').value = 'Integrante';
         document.getElementById('memberApodoInput').value = '';
         document.getElementById('memberFraseInput').value = '';
         event.target.value = '';
 
         renderMiembros();
+        lanzarConfetiDorado();
         await sincronizarNube();
         mostrarToast(`${name} fue añadido al Mural de Integrantes`);
       } catch (err) {
@@ -1613,16 +1960,38 @@
       }
     }
 
+    function setRolMiembroFiltro(rol, btn) {
+      rolMiembroActual = rol;
+      document.querySelectorAll('.role-filter-btn').forEach(b => {
+        b.className = 'role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]';
+      });
+      if (btn) {
+        btn.className = 'role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white border-[var(--wine-main)]';
+      }
+      renderMiembros();
+    }
+
+    function obtenerEtiquetaRol(rol) {
+      if (rol === 'Directiva') return '★ Junta Directiva';
+      if (rol === 'Tutor') return '★ Tutor(a) / Docente';
+      if (rol === 'Padrino') return '★ Padrino / Madrina';
+      return 'Integrante Promo ’26';
+    }
+
     function renderMiembros() {
       const grid = document.getElementById('miembrosGrid');
       const query = (document.getElementById('memberSearchInput')?.value || '').toLowerCase().trim();
 
-      const filtrados = members.filter(m =>
-        !query ||
-        m.name.toLowerCase().includes(query) ||
-        (m.apodo || '').toLowerCase().includes(query) ||
-        (m.frase || '').toLowerCase().includes(query)
-      );
+      const filtrados = members.filter(m => {
+        const mRole = m.role || 'Integrante';
+        const cumpleRol = rolMiembroActual === 'Todos' || mRole === rolMiembroActual;
+        const cumpleQuery = !query ||
+          m.name.toLowerCase().includes(query) ||
+          (m.apodo || '').toLowerCase().includes(query) ||
+          (m.frase || '').toLowerCase().includes(query) ||
+          obtenerEtiquetaRol(mRole).toLowerCase().includes(query);
+        return cumpleRol && cumpleQuery;
+      });
 
       document.getElementById('memberCountLabel').innerText = `Mostrando ${filtrados.length} de ${members.length} integrantes`;
 
@@ -1630,30 +1999,41 @@
         grid.innerHTML = `
           <div class="col-span-full rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-12 text-center space-y-2">
             <div class="text-sm font-bold text-[var(--text-dark)]">Aún no hay integrantes registrados con ese filtro</div>
-            <p class="text-xs text-[var(--text-muted)]">Usa el formulario superior para añadir a los miembros de la Promoción 2026.</p>
+            <p class="text-xs text-[var(--text-muted)]">Usa el formulario superior para añadir a los miembros, tutores o padrinos de la Promoción 2026.</p>
           </div>`;
         return;
       }
 
       grid.innerHTML = filtrados.map((m, idx) => {
         const dioLike = (m.likedBy || []).includes(userId);
+        const mRole = m.role || 'Integrante';
+        const esDistinguido = mRole !== 'Integrante';
         const safeName = (m.name || '').replace(/'/g, "\\'");
-        const safeSub = (m.frase || m.apodo || 'Promoción EDM ’26').replace(/'/g, "\\'");
+        const safeSub = (m.frase || m.apodo || obtenerEtiquetaRol(mRole)).replace(/'/g, "\\'");
         return `
-          <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col">
-            <div onclick="abrirModal('${m.photoUrl}', 'image/jpeg')" class="w-full h-64 bg-[#181214] overflow-hidden cursor-pointer group">
-              <img src="${m.photoUrl}" alt="${m.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
+          <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border ${esDistinguido ? 'border-2 border-[var(--gold-main)]' : 'border-[var(--border-color)]'} overflow-hidden flex flex-col">
+            <div onclick="abrirModal('${m.photoUrl}', 'image/jpeg', '${safeName}', '${obtenerEtiquetaRol(mRole)}')" class="w-full h-64 bg-[#181214] overflow-hidden cursor-pointer relative group">
+              <img src="${m.photoUrl}" alt="${m.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${m.photoUrl}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold ${esDistinguido ? 'bg-[var(--gold-bright)] text-[var(--wine-dark)]' : 'bg-black/70 text-white'}">
+                ${obtenerEtiquetaRol(mRole)}
+              </span>
             </div>
             <div class="p-4 flex-1 flex flex-col justify-between gap-3">
               <div class="space-y-1">
                 <h3 class="text-base font-bold text-[var(--wine-main)] truncate">${m.name}</h3>
                 <div class="text-xs font-semibold text-[var(--gold-main)]">
-                  ${m.apodo || 'Integrante Promo ’26'} · EDM 2026
+                  ${m.apodo || obtenerEtiquetaRol(mRole)} · EDM 2026
                 </div>
                 ${m.frase ? `<p class="text-xs text-[var(--text-muted)] italic leading-relaxed pt-1">&ldquo;${m.frase}&rdquo;</p>` : ''}
               </div>
               <div id="edit-member-${m.id}" class="hidden space-y-2 pt-2 border-t border-[var(--border-color)]">
                 <input id="edit-name-${m.id}" type="text" value="${(m.name || '').replace(/"/g, '&quot;')}" placeholder="Nombre..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
+                <select id="edit-role-${m.id}" class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs font-semibold outline-none">
+                  <option value="Integrante" ${mRole === 'Integrante' ? 'selected' : ''}>Integrante Promo ’26</option>
+                  <option value="Directiva" ${mRole === 'Directiva' ? 'selected' : ''}>Junta Directiva</option>
+                  <option value="Tutor" ${mRole === 'Tutor' ? 'selected' : ''}>Tutor(a) / Profesor(a)</option>
+                  <option value="Padrino" ${mRole === 'Padrino' ? 'selected' : ''}>Padrino / Madrina</option>
+                </select>
                 <input id="edit-apodo-${m.id}" type="text" value="${(m.apodo || '').replace(/"/g, '&quot;')}" placeholder="Apodo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
                 <input id="edit-frase-${m.id}" type="text" value="${(m.frase || '').replace(/"/g, '&quot;')}" placeholder="Frase..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
                 <button onclick="guardarEdicionMiembro('${m.id}')" class="btn-interactive w-full py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar cambios</button>
@@ -1686,9 +2066,11 @@
       const m = members.find(x => x.id === memberId);
       if (!m) return;
       const nuevoNombre = document.getElementById(`edit-name-${memberId}`)?.value.trim();
+      const nuevoRol = document.getElementById(`edit-role-${memberId}`)?.value || 'Integrante';
       const nuevoApodo = document.getElementById(`edit-apodo-${memberId}`)?.value.trim();
       const nuevaFrase = document.getElementById(`edit-frase-${memberId}`)?.value.trim();
       if (nuevoNombre) m.name = nuevoNombre;
+      m.role = nuevoRol;
       m.apodo = nuevoApodo || '';
       m.frase = nuevaFrase || '';
       m.updatedAt = Date.now();
@@ -1760,64 +2142,112 @@
     }
 
     async function subirArchivo(event) {
-      const rawFile = event.target.files[0];
-      if (!rawFile) return;
+      const fileList = Array.from(event.target.files || []);
+      if (fileList.length === 0) return;
 
-      const customName = document.getElementById('customFileName').value.trim() || rawFile.name.replace(/\.[^/.]+$/, '');
+      const baseCustomName = document.getElementById('customFileName').value.trim();
       const albumElegido = document.getElementById('uploadAlbumSelect').value || 'General';
       const btn = document.getElementById('btnUploadMedia');
-      btn.disabled = true;
-      btn.innerText = 'Optimizando...';
+      const progBox = document.getElementById('uploadProgressBox');
+      const progText = document.getElementById('uploadProgressText');
+      const progPct = document.getElementById('uploadProgressPct');
+      const progBar = document.getElementById('uploadProgressBar');
 
-      const esVideo = rawFile.type.startsWith('video/');
-      const endpoint = esVideo ? 'sendVideo' : 'sendPhoto';
-      const fieldName = esVideo ? 'video' : 'photo';
+      btn.disabled = true;
+      if (progBox) progBox.classList.remove('hidden');
+
+      let subidosExito = 0;
 
       try {
-        const file = await comprimirImagenAntesDeSubir(rawFile);
-        const formData = new FormData();
-        formData.append('chat_id', CHAT_ID);
-        formData.append(fieldName, file);
+        for (let i = 0; i < fileList.length; i++) {
+          const rawFile = fileList[i];
+          const pctInicial = Math.round((i / fileList.length) * 100);
+          btn.innerText = `Subiendo ${i + 1}/${fileList.length}...`;
+          if (progText) progText.innerText = `Optimizando y subiendo archivo ${i + 1} de ${fileList.length}...`;
+          if (progPct) progPct.innerText = `${pctInicial}%`;
+          if (progBar) progBar.style.width = `${Math.max(8, pctInicial)}%`;
 
-        const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${endpoint}`, {
-          method: 'POST',
-          body: formData
-        });
-        const tgData = await tgRes.json();
-        if (!tgData.ok) throw new Error(tgData.description || 'Error en Telegram');
+          const itemTitle = baseCustomName
+            ? (fileList.length > 1 ? `${baseCustomName} (${i + 1})` : baseCustomName)
+            : rawFile.name.replace(/\.[^/.]+$/, '');
 
-        const fileId = esVideo ? tgData.result.video.file_id : tgData.result.photo[tgData.result.photo.length - 1].file_id;
-        const fileInfoRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
-        const fileInfoData = await fileInfoRes.json();
-        if (!fileInfoData.ok) throw new Error('Error al obtener enlace');
+          const esVideo = rawFile.type.startsWith('video/');
+          if (esVideo && rawFile.size > 20 * 1024 * 1024) {
+            const mb = (rawFile.size / (1024 * 1024)).toFixed(1);
+            mostrarToast(`El video pesa ${mb} MB (>20 MB). Pégalo por Google Drive o YouTube para reproducirlo en la web.`);
+            document.getElementById('externalVideoBox')?.classList.remove('hidden');
+            continue;
+          }
+          const endpoint = esVideo ? 'sendVideo' : 'sendPhoto';
+          const fieldName = esVideo ? 'video' : 'photo';
 
-        const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfoData.result.file_path}`;
+          try {
+            const file = await comprimirImagenAntesDeSubir(rawFile);
+            const formData = new FormData();
+            formData.append('chat_id', CHAT_ID);
+            formData.append(fieldName, file);
 
-        items.unshift({
-          id: 'item_' + Math.random().toString(36).substring(2, 9),
-          url: fileUrl,
-          name: customName,
-          type: esVideo ? 'video/mp4' : 'image/jpeg',
-          album: albumElegido,
-          date: new Date().toISOString(),
-          updatedAt: Date.now(),
-          likes: 0,
-          likedBy: [],
-          comments: []
-        });
+            const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${endpoint}`, {
+              method: 'POST',
+              body: formData
+            });
+            const tgData = await tgRes.json();
+            if (!tgData.ok) throw new Error(tgData.description || 'Error en Telegram');
+
+            const fileId = esVideo ? tgData.result.video.file_id : tgData.result.photo[tgData.result.photo.length - 1].file_id;
+            const fileInfoRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
+            const fileInfoData = await fileInfoRes.json().catch(() => ({}));
+
+            if (!fileInfoData.ok || !fileInfoData.result?.file_path) {
+              throw new Error('El video supera los 20 MB permitidos para reproducción directa');
+            }
+            const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfoData.result.file_path}`;
+
+            items.unshift({
+              id: 'item_' + Math.random().toString(36).substring(2, 9),
+              fileId,
+              url: fileUrl,
+              name: itemTitle,
+              type: esVideo ? 'video/mp4' : 'image/jpeg',
+              album: albumElegido,
+              date: new Date().toISOString(),
+              updatedAt: Date.now(),
+              likes: 0,
+              likedBy: [],
+              comments: []
+            });
+            subidosExito++;
+          } catch (singleErr) {
+            console.error('Error subiendo archivo individual:', singleErr);
+          }
+
+          const pctFinal = Math.round(((i + 1) / fileList.length) * 100);
+          if (progPct) progPct.innerText = `${pctFinal}%`;
+          if (progBar) progBar.style.width = `${pctFinal}%`;
+        }
 
         document.getElementById('customFileName').value = '';
         event.target.value = '';
         renderGaleria();
         renderCarrusel();
-        await sincronizarNube();
-        mostrarToast(`Recuerdo publicado en #${albumElegido}`);
-      } catch (err) {
-        console.error(err);
-        mostrarToast('Error al subir el archivo');
+        if (subidosExito > 0) {
+          lanzarConfetiDorado();
+          await sincronizarNube();
+          mostrarToast(
+            subidosExito === 1
+              ? `1 recuerdo publicado en #${albumElegido}`
+              : `${subidosExito} recuerdos publicados en #${albumElegido}`
+          );
+        } else {
+          mostrarToast('No se pudieron subir los archivos seleccionados');
+        }
       } finally {
         btn.disabled = false;
-        btn.innerText = 'Elegir archivo';
+        btn.innerText = 'Elegir archivos';
+        setTimeout(() => {
+          if (progBox) progBox.classList.add('hidden');
+          if (progBar) progBar.style.width = '0%';
+        }, 900);
       }
     }
 
@@ -1844,19 +2274,21 @@
         return;
       }
       container.classList.remove('hidden');
-      track.innerHTML = destacados.map(({ item }) => {
+      track.innerHTML = destacados.map(({ item, idx }) => {
         const esImagen = !item.type || item.type.startsWith('image/');
         return `
-          <div onclick="abrirModal('${item.url}', '${item.type}')" class="w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-[#181214]">
+          <div onclick="abrirModalPorIndice(${idx})" class="w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-[#181214] group">
             ${esImagen
-              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover" />`
-              : `<video src="${item.url}" muted playsinline preload="metadata" class="w-full h-full object-cover"></video>`}
+              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.04]" />`
+              : `<video data-src="${item.url}" muted playsinline preload="none" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
+                 <span class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/75 text-white text-[10px] font-bold">▶ Video</span>`}
             <div class="absolute inset-x-0 bottom-0 bg-black/80 px-2.5 py-1 text-[11px] text-white font-medium flex justify-between">
               <span class="truncate">${item.name}</span>
               <span class="font-mono-num text-[var(--gold-bright)]">♥ ${item.likes}</span>
             </div>
           </div>`;
       }).join('');
+      observarVideosGaleria();
     }
 
     function renderGaleria() {
@@ -1875,12 +2307,15 @@
       if (sort === 'populares') lista.sort((a, b) => (b.item.likes || 0) - (a.item.likes || 0));
       if (sort === 'comentados') lista.sort((a, b) => (b.item.comments?.length || 0) - (a.item.comments?.length || 0));
 
+      modalListaActual = lista.map(x => x.index);
+
       if (lista.length === 0) {
         galeria.innerHTML = `<div class="col-span-full rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-12 text-center text-xs text-[var(--text-muted)]">No se encontraron recuerdos en este álbum o vista.</div>`;
         return;
       }
 
       galeria.innerHTML = '';
+      const albumSelectOptions = ALBUM_OPTIONS.filter(a => a !== 'Todos');
       lista.forEach(({ item, index }, visualIdx) => {
         const esImagen = !item.type || item.type.startsWith('image/');
         const dioLike = (item.likedBy || []).includes(userId);
@@ -1893,10 +2328,23 @@
         card.style.setProperty('--i', visualIdx);
         card.className = 'anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] overflow-hidden flex flex-col';
         card.innerHTML = `
-          <div onclick="abrirModal('${item.url}', '${item.type}')" class="w-full h-52 bg-[#181214] overflow-hidden cursor-pointer relative group">
+          <div onclick="manejarToqueMediaGaleria(event, ${index})" class="w-full h-52 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
             ${esImagen
-              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />`
-              : `<video src="${item.url}" preload="metadata" muted playsinline class="w-full h-full object-cover"></video>`}
+              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />`
+              : item.externalEmbedUrl
+                ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src=window.DEFAULT_LOGO_SVG;" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
+                   <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                     <span class="w-11 h-11 rounded-full bg-black/75 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
+                   </div>
+                   <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/80 text-[var(--gold-bright)] text-[10px] font-bold tracking-wide">VIDEO HD</span>`
+                : `<video data-src="${item.url}" preload="none" muted loop playsinline onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
+                   <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                     <span class="w-11 h-11 rounded-full bg-black/70 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
+                   </div>
+                   <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/75 text-[var(--gold-bright)] text-[10px] font-bold tracking-wide">VIDEO</span>`}
+            <div id="heart-burst-${index}" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+              <span class="double-tap-heart text-5xl text-white drop-shadow-lg">♥</span>
+            </div>
           </div>
           <div class="p-4 flex-1 flex flex-col gap-3">
             <div>
@@ -1905,6 +2353,15 @@
                 <span class="text-xs font-semibold text-[var(--gold-main)] shrink-0">#${itemAlb}</span>
               </div>
               <div class="text-xs text-[var(--text-muted)] mt-0.5">${esImagen ? 'Fotografía' : 'Video'} · <span class="font-mono-num">${fecha}</span></div>
+            </div>
+            <div id="edit-item-${index}" class="hidden space-y-2 p-2.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)]">
+              <input id="edit-item-name-${index}" type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="Título del recuerdo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
+              <div class="flex gap-1.5">
+                <select id="edit-item-album-${index}" class="flex-1 rounded-lg border border-[var(--border-color)] bg-white px-2 py-1.5 text-xs font-semibold outline-none">
+                  ${albumSelectOptions.map(a => `<option value="${a}" ${itemAlb === a ? 'selected' : ''}>Álbum: ${a}</option>`).join('')}
+                </select>
+                <button type="button" onclick="guardarEdicionItem(${index})" class="btn-interactive px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
+              </div>
             </div>
             <div class="flex items-center justify-between gap-2">
               <button onclick="toggleLike(${index}, this)" class="btn-interactive px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)]'}">
@@ -1930,6 +2387,7 @@
             <div class="mt-auto pt-2.5 border-t border-[var(--border-color)] flex justify-between items-center text-xs">
               <div class="flex items-center gap-2.5">
                 ${esImagen ? `<button onclick="descargarPostalPolaroid('${item.url}', '${safeTitle}', 'Álbum: ${itemAlb}', '${fecha}')" class="btn-interactive text-[var(--wine-main)] font-semibold cursor-pointer">Postal</button>` : ''}
+                <button onclick="document.getElementById('edit-item-${index}').classList.toggle('hidden')" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Editar</button>
                 <button onclick="navigator.clipboard.writeText('${item.url}'); mostrarToast('Enlace copiado');" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Enlace</button>
               </div>
               <button onclick="eliminarItem(${index})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Eliminar</button>
@@ -1938,6 +2396,80 @@
         `;
         galeria.appendChild(card);
       });
+      observarVideosGaleria();
+    }
+
+    /* IntersectionObserver para cargar videos únicamente cuando entran en pantalla (Ahorro de datos y batería) */
+    let videoObserver = null;
+    function observarVideosGaleria() {
+      const vids = document.querySelectorAll('video.lazy-video');
+      if (!('IntersectionObserver' in window)) {
+        vids.forEach(v => {
+          if (!v.src && v.dataset.src) {
+            v.src = v.dataset.src;
+            v.preload = 'metadata';
+          }
+        });
+        return;
+      }
+      if (!videoObserver) {
+        videoObserver = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const v = entry.target;
+              if (!v.src && v.dataset.src) {
+                v.src = v.dataset.src;
+                v.preload = 'metadata';
+              }
+              obs.unobserve(v);
+            }
+          });
+        }, { rootMargin: '160px 0px' });
+      }
+      vids.forEach(v => videoObserver.observe(v));
+    }
+
+    /* Doble toque para dar ♥ Me gusta o 1 toque para abrir el Visor */
+    let ultimoToqueTs = 0;
+    let ultimoToqueIdx = -1;
+    let toqueSimpleTimer = null;
+    function manejarToqueMediaGaleria(e, index) {
+      const ahora = Date.now();
+      if (ultimoToqueIdx === index && (ahora - ultimoToqueTs) < 300) {
+        clearTimeout(toqueSimpleTimer);
+        ultimoToqueTs = 0;
+        ultimoToqueIdx = -1;
+        const burst = document.getElementById(`heart-burst-${index}`);
+        if (burst) {
+          burst.classList.remove('hidden');
+          setTimeout(() => burst.classList.add('hidden'), 650);
+        }
+        if (!items[index].likedBy || !items[index].likedBy.includes(userId)) {
+          toggleLike(index, null);
+        }
+        mostrarToast('♥ Te gusta este recuerdo');
+      } else {
+        ultimoToqueTs = ahora;
+        ultimoToqueIdx = index;
+        clearTimeout(toqueSimpleTimer);
+        toqueSimpleTimer = setTimeout(() => {
+          abrirModalPorIndice(index);
+        }, 240);
+      }
+    }
+
+    async function guardarEdicionItem(index) {
+      const target = items[index];
+      if (!target) return;
+      const nuevoTitulo = document.getElementById(`edit-item-name-${index}`)?.value.trim();
+      const nuevoAlbum = document.getElementById(`edit-item-album-${index}`)?.value || 'General';
+      if (nuevoTitulo) target.name = nuevoTitulo;
+      target.album = nuevoAlbum;
+      target.updatedAt = Date.now();
+      renderGaleria();
+      renderCarrusel();
+      await sincronizarNube();
+      mostrarToast('Recuerdo actualizado');
     }
 
     async function toggleLike(index, btn) {
@@ -2019,6 +2551,31 @@
     ========================================================= */
     function renderPremios() {
       const grid = document.getElementById('awardsGrid');
+      const podiumBox = document.getElementById('awardsPodium');
+      const podiumGrid = document.getElementById('awardsPodiumGrid');
+
+      const lideres = awards
+        .map(cat => {
+          const top = [...(cat.nominees || [])].sort((a, b) => (b.votes || 0) - (a.votes || 0))[0];
+          return top && (top.votes || 0) > 0 ? { category: cat.title, winner: top.name, votes: top.votes } : null;
+        })
+        .filter(Boolean);
+
+      if (podiumBox && podiumGrid) {
+        if (lideres.length > 0) {
+          podiumBox.classList.remove('hidden');
+          podiumGrid.innerHTML = lideres.map(l => `
+            <div class="p-3.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] flex flex-col justify-between gap-1">
+              <div class="text-[11px] font-semibold text-[var(--gold-main)] truncate">★ ${l.category}</div>
+              <div class="text-sm font-bold text-[var(--wine-main)] truncate">${l.winner}</div>
+              <div class="text-[11px] font-mono-num text-[var(--text-muted)]">${l.votes} ${l.votes === 1 ? 'voto' : 'votos'}</div>
+            </div>
+          `).join('');
+        } else {
+          podiumBox.classList.add('hidden');
+        }
+      }
+
       grid.innerHTML = awards.map(cat => {
         const total = (cat.nominees || []).reduce((acc, n) => acc + (n.votes || 0), 0);
         const ordenados = [...(cat.nominees || [])].sort((a, b) => (b.votes || 0) - (a.votes || 0));
@@ -2041,7 +2598,7 @@
                       const votado = (nom.votedBy || []).includes(userId);
                       return `
                         <button onclick="votarNominado('${cat.id}', '${nom.id}')" class="w-full text-left p-3 rounded-xl border transition relative overflow-hidden cursor-pointer ${votado ? 'border-[var(--wine-main)] bg-[var(--bg-cream)]' : 'border-[var(--border-color)] bg-white hover:border-[var(--gold-main)]'}">
-                          <div class="absolute inset-y-0 left-0 bg-[var(--gold-main)]/20 transition-all duration-300" style="width:${pct}%"></div>
+                          <div class="absolute inset-y-0 left-0 award-progress-bar transition-all duration-300" style="width:${pct}%"></div>
                           <div class="relative flex items-center justify-between gap-2 text-xs">
                             <span class="font-bold text-[var(--text-dark)]">${idx === 0 && nom.votes > 0 ? '★ ' : ''}${nom.name} ${votado ? '✓' : ''}</span>
                             <span class="font-mono-num font-bold text-[var(--wine-main)]">${nom.votes || 0} votos (${pct}%)</span>
@@ -2113,6 +2670,7 @@
       });
       cat.updatedAt = Date.now();
       renderPremios();
+      lanzarConfetiDorado();
       await sincronizarNube();
     }
 
@@ -2145,6 +2703,7 @@
       });
       document.getElementById('capMessageInput').value = '';
       renderCapsulas();
+      lanzarConfetiDorado();
       await sincronizarNube();
       mostrarToast(`Cápsula sellada hasta el ${unlockDate}`);
     }
@@ -2321,22 +2880,221 @@
       mostrarToast('Mensaje eliminado permanentemente');
     }
 
-    function abrirModal(url, type) {
+    /* =========================================================
+       VISOR CINEMATOGRÁFICO, MODO PRESENTACIÓN Y CONFETI DORADO
+    ========================================================= */
+    function lanzarConfetiDorado() {
+      const canvas = document.createElement('canvas');
+      canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+      document.body.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colores = ['#d8b258', '#b89242', '#681b28', '#8b2838', '#fffdf8'];
+      const particulas = Array.from({ length: 55 }, () => ({
+        x: canvas.width * (0.2 + Math.random() * 0.6),
+        y: canvas.height * 0.35,
+        vx: (Math.random() - 0.5) * 11,
+        vy: -Math.random() * 11 - 4,
+        size: Math.random() * 7 + 5,
+        color: colores[Math.floor(Math.random() * colores.length)],
+        rot: Math.random() * Math.PI * 2,
+        vrot: (Math.random() - 0.5) * 0.2
+      }));
+
+      let frame = 0;
+      function animar() {
+        frame++;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particulas.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.32;
+          p.rot += p.vrot;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+          ctx.restore();
+        });
+        if (frame < 85) {
+          requestAnimationFrame(animar);
+        } else {
+          canvas.remove();
+        }
+      }
+      requestAnimationFrame(animar);
+    }
+
+    function abrirRecuerdoAlAzar() {
+      if (!items.length) return mostrarToast('Aún no hay recuerdos en la galería');
+      const randomIdx = Math.floor(Math.random() * items.length);
+      modalListaActual = items.map((_, i) => i);
+      abrirModalPorIndice(randomIdx);
+      mostrarToast('✨ Recuerdo elegido al azar');
+    }
+
+    function iniciarModoPresentacion() {
+      if (!items.length) return mostrarToast('Aún no hay recuerdos en la galería');
+      if (!modalListaActual.length) modalListaActual = items.map((_, i) => i);
+      const startIdx = modalIndiceActual >= 0 ? modalListaActual[modalIndiceActual] : modalListaActual[0];
+      abrirModalPorIndice(startIdx);
+      if (!slideshowActivo) {
+        toggleSlideshow();
+      }
+    }
+
+    function abrirModalPorIndice(itemIndex) {
+      if (!modalListaActual || !modalListaActual.length) {
+        modalListaActual = items.map((_, i) => i);
+      }
+      let pos = modalListaActual.indexOf(itemIndex);
+      if (pos === -1) {
+        modalListaActual = items.map((_, i) => i);
+        pos = modalListaActual.indexOf(itemIndex);
+      }
+      modalIndiceActual = pos >= 0 ? pos : 0;
+      mostrarItemModalActual();
+    }
+
+    function mostrarItemModalActual() {
+      clearTimeout(slideshowTimer);
+      const realIndex = modalListaActual[modalIndiceActual];
+      const item = items[realIndex];
+      if (!item) return;
+
       const modal = document.getElementById('modal');
       const body = document.getElementById('modalBody');
+      const counter = document.getElementById('modalCounter');
+      const titleEl = document.getElementById('modalTitle');
+      const subEl = document.getElementById('modalSubtitle');
+      const prevBtn = document.getElementById('modalPrevBtn');
+      const nextBtn = document.getElementById('modalNextBtn');
+
+      const esImagen = !item.type || item.type.startsWith('image/');
+      const fecha = new Date(item.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+      const alb = item.album || inferirAlbum(item);
+
+      if (counter) counter.innerText = `${modalIndiceActual + 1} / ${modalListaActual.length}`;
+      if (titleEl) titleEl.innerText = item.name || 'Recuerdo de la Promo';
+      if (subEl) subEl.innerText = `#${alb} · ${fecha} · ♥ ${item.likes || 0}`;
+      if (prevBtn) prevBtn.classList.remove('hidden');
+      if (nextBtn) nextBtn.classList.remove('hidden');
+
+      if (esImagen) {
+        body.innerHTML = `<img src="${item.url}" alt="${item.name || ''}" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl" />`;
+        if (slideshowActivo) {
+          slideshowTimer = setTimeout(() => navegarModal(1), 4200);
+        }
+      } else if (item.externalEmbedUrl) {
+        body.innerHTML = `
+          <div class="w-[92vw] max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
+            <iframe src="${item.externalEmbedUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
+          </div>`;
+      } else {
+        body.innerHTML = `<video id="modalVideoPlayer" src="${item.url}" controls autoplay playsinline class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
+        const vid = document.getElementById('modalVideoPlayer');
+        if (vid && slideshowActivo) {
+          vid.onended = () => navegarModal(1);
+        }
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function navegarModal(direccion, e) {
+      if (e) e.stopPropagation();
+      if (!modalListaActual.length) return;
+      modalIndiceActual = (modalIndiceActual + direccion + modalListaActual.length) % modalListaActual.length;
+      mostrarItemModalActual();
+    }
+
+    function toggleSlideshow(e) {
+      if (e) e.stopPropagation();
+      slideshowActivo = !slideshowActivo;
+      const btn = document.getElementById('btnSlideshowToggle');
+      if (btn) {
+        btn.innerHTML = slideshowActivo ? '<span>⏸ Pausar</span>' : '<span>▶ Presentación</span>';
+      }
+      clearTimeout(slideshowTimer);
+      if (slideshowActivo) {
+        mostrarToast('Modo Presentación activado');
+        const vid = document.getElementById('modalVideoPlayer');
+        if (vid && !vid.ended && !vid.paused) {
+          vid.onended = () => navegarModal(1);
+        } else {
+          slideshowTimer = setTimeout(() => navegarModal(1), 4200);
+        }
+      } else {
+        mostrarToast('Presentación en pausa');
+      }
+    }
+
+    function abrirModal(url, type, customTitle = 'Retrato Oficial', customSub = 'Anuario EDM ’26') {
+      clearTimeout(slideshowTimer);
+      slideshowActivo = false;
+      const btn = document.getElementById('btnSlideshowToggle');
+      if (btn) btn.innerHTML = '<span>▶ Presentación</span>';
+
+      const modal = document.getElementById('modal');
+      const body = document.getElementById('modalBody');
+      const counter = document.getElementById('modalCounter');
+      const titleEl = document.getElementById('modalTitle');
+      const subEl = document.getElementById('modalSubtitle');
+      const prevBtn = document.getElementById('modalPrevBtn');
+      const nextBtn = document.getElementById('modalNextBtn');
+
+      if (counter) counter.innerText = '1 / 1';
+      if (titleEl) titleEl.innerText = customTitle;
+      if (subEl) subEl.innerText = customSub;
+      if (prevBtn) prevBtn.classList.add('hidden');
+      if (nextBtn) nextBtn.classList.add('hidden');
+
       const esImagen = !type || type.startsWith('image/');
       body.innerHTML = esImagen
-        ? `<img src="${url}" class="max-w-full max-h-[85vh] object-contain" />`
-        : `<video src="${url}" controls autoplay class="max-w-full max-h-[85vh] object-contain"></video>`;
+        ? `<img src="${url}" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl" />`
+        : `<video src="${url}" controls autoplay playsinline class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
       modal.classList.remove('hidden');
     }
 
     function cerrarModal(e, force = false) {
-      if (force || e.target.id === 'modal') {
+      if (force || (e && e.target && e.target.id === 'modal')) {
+        clearTimeout(slideshowTimer);
+        slideshowActivo = false;
+        const btn = document.getElementById('btnSlideshowToggle');
+        if (btn) btn.innerHTML = '<span>▶ Presentación</span>';
         document.getElementById('modal').classList.add('hidden');
         document.getElementById('modalBody').innerHTML = '';
       }
     }
+
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('modal');
+      if (!modal || modal.classList.contains('hidden')) return;
+      if (e.key === 'Escape') cerrarModal(null, true);
+      if (e.key === 'ArrowRight') navegarModal(1);
+      if (e.key === 'ArrowLeft') navegarModal(-1);
+    });
+
+    /* Gestos táctiles Swipe izquierda/derecha en el visor para celulares (Mejora #1) */
+    let touchStartX = 0;
+    let touchStartY = 0;
+    document.getElementById('modal')?.addEventListener('touchstart', (e) => {
+      if (!e.changedTouches || !e.changedTouches[0]) return;
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.getElementById('modal')?.addEventListener('touchend', (e) => {
+      if (!e.changedTouches || !e.changedTouches[0]) return;
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      const dy = e.changedTouches[0].screenY - touchStartY;
+      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+        if (dx < 0) navegarModal(1);
+        else navegarModal(-1);
+      }
+    }, { passive: true });
 
     // Sincronizar cambios pendientes si el usuario cierra o recarga la pestaña
     window.addEventListener('beforeunload', () => {
