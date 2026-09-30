@@ -60,11 +60,18 @@
       }
     };
 
-    window.repararImagenTelegram = function(img, rawUrl) {
+    window.repararImagenTelegram = async function(img, rawUrl, itemId, explicitFileId) {
       if (!img || !rawUrl) return;
       const step = Number(img.dataset.errStep || '0');
       if (step === 0) {
         img.dataset.errStep = '1';
+        try {
+          const nuevoUrl = await window.renovarUrlTelegramPorItem(rawUrl, itemId, explicitFileId);
+          if (nuevoUrl && nuevoUrl !== img.src) {
+            img.src = nuevoUrl;
+            return;
+          }
+        } catch (e) {}
         img.src = 'https://wsrv.nl/?url=' + encodeURIComponent(rawUrl) + '&w=1000&output=jpg';
       } else if (step === 1) {
         img.dataset.errStep = '2';
@@ -73,6 +80,20 @@
         img.onerror = null;
         img.src = window.DEFAULT_LOGO_SVG;
       }
+    };
+
+    window.repararVideoTelegram = async function(videoEl, rawUrl, itemId, explicitFileId) {
+      if (!videoEl || !rawUrl) return;
+      if (videoEl.dataset.errRepaired === '1') return;
+      videoEl.dataset.errRepaired = '1';
+      try {
+        const nuevoUrl = await window.renovarUrlTelegramPorItem(rawUrl, itemId, explicitFileId);
+        if (nuevoUrl) {
+          videoEl.dataset.src = nuevoUrl;
+          videoEl.src = nuevoUrl;
+          videoEl.load();
+        }
+      } catch (e) {}
     };
   </script>
   <style>
@@ -861,6 +882,174 @@
       'tg_msg_140': 'https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_111.mp4'
     };
 
+    /* Mapa de file_id permanentes de Telegram: permite renovar automáticamente cualquier enlace vencido sin volver a subir la foto/video */
+    const PERMANENT_MEDIA_MAP = {
+      "videos/file_82.mp4": {"f":"BAACAgEAAxkDAANwarue3F4WvQJukzLHQkgoF3blP6MAAhwIAALqMtlF4ld07QUnPSg9BA","p":"videos/file_82.mp4"},
+      "videos/file_66.mp4": {"f":"BAACAgEAAxkDAANcarsYRVQvZUNsrxolEAvWL9gdia4AAu8HAAJCS9lFAWv-KcF16yM9BA","p":"videos/file_162.mp4"},
+      "videos/file_65.mp4": {"f":"BAACAgEAAxkDAANaarsJh6_qQ0wfQMJyi3Iq7yUEBv4AAuAHAAJCS9lFdCxIJlaHTdI9BA","p":"videos/file_65.mp4"},
+      "photos/file_64.jpg": {"f":"AgACAgEAAxkDAANZarsJaRYu0G4VbulOue2ToyMnGesAAiYNaxtCS9lFD0dH1vO1A1QBAAMCAAN3AAM9BA","p":"photos/file_161.jpg"},
+      "photos/file_63.jpg": {"f":"AgACAgEAAxkDAANYarsJTGTg0KA3_zGoNKu7zI1Bc64AAiUNaxtCS9lFo-Di3tw23eoBAAMCAAN5AAM9BA","p":"photos/file_102.jpg"},
+      "photos/file_62.jpg": {"f":"AgACAgEAAxkDAANXarsJJ3ePZ3b_T99BJScdzIiKz8EAAiQNaxtCS9lFn1WbHMHDEAsBAAMCAAN5AAM9BA","p":"photos/file_103.jpg"},
+      "photos/file_59.jpg": {"f":"AgACAgEAAxkDAANUarsIzigm13vRK-Ec45YHzO1Itr8AAiENaxtCS9lFUM5n9NpVjd4BAAMCAAN5AAM9BA","p":"photos/file_160.jpg"},
+      "photos/file_58.jpg": {"f":"AgACAgEAAxkDAANTarsIh_bBnEvIg5AGS3SRx_UDcYsAAiANaxtCS9lFz6G2RZytnBsBAAMCAAN5AAM9BA","p":"photos/file_159.jpg"},
+      "photos/file_57.jpg": {"f":"AgACAgEAAxkDAANSarsId1RksF-JymBZeDhES8NVfQQAAh8NaxtCS9lFXDVg-ql-9HUBAAMCAAN5AAM9BA","p":"photos/file_104.jpg"},
+      "photos/file_56.jpg": {"f":"AgACAgEAAxkDAANRarsIVQq6DgRuMDAgjqXuc0QY9lgAAh4NaxtCS9lF6K9k_e2WcpABAAMCAAN5AAM9BA","p":"photos/file_105.jpg"},
+      "videos/file_55.mp4": {"f":"BAACAgEAAxkDAANQarsH6-vdibQReQINNDIw81XMRYEAAtwHAAJCS9lFvcRxKpweZ8U9BA","p":"videos/file_55.mp4"},
+      "photos/file_54.jpg": {"f":"AgACAgEAAxkDAANParsH38-fz6Qx3Vow6olpQglwXdoAAh0NaxtCS9lFOCqZ7JZO7TsBAAMCAAN4AAM9BA","p":"photos/file_158.jpg"},
+      "photos/file_53.jpg": {"f":"AgACAgEAAxkDAANOarsHyN1uo5Sz2vNUY0KBV_b7CPkAAhwNaxtCS9lF5RojPKpziwUBAAMCAAN5AAM9BA","p":"photos/file_157.jpg"},
+      "photos/file_52.jpg": {"f":"AgACAgEAAxkDAANNarsHufgH_hewiZpJk_GO9Qse1bMAAhsNaxtCS9lFtrPa66jPm-sBAAMCAAN5AAM9BA","p":"photos/file_106.jpg"},
+      "videos/file_51.mp4": {"f":"BAACAgEAAxkDAANMarsBuIOr9Z2HqkHQmxSG1w-5p4MAAtIHAAJCS9lF9X7UtBWUBnk9BA","p":"videos/file_51.mp4"},
+      "videos/file_50.mp4": {"f":"BAACAgEAAxkDAANLarsBRrZlihPP-bqi3FOPbpG0wN4AAtAHAAJCS9lFCHLkVg8RLeM9BA","p":"videos/file_50.mp4"},
+      "photos/file_49.jpg": {"f":"AgACAgEAAxkDAANKarsBNZ2jxowrDmcs0OaQ6Iuup5AAAgsNaxtCS9lFMw8d79RgyW0BAAMCAAN5AAM9BA","p":"photos/file_156.jpg"},
+      "videos/file_48.mp4": {"f":"BAACAgEAAxkDAANJarsBKuZWnV72nKzcI5oQ5MRhyJkAAs8HAAJCS9lFMrXhyHViu909BA","p":"videos/file_48.mp4"},
+      "photos/file_47.jpg": {"f":"AgACAgEAAxkDAANIarsBHzlLDrMw7By60jHjFLH6IEgAAgoNaxtCS9lFX_gwfsyLdtABAAMCAAN5AAM9BA","p":"photos/file_155.jpg"},
+      "videos/file_46.mp4": {"f":"BAACAgEAAxkDAANHarsBElxkxPu89ZnJ8NMRqT6iHK8AAs4HAAJCS9lF016FwFw1iyQ9BA","p":"videos/file_46.mp4"},
+      "videos/file_45.mp4": {"f":"BAACAgEAAxkDAANGarsAAfna-CCghDZJkL8hJYK-KGBHAALNBwACQkvZRUqjHwtUrqtVPQQ","p":"videos/file_45.mp4"},
+      "photos/file_44.jpg": {"f":"AgACAgEAAxkDAANFarrv2P5E2V4y7F7ohqHGLMMBkrcAAv0MaxtCS9lFwvb1Ilr9f14BAAMCAAN5AAM9BA","p":"photos/file_44.jpg"},
+      "photos/file_43.jpg": {"f":"AgACAgEAAxkDAANEarrvrlPpWOLbHFXghISqVJhzoKQAAvwMaxtCS9lF8C6RRqP5fwoBAAMCAAN4AAM9BA","p":"photos/file_43.jpg"},
+      "photos/file_42.jpg": {"f":"AgACAgEAAxkDAANDarrvni52KMIDUV4bJxkWJRlaHYgAAvsMaxtCS9lFZnsuKUEqMOcBAAMCAAN4AAM9BA","p":"photos/file_42.jpg"},
+      "photos/file_41.jpg": {"f":"AgACAgEAAxkDAANCarrvYo85cJMVZPPsySxPPsBcAtwAAvoMaxtCS9lF5w334BIro1EBAAMCAAN4AAM9BA","p":"photos/file_41.jpg"},
+      "photos/file_40.jpg": {"f":"AgACAgEAAxkDAANBarru5GTbTTilPV-Xc8xFl0wV0cwAAvkMaxtCS9lFd36vpnvKXVMBAAMCAAN5AAM9BA","p":"photos/file_40.jpg"},
+      "photos/file_39.jpg": {"f":"AgACAgEAAxkDAANAarruncFQFfymYanrg5lcby5TtgkAAvgMaxtCS9lF3P1Epw1T-kYBAAMCAAN5AAM9BA","p":"photos/file_39.jpg"},
+      "photos/file_38.jpg": {"f":"AgACAgEAAxkDAAM9arruYTEVsm_qHaAaOvOm6hELuYYAAvcMaxtCS9lF9myXYAKg9jYBAAMCAAN3AAM9BA","p":"photos/file_38.jpg"},
+      "photos/file_37.jpg": {"f":"AgACAgEAAxkDAAM8arnaEkfSxKGOAjpHaaiszDRxFngAAukLaxtCS9FFTzo54ZuKvRwBAAMCAAN3AAM9BA","p":"photos/file_154.jpg"},
+      "photos/file_35.jpg": {"f":"AgACAgEAAxkDAAM4arnYn1igiYn9e23LtBSPFFGikHIAAuYLaxtCS9FFcXDeVATjbtEBAAMCAAN5AAM9BA","p":"photos/file_152.jpg"},
+      "photos/file_34.jpg": {"f":"AgACAgEAAxkDAAM3arnYUJ79l_EG1eCbtov8rDLZZFcAAuULaxtCS9FFsIcvxuTzbNQBAAMCAAN5AAM9BA","p":"photos/file_151.jpg"},
+      "videos/file_33.mp4": {"f":"BAACAgEAAxkDAAM2arnYLnpZOCtJa1BY5Gaca4c6dq4AAuQIAAJCS9FF8BigYF6EnLg9BA","p":"videos/file_150.mp4"},
+      "videos/file_32.mp4": {"f":"BAACAgEAAxkDAAM0arnXE-Yk5aalnMI0ZMcxkyFZZVMAAuEIAAJCS9FFlhjiLj3IBws9BA","p":"videos/file_149.mp4"},
+      "photos/file_30.jpg": {"f":"AgACAgEAAxkDAAMxarnVQsfalmC7M6doKOTdr6gWOyoAAuELaxtCS9FFz8RFYISvllwBAAMCAAN5AAM9BA","p":"photos/file_147.jpg"},
+      "photos/file_23.jpg": {"f":"AgACAgEAAxkDAAMkarnTQuWfnPsXaajkb4xhm2hTXdYAAtsLaxtCS9FF7iHGnjf0L2EBAAMCAAN3AAM9BA","p":"photos/file_138.jpg"},
+      "photos/file_25.jpg": {"f":"AgACAgEAAxkDAAMmarnTbtXLqhA_JLygCh7hnjyUXIIAAt0LaxtCS9FFQaSxqZgAAXXFAQADAgADdwADPQQ","p":"photos/file_140.jpg"},
+      "videos/file_29.mp4": {"f":"BAACAgEAAxkDAAMtarnUpq3Wxi5v3X-Cj4ea_2W-4RcAAtwIAAJCS9FFQwQy-TfbmUE9BA","p":"videos/file_146.mp4"},
+      "photos/file_20.jpg": {"f":"AgACAgEAAxkDAAMfarnS2xpuN1VPdMVRp8G2pNkesOcAAtcLaxtCS9FF8ZFMxtjJS6cBAAMCAAN5AAM9BA","p":"photos/file_134.jpg"},
+      "item_gtrrnck": {"f":"BAACAgEAAxkDAANGarsAAfna-CCghDZJkL8hJYK-KGBHAALNBwACQkvZRUqjHwtUrqtVPQQ","p":"videos/file_45.mp4"},
+      "item_jcl5420": {"f":"AgACAgEAAxkDAAOQarxY5nc-EnOxS3cMbV8u_qnY3EAAAtYMaxvqMuFFr8krRouCHtcBAAMCAAN3AAM9BA","p":"photos/file_93.jpg"},
+      "photos/file_93.jpg": {"f":"AgACAgEAAxkDAAOQarxY5nc-EnOxS3cMbV8u_qnY3EAAAtYMaxvqMuFFr8krRouCHtcBAAMCAAN3AAM9BA","p":"photos/file_93.jpg"},
+      "item_lk9zhec": {"f":"AgACAgEAAxkDAAOParxYz0Ao48vF0eXu0PMSUNXlxGcAAtUMaxvqMuFFuhqZov__hkQBAAMCAAN3AAM9BA","p":"photos/file_92.jpg"},
+      "photos/file_92.jpg": {"f":"AgACAgEAAxkDAAOParxYz0Ao48vF0eXu0PMSUNXlxGcAAtUMaxvqMuFFuhqZov__hkQBAAMCAAN3AAM9BA","p":"photos/file_92.jpg"},
+      "tg_msg_147": {"f":"BAACAgEAAyEGAAMBB4RksgADBmq8aLm_e2OGOYOa8qoa5BGbYUolAAKkCwACl9_hRU-p1gTyhFgMPQQ","p":"videos/file_108.mp4"},
+      "tg_msg_146": {"f":"BAACAgEAAyEGAAMBB4RksgADB2q8aLws6JTeJW7u4pyYUAqtvogKAAKlCwACl9_hRYl8t4ATHn_rPQQ","p":"videos/file_109.mp4"},
+      "tg_msg_145": {"f":"BAACAgEAAyEGAAMBB4RksgADCGq8aPfn-spstLTXF0YpYgWhzqEMAAKmCwACl9_hRe23wwsf8OW1PQQ","p":"videos/file_110.mp4"},
+      "tg_msg_140": {"f":"BAACAgEAAyEGAAMBB4RksgADCWq8aQXdU23AhYdFRY3ArbFR032SAAKnCwACl9_hRRmIu2nbP9lLPQQ","p":"videos/file_111.mp4"},
+      "item_z9ieqt2": {"f":"BAACAgEAAxkDAAOZarxmvh9Wi3Du4IIvW3f1_6dssOsAApcRAALqMuFF6iOzW99BI5E9BA","p":"videos/file_98.mp4"},
+      "videos/file_98.mp4": {"f":"BAACAgEAAxkDAAOZarxmvh9Wi3Du4IIvW3f1_6dssOsAApcRAALqMuFF6iOzW99BI5E9BA","p":"videos/file_98.mp4"},
+      "item_ak1hyub": {"f":"AgACAgEAAxkDAANWarsJF5Dc03-nXI9_GKGl_BwNKrEAAiMNaxtCS9lF14ti1mV2hY4BAAMCAAN5AAM9BA","p":"photos/file_101.jpg"},
+      "photos/file_101.jpg": {"f":"AgACAgEAAxkDAANWarsJF5Dc03-nXI9_GKGl_BwNKrEAAiMNaxtCS9lF14ti1mV2hY4BAAMCAAN5AAM9BA","p":"photos/file_101.jpg"},
+      "item_hr9ujo6": {"f":"AgACAgEAAxkDAANVarsJC9kk7fdh0UsCVQNhkJqMb4AAAiINaxtCS9lFcwABYComxfJOAQADAgADeQADPQQ","p":"photos/file_99.jpg"},
+      "photos/file_99.jpg": {"f":"AgACAgEAAxkDAANVarsJC9kk7fdh0UsCVQNhkJqMb4AAAiINaxtCS9lFcwABYComxfJOAQADAgADeQADPQQ","p":"photos/file_99.jpg"},
+      "photos/file_70.jpg": {"f":"AgACAgEAAxkDAANgarsnFrpk3tgbLgb7ng6Db9M7upkAAi8NaxtCS9lF-Si4H8dfCuUBAAMCAAN3AAM9BA","p":"photos/file_165.jpg"},
+      "photos/file_165.jpg": {"f":"AgACAgEAAxkDAANgarsnFrpk3tgbLgb7ng6Db9M7upkAAi8NaxtCS9lF-Si4H8dfCuUBAAMCAAN3AAM9BA","p":"photos/file_165.jpg"},
+      "videos/file_100.mp4": {"f":"BAACAgEAAxkDAAObarxnu2V8b0jPFjV1pG_BmIYGBXYAApgRAALqMuFFsQ9K95QiBz09BA","p":"videos/file_100.mp4"},
+      "item_sxl26zi": {"f":"AgACAgEAAxkDAANNarsHufgH_hewiZpJk_GO9Qse1bMAAhsNaxtCS9lFtrPa66jPm-sBAAMCAAN5AAM9BA","p":"photos/file_106.jpg"},
+      "photos/file_106.jpg": {"f":"AgACAgEAAxkDAANNarsHufgH_hewiZpJk_GO9Qse1bMAAhsNaxtCS9lFtrPa66jPm-sBAAMCAAN5AAM9BA","p":"photos/file_106.jpg"},
+      "item_72v23z6": {"f":"AgACAgEAAxkDAANRarsIVQq6DgRuMDAgjqXuc0QY9lgAAh4NaxtCS9lF6K9k_e2WcpABAAMCAAN5AAM9BA","p":"photos/file_105.jpg"},
+      "photos/file_105.jpg": {"f":"AgACAgEAAxkDAANRarsIVQq6DgRuMDAgjqXuc0QY9lgAAh4NaxtCS9lF6K9k_e2WcpABAAMCAAN5AAM9BA","p":"photos/file_105.jpg"},
+      "item_06l35n4": {"f":"AgACAgEAAxkDAANSarsId1RksF-JymBZeDhES8NVfQQAAh8NaxtCS9lFXDVg-ql-9HUBAAMCAAN5AAM9BA","p":"photos/file_104.jpg"},
+      "photos/file_104.jpg": {"f":"AgACAgEAAxkDAANSarsId1RksF-JymBZeDhES8NVfQQAAh8NaxtCS9lFXDVg-ql-9HUBAAMCAAN5AAM9BA","p":"photos/file_104.jpg"},
+      "item_4syjk4k": {"f":"AgACAgEAAxkDAANXarsJJ3ePZ3b_T99BJScdzIiKz8EAAiQNaxtCS9lFn1WbHMHDEAsBAAMCAAN5AAM9BA","p":"photos/file_103.jpg"},
+      "photos/file_103.jpg": {"f":"AgACAgEAAxkDAANXarsJJ3ePZ3b_T99BJScdzIiKz8EAAiQNaxtCS9lFn1WbHMHDEAsBAAMCAAN5AAM9BA","p":"photos/file_103.jpg"},
+      "item_w8x0lb5": {"f":"AgACAgEAAxkDAANYarsJTGTg0KA3_zGoNKu7zI1Bc64AAiUNaxtCS9lFo-Di3tw23eoBAAMCAAN5AAM9BA","p":"photos/file_102.jpg"},
+      "photos/file_102.jpg": {"f":"AgACAgEAAxkDAANYarsJTGTg0KA3_zGoNKu7zI1Bc64AAiUNaxtCS9lFo-Di3tw23eoBAAMCAAN5AAM9BA","p":"photos/file_102.jpg"},
+      "item_ghup4lv": {"f":"AgACAgEAAxkDAAOjarxoTiS5PUlCldrM_8br87hiR64AAuUMaxvqMuFFqL8ply--SecBAAMCAAN5AAM9BA","p":"photos/file_107.jpg"},
+      "photos/file_107.jpg": {"f":"AgACAgEAAxkDAAOjarxoTiS5PUlCldrM_8br87hiR64AAuUMaxvqMuFFqL8ply--SecBAAMCAAN5AAM9BA","p":"photos/file_107.jpg"},
+      "item_d691v8u": {"f":"BAACAgEAAxkDAAOlarxp5DoljUHYf21HFENTXiA3evsAApwRAALqMuFFcUZwcT46oOE9BA","p":"videos/file_113.mp4"},
+      "videos/file_113.mp4": {"f":"BAACAgEAAxkDAAOlarxp5DoljUHYf21HFENTXiA3evsAApwRAALqMuFFcUZwcT46oOE9BA","p":"videos/file_113.mp4"}
+    };
+
+    const TG_FILE_PREFIX = `https://api.telegram.org/file/bot${BOT_TOKEN}/`;
+
+    function obtenerInfoMapaPermanente(idOrUrl, secondUrl) {
+      for (const candidate of [idOrUrl, secondUrl]) {
+        if (!candidate) continue;
+        const s = String(candidate);
+        if (PERMANENT_MEDIA_MAP[s]) return PERMANENT_MEDIA_MAP[s];
+        if (s.startsWith(TG_FILE_PREFIX)) {
+          const shortKey = s.slice(TG_FILE_PREFIX.length);
+          if (PERMANENT_MEDIA_MAP[shortKey]) return PERMANENT_MEDIA_MAP[shortKey];
+        }
+      }
+      return null;
+    }
+
+    function aplicarMapaPermanenteAItem(item) {
+      if (!item || typeof item !== 'object') return item;
+      const info = obtenerInfoMapaPermanente(item.id, item.url);
+      if (info) {
+        if (!item.fileId && info.f) item.fileId = info.f;
+        const freshUrl = TG_FILE_PREFIX + info.p;
+        if (item.url !== freshUrl && (!item.updatedAt || item.updatedAt <= 1790734500000)) {
+          item.url = freshUrl;
+          item.updatedAt = Math.max(Number(item.updatedAt || 0), 1790734500000);
+        }
+      }
+      if (RESCUED_HEAVY_VIDEOS_MAP[item.id]) {
+        item.url = RESCUED_HEAVY_VIDEOS_MAP[item.id];
+        item.type = 'video/mp4';
+        delete item.isHeavyVideo;
+        delete item.embedPost;
+        delete item.thumbUrl;
+      }
+      return item;
+    }
+
+    const _renovandoFileIds = new Map();
+    window.renovarUrlTelegramPorItem = async function(rawUrl, itemId, explicitFileId) {
+      let targetItem = items.find(i => (itemId && i.id === itemId) || i.url === rawUrl || i.id === rawUrl);
+      let targetMember = !targetItem ? members.find(m => (itemId && m.id === itemId) || m.photoUrl === rawUrl) : null;
+      const mapInfo = obtenerInfoMapaPermanente(itemId || rawUrl, targetItem?.url || targetMember?.photoUrl);
+      const fid = explicitFileId || targetItem?.fileId || targetMember?.fileId || mapInfo?.f;
+      if (!fid) {
+        if (mapInfo?.p) return TG_FILE_PREFIX + mapInfo.p;
+        return null;
+      }
+
+      if (_renovandoFileIds.has(fid)) {
+        return _renovandoFileIds.get(fid);
+      }
+
+      const prom = (async () => {
+        try {
+          const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${encodeURIComponent(fid)}`);
+          const d = await r.json();
+          if (d && d.ok && d.result?.file_path) {
+            const freshUrl = TG_FILE_PREFIX + d.result.file_path;
+            let huboCambio = false;
+            items.forEach(i => {
+              if (i.fileId === fid || (itemId && i.id === itemId) || i.url === rawUrl || i.id === rawUrl) {
+                i.fileId = fid;
+                if (i.url !== freshUrl) {
+                  i.url = freshUrl;
+                  i.updatedAt = Date.now();
+                  huboCambio = true;
+                }
+              }
+            });
+            members.forEach(m => {
+              if (m.fileId === fid || (itemId && m.id === itemId) || m.photoUrl === rawUrl) {
+                m.fileId = fid;
+                if (m.photoUrl !== freshUrl) {
+                  m.photoUrl = freshUrl;
+                  m.updatedAt = Date.now();
+                  huboCambio = true;
+                }
+              }
+            });
+            if (huboCambio) {
+              guardarRespaldoLocal(true);
+              sincronizarNube();
+            }
+            return freshUrl;
+          }
+        } catch (e) {}
+        return null;
+      })();
+
+      _renovandoFileIds.set(fid, prom);
+      const resUrl = await prom;
+      setTimeout(() => _renovandoFileIds.delete(fid), 15000);
+      return resUrl;
+    };
+
     const BASE_CLOUD_ITEMS = [
       {"id":"tg_msg_147","tgMessageId":147,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_108.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:55:21.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_msg_146","tgMessageId":146,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_109.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T00:51:43.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
@@ -893,7 +1082,7 @@
       {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_20.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_20.jpg","name":"IMG-20251211-WA0005.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T02:37:14.893Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]}
     ];
 
-    let items = JSON.parse(JSON.stringify(BASE_CLOUD_ITEMS));
+    let items = JSON.parse(JSON.stringify(BASE_CLOUD_ITEMS)).map(i => aplicarMapaPermanenteAItem(i));
     let tweets = [
       {"id":"tw_qx6jhe","author":"Miembro Promo 349","authorId":"user_s33utowko0j","text":"Fabricio entiende...","date":"2026-09-29T01:57:27.247Z","updatedAt":0,"likes":2,"likedBy":["user_s33utowko0j","user_g58mo8fyf26"]},
       {"id":"tw_i3zqru","author":"Admin","authorId":"user_g58mo8fyf26","text":"El Sistema de BOT se encuentra en Desarrollo","date":"2026-09-29T01:39:51.180Z","updatedAt":0,"likes":0,"likedBy":[]},
@@ -974,17 +1163,10 @@
         if (!data || typeof data !== 'object') return false;
         if (Array.isArray(data.deletedIds)) data.deletedIds.forEach(id => deletedIds.add(String(id)));
         Object.keys(RESCUED_HEAVY_VIDEOS_MAP).forEach(k => deletedIds.delete(k));
+        deletedIds.delete(`${TG_FILE_PREFIX}photos/file_70.jpg`);
+        deletedIds.delete(`${TG_FILE_PREFIX}photos/file_165.jpg`);
         if (Array.isArray(data.items)) {
-          items = data.items.map(i => {
-            if (i && RESCUED_HEAVY_VIDEOS_MAP[i.id]) {
-              i.url = RESCUED_HEAVY_VIDEOS_MAP[i.id];
-              i.type = 'video/mp4';
-              delete i.isHeavyVideo;
-              delete i.embedPost;
-              delete i.thumbUrl;
-            }
-            return i;
-          }).filter(i => i && !i.isHeavyVideo && !deletedIds.has(obtenerIdItem(i)));
+          items = data.items.map(i => aplicarMapaPermanenteAItem(i)).filter(i => i && !i.isHeavyVideo && !deletedIds.has(obtenerIdItem(i)));
         }
         if (Array.isArray(data.tweets)) tweets = data.tweets.filter(t => !deletedIds.has(t.id));
         if (Array.isArray(data.members)) members = data.members.filter(m => !deletedIds.has(m.id));
@@ -1023,18 +1205,26 @@
           mapa.set(k, elem);
           ordenClaves.push(k);
         } else {
-          // Si existe en ambos, conservamos el que tenga más likes/comentarios o fecha de edición más reciente
+          // Si existe en ambos, conservamos el que tenga más likes/comentarios o fecha de edición más reciente, preservando fileId
           const loc = mapa.get(k);
           const locUpdated = Number(loc.updatedAt || 0);
           const cloudUpdated = Number(elem.updatedAt || 0);
+          const mergedFileId = loc.fileId || elem.fileId || '';
+          const mergedTgMsgId = loc.tgMessageId || elem.tgMessageId;
           if (cloudUpdated > locUpdated) {
+            if (mergedFileId) elem.fileId = mergedFileId;
+            if (mergedTgMsgId) elem.tgMessageId = mergedTgMsgId;
             mapa.set(k, elem);
-          } else if (Array.isArray(elem.comments) && Array.isArray(loc.comments)) {
-            const comMap = new Map();
-            [...loc.comments, ...elem.comments].forEach(c => {
-              if (c && c.id && !deletedIds.has(c.id)) comMap.set(c.id, c);
-            });
-            loc.comments = Array.from(comMap.values());
+          } else {
+            if (mergedFileId) loc.fileId = mergedFileId;
+            if (mergedTgMsgId) loc.tgMessageId = mergedTgMsgId;
+            if (Array.isArray(elem.comments) && Array.isArray(loc.comments)) {
+              const comMap = new Map();
+              [...loc.comments, ...elem.comments].forEach(c => {
+                if (c && c.id && !deletedIds.has(c.id)) comMap.set(c.id, c);
+              });
+              loc.comments = Array.from(comMap.values());
+            }
           }
         }
       });
@@ -1160,18 +1350,23 @@
           ? [record]
           : (record.items || []);
       Object.keys(RESCUED_HEAVY_VIDEOS_MAP).forEach(id => deletedIds.delete(id));
+      deletedIds.delete(`${TG_FILE_PREFIX}photos/file_70.jpg`);
+      deletedIds.delete(`${TG_FILE_PREFIX}photos/file_165.jpg`);
 
       const cloudItems = rawItems.map(i => {
         const itemId = i.id || i.url || ('item_' + Math.random().toString(36).substring(2, 8));
+        const mapInfo = obtenerInfoMapaPermanente(itemId, i.url);
         const rescuedMp4 = RESCUED_HEAVY_VIDEOS_MAP[itemId];
-        const finalUrl = rescuedMp4 || i.url || '';
-        if (String(itemId).startsWith('tg_msg_') && !deletedIds.has(String(itemId)) && finalUrl) {
+        const mappedUrl = mapInfo?.p ? (TG_FILE_PREFIX + mapInfo.p) : '';
+        const finalUrl = rescuedMp4 || mappedUrl || i.url || '';
+        const finalFileId = i.fileId || mapInfo?.f || '';
+        if (finalUrl && !deletedIds.has(String(itemId))) {
           deletedIds.delete(String(finalUrl));
         }
         return {
           id: itemId,
           tgMessageId: i.tgMessageId,
-          fileId: i.fileId || '',
+          fileId: finalFileId,
           externalEmbedUrl: i.externalEmbedUrl || '',
           isHeavyVideo: rescuedMp4 ? false : Boolean(i.isHeavyVideo),
           url: finalUrl,
@@ -1179,7 +1374,7 @@
           type: rescuedMp4 ? 'video/mp4' : (i.type || (String(finalUrl).match(/\.(mp4|mov|webm)$/i) || i.externalEmbedUrl ? 'video/mp4' : 'image/jpeg')),
           album: inferirAlbum(i),
           date: i.date || new Date().toISOString(),
-          updatedAt: rescuedMp4 ? Math.max(Number(i.updatedAt || 0), 1790732500000) : (i.updatedAt || Date.now()),
+          updatedAt: (rescuedMp4 || mappedUrl) ? Math.max(Number(i.updatedAt || 0), 1790734500000) : (i.updatedAt || Date.now()),
           likes: typeof i.likes === 'number' ? i.likes : 0,
           likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
           comments: Array.isArray(i.comments) ? i.comments.filter(c => !deletedIds.has(c.id)) : []
@@ -1199,6 +1394,7 @@
 
       const cloudMembers = (Array.isArray(record.members) ? record.members : []).map(m => ({
         id: m.id || 'mem_' + Math.random().toString(36).substring(2, 8),
+        fileId: m.fileId || '',
         name: m.name || 'Integrante Promo ’26',
         role: m.role || 'Integrante',
         apodo: m.apodo || '',
@@ -1930,6 +2126,7 @@
 
         members.unshift({
           id: 'mem_' + Math.random().toString(36).substring(2, 9),
+          fileId,
           name,
           role,
           apodo,
@@ -2012,8 +2209,8 @@
         const safeSub = (m.frase || m.apodo || obtenerEtiquetaRol(mRole)).replace(/'/g, "\\'");
         return `
           <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border ${esDistinguido ? 'border-2 border-[var(--gold-main)]' : 'border-[var(--border-color)]'} overflow-hidden flex flex-col">
-            <div onclick="abrirModal('${m.photoUrl}', 'image/jpeg', '${safeName}', '${obtenerEtiquetaRol(mRole)}')" class="w-full h-64 bg-[#181214] overflow-hidden cursor-pointer relative group">
-              <img src="${m.photoUrl}" alt="${m.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${m.photoUrl}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
+            <div onclick="abrirModal('${m.photoUrl}', 'image/jpeg', '${safeName}', '${obtenerEtiquetaRol(mRole)}', '${m.id}', '${m.fileId || ''}')" class="w-full h-64 bg-[#181214] overflow-hidden cursor-pointer relative group">
+              <img src="${m.photoUrl}" alt="${m.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${m.photoUrl}', '${m.id}', '${m.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
               <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold ${esDistinguido ? 'bg-[var(--gold-bright)] text-[var(--wine-dark)]' : 'bg-black/70 text-white'}">
                 ${obtenerEtiquetaRol(mRole)}
               </span>
@@ -2279,8 +2476,8 @@
         return `
           <div onclick="abrirModalPorIndice(${idx})" class="w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-[#181214] group">
             ${esImagen
-              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.04]" />`
-              : `<video data-src="${item.url}" muted playsinline preload="none" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
+              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.04]" />`
+              : `<video data-src="${item.url}" muted playsinline preload="none" onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
                  <span class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/75 text-white text-[10px] font-bold">▶ Video</span>`}
             <div class="absolute inset-x-0 bottom-0 bg-black/80 px-2.5 py-1 text-[11px] text-white font-medium flex justify-between">
               <span class="truncate">${item.name}</span>
@@ -2330,14 +2527,14 @@
         card.innerHTML = `
           <div onclick="manejarToqueMediaGaleria(event, ${index})" class="w-full h-52 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
             ${esImagen
-              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />`
+              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />`
               : item.externalEmbedUrl
                 ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src=window.DEFAULT_LOGO_SVG;" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                      <span class="w-11 h-11 rounded-full bg-black/75 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
                    </div>
                    <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/80 text-[var(--gold-bright)] text-[10px] font-bold tracking-wide">VIDEO HD</span>`
-                : `<video data-src="${item.url}" preload="none" muted loop playsinline onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
+                : `<video data-src="${item.url}" preload="none" muted loop playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                      <span class="w-11 h-11 rounded-full bg-black/70 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
                    </div>
@@ -2984,7 +3181,7 @@
       if (nextBtn) nextBtn.classList.remove('hidden');
 
       if (esImagen) {
-        body.innerHTML = `<img src="${item.url}" alt="${item.name || ''}" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl" />`;
+        body.innerHTML = `<img src="${item.url}" alt="${item.name || ''}" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl" />`;
         if (slideshowActivo) {
           slideshowTimer = setTimeout(() => navegarModal(1), 4200);
         }
@@ -2994,7 +3191,7 @@
             <iframe src="${item.externalEmbedUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
           </div>`;
       } else {
-        body.innerHTML = `<video id="modalVideoPlayer" src="${item.url}" controls autoplay playsinline class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
+        body.innerHTML = `<video id="modalVideoPlayer" src="${item.url}" controls autoplay playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
         const vid = document.getElementById('modalVideoPlayer');
         if (vid && slideshowActivo) {
           vid.onended = () => navegarModal(1);
@@ -3031,7 +3228,7 @@
       }
     }
 
-    function abrirModal(url, type, customTitle = 'Retrato Oficial', customSub = 'Anuario EDM ’26') {
+    function abrirModal(url, type, customTitle = 'Retrato Oficial', customSub = 'Anuario EDM ’26', itemId = '', explicitFileId = '') {
       clearTimeout(slideshowTimer);
       slideshowActivo = false;
       const btn = document.getElementById('btnSlideshowToggle');
@@ -3053,8 +3250,8 @@
 
       const esImagen = !type || type.startsWith('image/');
       body.innerHTML = esImagen
-        ? `<img src="${url}" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl" />`
-        : `<video src="${url}" controls autoplay playsinline class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
+        ? `<img src="${url}" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${url}', '${itemId}', '${explicitFileId}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl" />`
+        : `<video src="${url}" controls autoplay playsinline onerror="window.repararVideoTelegram(this, '${url}', '${itemId}', '${explicitFileId}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
       modal.classList.remove('hidden');
     }
 
