@@ -856,8 +856,18 @@
     const CHAT_ID = '8616807953';
     const ADMIN_PASSWORD = 'prom26admin';
 
-    const LOCAL_STORAGE_KEY = 'prom_edm26_state_v2';
-    const DELETED_IDS_KEY = 'prom_edm26_deleted_ids_v2';
+    const LOCAL_STORAGE_KEY = 'prom_edm26_live_snapshot_v4';
+    const DELETED_IDS_KEY = 'prom_edm26_deleted_ids_v4';
+    const LEGACY_STORAGE_KEYS_TO_PURGE = [
+      'prom_edm26_state_v2',
+      'prom_edm26_state_v1',
+      'prom_edm26_cloud_backup',
+      'prom_edm26_cloud_backup_v2',
+      'prom_edm26_revision'
+    ];
+    LEGACY_STORAGE_KEYS_TO_PURGE.forEach(k => {
+      try { localStorage.removeItem(k); } catch (e) {}
+    });
 
     const ALBUM_OPTIONS = ['Todos', 'General', 'Jornada', 'Semana Santa', '15 Años', 'Fiesta', 'Viaje'];
     let albumActual = 'Todos';
@@ -953,7 +963,23 @@
       "item_ghup4lv": {"f":"AgACAgEAAxkDAAOjarxoTiS5PUlCldrM_8br87hiR64AAuUMaxvqMuFFqL8ply--SecBAAMCAAN5AAM9BA","p":"photos/file_107.jpg"},
       "photos/file_107.jpg": {"f":"AgACAgEAAxkDAAOjarxoTiS5PUlCldrM_8br87hiR64AAuUMaxvqMuFFqL8ply--SecBAAMCAAN5AAM9BA","p":"photos/file_107.jpg"},
       "item_d691v8u": {"f":"BAACAgEAAxkDAAOlarxp5DoljUHYf21HFENTXiA3evsAApwRAALqMuFFcUZwcT46oOE9BA","p":"videos/file_113.mp4"},
-      "videos/file_113.mp4": {"f":"BAACAgEAAxkDAAOlarxp5DoljUHYf21HFENTXiA3evsAApwRAALqMuFFcUZwcT46oOE9BA","p":"videos/file_113.mp4"}
+      "videos/file_113.mp4": {"f":"BAACAgEAAxkDAAOlarxp5DoljUHYf21HFENTXiA3evsAApwRAALqMuFFcUZwcT46oOE9BA","p":"videos/file_113.mp4"},
+      "item_184_r": {"f":"AgACAgEAAxkDAAO4arxycPYMmD2MpiLGH2ijWsnFRh0AAvkMaxvqMuFF0dh2LOBiiZ0BAAMCAAN3AAM9BA","p":"photos/file_177.jpg"},
+      "photos/file_177.jpg": {"f":"AgACAgEAAxkDAAO4arxycPYMmD2MpiLGH2ijWsnFRh0AAvkMaxvqMuFF0dh2LOBiiZ0BAAMCAAN3AAM9BA","p":"photos/file_177.jpg"},
+      "item_183_r": {"f":"AgACAgEAAxkDAAO3arxybl-IgNU-Jt7V03DmSuphnwgAAvgMaxvqMuFFrGNNQlKHtaYBAAMCAAN3AAM9BA","p":"photos/file_176.jpg"},
+      "photos/file_176.jpg": {"f":"AgACAgEAAxkDAAO3arxybl-IgNU-Jt7V03DmSuphnwgAAvgMaxvqMuFFrGNNQlKHtaYBAAMCAAN3AAM9BA","p":"photos/file_176.jpg"},
+      "item_182_r": {"f":"AgACAgEAAxkDAAO2arxyayWNyo_g5IPNL6cxi64VTaUAAvcMaxvqMuFFMpZc_aOM5ewBAAMCAAN3AAM9BA","p":"photos/file_175.jpg"},
+      "photos/file_175.jpg": {"f":"AgACAgEAAxkDAAO2arxyayWNyo_g5IPNL6cxi64VTaUAAvcMaxvqMuFFMpZc_aOM5ewBAAMCAAN3AAM9BA","p":"photos/file_175.jpg"},
+      "item_181_r": {"f":"AgACAgEAAxkDAAO1arxyaC1uYNJiw1cEbVOJ_0qGZtAAAvYMaxvqMuFFYudKaS4HwnIBAAMCAAN3AAM9BA","p":"photos/file_174.jpg"},
+      "photos/file_174.jpg": {"f":"AgACAgEAAxkDAAO1arxyaC1uYNJiw1cEbVOJ_0qGZtAAAvYMaxvqMuFFYudKaS4HwnIBAAMCAAN3AAM9BA","p":"photos/file_174.jpg"},
+      "item_180_r": {"f":"AgACAgEAAxkDAAO0arxyZu93uN-Ber2mE6orXxbDbWEAAvUMaxvqMuFFJIumHQmXePoBAAMCAAN3AAM9BA","p":"photos/file_173.jpg"},
+      "photos/file_173.jpg": {"f":"AgACAgEAAxkDAAO0arxyZu93uN-Ber2mE6orXxbDbWEAAvUMaxvqMuFFJIumHQmXePoBAAMCAAN3AAM9BA","p":"photos/file_173.jpg"},
+      "item_179_r": {"f":"AgACAgEAAxkDAAOzarxyYq-7r7zOz1gjnrCYYKW0pYgAAvQMaxvqMuFFDpFda2YP92ABAAMCAAN3AAM9BA","p":"photos/file_172.jpg"},
+      "photos/file_172.jpg": {"f":"AgACAgEAAxkDAAOzarxyYq-7r7zOz1gjnrCYYKW0pYgAAvQMaxvqMuFFDpFda2YP92ABAAMCAAN3AAM9BA","p":"photos/file_172.jpg"},
+      "tg_msg_175": {"f":"BAACAgEAAxkBAAOvarxxGA0ex5VCrAdFgk5ANI2fYWsAAh4IAAIDe-hFwTfgc6ANnGw9BA","p":"videos/file_171.mp4"},
+      "videos/file_171.mp4": {"f":"BAACAgEAAxkBAAOvarxxGA0ex5VCrAdFgk5ANI2fYWsAAh4IAAIDe-hFwTfgc6ANnGw9BA","p":"videos/file_171.mp4"},
+      "tg_msg_174": {"f":"BAACAgEAAxkBAAOuarxwiJUYZqma1T5XR87DSMn4GBcAAhwIAAIDe-hF7gABkI05oUfgPQQ","p":"videos/file_170.mp4"},
+      "videos/file_170.mp4": {"f":"BAACAgEAAxkBAAOuarxwiJUYZqma1T5XR87DSMn4GBcAAhwIAAIDe-hF7gABkI05oUfgPQQ","p":"videos/file_170.mp4"}
     };
 
     const TG_FILE_PREFIX = `https://api.telegram.org/file/bot${BOT_TOKEN}/`;
@@ -1034,9 +1060,11 @@
                 }
               }
             });
-            if (huboCambio) {
-              guardarRespaldoLocal(true);
-              sincronizarNube();
+            if (huboCambio && nubeSincronizadaExito) {
+              // Solo actualizamos el respaldo de lectura en el dispositivo actual.
+              // IMPORTANTE: Un visitante que solo entra a ver fotos NUNCA debe disparar sincronizarNube() (PUT a JSONBin),
+              // para que un navegador pasivo o antiguo jamás pueda sobrescribir lo que subió un usuario activo.
+              guardarRespaldoLocal(false);
             }
             return freshUrl;
           }
@@ -1051,47 +1079,72 @@
     };
 
     const BASE_CLOUD_ITEMS = [
-      {"id":"tg_msg_147","tgMessageId":147,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_108.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:55:21.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_msg_146","tgMessageId":146,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_109.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T00:51:43.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_msg_145","tgMessageId":145,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_110.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T00:48:12.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_msg_142","tgMessageId":142,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_91.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:22:25.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_msg_140","tgMessageId":140,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_111.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:19:05.000Z","updatedAt":1790732500000,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_msg_139","tgMessageId":139,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_90.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:17:39.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_msg_138","tgMessageId":138,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_87.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:12:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_89.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_89.mp4","name":"Video Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:08:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_file_86","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_86.mp4","name":"Video desde Telegram","type":"video/mp4","album":"General","date":"2026-09-29T23:31:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"item_gtrrnck","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_45.mp4","name":"Recuerdo Promo","type":"video/mp4","album":"General","date":"2026-09-29T00:06:17.675Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_44.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_44.jpg","name":"Consagración","type":"image/jpeg","album":"General","date":"2026-09-28T22:53:11.472Z","updatedAt":0,"likes":2,"likedBy":["user_g58mo8fyf26","user_u5widpg47lk"],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_43.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_43.jpg","name":"San Jose","type":"image/jpeg","album":"General","date":"2026-09-28T22:52:29.276Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_42.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_42.jpg","name":"San Jose","type":"image/jpeg","album":"General","date":"2026-09-28T22:52:13.961Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_41.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_41.jpg","name":"La cena","type":"image/jpeg","album":"General","date":"2026-09-28T22:51:13.188Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_40.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_40.jpg","name":"La cena.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T22:49:07.922Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_39.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_39.jpg","name":"Aniversario 2025.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T22:47:56.149Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_38.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_38.jpg","name":"Aniversario 2025","type":"image/jpeg","album":"General","date":"2026-09-28T22:47:30.538Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_37.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_37.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-28T03:08:06.087Z","updatedAt":0,"likes":15,"likedBy":["user_2jlky1yi9p9","user_g58mo8fyf26"],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_17.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_17.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-28T03:07:30.310Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_13.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_13.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-28T03:07:01.179Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_35.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_35.jpg","name":".......jpg","type":"image/jpeg","album":"General","date":"2026-09-28T03:01:49.691Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_34.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_34.jpg","name":"1 generación","type":"image/jpeg","album":"General","date":"2026-09-28T03:00:31.206Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_33.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_33.mp4","name":"sorpresa","type":"video/mp4","album":"General","date":"2026-09-28T02:59:57.817Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_32.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_32.mp4","name":"VID-20221223-WA0009.mp4","type":"video/mp4","album":"General","date":"2026-09-28T02:55:15.114Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_30.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_30.jpg","name":"Navidad","type":"image/jpeg","album":"General","date":"2026-09-28T02:47:29.001Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_23.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_23.jpg","name":"La cena","type":"image/jpeg","album":"General","date":"2026-09-28T02:45:45.052Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_25.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_25.jpg","name":"Lamas gruta","type":"image/jpeg","album":"General","date":"2026-09-28T02:45:26.951Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_29.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_29.mp4","name":"El inicio del fin","type":"video/mp4","album":"General","date":"2026-09-28T02:44:53.715Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_20.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_20.jpg","name":"IMG-20251211-WA0005.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T02:37:14.893Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]}
+      {"id":"item_184_r","tgMessageId":184,"fileId":"AgACAgEAAxkDAAO4arxycPYMmD2MpiLGH2ijWsnFRh0AAvkMaxvqMuFF0dh2LOBiiZ0BAAMCAAN3AAM9BA","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_177.jpg","name":"Recuerdo de la Promo","type":"image/jpeg","album":"General","date":"2026-09-30T02:22:40.000Z","updatedAt":1790738253836,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_183_r","tgMessageId":183,"fileId":"AgACAgEAAxkDAAO3arxybl-IgNU-Jt7V03DmSuphnwgAAvgMaxvqMuFFrGNNQlKHtaYBAAMCAAN3AAM9BA","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_176.jpg","name":"Recuerdo de la Promo","type":"image/jpeg","album":"General","date":"2026-09-30T02:22:38.000Z","updatedAt":1790738253836,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_182_r","tgMessageId":182,"fileId":"AgACAgEAAxkDAAO2arxyayWNyo_g5IPNL6cxi64VTaUAAvcMaxvqMuFFMpZc_aOM5ewBAAMCAAN3AAM9BA","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_175.jpg","name":"Recuerdo de la Promo","type":"image/jpeg","album":"General","date":"2026-09-30T02:22:35.000Z","updatedAt":1790738253836,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_181_r","tgMessageId":181,"fileId":"AgACAgEAAxkDAAO1arxyaC1uYNJiw1cEbVOJ_0qGZtAAAvYMaxvqMuFFYudKaS4HwnIBAAMCAAN3AAM9BA","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_174.jpg","name":"Recuerdo de la Promo","type":"image/jpeg","album":"General","date":"2026-09-30T02:22:33.000Z","updatedAt":1790738253836,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_180_r","tgMessageId":180,"fileId":"AgACAgEAAxkDAAO0arxyZu93uN-Ber2mE6orXxbDbWEAAvUMaxvqMuFFJIumHQmXePoBAAMCAAN3AAM9BA","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_173.jpg","name":"Recuerdo de la Promo","type":"image/jpeg","album":"General","date":"2026-09-30T02:22:30.000Z","updatedAt":1790738253836,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_179_r","tgMessageId":179,"fileId":"AgACAgEAAxkDAAOzarxyYq-7r7zOz1gjnrCYYKW0pYgAAvQMaxvqMuFFDpFda2YP92ABAAMCAAN3AAM9BA","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_172.jpg","name":"Recuerdo de la Promo","type":"image/jpeg","album":"General","date":"2026-09-30T02:22:26.000Z","updatedAt":1790738253837,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_175","tgMessageId":175,"fileId":"BAACAgEAAxkBAAOvarxxGA0ex5VCrAdFgk5ANI2fYWsAAh4IAAIDe-hFwTfgc6ANnGw9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_171.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T02:16:56.000Z","updatedAt":1790736903216,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_174","tgMessageId":174,"fileId":"BAACAgEAAxkBAAOuarxwiJUYZqma1T5XR87DSMn4GBcAAhwIAAIDe-hF7gABkI05oUfgPQQ","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_170.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T02:14:32.000Z","updatedAt":1790736903019,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_d691v8u","tgMessageId":165,"fileId":"BAACAgEAAxkDAAOlarxp5DoljUHYf21HFENTXiA3evsAApwRAALqMuFFcUZwcT46oOE9BA","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_113.mp4","name":"El mejor Blog (no como FabricioGeimely)","type":"video/mp4","album":"General","date":"2026-09-30T01:46:13.616Z","updatedAt":1790738253837,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_ghup4lv","fileId":"AgACAgEAAxkDAAOjarxoTiS5PUlCldrM_8br87hiR64AAuUMaxvqMuFFqL8ply--SecBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_107.jpg","name":"mimir","type":"image/jpeg","album":"General","date":"2026-09-30T01:39:24.810Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_sxl26zi","fileId":"AgACAgEAAxkDAANNarsHufgH_hewiZpJk_GO9Qse1bMAAhsNaxtCS9lFtrPa66jPm-sBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_106.jpg","name":"Día de la Juventud","type":"image/jpeg","album":"General","date":"2026-09-30T01:38:51.422Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_72v23z6","fileId":"AgACAgEAAxkDAANRarsIVQq6DgRuMDAgjqXuc0QY9lgAAh4NaxtCS9lF6K9k_e2WcpABAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_105.jpg","name":"Jornada","type":"image/jpeg","album":"Jornada","date":"2026-09-30T01:38:39.273Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_06l35n4","fileId":"AgACAgEAAxkDAANSarsId1RksF-JymBZeDhES8NVfQQAAh8NaxtCS9lFXDVg-ql-9HUBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_104.jpg","name":"Todos","type":"image/jpeg","album":"Jornada","date":"2026-09-30T01:38:28.576Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_4syjk4k","fileId":"AgACAgEAAxkDAANXarsJJ3ePZ3b_T99BJScdzIiKz8EAAiQNaxtCS9lFn1WbHMHDEAsBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_103.jpg","name":"Ultima cena","type":"image/jpeg","album":"Semana Santa","date":"2026-09-30T01:37:54.224Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_w8x0lb5","fileId":"AgACAgEAAxkDAANYarsJTGTg0KA3_zGoNKu7zI1Bc64AAiUNaxtCS9lFo-Di3tw23eoBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_102.jpg","name":"Semana Santa","type":"image/jpeg","album":"Semana Santa","date":"2026-09-30T01:37:33.654Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_ak1hyub","fileId":"AgACAgEAAxkDAANWarsJF5Dc03-nXI9_GKGl_BwNKrEAAiMNaxtCS9lF14ti1mV2hY4BAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_101.jpg","name":"15","type":"image/jpeg","album":"15 Años","date":"2026-09-30T01:37:10.363Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_hr9ujo6","fileId":"AgACAgEAAxkDAANVarsJC9kk7fdh0UsCVQNhkJqMb4AAAiINaxtCS9lFcwABYComxfJOAQADAgADeQADPQQ","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_99.jpg","name":"15","type":"image/jpeg","album":"15 Años","date":"2026-09-30T01:37:01.684Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_100.mp4","fileId":"BAACAgEAAxkDAAObarxnu2V8b0jPFjV1pG_BmIYGBXYAApgRAALqMuFFsQ9K95QiBz09BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_100.mp4","name":"Primer Blog (no como FabricioGeimely)","type":"video/mp4","album":"General","date":"2026-09-30T01:37:00.066Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_z9ieqt2","fileId":"BAACAgEAAxkDAAOZarxmvh9Wi3Du4IIvW3f1_6dssOsAApcRAALqMuFF6iOzW99BI5E9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_98.mp4","name":"A2","type":"video/mp4","album":"General","date":"2026-09-30T01:32:54.943Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_147","tgMessageId":147,"fileId":"BAACAgEAAyEGAAMBB4RksgADBmq8aLm_e2OGOYOa8qoa5BGbYUolAAKkCwACl9_hRU-p1gTyhFgMPQQ","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_108.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T01:08:02.000Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_146","tgMessageId":146,"fileId":"BAACAgEAAyEGAAMBB4RksgADB2q8aLws6JTeJW7u4pyYUAqtvogKAAKlCwACl9_hRYl8t4ATHn_rPQQ","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_109.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T01:07:47.000Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_145","tgMessageId":145,"fileId":"BAACAgEAAyEGAAMBB4RksgADCGq8aPfn-spstLTXF0YpYgWhzqEMAAKmCwACl9_hRe23wwsf8OW1PQQ","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_110.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T00:59:16.000Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_jcl5420","fileId":"AgACAgEAAxkDAAOQarxY5nc-EnOxS3cMbV8u_qnY3EAAAtYMaxvqMuFFr8krRouCHtcBAAMCAAN3AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_93.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-30T00:33:43.534Z","updatedAt":1790734500000,"likes":1,"likedBy":["user_u5widpg47lk"],"comments":[]},
+      {"id":"item_lk9zhec","fileId":"AgACAgEAAxkDAAOParxYz0Ao48vF0eXu0PMSUNXlxGcAAtUMaxvqMuFFuhqZov__hkQBAAMCAAN3AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_92.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-30T00:33:20.007Z","updatedAt":1790734500000,"likes":1,"likedBy":["user_u5widpg47lk"],"comments":[]},
+      {"id":"tg_msg_140","tgMessageId":140,"fileId":"BAACAgEAAyEGAAMBB4RksgADCWq8aQXdU23AhYdFRY3ArbFR032SAAKnCwACl9_hRRmIu2nbP9lLPQQ","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_111.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:19:48.000Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_82.mp4","fileId":"BAACAgEAAxkDAANwarue3F4WvQJukzLHQkgoF3blP6MAAhwIAALqMtlF4ld07QUnPSg9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_82.mp4","name":"XD","type":"video/mp4","album":"General","date":"2026-09-29T11:19:56.847Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_70.jpg","fileId":"AgACAgEAAxkDAANgarsnFrpk3tgbLgb7ng6Db9M7upkAAi8NaxtCS9lF-Si4H8dfCuUBAAMCAAN3AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_165.jpg","name":"Casacas","type":"image/jpeg","album":"General","date":"2026-09-29T02:48:55.453Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_65.mp4","fileId":"BAACAgEAAxkDAANaarsJh6_qQ0wfQMJyi3Iq7yUEBv4AAuAHAAJCS9lFdCxIJlaHTdI9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_65.mp4","name":"VID-20251219-WA0018.mp4","type":"video/mp4","album":"General","date":"2026-09-29T00:42:46.103Z","updatedAt":1790734500000,"likes":1,"likedBy":["user_d3vh8ch9sr6"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_64.jpg","fileId":"AgACAgEAAxkDAANZarsJaRYu0G4VbulOue2ToyMnGesAAiYNaxtCS9lFD0dH1vO1A1QBAAMCAAN3AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_161.jpg","name":"Fiesta","type":"image/jpeg","album":"Fiesta","date":"2026-09-29T00:42:16.071Z","updatedAt":1790734500000,"likes":1,"likedBy":["user_d3vh8ch9sr6"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_59.jpg","fileId":"AgACAgEAAxkDAANUarsIzigm13vRK-Ec45YHzO1Itr8AAiENaxtCS9lFUM5n9NpVjd4BAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_160.jpg","name":"IMG-20230908-WA0001.jpg","type":"image/jpeg","album":"General","date":"2026-09-29T00:39:41.010Z","updatedAt":1790734500000,"likes":1,"likedBy":["user_d3vh8ch9sr6"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_58.jpg","fileId":"AgACAgEAAxkDAANTarsIh_bBnEvIg5AGS3SRx_UDcYsAAiANaxtCS9lFz6G2RZytnBsBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_159.jpg","name":"Jornada","type":"image/jpeg","album":"Jornada","date":"2026-09-29T00:38:29.239Z","updatedAt":1790734500000,"likes":1,"likedBy":["user_d3vh8ch9sr6"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_55.mp4","fileId":"BAACAgEAAxkDAANQarsH6-vdibQReQINNDIw81XMRYEAAtwHAAJCS9lFvcRxKpweZ8U9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_55.mp4","name":"XD...mp4","type":"video/mp4","album":"General","date":"2026-09-29T00:35:54.714Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_54.jpg","fileId":"AgACAgEAAxkDAANParsH38-fz6Qx3Vow6olpQglwXdoAAh0NaxtCS9lFOCqZ7JZO7TsBAAMCAAN4AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_158.jpg","name":"primaria","type":"image/jpeg","album":"General","date":"2026-09-29T00:35:41.734Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_53.jpg","fileId":"AgACAgEAAxkDAANOarsHyN1uo5Sz2vNUY0KBV_b7CPkAAhwNaxtCS9lF5RojPKpziwUBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_157.jpg","name":"Jornada.jpg","type":"image/jpeg","album":"Jornada","date":"2026-09-29T00:35:19.161Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_51.mp4","fileId":"BAACAgEAAxkDAANMarsBuIOr9Z2HqkHQmxSG1w-5p4MAAtIHAAJCS9lF9X7UtBWUBnk9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_51.mp4","name":"Fiesta..mp4","type":"video/mp4","album":"Fiesta","date":"2026-09-29T00:09:28.137Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_50.mp4","fileId":"BAACAgEAAxkDAANLarsBRrZlihPP-bqi3FOPbpG0wN4AAtAHAAJCS9lFCHLkVg8RLeM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_50.mp4","name":"Xd.mp4","type":"video/mp4","album":"General","date":"2026-09-29T00:07:33.827Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_49.jpg","fileId":"AgACAgEAAxkDAANKarsBNZ2jxowrDmcs0OaQ6Iuup5AAAgsNaxtCS9lFMw8d79RgyW0BAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_156.jpg","name":"Lamas.jpeg","type":"image/jpeg","album":"General","date":"2026-09-29T00:07:16.143Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_48.mp4","fileId":"BAACAgEAAxkDAANJarsBKuZWnV72nKzcI5oQ5MRhyJkAAs8HAAJCS9lFMrXhyHViu909BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_48.mp4","name":"Semana Santa.mp4","type":"video/mp4","album":"Semana Santa","date":"2026-09-29T00:07:05.256Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_47.jpg","fileId":"AgACAgEAAxkDAANIarsBHzlLDrMw7By60jHjFLH6IEgAAgoNaxtCS9lFX_gwfsyLdtABAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_155.jpg","name":"Fiesta.jpeg","type":"image/jpeg","album":"Fiesta","date":"2026-09-29T00:06:54.053Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_46.mp4","fileId":"BAACAgEAAxkDAANHarsBElxkxPu89ZnJ8NMRqT6iHK8AAs4HAAJCS9lF016FwFw1iyQ9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_46.mp4","name":"Xd..mp4","type":"video/mp4","album":"General","date":"2026-09-29T00:06:41.442Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_45.mp4","fileId":"BAACAgEAAxkDAANGarsAAfna-CCghDZJkL8hJYK-KGBHAALNBwACQkvZRUqjHwtUrqtVPQQ","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_45.mp4","name":"Decoracion.mp4","type":"video/mp4","album":"General","date":"2026-09-29T00:06:17.675Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_44.jpg","fileId":"AgACAgEAAxkDAANFarrv2P5E2V4y7F7ohqHGLMMBkrcAAv0MaxtCS9lFwvb1Ilr9f14BAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_44.jpg","name":"Consagración","type":"image/jpeg","album":"General","date":"2026-09-28T22:53:11.472Z","updatedAt":1790734500000,"likes":2,"likedBy":["user_g58mo8fyf26","user_u5widpg47lk"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_43.jpg","fileId":"AgACAgEAAxkDAANEarrvrlPpWOLbHFXghISqVJhzoKQAAvwMaxtCS9lF8C6RRqP5fwoBAAMCAAN4AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_43.jpg","name":"San Jose","type":"image/jpeg","album":"General","date":"2026-09-28T22:52:29.276Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_42.jpg","fileId":"AgACAgEAAxkDAANDarrvni52KMIDUV4bJxkWJRlaHYgAAvsMaxtCS9lFZnsuKUEqMOcBAAMCAAN4AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_42.jpg","name":"San Jose","type":"image/jpeg","album":"General","date":"2026-09-28T22:52:13.961Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_41.jpg","fileId":"AgACAgEAAxkDAANCarrvYo85cJMVZPPsySxPPsBcAtwAAvoMaxtCS9lF5w334BIro1EBAAMCAAN4AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_41.jpg","name":"La cena","type":"image/jpeg","album":"General","date":"2026-09-28T22:51:13.188Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_40.jpg","fileId":"AgACAgEAAxkDAANBarru5GTbTTilPV-Xc8xFl0wV0cwAAvkMaxtCS9lFd36vpnvKXVMBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_40.jpg","name":"La cena.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T22:49:07.922Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_39.jpg","fileId":"AgACAgEAAxkDAANAarruncFQFfymYanrg5lcby5TtgkAAvgMaxtCS9lF3P1Epw1T-kYBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_39.jpg","name":"Aniversario 2025.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T22:47:56.149Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_38.jpg","fileId":"AgACAgEAAxkDAAM9arruYTEVsm_qHaAaOvOm6hELuYYAAvcMaxtCS9lF9myXYAKg9jYBAAMCAAN3AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_38.jpg","name":"Aniversario 2025","type":"image/jpeg","album":"General","date":"2026-09-28T22:47:30.538Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_37.jpg","fileId":"AgACAgEAAxkDAAM8arnaEkfSxKGOAjpHaaiszDRxFngAAukLaxtCS9FFTzo54ZuKvRwBAAMCAAN3AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_154.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-28T03:08:06.087Z","updatedAt":1790734500000,"likes":15,"likedBy":["user_2jlky1yi9p9","user_g58mo8fyf26"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_35.jpg","fileId":"AgACAgEAAxkDAAM4arnYn1igiYn9e23LtBSPFFGikHIAAuYLaxtCS9FFcXDeVATjbtEBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_152.jpg","name":".......jpg","type":"image/jpeg","album":"General","date":"2026-09-28T03:01:49.691Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_34.jpg","fileId":"AgACAgEAAxkDAAM3arnYUJ79l_EG1eCbtov8rDLZZFcAAuULaxtCS9FFsIcvxuTzbNQBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_151.jpg","name":"1 generación","type":"image/jpeg","album":"General","date":"2026-09-28T03:00:31.206Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_33.mp4","fileId":"BAACAgEAAxkDAAM2arnYLnpZOCtJa1BY5Gaca4c6dq4AAuQIAAJCS9FF8BigYF6EnLg9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_150.mp4","name":"sorpresa","type":"video/mp4","album":"General","date":"2026-09-28T02:59:57.817Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_32.mp4","fileId":"BAACAgEAAxkDAAM0arnXE-Yk5aalnMI0ZMcxkyFZZVMAAuEIAAJCS9FFlhjiLj3IBws9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_149.mp4","name":"VID-20221223-WA0009.mp4","type":"video/mp4","album":"General","date":"2026-09-28T02:55:15.114Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_30.jpg","fileId":"AgACAgEAAxkDAAMxarnVQsfalmC7M6doKOTdr6gWOyoAAuELaxtCS9FFz8RFYISvllwBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_147.jpg","name":"Navidad","type":"image/jpeg","album":"General","date":"2026-09-28T02:47:29.001Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_23.jpg","fileId":"AgACAgEAAxkDAAMkarnTQuWfnPsXaajkb4xhm2hTXdYAAtsLaxtCS9FF7iHGnjf0L2EBAAMCAAN3AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_138.jpg","name":"La cena","type":"image/jpeg","album":"General","date":"2026-09-28T02:45:45.052Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_25.jpg","fileId":"AgACAgEAAxkDAAMmarnTbtXLqhA_JLygCh7hnjyUXIIAAt0LaxtCS9FFQaSxqZgAAXXFAQADAgADdwADPQQ","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_140.jpg","name":"Lamas gruta","type":"image/jpeg","album":"General","date":"2026-09-28T02:45:26.951Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_29.mp4","fileId":"BAACAgEAAxkDAAMtarnUpq3Wxi5v3X-Cj4ea_2W-4RcAAtwIAAJCS9FFQwQy-TfbmUE9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_146.mp4","name":"El inicio del fin","type":"video/mp4","album":"General","date":"2026-09-28T02:44:53.715Z","updatedAt":1790734500000,"likes":1,"likedBy":["user_2iitm9z61rh"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_20.jpg","fileId":"AgACAgEAAxkDAAMfarnS2xpuN1VPdMVRp8G2pNkesOcAAtcLaxtCS9FF8ZFMxtjJS6cBAAMCAAN5AAM9BA","externalEmbedUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_134.jpg","name":"IMG-20251211-WA0005.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T02:37:14.893Z","updatedAt":1790734500000,"likes":1,"likedBy":["user_2iitm9z61rh"],"comments":[]}
     ];
 
-    let items = JSON.parse(JSON.stringify(BASE_CLOUD_ITEMS)).map(i => aplicarMapaPermanenteAItem(i));
-    let tweets = [
-      {"id":"tw_qx6jhe","author":"Miembro Promo 349","authorId":"user_s33utowko0j","text":"Fabricio entiende...","date":"2026-09-29T01:57:27.247Z","updatedAt":0,"likes":2,"likedBy":["user_s33utowko0j","user_g58mo8fyf26"]},
-      {"id":"tw_i3zqru","author":"Admin","authorId":"user_g58mo8fyf26","text":"El Sistema de BOT se encuentra en Desarrollo","date":"2026-09-29T01:39:51.180Z","updatedAt":0,"likes":0,"likedBy":[]},
-      {"id":"tw_2l8vap","author":"Miembro Promo 397","authorId":"user_2iitm9z61rh","text":"The History of Everything-freestyle version \nsombody-justin bieber \ndtfm -bad bunny","date":"2026-09-28T23:25:00.920Z","updatedAt":0,"likes":0,"likedBy":[]}
-    ];
+    let items = [];
+    let tweets = [];
     let members = [];
     let awards = [];
     let capsules = [];
-    let events = [{"id":"ev_zy74em","title":"Último Aniversario","date":"2026-10-07T19:00","location":"Por confirmar"}];
+    let events = [];
     let musicConfig = {
       playlistUrl: 'https://open.spotify.com/embed/playlist/3lcbivzyUFBhKcmVi49W4J',
       himnos: [
@@ -1100,37 +1153,101 @@
     };
 
     /* =========================================================
-       MOTOR ANTI-REVERSIÓN Y CONTROL DE VERSIONES (v2)
-       Soluciona:
-       1. Condiciones de carrera en peticiones PUT simultáneas
-       2. Pérdida de cambios cuando JSONBin aplica límite de peticiones (429)
-       3. Reaparición de elementos borrados o sobrescritura desde otra pestaña/bot
-       4. Caché viejo en GET /latest
+       MOTOR ANTI-REVERSIÓN Y AUTORIDAD DEL USUARIO ACTIVO (v4)
+       Garantiza que:
+       1. Todo usuario que entra (nuevo o recurrente) recibe DIRECTAMENTE el último estado dejado por el último usuario activo en JSONBin.
+       2. Entrar a mirar la web es 100% Modo Lectura (jamás hace PUT a JSONBin).
+       3. Cuando alguien realiza una acción real (subir foto, comentar, dar like, borrar), NO se sube toda la memoria de su navegador:
+          solo se registra esa operación puntual en `cambiosActivosUsuario` y se aplica encima de la versión más reciente de JSONBin.
+       4. Así es físicamente imposible que una pestaña antigua o un teléfono con caché viejo borre cosas nuevas o reviva cosas eliminadas.
     ========================================================= */
     let nubeCargada = false;
+    let nubeSincronizadaExito = false;
     let cambiosPendientes = false;
     let sincronizandoAhora = false;
     let syncTimer = null;
-    let localRevision = Number(localStorage.getItem('prom_edm26_revision') || '0');
+    let localRevision = Date.now();
     const LEGACY_PURGED_IDS = [
       'ev-fotos', 'ev-graduacion', 'ev-viaje',
       'mem_fqzg4gg', 'mem_y0mmg6i',
       'cat-fiesta', 'cat-dormilon', 'cat-puntual', 'cat-dupla', 'cat_dudr9o',
-      'Canción Destacada_Promo 2026_0'
+      'Canción Destacada_Promo 2026_0',
+      'item_rescued_172', 'item_rescued_173', 'item_rescued_174',
+      'item_rescued_175', 'item_rescued_176', 'item_rescued_177'
     ];
     let deletedIds = new Set(LEGACY_PURGED_IDS);
 
     try {
-      const savedDeleted = JSON.parse(localStorage.getItem(DELETED_IDS_KEY) || '[]');
-      if (Array.isArray(savedDeleted)) savedDeleted.forEach(id => deletedIds.add(String(id)));
+      const savedDeletedV4 = JSON.parse(localStorage.getItem(DELETED_IDS_KEY) || '[]');
+      const savedDeletedV2 = JSON.parse(localStorage.getItem('prom_edm26_deleted_ids_v2') || '[]');
+      [...(Array.isArray(savedDeletedV4) ? savedDeletedV4 : []), ...(Array.isArray(savedDeletedV2) ? savedDeletedV2 : [])]
+        .forEach(id => deletedIds.add(String(id)));
     } catch (e) {}
+
+    /* Cola de deltas atómicos: solo contiene lo que ESTE usuario modificó/creó explícitamente en su sesión activa */
+    const cambiosActivosUsuario = {
+      items: new Map(),
+      tweets: new Map(),
+      members: new Map(),
+      awards: new Map(),
+      capsules: new Map(),
+      events: new Map(),
+      himnos: new Map()
+    };
+
+    function obtenerClaveDelta(tipo, obj) {
+      if (!obj) return '';
+      if (tipo === 'items') return String(obtenerIdItem(obj));
+      if (tipo === 'himnos') return String(obj.id || `${obj.titulo}_${obj.artista}`);
+      return String(obj.id || '');
+    }
+
+    function registrarCambioUsuario(tipo, obj) {
+      if (!obj || !cambiosActivosUsuario[tipo]) return;
+      const k = obtenerClaveDelta(tipo, obj);
+      if (!k) return;
+      cambiosActivosUsuario[tipo].set(k, JSON.parse(JSON.stringify(obj)));
+    }
+
+    function tieneCambiosActivosUsuario() {
+      return (
+        cambiosActivosUsuario.items.size > 0 ||
+        cambiosActivosUsuario.tweets.size > 0 ||
+        cambiosActivosUsuario.members.size > 0 ||
+        cambiosActivosUsuario.awards.size > 0 ||
+        cambiosActivosUsuario.capsules.size > 0 ||
+        cambiosActivosUsuario.events.size > 0 ||
+        cambiosActivosUsuario.himnos.size > 0
+      );
+    }
 
     function registrarEliminado(idOrUrl) {
       if (!idOrUrl) return;
-      deletedIds.add(String(idOrUrl));
+      const k = String(idOrUrl);
+      deletedIds.add(k);
+      Object.values(cambiosActivosUsuario).forEach(mapa => mapa.delete(k));
       try {
         localStorage.setItem(DELETED_IDS_KEY, JSON.stringify(Array.from(deletedIds)));
       } catch (e) {}
+    }
+
+    function registrarItemEliminadoCompleto(item) {
+      if (!item) return;
+      if (item.id) registrarEliminado(item.id);
+      if (item.url) registrarEliminado(item.url);
+      if (item.fileId) registrarEliminado(item.fileId);
+      if (item.tgMessageId) registrarEliminado('tg_msg_' + item.tgMessageId);
+      registrarEliminado(obtenerIdItem(item));
+    }
+
+    function estaItemEliminado(item) {
+      if (!item) return true;
+      if (item.id && deletedIds.has(String(item.id))) return true;
+      if (item.url && deletedIds.has(String(item.url))) return true;
+      if (item.fileId && deletedIds.has(String(item.fileId))) return true;
+      if (item.tgMessageId && deletedIds.has('tg_msg_' + item.tgMessageId)) return true;
+      if (deletedIds.has(String(obtenerIdItem(item)))) return true;
+      return false;
     }
 
     function obtenerIdItem(i) {
@@ -1140,8 +1257,9 @@
     function guardarRespaldoLocal(incrementarVersion = true) {
       if (incrementarVersion) {
         localRevision = Date.now();
-        localStorage.setItem('prom_edm26_revision', String(localRevision));
       }
+      // Solo guardamos instantánea local si ya validamos el estado real de la nube
+      if (!nubeSincronizadaExito) return;
       const payload = {
         revision: localRevision,
         savedAt: new Date().toISOString(),
@@ -1172,7 +1290,7 @@
         deletedIds.delete(`${TG_FILE_PREFIX}photos/file_70.jpg`);
         deletedIds.delete(`${TG_FILE_PREFIX}photos/file_165.jpg`);
         if (Array.isArray(data.items)) {
-          items = data.items.map(i => aplicarMapaPermanenteAItem(i)).filter(i => i && !i.isHeavyVideo && !deletedIds.has(obtenerIdItem(i)));
+          items = data.items.map(i => aplicarMapaPermanenteAItem(i)).filter(i => i && !i.isHeavyVideo && !estaItemEliminado(i));
         }
         if (Array.isArray(data.tweets)) tweets = data.tweets.filter(t => !deletedIds.has(t.id));
         if (Array.isArray(data.members)) members = data.members.filter(m => !deletedIds.has(m.id));
@@ -1189,53 +1307,83 @@
       }
     }
 
+    /* Aplica ÚNICAMENTE las acciones explícitas del usuario activo encima del último estado vivo de la nube */
+    function aplicarDeltasSobreNube(parsed) {
+      const deltaItems = Array.from(cambiosActivosUsuario.items.values());
+      const deltaTweets = Array.from(cambiosActivosUsuario.tweets.values());
+      const deltaMembers = Array.from(cambiosActivosUsuario.members.values());
+      const deltaAwards = Array.from(cambiosActivosUsuario.awards.values());
+      const deltaCapsules = Array.from(cambiosActivosUsuario.capsules.values());
+      const deltaEvents = Array.from(cambiosActivosUsuario.events.values());
+      const deltaHimnos = Array.from(cambiosActivosUsuario.himnos.values());
+
+      items = fusionarListasPorId(deltaItems, parsed.cloudItems, obtenerIdItem);
+      tweets = fusionarListasPorId(deltaTweets, parsed.cloudTweets, t => t.id);
+      members = fusionarListasPorId(deltaMembers, parsed.cloudMembers, m => m.id);
+      awards = fusionarPremios(deltaAwards, parsed.cloudAwards);
+      capsules = fusionarListasPorId(deltaCapsules, parsed.cloudCapsules, c => c.id);
+      events = fusionarListasPorId(deltaEvents, parsed.cloudEvents, ev => ev.id);
+      if ((parsed.cloudHimnos && parsed.cloudHimnos.length > 0) || deltaHimnos.length > 0) {
+        musicConfig.himnos = fusionarListasPorId(deltaHimnos, parsed.cloudHimnos, h => h.id || `${h.titulo}_${h.artista}`);
+      }
+      if (parsed.playlistUrl) musicConfig.playlistUrl = parsed.playlistUrl;
+    }
+
     function fusionarListasPorId(listaLocal, listaNube, getKey) {
       const mapa = new Map();
       const ordenClaves = [];
 
-      // Primero insertamos los elementos locales (tienen prioridad en ediciones recientes)
+      // Primero insertamos los elementos locales que no hayan sido eliminados
       (listaLocal || []).forEach(elem => {
         if (!elem) return;
         const k = String(getKey(elem));
-        if (!k || deletedIds.has(k)) return;
+        if (!k || deletedIds.has(k) || (elem.url && estaItemEliminado(elem))) return;
         mapa.set(k, elem);
         ordenClaves.push(k);
       });
 
-      // Luego agregamos los de la nube que no estén borrados localmente
+      // Luego agregamos los de la nube que no estén borrados
       (listaNube || []).forEach(elem => {
         if (!elem) return;
         const k = String(getKey(elem));
-        if (!k || deletedIds.has(k)) return;
+        if (!k || deletedIds.has(k) || (elem.url && estaItemEliminado(elem))) return;
         if (!mapa.has(k)) {
           mapa.set(k, elem);
           ordenClaves.push(k);
         } else {
-          // Si existe en ambos, conservamos el que tenga más likes/comentarios o fecha de edición más reciente, preservando fileId
+          // Si existe en ambos, conservamos el que tenga fecha de edición más reciente, preservando fileId y unificando comentarios no borrados
           const loc = mapa.get(k);
           const locUpdated = Number(loc.updatedAt || 0);
           const cloudUpdated = Number(elem.updatedAt || 0);
           const mergedFileId = loc.fileId || elem.fileId || '';
           const mergedTgMsgId = loc.tgMessageId || elem.tgMessageId;
-          if (cloudUpdated > locUpdated) {
+          const mergedComments = (() => {
+            if (!Array.isArray(elem.comments) && !Array.isArray(loc.comments)) return undefined;
+            const comMap = new Map();
+            [...(loc.comments || []), ...(elem.comments || [])].forEach(c => {
+              if (c && c.id && !deletedIds.has(c.id)) comMap.set(c.id, c);
+            });
+            return Array.from(comMap.values());
+          })();
+          if (cloudUpdated >= locUpdated) {
             if (mergedFileId) elem.fileId = mergedFileId;
             if (mergedTgMsgId) elem.tgMessageId = mergedTgMsgId;
+            if (mergedComments) elem.comments = mergedComments;
             mapa.set(k, elem);
           } else {
             if (mergedFileId) loc.fileId = mergedFileId;
             if (mergedTgMsgId) loc.tgMessageId = mergedTgMsgId;
-            if (Array.isArray(elem.comments) && Array.isArray(loc.comments)) {
-              const comMap = new Map();
-              [...loc.comments, ...elem.comments].forEach(c => {
-                if (c && c.id && !deletedIds.has(c.id)) comMap.set(c.id, c);
-              });
-              loc.comments = Array.from(comMap.values());
-            }
+            if (mergedComments) loc.comments = mergedComments;
           }
         }
       });
 
-      return ordenClaves.map(k => mapa.get(k)).filter(Boolean);
+      const resultado = ordenClaves.map(k => mapa.get(k)).filter(Boolean);
+      // Si los elementos tienen fecha ISO (items de galería o tweets), los mantenemos ordenados del más reciente al más antiguo para que lo nuevo de otros dispositivos quede arriba
+      if (resultado.length > 1 && resultado[0].date && (resultado[0].url || resultado[0].text !== undefined)) {
+        resultado.sort((a, b) => (new Date(b.date || 0).getTime() || 0) - (new Date(a.date || 0).getTime() || 0));
+      }
+      return resultado;
     }
 
     function fusionarPremios(locales, nube) {
@@ -1385,7 +1533,7 @@
           likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
           comments: Array.isArray(i.comments) ? i.comments.filter(c => !deletedIds.has(c.id)) : []
         };
-      }).filter(i => i.url && !i.isHeavyVideo && !deletedIds.has(obtenerIdItem(i)));
+      }).filter(i => i.url && !i.isHeavyVideo && !estaItemEliminado(i));
 
       const cloudTweets = (Array.isArray(record.tweets) ? record.tweets : []).map(t => ({
         id: t.id || 'tw_' + Math.random().toString(36).substring(2, 8),
@@ -1433,90 +1581,68 @@
     }
 
     async function cargarDesdeNube(manual = false) {
-      // Si hay cambios pendientes por subir, primero los protegemos antes de sobrescribir
-      if (cambiosPendientes && nubeCargada) {
+      // Si el usuario activo tiene una acción recién hecha sin subir, la enviamos primero
+      if (cambiosPendientes && nubeCargada && nubeSincronizadaExito) {
         await ejecutarSincronizacionNube();
       }
 
       document.getElementById('statusText').innerText = 'Sincronizando...';
       document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
 
-      // Cargamos primero el respaldo local para respuesta inmediata y no perder ediciones locales
-      const teniaRespaldoLocal = restaurarDesdeRespaldoLocal();
-      if (teniaRespaldoLocal && !nubeCargada) {
-        renderTodo();
-      }
-
       try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?_t=${Date.now()}`, {
-          headers: {
-            'X-Master-Key': MASTER_KEY,
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache'
-          },
-          cache: 'no-store'
-        });
-        if (!res.ok) throw new Error('Error HTTP ' + res.status);
+        // Todo usuario que entra va DIRECTO a consultar la última versión activa en JSONBin (con reintento rápido si hay microcorte)
+        let res = null;
+        for (let intento = 0; intento < 2; intento++) {
+          res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?_t=${Date.now()}`, {
+            headers: {
+              'X-Master-Key': MASTER_KEY,
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache'
+            },
+            cache: 'no-store'
+          }).catch(() => null);
+          if (res && res.ok) break;
+          await new Promise(r => setTimeout(r, 900));
+        }
+        if (!res || !res.ok) throw new Error('Error HTTP ' + (res ? res.status : 'red'));
+
         const data = await res.json();
         const record = data.record || {};
+        const parsed = normalizarRecordNube(record);
 
-        const {
-          esItemUnicoMake,
-          cloudItems,
-          cloudTweets,
-          cloudMembers,
-          cloudAwards,
-          cloudCapsules,
-          cloudEvents,
-          cloudHimnos,
-          playlistUrl
-        } = normalizarRecordNube(record);
-
-        if (esItemUnicoMake) {
-          // Si Make sobrescribió el bin con un único objeto, rescatamos el respaldo local + el nuevo item
-          items = fusionarListasPorId(cloudItems, items, obtenerIdItem);
-        } else if (cambiosPendientes) {
-          // Solo fusionamos con memoria local si el usuario tiene cambios sin guardar en este instante
-          items = fusionarListasPorId(items, cloudItems, obtenerIdItem);
-          tweets = fusionarListasPorId(tweets, cloudTweets, t => t.id);
-          members = fusionarListasPorId(members, cloudMembers, m => m.id);
-          awards = fusionarPremios(awards, cloudAwards);
-          capsules = fusionarListasPorId(capsules, cloudCapsules, c => c.id);
-          events = fusionarListasPorId(events, cloudEvents, ev => ev.id);
-          if (cloudHimnos.length > 0) {
-            musicConfig.himnos = fusionarListasPorId(musicConfig.himnos, cloudHimnos, h => h.id || `${h.titulo}_${h.artista}`);
-          }
-          if (playlistUrl) musicConfig.playlistUrl = playlistUrl;
+        if (parsed.esItemUnicoMake) {
+          restaurarDesdeRespaldoLocal();
+          items = fusionarListasPorId(parsed.cloudItems, items, obtenerIdItem);
+          parsed.cloudItems.forEach(i => registrarCambioUsuario('items', i));
         } else {
-          // La nube (JSONBin) es la fuente de verdad al abrir la página: evita que el caché viejo de otro celular/PC reviva eventos o pruebas borradas
-          items = cloudItems;
-          tweets = cloudTweets;
-          members = cloudMembers;
-          awards = cloudAwards;
-          capsules = cloudCapsules;
-          events = cloudEvents;
-          musicConfig.himnos = cloudHimnos;
-          if (playlistUrl) musicConfig.playlistUrl = playlistUrl;
+          // Mandamos al usuario directamente a lo último que subió el último usuario activo (+ cualquier acción puntual que esté haciendo ahora mismo)
+          aplicarDeltasSobreNube(parsed);
         }
 
         nubeCargada = true;
+        nubeSincronizadaExito = true;
         const huboNuevosTelegram = await sincronizarBotTelegramDirecto();
         guardarRespaldoLocal(false);
         renderTodo();
-        if (esItemUnicoMake || huboNuevosTelegram) {
-          ejecutarSincronizacionNube(true);
+        if (parsed.esItemUnicoMake || huboNuevosTelegram) {
+          ejecutarSincronizacionNube();
         }
         document.getElementById('statusText').innerText = 'Sincronizado ✓';
         document.getElementById('heroSyncBadge').innerText = 'Sincronizado ✓';
-        if (manual) mostrarToast('Sincronizado con la nube sin perder cambios');
+        if (manual) mostrarToast('Sincronizado con la última versión activa');
       } catch (err) {
         console.error('Aviso al conectar con nube:', err);
-        nubeCargada = true; // Permitimos trabajar sobre el respaldo local
-        const huboNuevosTelegram = await sincronizarBotTelegramDirecto();
-        if (huboNuevosTelegram) guardarRespaldoLocal(true);
+        const teniaRespaldoLocal = restaurarDesdeRespaldoLocal();
+        if (!teniaRespaldoLocal && items.length === 0) {
+          items = JSON.parse(JSON.stringify(BASE_CLOUD_ITEMS)).map(i => aplicarMapaPermanenteAItem(i)).filter(i => !estaItemEliminado(i));
+        }
+        nubeCargada = true;
         renderTodo();
-        document.getElementById('statusText').innerText = 'Guardado en dispositivo';
-        document.getElementById('heroSyncBadge').innerText = 'Modo local protegido';
+        document.getElementById('statusText').innerText = 'Reintentando conexión...';
+        document.getElementById('heroSyncBadge').innerText = 'Reconectando...';
+        setTimeout(() => {
+          if (!nubeSincronizadaExito && !sincronizandoAhora) cargarDesdeNube(false);
+        }, 4500);
       }
     }
 
@@ -1569,7 +1695,7 @@
       const customName = document.getElementById('customFileName').value.trim() || `Video (${info.provider})`;
       const albumElegido = document.getElementById('uploadAlbumSelect').value || 'General';
 
-      items.unshift({
+      const nuevoItemVideo = {
         id: 'ext_' + Math.random().toString(36).substring(2, 9),
         url: info.directMp4 || info.thumbUrl || window.DEFAULT_LOGO_SVG,
         externalEmbedUrl: info.embedUrl || '',
@@ -1581,7 +1707,9 @@
         likes: 0,
         likedBy: [],
         comments: []
-      });
+      };
+      items.unshift(nuevoItemVideo);
+      registrarCambioUsuario('items', nuevoItemVideo);
 
       inp.value = '';
       document.getElementById('customFileName').value = '';
@@ -1595,6 +1723,7 @@
 
     async function sincronizarBotTelegramDirecto() {
       try {
+        if (!nubeSincronizadaExito) return false;
         // Limpiamos cualquier item viejo con isHeavyVideo que haya quedado en memoria local
         items = items.filter(i => !i.isHeavyVideo);
 
@@ -1616,6 +1745,8 @@
         for (const upd of data.result) {
           const msg = upd.message || upd.channel_post;
           if (!msg) continue;
+          // Todos los mensajes hasta el 184 ya están procesados en la nube; solo procesamos envíos nuevos (>184)
+          if (msg.message_id <= 184) continue;
           const tgItemId = 'tg_msg_' + msg.message_id;
           if (deletedIds.has(tgItemId)) continue;
           if (items.some(i => i.id === tgItemId || i.tgMessageId === msg.message_id)) continue;
@@ -1631,10 +1762,11 @@
 
           if (!fileId || deletedIds.has(fileId)) continue;
 
-          // Si el video pesa más de 20 MB, Telegram bloquea el .mp4 web directo. Avisamos al compañero en Telegram para que lo envíe en 720p/480p (<20MB) y no metemos el cuadro de instalar Telegram en la web.
+          // Si el video pesa más de 20 MB, Telegram bloquea el .mp4 web directo. Solo avisamos si el mensaje es reciente (<10 min) y posterior al msg 185 para no repetir avisos desde otros navegadores.
           if (esVideo && fileSize > 20 * 1024 * 1024) {
-            const mbStr = (fileSize / (1024 * 1024)).toFixed(1);
-            if (!notifiedMsgs.has(msg.message_id) && msg.chat?.id) {
+            const msgAgeSec = msg.date ? (Date.now() / 1000 - msg.date) : 999999;
+            if (msg.message_id > 185 && msgAgeSec < 600 && !notifiedMsgs.has(msg.message_id) && msg.chat?.id) {
+              const mbStr = (fileSize / (1024 * 1024)).toFixed(1);
               notifiedMsgs.add(msg.message_id);
               try {
                 localStorage.setItem('prom_tg_notified_msgs', JSON.stringify(Array.from(notifiedMsgs).slice(-100)));
@@ -1657,15 +1789,14 @@
           if (!fileRes.ok || !fileData.ok || !fileData.result?.file_path) continue;
 
           const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
-          deletedIds.delete(fileUrl);
-          if (items.some(i => i.id === tgItemId || i.url === fileUrl)) continue;
+          if (deletedIds.has(fileUrl) || items.some(i => i.id === tgItemId || i.fileId === fileId || i.url === fileUrl)) continue;
 
           const defaultTitle = senderName && senderName !== 'Botedm2026'
             ? `${esVideo ? 'Video' : 'Foto'} de ${senderName}`
             : (esVideo ? 'Video de la Promo' : 'Foto de la Promo');
           const caption = (msg.caption || '').trim() || defaultTitle;
 
-          items.unshift({
+          const nuevoTgItem = {
             id: tgItemId,
             tgMessageId: msg.message_id,
             fileId,
@@ -1678,7 +1809,9 @@
             likes: 0,
             likedBy: [],
             comments: []
-          });
+          };
+          items.unshift(nuevoTgItem);
+          registrarCambioUsuario('items', nuevoTgItem);
           huboNuevos = true;
         }
         return huboNuevos;
@@ -1701,41 +1834,41 @@
       }, 450);
     }
 
-    async function ejecutarSincronizacionNube(forzarSobrescritura = false) {
+    async function ejecutarSincronizacionNube() {
       if (sincronizandoAhora) return;
-      if (!nubeCargada && !forzarSobrescritura) return;
+      if (!nubeCargada) return;
 
       sincronizandoAhora = true;
       cambiosPendientes = false;
 
       try {
-        // Paso 1: Si no es forzado, leemos la última versión de la nube antes de hacer PUT para no pisar fotos del Bot de Telegram u otros compañeros
-        if (!forzarSobrescritura) {
-          try {
-            const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?_t=${Date.now()}`, {
-              headers: { 'X-Master-Key': MASTER_KEY, 'Cache-Control': 'no-cache' },
-              cache: 'no-store'
-            });
-            if (getRes.ok) {
-              const getData = await getRes.json();
-              const parsed = normalizarRecordNube(getData.record || {});
-              items = fusionarListasPorId(items, parsed.cloudItems, obtenerIdItem);
-              tweets = fusionarListasPorId(tweets, parsed.cloudTweets, t => t.id);
-              members = fusionarListasPorId(members, parsed.cloudMembers, m => m.id);
-              awards = fusionarPremios(awards, parsed.cloudAwards);
-              capsules = fusionarListasPorId(capsules, parsed.cloudCapsules, c => c.id);
-              events = fusionarListasPorId(events, parsed.cloudEvents, ev => ev.id);
-            }
-          } catch (mergeErr) {
-            console.warn('Continuando guardado directo:', mergeErr);
-          }
+        // Paso 1 OBLIGATORIO: Siempre leemos la última versión activa de JSONBin antes de hacer PUT.
+        // Si la lectura falla por microcorte o límite de red, ABORTAMOS el PUT y reintentamos luego (jamás sobrescribimos a ciegas).
+        const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?_t=${Date.now()}`, {
+          headers: {
+            'X-Master-Key': MASTER_KEY,
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache'
+          },
+          cache: 'no-store'
+        });
+
+        if (!getRes.ok) {
+          throw new Error('Lectura previa obligatoria falló con estado ' + getRes.status);
         }
 
-        // Paso 2: Guardamos el estado unificado + registro de borrados (deletedIds) en JSONBin
+        const getData = await getRes.json();
+        const parsed = normalizarRecordNube(getData.record || {});
+        nubeSincronizadaExito = true;
+
+        // Paso 2: Tomamos el último estado de la nube como base absoluta y aplicamos SOLO las acciones puntuales de este usuario activo
+        aplicarDeltasSobreNube(parsed);
+
+        // Paso 3: Guardamos el estado unificado + registro de borrados (deletedIds) en JSONBin
         const payload = {
-          revision: localRevision,
+          revision: Date.now(),
           updatedAt: new Date().toISOString(),
-          deletedIds: Array.from(deletedIds).slice(-400),
+          deletedIds: Array.from(deletedIds).slice(-500),
           items,
           tweets,
           members,
@@ -1759,21 +1892,22 @@
         }
 
         guardarRespaldoLocal(false);
+        renderTodo();
         document.getElementById('statusText').innerText = 'Guardado en nube ✓';
         document.getElementById('heroSyncBadge').innerText = 'Guardado en nube ✓';
       } catch (e) {
         console.error('Error al sincronizar con JSONBin:', e);
         cambiosPendientes = true;
-        document.getElementById('statusText').innerText = 'Respaldo local activo (Reintentando...)';
-        document.getElementById('heroSyncBadge').innerText = 'Guardado en dispositivo';
-        // Reintento automático en 6 segundos si hubo límite de peticiones (429) o microcorte
+        document.getElementById('statusText').innerText = 'Reintentando guardado...';
+        document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
+        // Reintento automático en 5 segundos si hubo límite de peticiones (429) o microcorte
         clearTimeout(syncTimer);
-        syncTimer = setTimeout(() => ejecutarSincronizacionNube(forzarSobrescritura), 6000);
+        syncTimer = setTimeout(() => ejecutarSincronizacionNube(), 5000);
       } finally {
         sincronizandoAhora = false;
         if (cambiosPendientes) {
           clearTimeout(syncTimer);
-          syncTimer = setTimeout(() => ejecutarSincronizacionNube(forzarSobrescritura), 2500);
+          syncTimer = setTimeout(() => ejecutarSincronizacionNube(), 2500);
         }
       }
     }
@@ -2068,7 +2202,9 @@
       const date = document.getElementById('evDateInput').value;
       const location = document.getElementById('evLocInput').value.trim() || 'Por confirmar';
       if (!title || !date) return mostrarToast('Completa el nombre y la fecha del evento');
-      events.push({ id: 'ev_' + Math.random().toString(36).substring(2, 8), title, date, location, updatedAt: Date.now() });
+      const nuevoEv = { id: 'ev_' + Math.random().toString(36).substring(2, 8), title, date, location, updatedAt: Date.now() };
+      events.push(nuevoEv);
+      registrarCambioUsuario('events', nuevoEv);
       document.getElementById('evTitleInput').value = '';
       document.getElementById('evLocInput').value = '';
       renderCronogramaEventos();
@@ -2132,7 +2268,7 @@
 
         const photoUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfoData.result.file_path}`;
 
-        members.unshift({
+        const nuevoMiembro = {
           id: 'mem_' + Math.random().toString(36).substring(2, 9),
           fileId,
           name,
@@ -2144,7 +2280,9 @@
           updatedAt: Date.now(),
           likes: 0,
           likedBy: []
-        });
+        };
+        members.unshift(nuevoMiembro);
+        registrarCambioUsuario('members', nuevoMiembro);
 
         document.getElementById('memberNameInput').value = '';
         if (document.getElementById('memberRoleInput')) document.getElementById('memberRoleInput').value = 'Integrante';
@@ -2279,6 +2417,7 @@
       m.apodo = nuevoApodo || '';
       m.frase = nuevaFrase || '';
       m.updatedAt = Date.now();
+      registrarCambioUsuario('members', m);
       renderMiembros();
       await sincronizarNube();
       mostrarToast('Datos del integrante actualizados');
@@ -2302,6 +2441,7 @@
         m.likes = (m.likes || 0) + 1;
       }
       m.updatedAt = Date.now();
+      registrarCambioUsuario('members', m);
       renderMiembros();
       await sincronizarNube();
     }
@@ -2408,7 +2548,7 @@
             }
             const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfoData.result.file_path}`;
 
-            items.unshift({
+            const nuevoItemSubido = {
               id: 'item_' + Math.random().toString(36).substring(2, 9),
               fileId,
               url: fileUrl,
@@ -2420,7 +2560,9 @@
               likes: 0,
               likedBy: [],
               comments: []
-            });
+            };
+            items.unshift(nuevoItemSubido);
+            registrarCambioUsuario('items', nuevoItemSubido);
             subidosExito++;
           } catch (singleErr) {
             console.error('Error subiendo archivo individual:', singleErr);
@@ -2671,6 +2813,7 @@
       if (nuevoTitulo) target.name = nuevoTitulo;
       target.album = nuevoAlbum;
       target.updatedAt = Date.now();
+      registrarCambioUsuario('items', target);
       renderGaleria();
       renderCarrusel();
       await sincronizarNube();
@@ -2693,6 +2836,7 @@
         items[index].likes = (items[index].likes || 0) + 1;
       }
       items[index].updatedAt = Date.now();
+      registrarCambioUsuario('items', items[index]);
       renderGaleria();
       renderCarrusel();
       await sincronizarNube();
@@ -2712,6 +2856,7 @@
         text
       });
       items[index].updatedAt = Date.now();
+      registrarCambioUsuario('items', items[index]);
       input.value = '';
       renderGaleria();
       document.getElementById(`comments-${index}`).classList.remove('hidden');
@@ -2730,6 +2875,7 @@
       registrarEliminado(commentId);
       items[itemIndex].comments = items[itemIndex].comments.filter(x => x.id !== commentId);
       items[itemIndex].updatedAt = Date.now();
+      registrarCambioUsuario('items', items[itemIndex]);
       renderGaleria();
       await sincronizarNube();
     }
@@ -2743,7 +2889,7 @@
         if (pass === null) return;
         if (pass !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
       }
-      registrarEliminado(obtenerIdItem(target));
+      registrarItemEliminadoCompleto(target);
       items.splice(index, 1);
       renderGaleria();
       renderCarrusel();
@@ -2826,7 +2972,9 @@
       const title = document.getElementById('newCatTitle').value.trim();
       const description = document.getElementById('newCatDesc').value.trim();
       if (!title) return mostrarToast('Escribe el título de la categoría');
-      awards.unshift({ id: 'cat_' + Math.random().toString(36).substring(2, 8), title, description, updatedAt: Date.now(), nominees: [] });
+      const nuevaCat = { id: 'cat_' + Math.random().toString(36).substring(2, 8), title, description, updatedAt: Date.now(), nominees: [] };
+      awards.unshift(nuevaCat);
+      registrarCambioUsuario('awards', nuevaCat);
       document.getElementById('newCatTitle').value = '';
       document.getElementById('newCatDesc').value = '';
       document.getElementById('newCategoryBox').classList.add('hidden');
@@ -2846,6 +2994,7 @@
         cat.nominees.push({ id: 'nom_' + Math.random().toString(36).substring(2, 8), name, votes: 1, votedBy: [userId], updatedAt: Date.now() });
       }
       cat.updatedAt = Date.now();
+      registrarCambioUsuario('awards', cat);
       inp.value = '';
       renderPremios();
       await sincronizarNube();
@@ -2874,6 +3023,7 @@
         }
       });
       cat.updatedAt = Date.now();
+      registrarCambioUsuario('awards', cat);
       renderPremios();
       lanzarConfetiDorado();
       await sincronizarNube();
@@ -2896,7 +3046,7 @@
       const message = document.getElementById('capMessageInput').value.trim();
       if (!message) return mostrarToast('Escribe tu carta antes de sellarla');
 
-      capsules.unshift({
+      const nuevaCap = {
         id: 'cap_' + Math.random().toString(36).substring(2, 9),
         author: userName,
         authorId: userId,
@@ -2905,7 +3055,9 @@
         message,
         updatedAt: Date.now(),
         createdAt: new Date().toLocaleDateString('es-ES')
-      });
+      };
+      capsules.unshift(nuevaCap);
+      registrarCambioUsuario('capsules', nuevaCap);
       document.getElementById('capMessageInput').value = '';
       renderCapsulas();
       lanzarConfetiDorado();
@@ -2984,7 +3136,9 @@
       const artista = document.getElementById('himnoArtista').value.trim();
       const etiqueta = document.getElementById('himnoEtiqueta').value.trim() || 'Himno';
       if (!titulo || !artista) return mostrarToast('Completa título y artista');
-      musicConfig.himnos.push({ id: 'him_' + Math.random().toString(36).substring(2, 8), titulo, artista, etiqueta, updatedAt: Date.now() });
+      const nuevoHimno = { id: 'him_' + Math.random().toString(36).substring(2, 8), titulo, artista, etiqueta, updatedAt: Date.now() };
+      musicConfig.himnos.push(nuevoHimno);
+      registrarCambioUsuario('himnos', nuevoHimno);
       document.getElementById('himnoTitulo').value = '';
       document.getElementById('himnoArtista').value = '';
       document.getElementById('addHimnoForm').classList.add('hidden');
@@ -3011,7 +3165,7 @@
       const input = document.getElementById('tweetInput');
       const text = input.value.trim();
       if (!text) return;
-      tweets.unshift({
+      const nuevoTweet = {
         id: 'tw_' + Math.random().toString(36).substring(2, 8),
         author: userName,
         authorId: userId,
@@ -3020,7 +3174,9 @@
         updatedAt: Date.now(),
         likes: 0,
         likedBy: []
-      });
+      };
+      tweets.unshift(nuevoTweet);
+      registrarCambioUsuario('tweets', nuevoTweet);
       input.value = '';
       actualizarContador();
       renderTweets();
@@ -3065,6 +3221,7 @@
         t.likes = (t.likes || 0) + 1;
       }
       t.updatedAt = Date.now();
+      registrarCambioUsuario('tweets', t);
       renderTweets();
       await sincronizarNube();
     }
@@ -3312,16 +3469,31 @@
       actualizarUIUsuario();
       inicializarTemaAzul();
       cargarDesdeNube();
+
+      // Si el usuario vuelve a una pestaña que dejó abierta hace rato, actualizamos desde JSONBin de inmediato
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && !sincronizandoAhora && !cambiosPendientes) {
+          cargarDesdeNube(false);
+        }
+      });
+
       setInterval(async () => {
-        if (!nubeCargada || sincronizandoAhora) return;
+        if (!nubeCargada || !nubeSincronizadaExito || sincronizandoAhora) return;
         const nuevos = await sincronizarBotTelegramDirecto();
         if (nuevos) {
           guardarRespaldoLocal(true);
           renderTodo();
-          await ejecutarSincronizacionNube(true);
+          await ejecutarSincronizacionNube();
           mostrarToast('Nuevo recuerdo recibido desde @promedmbot');
         }
-      }, 7000);
+      }, 9000);
+
+      // Refresco silencioso desde JSONBin cada 25s para mantener todas las pestañas al día con borrados, fotos y comentarios nuevos
+      setInterval(() => {
+        if (document.visibilityState === 'visible' && nubeCargada && !sincronizandoAhora && !cambiosPendientes) {
+          cargarDesdeNube(false);
+        }
+      }, 25000);
     });
   </script>
 </body>
