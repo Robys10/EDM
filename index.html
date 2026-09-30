@@ -1112,7 +1112,13 @@
     let sincronizandoAhora = false;
     let syncTimer = null;
     let localRevision = Number(localStorage.getItem('prom_edm26_revision') || '0');
-    let deletedIds = new Set();
+    const LEGACY_PURGED_IDS = [
+      'ev-fotos', 'ev-graduacion', 'ev-viaje',
+      'mem_fqzg4gg', 'mem_y0mmg6i',
+      'cat-fiesta', 'cat-dormilon', 'cat-puntual', 'cat-dupla', 'cat_dudr9o',
+      'Canción Destacada_Promo 2026_0'
+    ];
+    let deletedIds = new Set(LEGACY_PURGED_IDS);
 
     try {
       const savedDeleted = JSON.parse(localStorage.getItem(DELETED_IDS_KEY) || '[]');
@@ -1466,14 +1472,15 @@
           playlistUrl
         } = normalizarRecordNube(record);
 
-        if (teniaRespaldoLocal || esItemUnicoMake) {
-          // Fusión inteligente: conserva todo lo que agregaste/editaste localmente + lo nuevo de la nube, respetando borrados
-          items = esItemUnicoMake
-            ? fusionarListasPorId(cloudItems, items, obtenerIdItem)
-            : fusionarListasPorId(items, cloudItems, obtenerIdItem);
+        if (esItemUnicoMake) {
+          // Si Make sobrescribió el bin con un único objeto, rescatamos el respaldo local + el nuevo item
+          items = fusionarListasPorId(cloudItems, items, obtenerIdItem);
+        } else if (cambiosPendientes) {
+          // Solo fusionamos con memoria local si el usuario tiene cambios sin guardar en este instante
+          items = fusionarListasPorId(items, cloudItems, obtenerIdItem);
           tweets = fusionarListasPorId(tweets, cloudTweets, t => t.id);
           members = fusionarListasPorId(members, cloudMembers, m => m.id);
-          awards = fusionarPremios(awards, cloudAwards.length ? cloudAwards : DEFAULT_AWARDS);
+          awards = fusionarPremios(awards, cloudAwards);
           capsules = fusionarListasPorId(capsules, cloudCapsules, c => c.id);
           events = fusionarListasPorId(events, cloudEvents, ev => ev.id);
           if (cloudHimnos.length > 0) {
@@ -1481,13 +1488,14 @@
           }
           if (playlistUrl) musicConfig.playlistUrl = playlistUrl;
         } else {
+          // La nube (JSONBin) es la fuente de verdad al abrir la página: evita que el caché viejo de otro celular/PC reviva eventos o pruebas borradas
           items = cloudItems;
           tweets = cloudTweets;
           members = cloudMembers;
-          if (cloudAwards.length > 0) awards = cloudAwards;
+          awards = cloudAwards;
           capsules = cloudCapsules;
           events = cloudEvents;
-          if (cloudHimnos.length > 0) musicConfig.himnos = cloudHimnos;
+          musicConfig.himnos = cloudHimnos;
           if (playlistUrl) musicConfig.playlistUrl = playlistUrl;
         }
 
