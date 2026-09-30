@@ -658,16 +658,46 @@
       { id: 'cat-dupla', title: 'La Mejor Dupla EDM ’26', description: 'Los inseparables del salón en trabajos, recreos y salidas.', nominees: [] }
     ];
 
-    let items = [];
-    let tweets = [];
+    const BASE_CLOUD_ITEMS = [
+      {"id":"tg_msg_138","tgMessageId":138,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_87.mp4","name":"Video de la Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:12:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_89.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_89.mp4","name":"Video Promo","type":"video/mp4","album":"General","date":"2026-09-30T00:08:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_file_86","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_86.mp4","name":"Video desde Telegram","type":"video/mp4","album":"General","date":"2026-09-29T23:31:00.000Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"item_gtrrnck","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_45.mp4","name":"Recuerdo Promo","type":"video/mp4","album":"General","date":"2026-09-29T00:06:17.675Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_44.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_44.jpg","name":"Consagración","type":"image/jpeg","album":"General","date":"2026-09-28T22:53:11.472Z","updatedAt":0,"likes":2,"likedBy":["user_g58mo8fyf26","user_u5widpg47lk"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_43.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_43.jpg","name":"San Jose","type":"image/jpeg","album":"General","date":"2026-09-28T22:52:29.276Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_42.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_42.jpg","name":"San Jose","type":"image/jpeg","album":"General","date":"2026-09-28T22:52:13.961Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_41.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_41.jpg","name":"La cena","type":"image/jpeg","album":"General","date":"2026-09-28T22:51:13.188Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_40.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_40.jpg","name":"La cena.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T22:49:07.922Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_39.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_39.jpg","name":"Aniversario 2025.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T22:47:56.149Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_38.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_38.jpg","name":"Aniversario 2025","type":"image/jpeg","album":"General","date":"2026-09-28T22:47:30.538Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_37.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_37.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-28T03:08:06.087Z","updatedAt":0,"likes":15,"likedBy":["user_2jlky1yi9p9","user_g58mo8fyf26"],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_17.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_17.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-28T03:07:30.310Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_13.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_13.jpg","name":"Fiesta Sorpresa","type":"image/jpeg","album":"Fiesta","date":"2026-09-28T03:07:01.179Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_35.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_35.jpg","name":".......jpg","type":"image/jpeg","album":"General","date":"2026-09-28T03:01:49.691Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_34.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_34.jpg","name":"1 generación","type":"image/jpeg","album":"General","date":"2026-09-28T03:00:31.206Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_33.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_33.mp4","name":"sorpresa","type":"video/mp4","album":"General","date":"2026-09-28T02:59:57.817Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_32.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_32.mp4","name":"VID-20221223-WA0009.mp4","type":"video/mp4","album":"General","date":"2026-09-28T02:55:15.114Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_30.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_30.jpg","name":"Navidad","type":"image/jpeg","album":"General","date":"2026-09-28T02:47:29.001Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_23.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_23.jpg","name":"La cena","type":"image/jpeg","album":"General","date":"2026-09-28T02:45:45.052Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_25.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_25.jpg","name":"Lamas gruta","type":"image/jpeg","album":"General","date":"2026-09-28T02:45:26.951Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_29.mp4","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_29.mp4","name":"El inicio del fin","type":"video/mp4","album":"General","date":"2026-09-28T02:44:53.715Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_20.jpg","url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_20.jpg","name":"IMG-20251211-WA0005.jpg","type":"image/jpeg","album":"General","date":"2026-09-28T02:37:14.893Z","updatedAt":0,"likes":0,"likedBy":[],"comments":[]}
+    ];
+
+    let items = JSON.parse(JSON.stringify(BASE_CLOUD_ITEMS));
+    let tweets = [
+      {"id":"tw_qx6jhe","author":"Miembro Promo 349","authorId":"user_s33utowko0j","text":"Fabricio entiende...","date":"2026-09-29T01:57:27.247Z","updatedAt":0,"likes":2,"likedBy":["user_s33utowko0j","user_g58mo8fyf26"]},
+      {"id":"tw_i3zqru","author":"Admin","authorId":"user_g58mo8fyf26","text":"El Sistema de BOT se encuentra en Desarrollo","date":"2026-09-29T01:39:51.180Z","updatedAt":0,"likes":0,"likedBy":[]},
+      {"id":"tw_2l8vap","author":"Miembro Promo 397","authorId":"user_2iitm9z61rh","text":"The History of Everything-freestyle version \nsombody-justin bieber \ndtfm -bad bunny","date":"2026-09-28T23:25:00.920Z","updatedAt":0,"likes":0,"likedBy":[]}
+    ];
     let members = [];
-    let awards = JSON.parse(JSON.stringify(DEFAULT_AWARDS));
+    let awards = [];
     let capsules = [];
-    let events = [];
+    let events = [{"id":"ev_zy74em","title":"Último Aniversario","date":"2026-10-07T19:00","location":"Por confirmar"}];
     let musicConfig = {
       playlistUrl: 'https://open.spotify.com/embed/playlist/3lcbivzyUFBhKcmVi49W4J',
       himnos: [
-        { id: 'him_default', titulo: 'Canción Destacada', artista: 'Promo 2026', etiqueta: 'Favorita' }
+        { id: 'La guitarra_Los Auténticos Decadentes_1', titulo: 'La guitarra', artista: 'Los Auténticos Decadentes', etiqueta: 'Himno del Salón' }
       ]
     };
 
@@ -908,18 +938,25 @@
         : esItemUnicoMake
           ? [record]
           : (record.items || []);
-      const cloudItems = rawItems.map(i => ({
-        id: i.id || i.url || ('item_' + Math.random().toString(36).substring(2, 8)),
-        url: i.url || '',
-        name: i.name || 'Recuerdo de la Promo',
-        type: i.type || (String(i.url || '').match(/\.(mp4|mov|webm)$/i) ? 'video/mp4' : 'image/jpeg'),
-        album: inferirAlbum(i),
-        date: i.date || new Date().toISOString(),
-        updatedAt: i.updatedAt || Date.now(),
-        likes: typeof i.likes === 'number' ? i.likes : 0,
-        likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
-        comments: Array.isArray(i.comments) ? i.comments.filter(c => !deletedIds.has(c.id)) : []
-      })).filter(i => i.url && !deletedIds.has(obtenerIdItem(i)) && !deletedIds.has(i.url));
+      const cloudItems = rawItems.map(i => {
+        const itemId = i.id || i.url || ('item_' + Math.random().toString(36).substring(2, 8));
+        if (String(itemId).startsWith('tg_msg_') && !deletedIds.has(String(itemId)) && i.url) {
+          deletedIds.delete(String(i.url));
+        }
+        return {
+          id: itemId,
+          tgMessageId: i.tgMessageId,
+          url: i.url || '',
+          name: i.name || 'Recuerdo de la Promo',
+          type: i.type || (String(i.url || '').match(/\.(mp4|mov|webm)$/i) ? 'video/mp4' : 'image/jpeg'),
+          album: inferirAlbum(i),
+          date: i.date || new Date().toISOString(),
+          updatedAt: i.updatedAt || Date.now(),
+          likes: typeof i.likes === 'number' ? i.likes : 0,
+          likedBy: Array.isArray(i.likedBy) ? i.likedBy : [],
+          comments: Array.isArray(i.comments) ? i.comments.filter(c => !deletedIds.has(c.id)) : []
+        };
+      }).filter(i => i.url && !deletedIds.has(obtenerIdItem(i)));
 
       const cloudTweets = (Array.isArray(record.tweets) ? record.tweets : []).map(t => ({
         id: t.id || 'tw_' + Math.random().toString(36).substring(2, 8),
@@ -1004,7 +1041,7 @@
           playlistUrl
         } = normalizarRecordNube(record);
 
-        if (teniaRespaldoLocal) {
+        if (teniaRespaldoLocal || esItemUnicoMake) {
           // Fusión inteligente: conserva todo lo que agregaste/editaste localmente + lo nuevo de la nube, respetando borrados
           items = esItemUnicoMake
             ? fusionarListasPorId(cloudItems, items, obtenerIdItem)
@@ -1033,7 +1070,7 @@
         const huboNuevosTelegram = await sincronizarBotTelegramDirecto();
         guardarRespaldoLocal(false);
         renderTodo();
-        if ((esItemUnicoMake && teniaRespaldoLocal) || huboNuevosTelegram) {
+        if (esItemUnicoMake || huboNuevosTelegram) {
           ejecutarSincronizacionNube(true);
         }
         document.getElementById('statusText').innerText = 'Sincronizado ✓';
@@ -1052,8 +1089,13 @@
 
     async function sincronizarBotTelegramDirecto() {
       try {
-        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=30`);
-        if (!res.ok) return false; // Si el Webhook de Make está activo, Make se encarga vía JSONBin
+        let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=30`);
+        if (res.status === 409) {
+          // Si hay un webhook de Make con error reteniendo el bot, lo liberamos automáticamente
+          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/deleteWebhook`);
+          res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=30`);
+        }
+        if (!res.ok) return false;
         const data = await res.json();
         if (!data.ok || !Array.isArray(data.result) || data.result.length === 0) return false;
 
@@ -1081,7 +1123,9 @@
           if (!fileData.ok || !fileData.result?.file_path) continue;
 
           const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
-          if (deletedIds.has(fileUrl) || items.some(i => i.url === fileUrl)) continue;
+          // Si el usuario volvió a enviar en un mensaje nuevo un archivo que antes había borrado, permitimos el nuevo mensaje
+          deletedIds.delete(fileUrl);
+          if (items.some(i => i.id === tgItemId)) continue;
 
           const caption = (msg.caption || '').trim() || (esVideo ? 'Video de la Promo' : 'Foto de la Promo');
           items.unshift({
@@ -1963,7 +2007,6 @@
         if (pass !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
       }
       registrarEliminado(obtenerIdItem(target));
-      if (target.url) registrarEliminado(target.url);
       items.splice(index, 1);
       renderGaleria();
       renderCarrusel();
@@ -2306,6 +2349,16 @@
       actualizarUIUsuario();
       inicializarTemaAzul();
       cargarDesdeNube();
+      setInterval(async () => {
+        if (!nubeCargada || sincronizandoAhora) return;
+        const nuevos = await sincronizarBotTelegramDirecto();
+        if (nuevos) {
+          guardarRespaldoLocal(true);
+          renderTodo();
+          await ejecutarSincronizacionNube(true);
+          mostrarToast('Nuevo recuerdo recibido desde @promedmbot');
+        }
+      }, 7000);
     });
   </script>
 </body>
