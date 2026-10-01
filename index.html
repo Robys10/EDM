@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" style="color-scheme: only light;">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="only light" />
+  <meta name="supported-color-schemes" content="light" />
+  <meta name="theme-color" content="#f4eee2" />
   <meta name="referrer" content="no-referrer" />
   <title>PROM ESTRELLA DE LA MAÑANA '26 — Mural Digital, Anuario & Galería Oficial</title>
   <meta name="description" content="Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM) con sincronización en la nube sin pérdida de datos." />
@@ -110,16 +113,22 @@
   </script>
   <style>
     :root {
+      color-scheme: only light;
+      forced-color-adjust: none;
+      -webkit-forced-color-adjust: none;
       --bg-cream: #f4eee2;
       --wine-main: #681b28;
-      --wine-dark: #431019;
+      --wine-dark: #3d0e17;
       --wine-light: #8b2838;
-      --gold-main: #b89242;
+      --gold-main: #b58d3d;
       --gold-bright: #d8b258;
-      --text-dark: #2a1b1e;
-      --text-muted: #6e5c5f;
-      --card-bg: #fffdf8;
-      --border-color: rgba(104, 27, 40, 0.15);
+      --text-dark: #241619;
+      --text-muted: #6b585b;
+      --card-bg: #fffdf9;
+      --border-color: rgba(104, 27, 40, 0.13);
+      --gold-hairline: rgba(184, 146, 66, 0.34);
+      --card-shadow: 0 10px 28px -12px rgba(67, 16, 25, 0.10), 0 2px 6px -1px rgba(67, 16, 25, 0.04);
+      --card-shadow-hover: 0 18px 36px -12px rgba(67, 16, 25, 0.17), 0 4px 10px -2px rgba(67, 16, 25, 0.06);
       --danger: #d93838;
       --crema-fijo: #fdf6e2;
       --crema-text: #5c4a1e;
@@ -127,27 +136,89 @@
 
     body.blue-theme {
       --wine-main: #1e3a8a;
-      --wine-dark: #111827;
+      --wine-dark: #0f172a;
       --wine-light: #1d4ed8;
-      --border-color: rgba(30, 58, 138, 0.22);
+      --border-color: rgba(30, 58, 138, 0.16);
+      --card-shadow: 0 10px 28px -12px rgba(15, 23, 42, 0.11), 0 2px 6px -1px rgba(15, 23, 42, 0.05);
+      --card-shadow-hover: 0 18px 36px -12px rgba(15, 23, 42, 0.18), 0 4px 10px -2px rgba(15, 23, 42, 0.07);
     }
 
     html {
+      color-scheme: only light;
+      forced-color-adjust: none;
+      -webkit-forced-color-adjust: none;
       overflow-x: hidden;
       max-width: 100%;
       width: 100%;
       -webkit-text-size-adjust: 100%;
+      background-color: #f4eee2 !important;
     }
 
     body {
-      background-color: var(--bg-cream);
-      color: var(--text-dark);
+      color-scheme: only light;
+      forced-color-adjust: none;
+      -webkit-forced-color-adjust: none;
+      background-color: var(--bg-cream) !important;
+      background-image: radial-gradient(circle at 50% 0%, rgba(255, 253, 248, 0.7) 0%, rgba(244, 238, 226, 0) 70%);
+      color: var(--text-dark) !important;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
       transition: background-color 0.25s ease, color 0.25s ease;
       overflow-x: hidden;
       max-width: 100vw;
       width: 100%;
+    }
+
+    /* Evita que navegadores móviles con Modo Oscuro Forzado inviertan tarjetas, inputs o textos */
+    section, article, aside, header, footer, nav, div, input, select, textarea, button {
+      forced-color-adjust: none;
+      -webkit-forced-color-adjust: none;
+    }
+
+    ::selection {
+      background-color: var(--wine-main);
+      color: #fffdf9;
+    }
+
+    .editorial-surface {
+      background-color: var(--card-bg);
+      box-shadow: var(--card-shadow);
+    }
+
+    .editorial-hero {
+      background-color: var(--card-bg);
+      background-image:
+        radial-gradient(circle at 88% 12%, rgba(216, 178, 88, 0.16) 0%, rgba(216, 178, 88, 0) 52%),
+        radial-gradient(circle at 8% 90%, rgba(104, 27, 40, 0.06) 0%, rgba(104, 27, 40, 0) 50%);
+      border-top: 3px solid var(--gold-main);
+      outline: 1px solid rgba(184, 146, 66, 0.24);
+      outline-offset: -7px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .section-banner {
+      background-color: var(--card-bg);
+      background-image: radial-gradient(circle at 50% 0%, rgba(216, 178, 88, 0.11) 0%, rgba(216, 178, 88, 0) 65%);
+      border-top: 3px solid var(--gold-main);
+      box-shadow: var(--card-shadow);
+    }
+
+    .editorial-stat-card {
+      background-color: var(--card-bg);
+      box-shadow: var(--card-shadow);
+      border-top: 2.5px solid var(--gold-main);
+    }
+
+    .countdown-tile {
+      background: linear-gradient(180deg, #fffdf9 0%, #f6efe2 100%);
+      border-top: 2px solid var(--gold-main);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 4px 12px -6px rgba(67, 16, 25, 0.12);
+    }
+
+    .wax-seal {
+      background: radial-gradient(circle at 35% 30%, var(--wine-light), var(--wine-dark));
+      border: 2px solid var(--gold-bright);
+      box-shadow: 0 6px 14px -3px rgba(67, 16, 25, 0.35), inset 0 0 0 2px rgba(216, 178, 88, 0.35);
     }
 
     .page-section {
@@ -206,11 +277,12 @@
     .anim-card {
       animation: fadeSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
       animation-delay: calc(var(--i, 0) * 22ms);
+      box-shadow: var(--card-shadow);
       transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease, box-shadow 180ms ease;
     }
     .anim-card:hover {
       transform: translate3d(0, -3px, 0);
-      box-shadow: 0 10px 24px -10px rgba(67, 16, 25, 0.16);
+      box-shadow: var(--card-shadow-hover);
     }
     .anim-modal {
       animation: modalZoomIn 180ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
@@ -279,8 +351,18 @@
 
   <!-- TOP BAR (3-Zone Contract adaptable a cualquier pantalla de celular) -->
   <header class="sticky top-0 z-30 h-14 sm:h-16 w-full max-w-full header-glass border-b border-[var(--border-color)] px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
-    <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="font-display text-sm sm:text-lg md:text-xl font-bold tracking-tight text-[var(--wine-main)] truncate min-w-0">
-      Estrella de la Mañana ’26
+    <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="flex items-center gap-2.5 min-w-0 group">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white border border-[var(--gold-main)] p-1 flex items-center justify-center shrink-0 shadow-xs">
+        <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo EDM 26" class="logo-dinamico w-full h-full object-contain" />
+      </div>
+      <div class="min-w-0">
+        <div class="font-display text-sm sm:text-base md:text-lg font-bold tracking-tight text-[var(--wine-main)] truncate">
+          Estrella de la Mañana ’26
+        </div>
+        <div class="hidden sm:block text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--gold-main)] leading-none">
+          Anuario &amp; Galería Oficial
+        </div>
+      </div>
     </a>
 
     <nav aria-label="Navegación principal" class="hidden md:flex items-center gap-6 text-sm font-semibold text-[var(--text-muted)] shrink-0">
@@ -292,15 +374,16 @@
     </nav>
 
     <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-      <button type="button" onclick="alternarTemaAzul()" class="btn-interactive px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg border border-[var(--border-color)] text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center gap-1 whitespace-nowrap cursor-pointer">
+      <button type="button" onclick="alternarTemaAzul()" class="btn-interactive px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-xl border border-[var(--border-color)] bg-white/80 text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+        <span class="w-2 h-2 rounded-full bg-[var(--wine-main)]"></span>
         <span id="themeBtnTopText">Tema Azul</span>
       </button>
 
-      <button type="button" onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[var(--wine-main)] hover:bg-[var(--wine-light)] rounded-lg whitespace-nowrap cursor-pointer">
-        <span>Subir Recuerdo</span>
+      <button type="button" onclick="cambiarSeccion('galeria'); document.getElementById('uploadPanelWrapper')?.classList.remove('hidden'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[var(--wine-main)] hover:bg-[var(--wine-light)] border border-[var(--gold-main)]/40 rounded-xl shadow-xs whitespace-nowrap cursor-pointer">
+        <span>+ Subir Recuerdo</span>
       </button>
 
-      <button type="button" onclick="toggleMobileSidebar()" aria-label="Abrir menú" class="btn-interactive md:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[var(--border-color)] text-[var(--wine-main)] flex items-center justify-center cursor-pointer shrink-0">
+      <button type="button" onclick="toggleMobileSidebar()" aria-label="Abrir menú" class="btn-interactive md:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-[var(--border-color)] bg-white/80 text-[var(--wine-main)] flex items-center justify-center cursor-pointer shrink-0">
         ☰
       </button>
     </div>
@@ -326,47 +409,48 @@
         </div>
 
         <div class="space-y-1">
+          <div class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Índice del Anuario</div>
           <button type="button" data-side="inicio" onclick="cambiarSeccion('inicio')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white">
-            <span>Inicio</span>
+            <span>Portada &amp; Inicio</span>
           </button>
           <button type="button" data-side="miembros" onclick="cambiarSeccion('miembros')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
             <span>Integrantes</span>
-            <span id="sideCountMiembros" class="text-xs font-mono-num">0</span>
+            <span id="sideCountMiembros" class="text-[11px] font-mono-num opacity-80">0</span>
           </button>
           <button type="button" data-side="galeria" onclick="cambiarSeccion('galeria')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
-            <span>Galería & Álbumes</span>
-            <span id="sideCountGaleria" class="text-xs font-mono-num">0</span>
+            <span>Galería &amp; Álbumes</span>
+            <span id="sideCountGaleria" class="text-[11px] font-mono-num opacity-80">0</span>
           </button>
           <button type="button" data-side="premios" onclick="cambiarSeccion('premios')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
             <span>Premios Promo ’26</span>
-            <span id="sideCountPremios" class="text-xs font-mono-num">0</span>
+            <span id="sideCountPremios" class="text-[11px] font-mono-num opacity-80">0</span>
           </button>
           <button type="button" data-side="capsula" onclick="cambiarSeccion('capsula')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
             <span>Cápsula del Tiempo</span>
-            <span id="sideCountCapsula" class="text-xs font-mono-num">0</span>
+            <span id="sideCountCapsula" class="text-[11px] font-mono-num opacity-80">0</span>
           </button>
           <button type="button" data-side="eventos" onclick="cambiarSeccion('eventos')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
-            <span>Eventos & Soundtrack</span>
-            <span id="sideCountHimnos" class="text-xs font-mono-num">0</span>
+            <span>Eventos &amp; Soundtrack</span>
+            <span id="sideCountHimnos" class="text-[11px] font-mono-num opacity-80">0</span>
           </button>
           <button type="button" data-side="mensajes" onclick="cambiarSeccion('mensajes')" class="side-link btn-interactive w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer text-[var(--text-muted)] hover:text-[var(--wine-main)]">
             <span>Buzón de Anécdotas</span>
-            <span id="sideCountBuzon" class="text-xs font-mono-num">0</span>
+            <span id="sideCountBuzon" class="text-[11px] font-mono-num opacity-80">0</span>
           </button>
         </div>
 
         <!-- Identidad del Miembro -->
-        <div class="pt-4 border-t border-[var(--border-color)] space-y-2">
-          <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
-            <span class="font-medium">Tu firma en la promo</span>
+        <div class="p-3.5 rounded-xl bg-[var(--bg-cream)]/65 border border-[var(--border-color)] space-y-1.5">
+          <div class="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
+            <span class="font-semibold uppercase tracking-wider text-[var(--gold-main)]">Tu firma</span>
             <button type="button" onclick="abrirEditorNombre()" class="text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Editar</button>
           </div>
-          <div id="userNameDisplay" class="text-sm font-semibold text-[var(--text-dark)] truncate"></div>
+          <div id="userNameDisplay" class="font-display text-sm font-bold text-[var(--wine-main)] truncate"></div>
           <form id="userNameForm" onsubmit="guardarNombreUsuario(event)" class="hidden space-y-2 pt-1">
             <input id="userNameInput" type="text" maxlength="32" placeholder="Tu nombre o apodo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
             <div class="flex gap-1.5">
               <button type="submit" class="btn-interactive flex-1 py-1.5 text-xs font-semibold text-white bg-[var(--wine-main)] rounded-lg cursor-pointer">Guardar</button>
-              <button type="button" onclick="cerrarEditorNombre()" class="btn-interactive px-2.5 py-1.5 text-xs font-semibold text-[var(--text-muted)] border border-[var(--border-color)] rounded-lg cursor-pointer">Cancelar</button>
+              <button type="button" onclick="cerrarEditorNombre()" class="btn-interactive px-2.5 py-1.5 text-xs font-semibold text-[var(--text-muted)] bg-white border border-[var(--border-color)] rounded-lg cursor-pointer">Cancelar</button>
             </div>
           </form>
         </div>
@@ -389,168 +473,196 @@
     <div id="mobileBackdrop" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 min-w-0 max-w-full px-3 py-4 sm:px-5 sm:py-6 md:px-8 md:py-8 max-w-5xl mx-auto w-full overflow-x-hidden">
+    <main class="flex-1 min-w-0 max-w-full px-3 py-4 sm:px-6 sm:py-7 md:px-8 md:py-8 max-w-6xl mx-auto w-full overflow-x-hidden">
 
       <!-- 1. SECCIÓN INICIO -->
-      <section id="seccion-inicio" class="page-section anim-section space-y-5 sm:space-y-8">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 md:p-10 flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8">
-          <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2 flex items-center justify-center shrink-0">
+      <section id="seccion-inicio" class="page-section anim-section space-y-5 sm:space-y-7">
+        <div class="editorial-hero rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-5 sm:gap-7 md:gap-9 relative overflow-hidden">
+          <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl bg-white border-2 border-[var(--gold-main)] p-2.5 shadow-md ring-4 ring-[var(--gold-main)]/15 flex items-center justify-center shrink-0">
             <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
           </div>
-          <div class="flex-1 min-w-0 w-full text-center md:text-left space-y-2.5 sm:space-y-3">
-            <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-[var(--text-muted)]">
-              <span>Promoción Oficial 2026</span>
-              <span>·</span>
-              <span>EDM</span>
-              <span>·</span>
-              <span id="heroSyncBadge">Sincronizado</span>
+          <div class="flex-1 min-w-0 w-full text-center md:text-left space-y-3">
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--gold-main)]">
+              <span>✦ Anuario &amp; Archivo Oficial</span>
+              <span aria-hidden="true">·</span>
+              <span>EDM 2026</span>
+              <span aria-hidden="true">·</span>
+              <span id="heroSyncBadge" class="text-[var(--text-muted)] font-medium normal-case tracking-normal">Sincronizado</span>
             </div>
-            <h1 class="text-xl sm:text-2xl md:text-4xl font-bold text-[var(--wine-main)] tracking-tight break-words">Prom Estrella de la Mañana</h1>
-            <p class="text-xs sm:text-sm md:text-base text-[var(--text-muted)] max-w-2xl leading-relaxed">
-              Mural digital, anuario de integrantes, votaciones del salón, cápsula del tiempo y galería oficial 2026 con guardado inteligente en tiempo real.
+            <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-bold text-[var(--wine-main)] tracking-tight leading-[1.12] break-words">Promoción Estrella de la Mañana ’26</h1>
+            <p class="text-xs sm:text-sm md:text-[15px] text-[var(--text-muted)] max-w-2xl leading-relaxed">
+              Edición conmemorativa digital: explora los álbumes fotográficos y videos de la promoción, retratos del salón, votaciones en vivo y cartas selladas hacia el futuro.
             </p>
-            <div class="pt-1.5 grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 w-full">
-              <button type="button" onclick="cambiarSeccion('miembros')" class="btn-interactive w-full sm:w-auto px-3 sm:px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] cursor-pointer text-center truncate">
-                Mural de Integrantes
-              </button>
-              <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive w-full sm:w-auto px-3 sm:px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold cursor-pointer text-center truncate">
+            <div class="pt-2 grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center md:justify-start gap-2.5 sm:gap-3 w-full">
+              <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] border border-[var(--gold-main)]/40 shadow-sm cursor-pointer text-center truncate">
                 Explorar Galería
               </button>
-              <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive w-full sm:w-auto px-3 sm:px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer text-center truncate">
+              <button type="button" onclick="cambiarSeccion('miembros')" class="btn-interactive w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold cursor-pointer text-center truncate">
+                Mural de Integrantes
+              </button>
+              <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive w-full sm:w-auto px-3.5 sm:px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer text-center truncate">
                 ✨ Recuerdo al Azar
               </button>
-              <button type="button" onclick="iniciarModoPresentacion()" class="btn-interactive w-full sm:w-auto px-3 sm:px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--wine-dark)] text-[var(--gold-bright)] text-xs font-semibold cursor-pointer text-center truncate">
-                ▶ Presentación
+              <button type="button" onclick="iniciarModoPresentacion()" class="btn-interactive w-full sm:w-auto px-3.5 sm:px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--wine-dark)] text-[var(--gold-bright)] text-xs font-semibold cursor-pointer text-center truncate">
+                ▶ Modo Cine
               </button>
             </div>
           </div>
         </div>
 
         <!-- CUENTA REGRESIVA EN VIVO -->
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-4 sm:p-5 md:p-6">
-          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-5">
+        <div class="editorial-surface rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-6">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
             <div class="space-y-1 min-w-0">
-              <div class="text-xs font-semibold text-[var(--gold-main)]">Cuenta Regresiva Oficial · Promo ’26</div>
-              <h2 id="nextEventTitle" class="text-base sm:text-lg md:text-xl font-bold text-[var(--wine-main)] break-words">Ceremonia de Graduación y Fiesta de Gala EDM ’26</h2>
-              <p id="nextEventMeta" class="text-xs text-[var(--text-muted)]">18 de diciembre de 2026 · Auditorio & Salón de Gala</p>
+              <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">✦ Cuenta Regresiva Oficial · Promo ’26</div>
+              <h2 id="nextEventTitle" class="text-base sm:text-xl font-bold text-[var(--wine-main)] break-words">Ceremonia de Graduación y Fiesta de Gala EDM ’26</h2>
+              <p id="nextEventMeta" class="text-xs text-[var(--text-muted)]">18 de diciembre de 2026 · Auditorio &amp; Salón de Gala</p>
             </div>
-            <div class="grid grid-cols-4 gap-1.5 sm:gap-3 w-full lg:w-auto">
-              <div class="min-w-0 sm:min-w-[72px] py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
-                <div id="cdDays" class="text-lg sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)]">Días</div>
+            <div class="grid grid-cols-4 gap-2 sm:gap-3 w-full lg:w-auto">
+              <div class="countdown-tile min-w-0 sm:min-w-[82px] py-2.5 px-2 sm:px-4 rounded-xl border border-[var(--border-color)] text-center">
+                <div id="cdDays" class="text-xl sm:text-2xl md:text-3xl font-extrabold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] mt-0.5">Días</div>
               </div>
-              <div class="min-w-0 sm:min-w-[72px] py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
-                <div id="cdHours" class="text-lg sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)]">Horas</div>
+              <div class="countdown-tile min-w-0 sm:min-w-[82px] py-2.5 px-2 sm:px-4 rounded-xl border border-[var(--border-color)] text-center">
+                <div id="cdHours" class="text-xl sm:text-2xl md:text-3xl font-extrabold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] mt-0.5">Horas</div>
               </div>
-              <div class="min-w-0 sm:min-w-[72px] py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
-                <div id="cdMins" class="text-lg sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)]">Min</div>
+              <div class="countdown-tile min-w-0 sm:min-w-[82px] py-2.5 px-2 sm:px-4 rounded-xl border border-[var(--border-color)] text-center">
+                <div id="cdMins" class="text-xl sm:text-2xl md:text-3xl font-extrabold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] mt-0.5">Min</div>
               </div>
-              <div class="min-w-0 sm:min-w-[72px] py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
-                <div id="cdSecs" class="text-lg sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)]">Seg</div>
+              <div class="countdown-tile min-w-0 sm:min-w-[82px] py-2.5 px-2 sm:px-4 rounded-xl border border-[var(--border-color)] text-center">
+                <div id="cdSecs" class="text-xl sm:text-2xl md:text-3xl font-extrabold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] mt-0.5">Seg</div>
               </div>
             </div>
           </div>
           <div class="mt-4 pt-3 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span id="countdownFooterHint" class="text-[var(--text-muted)]">Agrega las fechas reales de tu promo en Eventos & Soundtrack</span>
-            <button type="button" onclick="cambiarSeccion('eventos')" class="font-bold text-[var(--wine-main)] hover:underline cursor-pointer">
+            <span id="countdownFooterHint" class="text-[var(--text-muted)]">Agrega las fechas reales de tu promo en Eventos &amp; Soundtrack</span>
+            <button type="button" onclick="cambiarSeccion('eventos')" class="font-semibold text-[var(--wine-main)] hover:underline cursor-pointer">
               Editar Cronograma 2026 →
             </button>
           </div>
         </div>
 
         <!-- Resumen Cuantitativo -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3 sm:p-4 min-w-0">
-            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] truncate">Integrantes en Mural</div>
-            <div id="statMembers" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
-            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1 truncate">Anuario Promo ’26</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div class="editorial-stat-card rounded-2xl border border-[var(--border-color)] p-4 sm:p-5 min-w-0">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] truncate">Integrantes</div>
+            <div id="statMembers" class="font-display text-2xl sm:text-3xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-xs text-[var(--gold-main)] font-medium mt-1 truncate">Anuario Promo ’26</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3 sm:p-4 min-w-0">
-            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] truncate">Recuerdos en Galería</div>
-            <div id="statTotalItems" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
-            <div id="statBreakdown" class="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1 font-mono-num truncate">0 fotos · 0 videos</div>
+          <div class="editorial-stat-card rounded-2xl border border-[var(--border-color)] p-4 sm:p-5 min-w-0">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] truncate">Archivo Visual</div>
+            <div id="statTotalItems" class="font-display text-2xl sm:text-3xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div id="statBreakdown" class="text-xs text-[var(--gold-main)] font-medium mt-1 font-mono-num truncate">0 fotos · 0 videos</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3 sm:p-4 min-w-0">
-            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] truncate">Cápsula & Buzón</div>
-            <div id="statTweets" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
-            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1 truncate">Mensajes de la promo</div>
+          <div class="editorial-stat-card rounded-2xl border border-[var(--border-color)] p-4 sm:p-5 min-w-0">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] truncate">Cápsula &amp; Buzón</div>
+            <div id="statTweets" class="font-display text-2xl sm:text-3xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-xs text-[var(--gold-main)] font-medium mt-1 truncate">Cartas y anécdotas</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3 sm:p-4 min-w-0">
-            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] truncate">Reacciones Totales</div>
-            <div id="statLikes" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
-            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1 truncate">Votos de compañeros</div>
+          <div class="editorial-stat-card rounded-2xl border border-[var(--border-color)] p-4 sm:p-5 min-w-0">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] truncate">Interacciones</div>
+            <div id="statLikes" class="font-display text-2xl sm:text-3xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-xs text-[var(--gold-main)] font-medium mt-1 truncate">Corazones y votos</div>
           </div>
         </div>
 
-        <!-- Tarjetas de Acceso Directo -->
+        <!-- Vitrina Fotográfica en Portada (Mosaico en vivo de recuerdos reales) -->
+        <div id="homeShowcaseBox" class="hidden editorial-surface rounded-2xl border border-[var(--gold-hairline)] p-4 sm:p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--gold-main)]">✦ Vitrina Fotográfica en Vivo</div>
+              <h2 class="font-display text-base sm:text-xl font-bold text-[var(--wine-main)]">Momentos Destacados de Nuestra Promoción</h2>
+            </div>
+            <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive px-3.5 py-1.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] text-xs font-bold text-[var(--wine-main)] cursor-pointer">
+              Ver toda la galería →
+            </button>
+          </div>
+          <div id="homeShowcaseGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"></div>
+        </div>
+
+        <!-- Tarjetas de Acceso Directo (Capítulos del Anuario) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <button type="button" onclick="cambiarSeccion('miembros')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
-            <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">Mural de Integrantes</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Conoce a todos los miembros de la promoción, sube tu foto oficial y descárgala como Postal Polaroid.</p>
+          <button type="button" onclick="cambiarSeccion('miembros')" class="group anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-1.5">
+              <div class="text-[10px] font-mono-num font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Capítulo 01 · Anuario</div>
+              <h3 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Mural de Integrantes</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Conoce a todos los miembros de la promoción, sube tu retrato oficial y descárgalo como Postal Conmemorativa.</p>
             </div>
-            <span class="text-xs font-semibold text-[var(--gold-main)]">Ver anuario →</span>
+            <span class="text-xs font-semibold text-[var(--wine-main)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">Ver anuario →</span>
           </button>
 
-          <button type="button" onclick="cambiarSeccion('galeria')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
-            <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">Galería por Álbumes</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Filtra fotos y videos por Jornada, Semana Santa, 15 Años o Fiesta y deja dedicatorias.</p>
+          <button type="button" onclick="cambiarSeccion('galeria')" class="group anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-1.5">
+              <div class="text-[10px] font-mono-num font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Capítulo 02 · Galería</div>
+              <h3 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Galería por Álbumes</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Explora nuestras fotos y videos por Día del Maestro, Olimpiadas, Jornada, Semana Santa, 15 Años o Fiesta.</p>
             </div>
-            <span class="text-xs font-semibold text-[var(--gold-main)]">Abrir galería →</span>
+            <span class="text-xs font-semibold text-[var(--wine-main)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">Abrir galería →</span>
           </button>
 
-          <button type="button" onclick="cambiarSeccion('premios')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
-            <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">Premios de la Promo ’26</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Nomina a tus compañeros y vota en vivo en las categorías clásicas del salón.</p>
+          <button type="button" onclick="cambiarSeccion('premios')" class="group anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-1.5">
+              <div class="text-[10px] font-mono-num font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Capítulo 03 · Votaciones</div>
+              <h3 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Premios de la Promo ’26</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Nomina a tus compañeros y vota en vivo en las categorías clásicas para coronar el Cuadro de Honor.</p>
             </div>
-            <span class="text-xs font-semibold text-[var(--gold-main)]">Ir a votar →</span>
+            <span class="text-xs font-semibold text-[var(--wine-main)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">Ir a votar →</span>
           </button>
 
-          <button type="button" onclick="cambiarSeccion('capsula')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
-            <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">Cápsula del Tiempo</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Sella cartas o predicciones con candado hasta el día de la graduación o reencuentro.</p>
+          <button type="button" onclick="cambiarSeccion('capsula')" class="group anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-1.5">
+              <div class="text-[10px] font-mono-num font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Capítulo 04 · Futuro</div>
+              <h3 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Cápsula del Tiempo</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Sella cartas, promesas o predicciones con candado hasta el día de la graduación o reencuentro.</p>
             </div>
-            <span class="text-xs font-semibold text-[var(--gold-main)]">Abrir cápsula →</span>
+            <span class="text-xs font-semibold text-[var(--wine-main)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">Abrir cápsula →</span>
           </button>
 
-          <button type="button" onclick="cambiarSeccion('eventos')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
-            <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">Eventos & Soundtrack</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Configura el cronograma 2026 de la promo, escucha la playlist en Spotify y añade himnos.</p>
+          <button type="button" onclick="cambiarSeccion('eventos')" class="group anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-1.5">
+              <div class="text-[10px] font-mono-num font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Capítulo 05 · Agenda &amp; Música</div>
+              <h3 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Eventos &amp; Soundtrack</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Consulta el cronograma oficial 2026 de la promo, escucha la playlist en Spotify y añade himnos.</p>
             </div>
-            <span class="text-xs font-semibold text-[var(--gold-main)]">Ver eventos y música →</span>
+            <span class="text-xs font-semibold text-[var(--wine-main)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">Ver eventos y música →</span>
           </button>
 
-          <button type="button" onclick="cambiarSeccion('mensajes')" class="anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
-            <div class="space-y-2">
-              <h3 class="text-base font-bold text-[var(--wine-main)]">Buzón de Anécdotas</h3>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Comparte mensajes cortos, recuerdos de clases y sugerencias con toda la promo.</p>
+          <button type="button" onclick="cambiarSeccion('mensajes')" class="group anim-card text-left rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[var(--gold-main)] p-5 flex flex-col justify-between gap-4 cursor-pointer">
+            <div class="space-y-1.5">
+              <div class="text-[10px] font-mono-num font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Capítulo 06 · Recuerdos</div>
+              <h3 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Buzón de Anécdotas</h3>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">Comparte mensajes cortos, recuerdos de clases y dedicatorias firmadas con toda la promoción.</p>
             </div>
-            <span class="text-xs font-semibold text-[var(--gold-main)]">Dejar mensaje →</span>
+            <span class="text-xs font-semibold text-[var(--wine-main)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">Dejar mensaje →</span>
           </button>
         </div>
       </section>
 
       <!-- 2. SECCIÓN MURAL DE INTEGRANTES -->
       <section id="seccion-miembros" class="page-section hidden anim-section space-y-4 sm:space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 text-center space-y-1.5">
-          <div class="text-xs text-[var(--gold-main)] font-semibold">Anuario Oficial · Promoción 2026</div>
-          <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-[var(--wine-main)] break-words">Mural de Integrantes Estrella de la Mañana</h1>
-          <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
-            Agrega tu retrato oficial con tu nombre, apodo y frase célebre. Puedes editar o descargar cualquier tarjeta como Postal Polaroid.
-          </p>
+        <div class="section-banner rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="text-[11px] text-[var(--gold-main)] font-bold uppercase tracking-[0.14em]">✦ Capítulo 01 · Anuario Oficial 2026</div>
+            <h1 class="font-display text-xl sm:text-2xl md:text-3xl font-bold text-[var(--wine-main)] break-words">Mural de Integrantes Estrella de la Mañana</h1>
+            <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-2xl">
+              Retratos oficiales, apodos y frases célebres de nuestra promoción. Puedes descargar cualquier retrato como Postal Conmemorativa.
+            </p>
+          </div>
+          <button type="button" onclick="document.getElementById('memberFormDrawer').classList.toggle('hidden')" class="btn-interactive w-full md:w-auto px-4 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-bold border border-[var(--gold-main)]/40 shadow-xs cursor-pointer whitespace-nowrap text-center">
+            + Inscribir Integrante
+          </button>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-4 sm:p-5 space-y-4">
-          <div>
-            <h2 class="text-base font-bold text-[var(--wine-main)]">Añadir integrante al mural de la promoción</h2>
-            <p class="text-xs text-[var(--text-muted)]">Completa los datos del compañero(a) y selecciona su foto para publicarla</p>
+        <div id="memberFormDrawer" class="editorial-surface rounded-2xl border border-[var(--gold-hairline)] p-4 sm:p-5 space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="font-display text-base font-bold text-[var(--wine-main)]">Ficha de Inscripción al Anuario</h2>
+              <p class="text-xs text-[var(--text-muted)]">Completa los datos del compañero(a) y selecciona su retrato para publicarlo</p>
+            </div>
+            <button type="button" onclick="document.getElementById('memberFormDrawer').classList.add('hidden')" class="text-xs font-bold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">✕</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <input id="memberNameInput" type="text" maxlength="50" placeholder="Nombre completo (obligatorio)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
@@ -590,14 +702,17 @@
       <!-- 3. SECCIÓN GALERÍA & ÁLBUMES -->
       <section id="seccion-galeria" class="page-section hidden anim-section space-y-4 sm:space-y-5">
         <!-- Barra de Historias por Álbum (Estilo Social + Gala) -->
-        <div class="w-full max-w-full overflow-hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3.5 sm:p-4 space-y-2.5">
+        <div class="w-full max-w-full overflow-hidden editorial-surface rounded-2xl border border-[var(--gold-hairline)] p-4 sm:p-5 space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-[11px] sm:text-xs font-bold text-[var(--wine-main)] uppercase tracking-wider">Historias y Álbumes</span>
+            <div>
+              <span class="text-[11px] font-bold text-[var(--gold-main)] uppercase tracking-[0.14em]">✦ Archivo Fotográfico &amp; Videos</span>
+              <h1 class="font-display text-lg sm:text-xl font-bold text-[var(--wine-main)]">Historias y Álbumes de la Promoción</h1>
+            </div>
             <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <button type="button" onclick="document.getElementById('newAlbumBox').classList.toggle('hidden')" class="btn-interactive px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] text-[var(--wine-main)] text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap">
+              <button type="button" onclick="document.getElementById('newAlbumBox').classList.toggle('hidden')" class="btn-interactive px-3 py-1.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] text-[var(--wine-main)] text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap">
                 🔒 + Nuevo Álbum
               </button>
-              <button type="button" onclick="document.getElementById('uploadPanelWrapper').classList.toggle('hidden')" class="btn-interactive px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--wine-main)] text-white text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap">
+              <button type="button" onclick="document.getElementById('uploadPanelWrapper').classList.toggle('hidden')" class="btn-interactive px-3.5 py-1.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap shadow-xs">
                 + Subir Foto o Video
               </button>
             </div>
@@ -618,15 +733,18 @@
           <div id="storiesAlbumBar" class="w-full max-w-full flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar pt-1 pb-0.5"></div>
         </div>
 
-        <div id="featuredContainer" class="hidden w-full max-w-full overflow-hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3.5 sm:p-4 space-y-3">
+        <div id="featuredContainer" class="hidden w-full max-w-full overflow-hidden editorial-surface rounded-2xl border border-[var(--gold-hairline)] p-4 sm:p-5 space-y-3">
           <div class="flex items-center justify-between gap-2">
-            <h2 class="text-xs sm:text-sm font-bold text-[var(--wine-main)] truncate">Recuerdos Más Votados de la Promo</h2>
-            <span class="text-[11px] sm:text-xs text-[var(--text-muted)] shrink-0">Destacados</span>
+            <div>
+              <div class="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Selección de la Promo</div>
+              <h2 class="font-display text-sm sm:text-base font-bold text-[var(--wine-main)] truncate">Recuerdos Más Votados</h2>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-[var(--bg-cream)] border border-[var(--border-color)] text-[11px] font-semibold text-[var(--wine-main)] shrink-0">★ Top Favoritos</span>
           </div>
-          <div id="carouselTrack" class="w-full max-w-full flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
+          <div id="carouselTrack" class="w-full max-w-full flex gap-3.5 overflow-x-auto no-scrollbar pb-1"></div>
         </div>
 
-        <div id="uploadPanelWrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div id="uploadPanelWrapper" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div class="lg:col-span-7 rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-4 sm:p-5 flex flex-col justify-between gap-4">
             <div>
               <h2 class="text-base font-bold text-[var(--wine-main)]">Sube una o varias fotos y videos por álbum</h2>
@@ -691,8 +809,8 @@
 
         <div id="albumFilterBar" class="w-full max-w-full flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
 
-        <div class="w-full max-w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3">
-          <input type="text" id="searchInput" oninput="renderGaleria(true)" placeholder="Buscar recuerdo por título, álbum o dedicatoria..." class="w-full md:flex-1 md:max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-3.5 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+        <div class="editorial-surface rounded-2xl border border-[var(--border-color)] p-3 sm:p-4 w-full max-w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3">
+          <input type="text" id="searchInput" oninput="renderGaleria(true)" placeholder="🔍 Buscar recuerdo por título, #álbum o dedicatoria..." class="w-full md:flex-1 md:max-w-md rounded-xl bg-[var(--bg-cream)]/60 border border-[var(--border-color)] px-3.5 py-2 text-xs text-[var(--text-dark)] outline-none focus:bg-white focus:border-[var(--wine-main)]" />
           <div class="w-full md:w-auto flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2">
             <div class="grid grid-cols-2 sm:flex items-center gap-1.5 sm:gap-2">
               <button type="button" onclick="alternarModoOrganizarLote()" id="btnBatchOrganizeToggle" class="btn-interactive px-2.5 sm:px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--gold-main)] text-[var(--wine-main)] text-[11px] sm:text-xs font-bold cursor-pointer truncate text-center">
@@ -709,12 +827,12 @@
               </button>
             </div>
             <div class="flex items-center justify-between sm:justify-start gap-2">
-              <div class="flex-1 sm:flex-initial flex items-center p-1 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)]">
+              <div class="flex-1 sm:flex-initial flex items-center p-1 rounded-xl bg-[var(--bg-cream)]/70 border border-[var(--border-color)]">
                 <button onclick="setFiltro('todos', this)" class="filter-btn flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer text-center">Todos</button>
                 <button onclick="setFiltro('image', this)" class="filter-btn flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer text-center">Fotos</button>
                 <button onclick="setFiltro('video', this)" class="filter-btn flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer text-center">Videos</button>
               </div>
-              <select id="sortSelect" onchange="renderGaleria(true)" class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-2.5 sm:px-3 py-2 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer shrink-0">
+              <select id="sortSelect" onchange="renderGaleria(true)" class="rounded-xl bg-[var(--bg-cream)]/70 border border-[var(--border-color)] px-2.5 sm:px-3 py-2 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer shrink-0">
                 <option value="recientes">Más recientes</option>
                 <option value="populares">Más gustados</option>
                 <option value="comentados">Más comentados</option>
@@ -756,19 +874,19 @@
 
       <!-- 4. SECCIÓN PREMIOS DE LA PROMO '26 -->
       <section id="seccion-premios" class="page-section hidden anim-section space-y-4 sm:space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-          <div class="min-w-0">
-            <div class="text-xs font-semibold text-[var(--gold-main)]">Votaciones Interactivas del Salón</div>
-            <h1 class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] break-words">Los Premios de la Promo ’26</h1>
-            <p class="text-xs md:text-sm text-[var(--text-muted)]">Nomina a tus compañeros y vota en cada categoría para coronar a los ganadores.</p>
+        <div class="section-banner rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+          <div class="min-w-0 space-y-1">
+            <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">✦ Capítulo 03 · Votaciones Interactivas del Salón</div>
+            <h1 class="font-display text-xl sm:text-2xl md:text-3xl font-bold text-[var(--wine-main)] break-words">Los Premios de la Promo ’26</h1>
+            <p class="text-xs md:text-sm text-[var(--text-muted)]">Nomina a tus compañeros y vota en cada categoría para coronar el Cuadro de Honor.</p>
           </div>
-          <button onclick="document.getElementById('newCategoryBox').classList.toggle('hidden')" class="btn-interactive w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer text-center whitespace-nowrap">
+          <button onclick="document.getElementById('newCategoryBox').classList.toggle('hidden')" class="btn-interactive w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-bold border border-[var(--gold-main)]/40 cursor-pointer text-center whitespace-nowrap">
             + Nueva Categoría
           </button>
         </div>
 
-        <div id="newCategoryBox" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 space-y-3">
-          <h3 class="text-sm font-bold text-[var(--wine-main)]">Crear nueva categoría de votación</h3>
+        <div id="newCategoryBox" class="hidden editorial-surface rounded-2xl border border-[var(--gold-main)] p-5 space-y-3">
+          <h3 class="font-display text-sm font-bold text-[var(--wine-main)]">Crear nueva categoría de votación</h3>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <input id="newCatTitle" type="text" maxlength="50" placeholder="Título (ej. El más puntual)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
             <input id="newCatDesc" type="text" maxlength="90" placeholder="Descripción breve..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
@@ -776,14 +894,14 @@
           </div>
         </div>
 
-        <div id="awardsPodium" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 space-y-3">
-          <div class="flex items-center justify-between">
+        <div id="awardsPodium" class="hidden rounded-2xl bg-[var(--wine-dark)] border-2 border-[var(--gold-main)] p-5 sm:p-6 space-y-4 text-white shadow-lg">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 pb-3">
             <div>
-              <div class="text-xs font-semibold text-[var(--gold-main)]">Cuadro de Honor en Vivo</div>
-              <h2 class="text-base font-bold text-[var(--wine-main)]">Ganadores Actuales del Salón</h2>
+              <div class="text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--gold-bright)]">♛ Cuadro de Honor en Vivo</div>
+              <h2 class="font-display text-base sm:text-lg font-bold text-white">Líderes Actuales de la Promoción</h2>
             </div>
-            <button type="button" onclick="lanzarConfetiDorado()" class="btn-interactive px-3 py-1.5 rounded-xl border border-[var(--gold-main)] text-xs font-semibold text-[var(--wine-main)] cursor-pointer">
-              🎉 Celebrar
+            <button type="button" onclick="lanzarConfetiDorado()" class="btn-interactive px-3.5 py-1.5 rounded-xl bg-[var(--gold-bright)] text-[var(--wine-dark)] text-xs font-bold cursor-pointer">
+              🎉 Celebrar Ganadores
             </button>
           </div>
           <div id="awardsPodiumGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
@@ -794,20 +912,23 @@
 
       <!-- 5. SECCIÓN CÁPSULA DEL TIEMPO -->
       <section id="seccion-capsula" class="page-section hidden anim-section space-y-4 sm:space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 text-center space-y-1.5">
-          <div class="text-xs font-semibold text-[var(--gold-main)]">Mensajes hacia el Futuro</div>
-          <h1 class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] break-words">Cápsula del Tiempo EDM ’26</h1>
+        <div class="section-banner rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-7 text-center space-y-1.5">
+          <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">✦ Capítulo 04 · Mensajes hacia el Futuro</div>
+          <h1 class="font-display text-xl sm:text-2xl md:text-3xl font-bold text-[var(--wine-main)] break-words">Cápsula del Tiempo EDM ’26</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
-            Sella una carta, promesa o predicción para el día de nuestra graduación o reencuentro. Los mensajes permanecen protegidos con candado hasta su fecha de apertura.
+            Sella una carta, promesa o predicción para el día de nuestra graduación o reencuentro. Los sobres permanecen lacrados hasta su fecha de apertura.
           </p>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-4">
-          <h2 class="text-base font-bold text-[var(--wine-main)]">Sellar nuevo recuerdo en la cápsula</h2>
+        <div class="editorial-surface rounded-2xl border border-[var(--gold-hairline)] p-4 sm:p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="font-display text-base font-bold text-[var(--wine-main)]">Lacrar nueva carta en la cápsula</h2>
+            <span class="text-[11px] font-mono-num text-[var(--gold-main)] font-semibold">✦ Sello Oficial 2026</span>
+          </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <input id="capRecipientInput" type="text" value="Para toda la Promo ’26" maxlength="40" placeholder="Destinatario..." class="w-full min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
             <input id="capDateInput" type="date" value="2026-12-18" class="w-full min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
-            <button onclick="sellarCapsula()" class="btn-interactive w-full px-5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Sellar en la Cápsula</button>
+            <button onclick="sellarCapsula()" class="btn-interactive w-full px-5 py-2 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-bold cursor-pointer">🔒 Sellar en la Cápsula</button>
           </div>
           <textarea id="capMessageInput" rows="3" maxlength="500" placeholder="Escribe tu carta o predicción para el futuro de la promoción..." class="w-full rounded-xl border border-[var(--border-color)] bg-white p-3.5 text-xs outline-none resize-none"></textarea>
         </div>
@@ -817,15 +938,16 @@
 
       <!-- 6. SECCIÓN EVENTOS & SOUNDTRACK -->
       <section id="seccion-eventos" class="page-section hidden anim-section space-y-4 sm:space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 text-center space-y-1.5">
-          <h1 class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] break-words">Cronograma 2026 & Soundtrack Oficial</h1>
+        <div class="section-banner rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-7 text-center space-y-1.5">
+          <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">✦ Capítulo 05 · Agenda &amp; Música</div>
+          <h1 class="font-display text-xl sm:text-2xl md:text-3xl font-bold text-[var(--wine-main)] break-words">Cronograma 2026 &amp; Soundtrack Oficial</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)]">Configura libremente las fechas importantes de nuestro año y la música que nos acompaña</p>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-4">
+        <div class="editorial-surface rounded-2xl border border-[var(--border-color)] p-4 sm:p-6 space-y-4">
           <div class="flex items-center justify-between gap-2">
             <div>
-              <h2 class="text-base font-bold text-[var(--wine-main)]">Cronograma de Eventos 2026</h2>
+              <h2 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Cronograma de Eventos 2026</h2>
               <p class="text-xs text-[var(--text-muted)]">Agrega, edita o borra libremente las fechas reales de la promoción</p>
             </div>
           </div>
@@ -840,15 +962,15 @@
           <div id="eventsTimelineGrid" class="grid grid-cols-1 md:grid-cols-3 gap-3.5"></div>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-3">
-          <h2 class="text-base font-bold text-[var(--wine-main)]">Playlist Oficial en Spotify</h2>
+        <div class="editorial-surface rounded-2xl border border-[var(--border-color)] p-4 sm:p-6 space-y-3">
+          <h2 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Playlist Oficial en Spotify</h2>
           <div id="spotifyContainer" class="rounded-xl overflow-hidden border border-[var(--border-color)] bg-black"></div>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-4">
+        <div class="editorial-surface rounded-2xl border border-[var(--border-color)] p-4 sm:p-6 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 class="text-base font-bold text-[var(--wine-main)]">Himnos del Salón</h2>
+              <h2 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Himnos del Salón</h2>
               <p class="text-xs text-[var(--text-muted)]">Canciones votadas y sugeridas por la promoción</p>
             </div>
             <button onclick="document.getElementById('addHimnoForm').classList.toggle('hidden')" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">
@@ -869,8 +991,9 @@
 
       <!-- 7. SECCIÓN BUZÓN DE ANÉCDOTAS -->
       <section id="seccion-mensajes" class="page-section hidden anim-section space-y-4 sm:space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 text-center space-y-1.5">
-          <h1 class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] break-words">Buzón de Anécdotas</h1>
+        <div class="section-banner rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-7 text-center space-y-1.5">
+          <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">✦ Capítulo 06 · Dedicatorias y Recuerdos</div>
+          <h1 class="font-display text-xl sm:text-2xl md:text-3xl font-bold text-[var(--wine-main)] break-words">Buzón de Anécdotas</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)]">Comparte tus palabras, recuerdos de salón y dedicatorias con la Promoción 2026</p>
         </div>
 
@@ -908,7 +1031,7 @@
       <span class="truncate max-w-full">Anuario</span>
     </button>
     <div class="flex items-center justify-center min-w-0">
-      <button type="button" onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive -mt-3.5 px-3 py-2 rounded-2xl bg-[var(--wine-main)] text-white border-2 border-[var(--gold-bright)] shadow-md text-[11px] font-bold flex items-center justify-center gap-0.5 whitespace-nowrap cursor-pointer">
+      <button type="button" onclick="cambiarSeccion('galeria'); document.getElementById('uploadPanelWrapper')?.classList.remove('hidden'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive -mt-3.5 px-3 py-2 rounded-2xl bg-[var(--wine-main)] text-white border-2 border-[var(--gold-bright)] shadow-md text-[11px] font-bold flex items-center justify-center gap-0.5 whitespace-nowrap cursor-pointer">
         <span>+ Subir</span>
       </button>
     </div>
@@ -925,11 +1048,11 @@
   <!-- MODAL LIGHTBOX CINEMATOGRÁFICO + ZOOM INTERACTIVO + MODO PRESENTACIÓN -->
   <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-between bg-black/95 p-2 sm:p-5 select-none" style="touch-action: none;">
     <!-- Barra superior del visor adaptable a celulares -->
-    <div class="w-full max-w-5xl flex items-center justify-between gap-1.5 sm:gap-2 pb-2 z-20" onclick="event.stopPropagation()">
-      <div class="flex items-center gap-2 min-w-0 flex-1">
-        <span id="modalCounter" class="px-2 py-1 rounded-lg bg-white/10 text-white text-[11px] sm:text-xs font-mono-num font-semibold shrink-0">1 / 1</span>
+    <div class="w-full max-w-5xl flex items-center justify-between gap-1.5 sm:gap-2 px-3 py-2 rounded-2xl bg-black/65 backdrop-blur-md border border-white/15 z-20" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2.5 min-w-0 flex-1">
+        <span id="modalCounter" class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15 text-[var(--gold-bright)] text-[11px] sm:text-xs font-mono-num font-bold shrink-0">1 / 1</span>
         <div class="min-w-0 flex-1">
-          <div id="modalTitle" class="text-xs sm:text-base font-bold text-white truncate">Recuerdo de la Promo</div>
+          <div id="modalTitle" class="font-display text-xs sm:text-base font-bold text-white truncate">Recuerdo de la Promo</div>
           <div id="modalSubtitle" class="text-[10px] sm:text-[11px] text-[var(--gold-bright)] truncate">#General</div>
         </div>
       </div>
@@ -1436,7 +1559,7 @@
       {"id":"tg_file_293","fileId":"","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_293.jpg","name":"Dia Del Maestro","type":"image/jpeg","album":"Día del Maestro","date":"2026-10-01T01:36:09.000Z","updatedAt":1790824077370,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_file_291","fileId":"","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_291.mp4","name":"Dia Del Maestro","type":"video/mp4","album":"Día del Maestro","date":"2026-10-01T01:36:08.000Z","updatedAt":1790824077370,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_file_290","fileId":"","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_290.jpg","name":"Dia Del Maestro","type":"image/jpeg","album":"Día del Maestro","date":"2026-10-01T01:36:07.000Z","updatedAt":1790824077370,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_file_287","fileId":"","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_287.mp4","name":"Dia Del Maestro","type":"video/mp4","album":"Día del Maestro","date":"2026-10-01T01:36:06.000Z","updatedAt":1790824077371,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_file_287","fileId":"","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_287.mp4","name":"Dia Del Maestro","type":"video/mp4","album":"Día del Maestro","date":"2026-10-01T01:36:06.000Z","updatedAt":1790888312532,"likes":1,"likedBy":["user_gmgh9rd7siq"],"comments":[]},
       {"id":"tg_file_288","fileId":"","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_288.jpg","name":"Dia Del Maestro","type":"image/jpeg","album":"Día del Maestro","date":"2026-10-01T01:36:06.000Z","updatedAt":1790824077371,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_file_289","fileId":"","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_289.jpg","name":"Dia Del Maestro","type":"image/jpeg","album":"Día del Maestro","date":"2026-10-01T01:36:06.000Z","updatedAt":1790824077371,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_file_286","fileId":"","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_286.jpg","name":"Dia Del Maestro","type":"image/jpeg","album":"Día del Maestro","date":"2026-10-01T01:36:05.000Z","updatedAt":1790824077371,"likes":0,"likedBy":[],"comments":[]},
@@ -1507,7 +1630,7 @@
       {"id":"tg_file_173","fileId":"AgACAgEAAxkDAAO0arxyZu93uN-Ber2mE6orXxbDbWEAAvUMaxvqMuFFJIumHQmXePoBAAMCAAN3AAM9BA","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_173.jpg","name":"Recuerdo de la Promo","type":"image/jpeg","album":"General","date":"2026-09-30T02:22:30.000Z","updatedAt":1790822916106,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_file_172","fileId":"AgACAgEAAxkDAAOzarxyYq-7r7zOz1gjnrCYYKW0pYgAAvQMaxvqMuFFDpFda2YP92ABAAMCAAN3AAM9BA","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_172.jpg","name":"Recuerdo de la Promo","type":"image/jpeg","album":"General","date":"2026-09-30T02:22:27.000Z","updatedAt":1790822916106,"likes":0,"likedBy":[],"comments":[]},
       {"id":"tg_msg_175","tgMessageId":175,"fileId":"BAACAgEAAxkBAAOvarxxGA0ex5VCrAdFgk5ANI2fYWsAAh4IAAIDe-hFwTfgc6ANnGw9BA","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_171.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T02:16:56.000Z","updatedAt":1790734644415,"likes":0,"likedBy":[],"comments":[]},
-      {"id":"tg_msg_174","tgMessageId":174,"fileId":"BAACAgEAAxkBAAOuarxwiJUYZqma1T5XR87DSMn4GBcAAhwIAAIDe-hF7gABkI05oUfgPQQ","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_170.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T02:14:32.000Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
+      {"id":"tg_msg_174","tgMessageId":174,"fileId":"BAACAgEAAxkBAAOuarxwiJUYZqma1T5XR87DSMn4GBcAAhwIAAIDe-hF7gABkI05oUfgPQQ","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_170.mp4","name":"Video de Fabricio","type":"video/mp4","album":"General","date":"2026-09-30T02:14:32.000Z","updatedAt":1790824667816,"likes":0,"likedBy":[],"comments":[]},
       {"id":"item_d691v8u","tgMessageId":165,"fileId":"BAACAgEAAxkDAAOlarxp5DoljUHYf21HFENTXiA3evsAApwRAALqMuFFcUZwcT46oOE9BA","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/videos/file_113.mp4","name":"El mejor Blog (no como FabricioGeimely)","type":"video/mp4","album":"General","date":"2026-09-30T01:46:13.616Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[{"id":"com_iry2jm4d","author":"Miembro Promo 546","authorId":"user_uuqsz66gytb","date":"2026-09-30T01:50:19.614Z","text":"TardilloComics quien te conoce"}]},
       {"id":"item_ghup4lv","tgMessageId":163,"fileId":"AgACAgEAAxkDAAOjarxoTiS5PUlCldrM_8br87hiR64AAuUMaxvqMuFFqL8ply--SecBAAMCAAN5AAM9BA","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_107.jpg","name":"mimir","type":"image/jpeg","album":"General","date":"2026-09-30T01:39:24.810Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
       {"id":"item_sxl26zi","tgMessageId":77,"fileId":"AgACAgEAAxkDAANNarsHufgH_hewiZpJk_GO9Qse1bMAAhsNaxtCS9lFtrPa66jPm-sBAAMCAAN5AAM9BA","externalEmbedUrl":"","externalOriginalUrl":"","isHeavyVideo":false,"url":"https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_106.jpg","name":"Día de la Juventud","type":"image/jpeg","album":"General","date":"2026-09-30T01:38:51.422Z","updatedAt":1790734500000,"likes":0,"likedBy":[],"comments":[]},
@@ -3450,18 +3573,25 @@
         return;
       }
       grid.innerHTML = ordenados.map(ev => {
-        const dias = Math.ceil((new Date(ev.date).getTime() - Date.now()) / 86400000);
+        const dObj = new Date(ev.date);
+        const dias = Math.ceil((dObj.getTime() - Date.now()) / 86400000);
+        const diaNum = String(dObj.getDate() || 18).padStart(2, '0');
+        const mesCorto = dObj.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').toUpperCase();
         return `
-          <div class="p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] flex flex-col justify-between gap-2">
-            <div>
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="text-xs font-semibold text-[var(--wine-main)] font-mono-num">
+          <div class="p-4 rounded-2xl bg-[var(--bg-cream)]/75 border border-[var(--border-color)] hover:border-[var(--gold-main)] transition-colors flex items-start gap-3.5">
+            <div class="w-14 py-2 rounded-xl bg-white border border-[var(--gold-main)] text-center shrink-0 shadow-xs">
+              <div class="font-mono-num text-lg font-extrabold text-[var(--wine-main)] leading-none">${diaNum}</div>
+              <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--gold-main)] mt-1">${mesCorto}</div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded-md bg-white border border-[var(--border-color)] text-[10px] font-bold text-[var(--wine-main)] font-mono-num">
                   ${dias > 0 ? `Faltan ${dias} días` : dias === 0 ? '¡Es hoy!' : 'Realizado'}
                 </span>
-                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">Borrar</button>
+                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
               </div>
-              <h4 class="text-sm font-bold text-[var(--wine-main)]">${ev.title}</h4>
-              <p class="text-xs text-[var(--text-muted)] mt-1">${new Date(ev.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })} · ${ev.location}</p>
+              <h4 class="font-display text-sm font-bold text-[var(--wine-main)] truncate">${ev.title}</h4>
+              <p class="text-xs text-[var(--text-muted)] mt-0.5 truncate">📍 ${ev.location}</p>
             </div>
           </div>
         `;
@@ -3625,20 +3755,23 @@
         const safeName = (m.name || '').replace(/'/g, "\\'");
         const safeSub = (m.frase || m.apodo || obtenerEtiquetaRol(mRole)).replace(/'/g, "\\'");
         return `
-          <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border ${esDistinguido ? 'border-2 border-[var(--gold-main)]' : 'border-[var(--border-color)]'} overflow-hidden flex flex-col">
-            <div onclick="abrirModal('${m.photoUrl}', 'image/jpeg', '${safeName}', '${obtenerEtiquetaRol(mRole)}', '${m.id}', '${m.fileId || ''}')" class="w-full h-64 bg-[#181214] overflow-hidden cursor-pointer relative group">
-              <img src="${m.photoUrl}" alt="${m.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${m.photoUrl}', '${m.id}', '${m.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
-              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold ${esDistinguido ? 'bg-[var(--gold-bright)] text-[var(--wine-dark)]' : 'bg-black/70 text-white'}">
+          <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border ${esDistinguido ? 'border-[var(--gold-main)]' : 'border-[var(--border-color)]'} overflow-hidden flex flex-col">
+            <div onclick="abrirModal('${m.photoUrl}', 'image/jpeg', '${safeName}', '${obtenerEtiquetaRol(mRole)}', '${m.id}', '${m.fileId || ''}')" class="w-full h-76 sm:h-84 bg-[#181214] overflow-hidden cursor-pointer relative group">
+              <img src="${m.photoUrl}" alt="${m.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${m.photoUrl}', '${m.id}', '${m.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />
+              <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none"></div>
+              <span class="absolute bottom-3 left-3.5 text-[11px] font-bold uppercase tracking-wider ${esDistinguido ? 'text-[var(--gold-bright)]' : 'text-white/95'}">
                 ${obtenerEtiquetaRol(mRole)}
               </span>
             </div>
-            <div class="p-4 flex-1 flex flex-col justify-between gap-3">
-              <div class="space-y-1">
-                <h3 class="text-base font-bold text-[var(--wine-main)] truncate">${m.name}</h3>
-                <div class="text-xs font-semibold text-[var(--gold-main)]">
-                  ${m.apodo || obtenerEtiquetaRol(mRole)} · EDM 2026
+            <div class="p-5 flex-1 flex flex-col justify-between gap-4">
+              <div class="space-y-2">
+                <div>
+                  <h3 class="font-display text-lg sm:text-xl font-bold text-[var(--wine-main)] truncate">${m.name}</h3>
+                  <div class="text-xs font-semibold text-[var(--gold-main)] mt-0.5">
+                    ${m.apodo ? m.apodo + ' · ' : ''}Promoción EDM ’26
+                  </div>
                 </div>
-                ${m.frase ? `<p class="text-xs text-[var(--text-muted)] italic leading-relaxed pt-1">&ldquo;${m.frase}&rdquo;</p>` : ''}
+                ${m.frase ? `<blockquote class="border-l-2 border-[var(--gold-main)] pl-3 py-0.5 font-display text-[13.5px] text-[var(--text-muted)] italic leading-relaxed">&ldquo;${m.frase}&rdquo;</blockquote>` : ''}
               </div>
               <div id="edit-member-${m.id}" class="hidden space-y-2 pt-2 border-t border-[var(--border-color)]">
                 <input id="edit-name-${m.id}" type="text" value="${(m.name || '').replace(/"/g, '&quot;')}" placeholder="Nombre..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
@@ -3653,19 +3786,19 @@
                 <button onclick="guardarEdicionMiembro('${m.id}')" class="btn-interactive w-full py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar cambios</button>
               </div>
               <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
-                <div class="flex items-center gap-1.5">
+                <div class="flex items-center gap-2">
                   <button onclick="toggleLikeMiembro('${m.id}', this)" class="btn-interactive px-3 py-1.5 rounded-lg font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)]'}">
                     ♥ <span class="font-mono-num">${m.likes || 0}</span>
                   </button>
-                  <button onclick="descargarPostalPolaroid('${m.photoUrl}', '${safeName}', '${safeSub}', 'Anuario 2026')" class="btn-interactive px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--gold-main)] text-[var(--wine-main)] hover:bg-[var(--wine-main)] hover:text-white cursor-pointer">
+                  <button onclick="descargarPostalPolaroid('${m.photoUrl}', '${safeName}', '${safeSub}', 'Anuario 2026')" class="btn-interactive px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--gold-hairline)] text-[var(--wine-main)] hover:bg-[var(--wine-main)] hover:text-white cursor-pointer">
                     Postal
                   </button>
                 </div>
-                <div class="flex items-center gap-2">
-                  <button onclick="document.getElementById('edit-member-${m.id}').classList.toggle('hidden')" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">
+                <div class="flex items-center gap-2.5">
+                  <button onclick="document.getElementById('edit-member-${m.id}').classList.toggle('hidden')" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-medium cursor-pointer">
                     Editar
                   </button>
-                  <button onclick="eliminarMiembro('${m.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">
+                  <button onclick="eliminarMiembro('${m.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-medium cursor-pointer">
                     Eliminar
                   </button>
                 </div>
@@ -3870,24 +4003,26 @@
           const activo = albumActual === alb;
 
           return `
-            <button type="button" onclick="abrirHistoriaOFiltrarAlbum('${safeAlb}')" class="group flex flex-col items-center gap-1.5 shrink-0 cursor-pointer focus:outline-none">
-              <div class="story-ring rounded-full ${activo ? 'ring-2 ring-[var(--wine-main)] scale-105' : 'opacity-90 hover:opacity-100'} transition-transform">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#181214] border-2 border-[var(--card-bg)] overflow-hidden relative flex items-center justify-center">
-                  <img src="${coverUrl}" alt="${alb}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${coverUrl}', '${iid}', '${fid}')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" />
-                  <span class="absolute bottom-0 inset-x-0 bg-black/70 text-[10px] font-mono-num font-bold text-[var(--gold-bright)] text-center leading-tight py-0.5">${count}</span>
+            <button type="button" onclick="abrirHistoriaOFiltrarAlbum('${safeAlb}')" class="group flex flex-col items-center gap-2 shrink-0 cursor-pointer focus:outline-none">
+              <div class="relative">
+                <div class="story-ring rounded-full ${activo ? 'ring-2 ring-[var(--wine-main)] scale-105 shadow-md' : 'opacity-95 hover:opacity-100'} transition-transform">
+                  <div class="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-full bg-[#181214] border-2 border-[var(--card-bg)] overflow-hidden relative flex items-center justify-center">
+                    <img src="${coverUrl}" alt="${alb}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${coverUrl}', '${iid}', '${fid}')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                  </div>
                 </div>
+                <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[var(--wine-dark)] text-[var(--gold-bright)] border border-[var(--gold-main)] text-[10px] font-mono-num font-bold leading-none shadow-xs">${count}</span>
               </div>
-              <span class="text-[11px] font-bold ${activo ? 'text-[var(--wine-main)] underline' : 'text-[var(--text-dark)]'} max-w-[76px] truncate">
+              <span class="text-xs font-semibold ${activo ? 'text-[var(--wine-main)] font-bold underline decoration-[var(--gold-main)] decoration-2 underline-offset-4' : 'text-[var(--text-dark)]'} max-w-[88px] truncate">
                 ${alb === 'Todos' ? 'Todos' : alb}
               </span>
             </button>
           `;
         }).join('') +
-        `<button type="button" onclick="document.getElementById('newAlbumBox').classList.toggle('hidden'); document.getElementById('newAlbumNameInput')?.focus();" class="group flex flex-col items-center gap-1.5 shrink-0 cursor-pointer focus:outline-none">
-          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[var(--bg-cream)] border-2 border-dashed border-[var(--gold-main)] flex items-center justify-center text-lg font-bold text-[var(--wine-main)] group-hover:scale-105 transition-transform">
+        `<button type="button" onclick="document.getElementById('newAlbumBox').classList.toggle('hidden'); document.getElementById('newAlbumNameInput')?.focus();" class="group flex flex-col items-center gap-2 shrink-0 cursor-pointer focus:outline-none">
+          <div class="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-full bg-[var(--bg-cream)] border-2 border-dashed border-[var(--gold-main)] flex items-center justify-center text-lg font-bold text-[var(--wine-main)] group-hover:scale-105 transition-transform">
             +
           </div>
-          <span class="text-[11px] font-bold text-[var(--wine-main)] max-w-[76px] truncate">Nuevo</span>
+          <span class="text-xs font-semibold text-[var(--wine-main)] max-w-[88px] truncate">Nuevo</span>
         </button>`;
     }
 
@@ -4186,7 +4321,47 @@
       renderGaleria(true);
     }
 
+    function renderVitrinaInicio() {
+      const box = document.getElementById('homeShowcaseBox');
+      const grid = document.getElementById('homeShowcaseGrid');
+      if (!box || !grid) return;
+
+      const candidatos = items
+        .map((item, idx) => ({ item, idx }))
+        .filter(x => !x.item.type || x.item.type.startsWith('image/'));
+
+      if (candidatos.length === 0) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      // Priorizamos recuerdos con título personalizado o likes para que la portada luzca curada
+      const curados = [...candidatos]
+        .sort((a, b) => {
+          const aCustom = !esTituloGenerico(a.item.name) ? 1 : 0;
+          const bCustom = !esTituloGenerico(b.item.name) ? 1 : 0;
+          if (bCustom !== aCustom) return bCustom - aCustom;
+          return (b.item.likes || 0) - (a.item.likes || 0);
+        })
+        .slice(0, 4);
+
+      box.classList.remove('hidden');
+      grid.innerHTML = curados.map(({ item, idx }) => {
+        const alb = item.album || inferirAlbum(item);
+        return `
+          <div onclick="abrirModalPorIndice(${idx})" class="group h-44 sm:h-52 rounded-2xl overflow-hidden relative cursor-pointer bg-[#181214] border border-[var(--gold-hairline)] shadow-xs">
+            <img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]" />
+            <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-xs border border-white/15 text-[var(--gold-bright)] text-[10px] font-semibold">#${alb}</span>
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent p-3 text-white">
+              <div class="font-display text-xs sm:text-sm font-bold truncate">${item.name}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function renderCarrusel() {
+      renderVitrinaInicio();
       const container = document.getElementById('featuredContainer');
       const track = document.getElementById('carouselTrack');
       const destacados = items
@@ -4200,17 +4375,18 @@
         return;
       }
       container.classList.remove('hidden');
-      track.innerHTML = destacados.map(({ item, idx }) => {
+      track.innerHTML = destacados.map(({ item, idx }, rankIdx) => {
         const esImagen = !item.type || item.type.startsWith('image/');
         return `
-          <div onclick="abrirModalPorIndice(${idx})" class="w-44 h-28 rounded-xl overflow-hidden relative shrink-0 border border-[var(--gold-main)] cursor-pointer bg-[#181214] group">
+          <div onclick="abrirModalPorIndice(${idx})" class="w-60 sm:w-72 h-38 sm:h-44 rounded-2xl overflow-hidden relative shrink-0 border border-[var(--gold-hairline)] cursor-pointer bg-[#181214] group shadow-sm">
             ${esImagen
-              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.04]" />`
+              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]" />`
               : `<video data-src="${item.url}" muted playsinline preload="none" onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
-                 <span class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/75 text-white text-[10px] font-bold">▶ Video</span>`}
-            <div class="absolute inset-x-0 bottom-0 bg-black/80 px-2.5 py-1 text-[11px] text-white font-medium flex justify-between">
-              <span class="truncate">${item.name}</span>
-              <span class="font-mono-num text-[var(--gold-bright)]">♥ ${item.likes}</span>
+                 <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/75 text-[var(--gold-bright)] text-[10px] font-semibold">▶ Video</span>`}
+            <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/75 border border-[var(--gold-main)]/60 text-[var(--gold-bright)] text-[10px] font-mono-num font-bold">#${rankIdx + 1}</span>
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent px-3.5 pt-7 pb-3 text-xs text-white flex items-end justify-between gap-2">
+              <span class="font-display font-bold truncate">${item.name}</span>
+              <span class="font-mono-num font-bold text-[var(--gold-bright)] shrink-0">♥ ${item.likes}</span>
             </div>
           </div>`;
       }).join('');
@@ -4270,34 +4446,37 @@
         card.style.setProperty('--i', Math.min(visualIdx, 12));
         card.className = `anim-card rounded-2xl bg-[var(--card-bg)] ${estaSeleccionadoLote ? 'border-2 border-[var(--gold-bright)] ring-2 ring-[var(--wine-main)]' : 'border border-[var(--border-color)]'} overflow-hidden flex flex-col`;
         card.innerHTML = `
-          <div onclick="manejarToqueMediaGaleria(event, ${index})" class="media-thumb-box w-full h-52 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
+          <div onclick="manejarToqueMediaGaleria(event, ${index})" class="media-thumb-box w-full h-64 sm:h-72 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
             ${esImagen
-              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />`
+              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />`
               : (item.externalEmbedUrl && !item.externalEmbedUrl.includes('tiktok.com'))
-                ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.classList.add('hidden');" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
-                   <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                     <span class="w-11 h-11 rounded-full bg-black/75 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
+                ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.classList.add('hidden');" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />
+                   <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent flex items-center justify-center pointer-events-none">
+                     <span class="w-12 h-12 rounded-full bg-black/75 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-lg group-hover:scale-110 transition-transform">▶</span>
                    </div>
-                   <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/80 text-[var(--gold-bright)] text-[10px] font-bold tracking-wide">VIDEO HD</span>`
+                   <span class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/75 text-[var(--gold-bright)] text-[10px] font-semibold tracking-wide">▶ Video HD</span>`
                 : `<video data-src="${item.url.includes('#t=') ? item.url : (item.url + '#t=0.001')}" preload="none" muted loop playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0.001;" class="lazy-video w-full h-full object-cover"></video>
-                   <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                     <span class="w-11 h-11 rounded-full bg-black/70 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
+                   <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent flex items-center justify-center pointer-events-none">
+                     <span class="w-12 h-12 rounded-full bg-black/70 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-lg group-hover:scale-110 transition-transform">▶</span>
                    </div>
-                   <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/75 text-[var(--gold-bright)] text-[10px] font-bold tracking-wide">VIDEO</span>`}
+                   <span class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/70 text-[var(--gold-bright)] text-[10px] font-semibold tracking-wide">▶ Video</span>`}
             ${modoOrganizarLote
-              ? `<span class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-lg ${estaSeleccionadoLote ? 'bg-[var(--wine-main)] text-white border border-[var(--gold-bright)]' : 'bg-black/75 text-white border border-white/40'} text-xs font-bold shadow">${estaSeleccionadoLote ? '✓ Seleccionado' : '☐ Toca para elegir'}</span>`
-              : (esReciente ? `<span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[var(--wine-main)]/90 border border-[var(--gold-bright)] text-[var(--gold-bright)] text-[10px] font-bold shadow">✨ Recién subido</span>` : '')}
+              ? `<span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg ${estaSeleccionadoLote ? 'bg-[var(--wine-main)] text-white border border-[var(--gold-bright)]' : 'bg-black/75 text-white border border-white/40'} text-xs font-bold shadow">${estaSeleccionadoLote ? '✓ Seleccionado' : '☐ Toca para elegir'}</span>`
+              : (esReciente ? `<span class="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-[var(--wine-main)]/90 border border-[var(--gold-bright)] text-[var(--gold-bright)] text-[10px] font-semibold shadow">✨ Nuevo</span>` : '')}
+            <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-black/65 backdrop-blur-xs border border-white/15 text-[var(--gold-bright)] text-[10px] font-semibold pointer-events-none">#${itemAlb}</span>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-2.5 right-2.5 w-7 h-7 rounded-lg bg-black/65 border border-white/20 text-white text-xs flex items-center justify-center pointer-events-none">⤢</span>
             <div id="heart-burst-${index}" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none z-10">
               <span class="double-tap-heart text-5xl text-white drop-shadow-lg">♥</span>
             </div>
           </div>
-          <div class="p-4 flex-1 flex flex-col gap-3">
-            <div>
-              <div class="flex items-center justify-between gap-2">
-                <h3 class="text-sm font-bold text-[var(--text-dark)] truncate">${item.name}</h3>
-                <span class="text-xs font-semibold text-[var(--gold-main)] shrink-0">#${itemAlb}</span>
+          <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+            <div class="space-y-1">
+              <h3 class="font-display text-[15.5px] font-bold text-[var(--text-dark)] tracking-tight truncate" title="${(item.name || '').replace(/"/g, '&quot;')}">${item.name}</h3>
+              <div class="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
+                <span class="font-semibold text-[var(--gold-main)]">${esImagen ? 'Fotografía' : 'Video'}</span>
+                <span aria-hidden="true">·</span>
+                <span class="font-mono-num">${fecha}</span>
               </div>
-              <div class="text-xs text-[var(--text-muted)] mt-0.5">${esImagen ? 'Fotografía' : 'Video'} · <span class="font-mono-num">${fecha}</span></div>
             </div>
             <div id="edit-item-${index}" class="hidden space-y-2 p-2.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)]">
               <input id="edit-item-name-${index}" type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="Título del recuerdo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
@@ -4307,14 +4486,6 @@
                 </select>
                 <button type="button" onclick="guardarEdicionItem(${index})" class="btn-interactive px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Guardar</button>
               </div>
-            </div>
-            <div class="flex items-center justify-between gap-2">
-              <button onclick="toggleLike(${index}, this)" class="btn-interactive px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)]'}">
-                ♥ Me gusta (<span class="font-mono-num">${item.likes || 0}</span>)
-              </button>
-              <button onclick="document.getElementById('comments-${index}').classList.toggle('hidden')" class="btn-interactive text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
-                Dedicatorias (<span class="font-mono-num">${comentarios.length}</span>)
-              </button>
             </div>
             <div id="comments-${index}" class="hidden rounded-xl p-3 border border-[#e6d8b5] space-y-2 text-xs" style="background:var(--crema-fijo);color:var(--crema-text);">
               <div class="max-h-28 overflow-y-auto space-y-1.5">
@@ -4329,13 +4500,20 @@
                 <button type="submit" class="btn-interactive px-3 py-1 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Enviar</button>
               </form>
             </div>
-            <div class="mt-auto pt-2.5 border-t border-[var(--border-color)] flex justify-between items-center text-xs">
-              <div class="flex items-center gap-2.5">
-                ${esImagen ? `<button onclick="descargarPostalPolaroid('${item.url}', '${safeTitle}', 'Álbum: ${itemAlb}', '${fecha}')" class="btn-interactive text-[var(--wine-main)] font-semibold cursor-pointer">Postal</button>` : ''}
-                <button onclick="document.getElementById('edit-item-${index}').classList.toggle('hidden')" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Editar</button>
-                <button onclick="navigator.clipboard.writeText('${item.url}'); mostrarToast('Enlace copiado');" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-semibold cursor-pointer">Enlace</button>
+            <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2 text-xs">
+              <div class="flex items-center gap-2">
+                <button onclick="toggleLike(${index}, this)" class="btn-interactive px-2.5 py-1 rounded-lg font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)] hover:border-[var(--wine-main)]'}">
+                  ♥ <span class="font-mono-num">${item.likes || 0}</span>
+                </button>
+                <button onclick="document.getElementById('comments-${index}').classList.toggle('hidden')" class="btn-interactive px-2 py-1 rounded-lg font-medium text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
+                  Dedicatorias (<span class="font-mono-num">${comentarios.length}</span>)
+                </button>
               </div>
-              <button onclick="eliminarItem(${index})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Eliminar</button>
+              <div class="flex items-center gap-2 text-[11px] sm:text-xs">
+                ${esImagen ? `<button onclick="descargarPostalPolaroid('${item.url}', '${safeTitle}', 'Álbum: ${itemAlb}', '${fecha}')" class="btn-interactive text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Postal</button>` : ''}
+                <button onclick="document.getElementById('edit-item-${index}').classList.toggle('hidden')" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-medium cursor-pointer">Editar</button>
+                <button onclick="eliminarItem(${index})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-medium cursor-pointer" title="Eliminar recuerdo">Borrar</button>
+              </div>
             </div>
           </div>
         `;
@@ -4520,11 +4698,14 @@
       if (podiumBox && podiumGrid) {
         if (lideres.length > 0) {
           podiumBox.classList.remove('hidden');
-          podiumGrid.innerHTML = lideres.map(l => `
-            <div class="p-3.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] flex flex-col justify-between gap-1">
-              <div class="text-[11px] font-semibold text-[var(--gold-main)] truncate">★ ${l.category}</div>
-              <div class="text-sm font-bold text-[var(--wine-main)] truncate">${l.winner}</div>
-              <div class="text-[11px] font-mono-num text-[var(--text-muted)]">${l.votes} ${l.votes === 1 ? 'voto' : 'votos'}</div>
+          podiumGrid.innerHTML = lideres.map((l, i) => `
+            <div class="p-3.5 rounded-xl bg-white/10 border border-[var(--gold-main)]/60 flex flex-col justify-between gap-1.5">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--gold-bright)] truncate">👑 ${l.category}</span>
+                <span class="text-[10px] font-mono-num text-white/70">#${i + 1}</span>
+              </div>
+              <div class="font-display text-sm sm:text-base font-bold text-white truncate">${l.winner}</div>
+              <div class="text-[11px] font-mono-num text-[var(--gold-bright)] font-semibold">${l.votes} ${l.votes === 1 ? 'voto' : 'votos'}</div>
             </div>
           `).join('');
         } else {
@@ -4537,27 +4718,34 @@
         const ordenados = [...(cat.nominees || [])].sort((a, b) => (b.votes || 0) - (a.votes || 0));
 
         return `
-          <article class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 flex flex-col justify-between gap-4">
+          <article class="editorial-surface rounded-2xl border border-[var(--border-color)] p-5 flex flex-col justify-between gap-4">
             <div>
-              <div class="flex items-start justify-between gap-2 mb-3">
+              <div class="flex items-start justify-between gap-2 pb-3 border-b border-[var(--border-color)]">
                 <div>
-                  <h3 class="text-base font-bold text-[var(--wine-main)]">${cat.title}</h3>
-                  ${cat.description ? `<p class="text-xs text-[var(--text-muted)]">${cat.description}</p>` : ''}
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">${cat.title}</h3>
+                    <span class="px-2 py-0.5 rounded-full bg-[var(--bg-cream)] border border-[var(--border-color)] text-[10px] font-mono-num font-bold text-[var(--gold-main)]">${total} v.</span>
+                  </div>
+                  ${cat.description ? `<p class="text-xs text-[var(--text-muted)] mt-0.5">${cat.description}</p>` : ''}
                 </div>
-                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">Borrar</button>
+                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
               </div>
-              <div class="space-y-2 my-3">
+              <div class="space-y-2 my-3.5">
                 ${ordenados.length === 0
                   ? `<div class="text-xs text-[var(--text-muted)] italic py-4 text-center bg-[var(--bg-cream)] rounded-xl border border-dashed border-[var(--border-color)]">Aún no hay nominados. ¡Escribe el nombre de un compañero abajo!</div>`
                   : ordenados.map((nom, idx) => {
                       const pct = total > 0 ? Math.round(((nom.votes || 0) / total) * 100) : 0;
                       const votado = (nom.votedBy || []).includes(userId);
+                      const esLider = idx === 0 && (nom.votes || 0) > 0;
                       return `
                         <button onclick="votarNominado('${cat.id}', '${nom.id}')" class="w-full text-left p-3 rounded-xl border transition relative overflow-hidden cursor-pointer ${votado ? 'border-[var(--wine-main)] bg-[var(--bg-cream)]' : 'border-[var(--border-color)] bg-white hover:border-[var(--gold-main)]'}">
                           <div class="absolute inset-y-0 left-0 award-progress-bar transition-all duration-300" style="width:${pct}%"></div>
                           <div class="relative flex items-center justify-between gap-2 text-xs">
-                            <span class="font-bold text-[var(--text-dark)]">${idx === 0 && nom.votes > 0 ? '★ ' : ''}${nom.name} ${votado ? '✓' : ''}</span>
-                            <span class="font-mono-num font-bold text-[var(--wine-main)]">${nom.votes || 0} votos (${pct}%)</span>
+                            <span class="font-bold text-[var(--text-dark)] flex items-center gap-1.5 min-w-0">
+                              <span class="font-mono-num text-[11px] text-[var(--gold-main)]">${String(idx + 1).padStart(2, '0')}</span>
+                              <span class="truncate">${esLider ? '👑 ' : ''}${nom.name} ${votado ? '✓' : ''}</span>
+                            </span>
+                            <span class="font-mono-num font-bold text-[var(--wine-main)] shrink-0">${nom.votes || 0} (${pct}%)</span>
                           </div>
                         </button>
                       `;
@@ -4680,21 +4868,22 @@
       grid.innerHTML = capsules.map(cap => {
         const abierta = hoy >= cap.unlockDate;
         return `
-          <article class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 flex flex-col justify-between gap-3">
+          <article class="editorial-surface rounded-2xl border ${abierta ? 'border-emerald-700/30' : 'border-[var(--gold-hairline)]'} p-5 flex flex-col justify-between gap-3">
             <div>
-              <div class="flex items-center justify-between gap-2 mb-2.5">
-                <span class="text-xs font-semibold ${abierta ? 'text-emerald-700' : 'text-[var(--wine-main)]'}">
-                  ${abierta ? 'Abierta' : 'Abre el ' + cap.unlockDate}
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${abierta ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-[var(--bg-cream)] text-[var(--wine-main)] border border-[var(--gold-main)]'}">
+                  ${abierta ? '✦ Carta Desbloqueada' : '🔒 Abre el ' + cap.unlockDate}
                 </span>
-                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">Borrar</button>
+                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
               </div>
-              <h3 class="text-sm font-bold text-[var(--wine-main)]">${cap.recipient}</h3>
-              <p class="text-xs text-[var(--gold-main)] font-semibold mb-3">Por: ${cap.author} · ${cap.createdAt}</p>
+              <h3 class="font-display text-base font-bold text-[var(--wine-main)]">${cap.recipient}</h3>
+              <p class="text-xs text-[var(--gold-main)] font-semibold mb-3">De: ${cap.author} · ${cap.createdAt}</p>
               ${abierta
-                ? `<p class="text-xs text-[var(--text-dark)] leading-relaxed bg-[var(--bg-cream)] p-3 rounded-xl border border-[var(--border-color)] whitespace-pre-wrap">&ldquo;${cap.message}&rdquo;</p>`
-                : `<div class="p-4 rounded-xl bg-[var(--bg-cream)] border border-dashed border-[var(--gold-main)] text-center space-y-1">
-                     <div class="text-xs font-bold text-[var(--wine-main)]">Carta Sellada</div>
-                     <p class="text-[11px] text-[var(--text-muted)]">Se desbloqueará el ${cap.unlockDate}</p>
+                ? `<blockquote class="font-display text-xs sm:text-[13px] text-[var(--text-dark)] italic leading-relaxed bg-[var(--bg-cream)] p-3.5 rounded-xl border-l-2 border-[var(--gold-main)] whitespace-pre-wrap">&ldquo;${cap.message}&rdquo;</blockquote>`
+                : `<div class="p-4 rounded-xl bg-[var(--bg-cream)]/80 border border-dashed border-[var(--gold-main)] text-center space-y-2 relative overflow-hidden">
+                     <div class="wax-seal w-10 h-10 rounded-full mx-auto flex items-center justify-center text-[10px] font-bold text-[var(--gold-bright)] tracking-wider">EDM</div>
+                     <div class="font-display text-xs font-bold text-[var(--wine-main)]">Sobre Lacrado de la Promo</div>
+                     <p class="text-[11px] text-[var(--text-muted)]">Apertura programada: <strong class="font-mono-num">${cap.unlockDate}</strong></p>
                    </div>`}
             </div>
           </article>
@@ -4724,12 +4913,17 @@
       hc.innerHTML = (musicConfig.himnos || []).map((h, i) => {
         const hid = h.id || `${h.titulo}_${h.artista}_${i}`;
         return `
-        <div class="py-3 flex items-center justify-between text-sm">
-          <div>
-            <div class="font-bold text-[var(--text-dark)]"><span class="font-mono-num text-xs text-[var(--text-muted)] mr-2">${String(i + 1).padStart(2, '0')}.</span>${h.titulo}</div>
-            <div class="text-xs text-[var(--text-muted)] mt-0.5">${h.artista} · <span class="text-[var(--wine-main)] font-medium">${h.etiqueta || 'Himno'}</span></div>
+        <div class="py-3.5 flex items-center justify-between gap-3 text-sm">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] text-[var(--wine-main)] font-mono-num text-xs font-bold flex items-center justify-center shrink-0">
+              ${String(i + 1).padStart(2, '0')}
+            </div>
+            <div class="min-w-0">
+              <div class="font-display font-bold text-[var(--text-dark)] truncate">${h.titulo}</div>
+              <div class="text-xs text-[var(--text-muted)] mt-0.5 truncate">${h.artista} · <span class="text-[var(--wine-main)] font-semibold">${h.etiqueta || 'Himno'}</span></div>
+            </div>
           </div>
-          <button onclick="eliminarHimno('${hid.replace(/'/g, "\\'")}', ${i})" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Borrar</button>
+          <button onclick="eliminarHimno('${hid.replace(/'/g, "\\'")}', ${i})" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer shrink-0">✕</button>
         </div>
       `;
       }).join('');
@@ -4798,15 +4992,19 @@
       feed.innerHTML = tweets.map((t, idx) => {
         const dioLike = (t.likedBy || []).includes(userId);
         const fecha = new Date(t.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+        const inicial = String(t.author || 'E').trim().charAt(0).toUpperCase() || 'E';
         return `
-          <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
-            <div class="flex items-center justify-between">
-              <div class="text-sm font-bold text-[var(--wine-main)]">${t.author}</div>
-              <div class="text-xs font-mono-num text-[var(--text-muted)]">${fecha}</div>
+          <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-full bg-[var(--wine-main)] text-[var(--gold-bright)] font-display font-bold text-xs flex items-center justify-center shrink-0">${inicial}</div>
+                <div class="font-display text-sm font-bold text-[var(--wine-main)] truncate">${t.author}</div>
+              </div>
+              <div class="text-xs font-mono-num text-[var(--text-muted)] shrink-0">${fecha}</div>
             </div>
-            <p class="text-sm text-[var(--text-dark)] whitespace-pre-line break-words">${t.text}</p>
+            <p class="text-sm text-[var(--text-dark)] leading-relaxed whitespace-pre-line break-words">${t.text}</p>
             <div class="pt-2.5 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
-              <button onclick="toggleTweetLike('${t.id}')" class="btn-interactive font-semibold cursor-pointer ${dioLike ? 'text-[var(--danger)]' : 'text-[var(--text-muted)]'}">♥ ${t.likes || 0}</button>
+              <button onclick="toggleTweetLike('${t.id}')" class="btn-interactive font-semibold cursor-pointer ${dioLike ? 'text-[var(--danger)]' : 'text-[var(--text-muted)]'}">♥ <span class="font-mono-num">${t.likes || 0}</span></button>
               <button onclick="eliminarTweet('${t.id}')" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer">Borrar</button>
             </div>
           </article>
