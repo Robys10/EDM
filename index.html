@@ -120,12 +120,28 @@
       --border-color: rgba(30, 58, 138, 0.22);
     }
 
+    html {
+      overflow-x: hidden;
+      max-width: 100%;
+      width: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
       background-color: var(--bg-cream);
       color: var(--text-dark);
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
       transition: background-color 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
+      max-width: 100vw;
+      width: 100%;
+    }
+
+    .page-section {
+      min-width: 0;
+      max-width: 100%;
+      width: 100%;
     }
 
     h1, h2, .font-display {
@@ -235,15 +251,15 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-16 md:pb-0">
+<body class="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col pb-20 md:pb-0">
 
-  <!-- TOP BAR (3-Zone Contract) -->
-  <header class="sticky top-0 z-30 h-16 header-glass border-b border-[var(--border-color)] px-4 lg:px-8 flex items-center justify-between gap-4">
-    <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="font-display text-lg md:text-xl font-bold tracking-tight text-[var(--wine-main)] whitespace-nowrap shrink-0">
+  <!-- TOP BAR (3-Zone Contract adaptable a cualquier pantalla de celular) -->
+  <header class="sticky top-0 z-30 h-14 sm:h-16 w-full max-w-full header-glass border-b border-[var(--border-color)] px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
+    <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="font-display text-sm sm:text-lg md:text-xl font-bold tracking-tight text-[var(--wine-main)] truncate min-w-0">
       Estrella de la Mañana ’26
     </a>
 
-    <nav aria-label="Navegación principal" class="hidden md:flex items-center gap-6 text-sm font-semibold text-[var(--text-muted)]">
+    <nav aria-label="Navegación principal" class="hidden md:flex items-center gap-6 text-sm font-semibold text-[var(--text-muted)] shrink-0">
       <button type="button" data-nav="inicio" onclick="cambiarSeccion('inicio')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 text-[var(--wine-main)] border-[var(--wine-main)]">Inicio</button>
       <button type="button" data-nav="miembros" onclick="cambiarSeccion('miembros')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Integrantes</button>
       <button type="button" data-nav="galeria" onclick="cambiarSeccion('galeria')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Galería</button>
@@ -251,8 +267,8 @@
       <button type="button" data-nav="capsula" onclick="cambiarSeccion('capsula')" class="nav-link py-1 transition-colors whitespace-nowrap cursor-pointer border-b-2 border-transparent hover:text-[var(--wine-main)]">Cápsula</button>
     </nav>
 
-    <div class="flex items-center gap-2.5 shrink-0">
-      <button type="button" onclick="alternarTemaAzul()" class="btn-interactive px-3.5 py-2 text-xs font-semibold rounded-lg border border-[var(--border-color)] text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+    <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <button type="button" onclick="alternarTemaAzul()" class="btn-interactive px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg border border-[var(--border-color)] text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center gap-1 whitespace-nowrap cursor-pointer">
         <span id="themeBtnTopText">Tema Azul</span>
       </button>
 
@@ -260,14 +276,14 @@
         <span>Subir Recuerdo</span>
       </button>
 
-      <button type="button" onclick="toggleMobileSidebar()" aria-label="Abrir menú" class="btn-interactive md:hidden w-10 h-10 rounded-lg border border-[var(--border-color)] text-[var(--wine-main)] flex items-center justify-center cursor-pointer">
+      <button type="button" onclick="toggleMobileSidebar()" aria-label="Abrir menú" class="btn-interactive md:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[var(--border-color)] text-[var(--wine-main)] flex items-center justify-center cursor-pointer shrink-0">
         ☰
       </button>
     </div>
   </header>
 
   <!-- CUERPO PRINCIPAL: SIDEBAR + MAIN VIEWPORT -->
-  <div class="flex-1 flex max-w-[1440px] w-full mx-auto">
+  <div class="flex-1 flex max-w-[1440px] w-full min-w-0 overflow-x-hidden mx-auto">
 
     <!-- SIDEBAR -->
     <aside id="appSidebar" class="hidden lg:flex lg:w-64 lg:shrink-0 flex-col justify-between bg-[var(--card-bg)] border-r border-[var(--border-color)] p-5 transition-colors">
@@ -349,67 +365,67 @@
     <div id="mobileBackdrop" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 min-w-0 px-4 py-6 md:px-8 md:py-8 max-w-5xl mx-auto w-full">
+    <main class="flex-1 min-w-0 max-w-full px-3 py-4 sm:px-5 sm:py-6 md:px-8 md:py-8 max-w-5xl mx-auto w-full overflow-x-hidden">
 
       <!-- 1. SECCIÓN INICIO -->
-      <section id="seccion-inicio" class="page-section anim-section space-y-8">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
-          <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2.5 flex items-center justify-center shrink-0">
+      <section id="seccion-inicio" class="page-section anim-section space-y-5 sm:space-y-8">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 md:p-10 flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8">
+          <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl bg-white border border-[var(--gold-main)] p-2 flex items-center justify-center shrink-0">
             <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
           </div>
-          <div class="flex-1 text-center md:text-left space-y-3">
-            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs text-[var(--text-muted)]">
+          <div class="flex-1 min-w-0 w-full text-center md:text-left space-y-2.5 sm:space-y-3">
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-[var(--text-muted)]">
               <span>Promoción Oficial 2026</span>
               <span>·</span>
               <span>EDM</span>
               <span>·</span>
               <span id="heroSyncBadge">Sincronizado</span>
             </div>
-            <h1 class="text-2xl md:text-4xl font-bold text-[var(--wine-main)] tracking-tight">Prom Estrella de la Mañana</h1>
-            <p class="text-sm md:text-base text-[var(--text-muted)] max-w-2xl leading-relaxed">
+            <h1 class="text-xl sm:text-2xl md:text-4xl font-bold text-[var(--wine-main)] tracking-tight break-words">Prom Estrella de la Mañana</h1>
+            <p class="text-xs sm:text-sm md:text-base text-[var(--text-muted)] max-w-2xl leading-relaxed">
               Mural digital, anuario de integrantes, votaciones del salón, cápsula del tiempo y galería oficial 2026 con guardado inteligente en tiempo real.
             </p>
-            <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <button type="button" onclick="cambiarSeccion('miembros')" class="btn-interactive px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] cursor-pointer whitespace-nowrap">
+            <div class="pt-1.5 grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 w-full">
+              <button type="button" onclick="cambiarSeccion('miembros')" class="btn-interactive w-full sm:w-auto px-3 sm:px-5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold hover:bg-[var(--wine-light)] cursor-pointer text-center truncate">
                 Mural de Integrantes
               </button>
-              <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
+              <button type="button" onclick="cambiarSeccion('galeria')" class="btn-interactive w-full sm:w-auto px-3 sm:px-5 py-2.5 rounded-xl border border-[var(--border-color)] bg-white text-[var(--text-dark)] hover:border-[var(--wine-main)] text-xs font-semibold cursor-pointer text-center truncate">
                 Explorar Galería
               </button>
-              <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
+              <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive w-full sm:w-auto px-3 sm:px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--card-bg)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer text-center truncate">
                 ✨ Recuerdo al Azar
               </button>
-              <button type="button" onclick="iniciarModoPresentacion()" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--wine-dark)] text-[var(--gold-bright)] text-xs font-semibold cursor-pointer whitespace-nowrap">
-                ▶ Modo Presentación
+              <button type="button" onclick="iniciarModoPresentacion()" class="btn-interactive w-full sm:w-auto px-3 sm:px-4 py-2.5 rounded-xl border border-[var(--gold-main)] bg-[var(--wine-dark)] text-[var(--gold-bright)] text-xs font-semibold cursor-pointer text-center truncate">
+                ▶ Presentación
               </button>
             </div>
           </div>
         </div>
 
         <!-- CUENTA REGRESIVA EN VIVO -->
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 md:p-6">
-          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-            <div class="space-y-1">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-4 sm:p-5 md:p-6">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-5">
+            <div class="space-y-1 min-w-0">
               <div class="text-xs font-semibold text-[var(--gold-main)]">Cuenta Regresiva Oficial · Promo ’26</div>
-              <h2 id="nextEventTitle" class="text-lg md:text-xl font-bold text-[var(--wine-main)]">Ceremonia de Graduación y Fiesta de Gala EDM ’26</h2>
+              <h2 id="nextEventTitle" class="text-base sm:text-lg md:text-xl font-bold text-[var(--wine-main)] break-words">Ceremonia de Graduación y Fiesta de Gala EDM ’26</h2>
               <p id="nextEventMeta" class="text-xs text-[var(--text-muted)]">18 de diciembre de 2026 · Auditorio & Salón de Gala</p>
             </div>
-            <div class="grid grid-cols-4 gap-2 sm:gap-3">
-              <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
-                <div id="cdDays" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[11px] font-semibold text-[var(--text-muted)]">Días</div>
+            <div class="grid grid-cols-4 gap-1.5 sm:gap-3 w-full lg:w-auto">
+              <div class="min-w-0 sm:min-w-[72px] py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
+                <div id="cdDays" class="text-lg sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)]">Días</div>
               </div>
-              <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
-                <div id="cdHours" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[11px] font-semibold text-[var(--text-muted)]">Horas</div>
+              <div class="min-w-0 sm:min-w-[72px] py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
+                <div id="cdHours" class="text-lg sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)]">Horas</div>
               </div>
-              <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
-                <div id="cdMins" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[11px] font-semibold text-[var(--text-muted)]">Min</div>
+              <div class="min-w-0 sm:min-w-[72px] py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
+                <div id="cdMins" class="text-lg sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)]">Min</div>
               </div>
-              <div class="min-w-[62px] sm:min-w-[72px] py-2.5 px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
-                <div id="cdSecs" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
-                <div class="text-[11px] font-semibold text-[var(--text-muted)]">Seg</div>
+              <div class="min-w-0 sm:min-w-[72px] py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] text-center">
+                <div id="cdSecs" class="text-lg sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num">00</div>
+                <div class="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)]">Seg</div>
               </div>
             </div>
           </div>
@@ -422,26 +438,26 @@
         </div>
 
         <!-- Resumen Cuantitativo -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
-            <div class="text-xs text-[var(--text-muted)]">Integrantes en Mural</div>
-            <div id="statMembers" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
-            <div class="text-xs text-[var(--text-muted)] mt-1">Anuario Promo ’26</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3 sm:p-4 min-w-0">
+            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] truncate">Integrantes en Mural</div>
+            <div id="statMembers" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1 truncate">Anuario Promo ’26</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
-            <div class="text-xs text-[var(--text-muted)]">Recuerdos en Galería</div>
-            <div id="statTotalItems" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
-            <div id="statBreakdown" class="text-xs text-[var(--text-muted)] mt-1 font-mono-num">0 fotos · 0 videos</div>
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3 sm:p-4 min-w-0">
+            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] truncate">Recuerdos en Galería</div>
+            <div id="statTotalItems" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div id="statBreakdown" class="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1 font-mono-num truncate">0 fotos · 0 videos</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
-            <div class="text-xs text-[var(--text-muted)]">Cápsula & Buzón</div>
-            <div id="statTweets" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
-            <div class="text-xs text-[var(--text-muted)] mt-1">Mensajes de la promo</div>
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3 sm:p-4 min-w-0">
+            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] truncate">Cápsula & Buzón</div>
+            <div id="statTweets" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1 truncate">Mensajes de la promo</div>
           </div>
-          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
-            <div class="text-xs text-[var(--text-muted)]">Reacciones Totales</div>
-            <div id="statLikes" class="text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
-            <div class="text-xs text-[var(--text-muted)] mt-1">Votos de compañeros</div>
+          <div class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3 sm:p-4 min-w-0">
+            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] truncate">Reacciones Totales</div>
+            <div id="statLikes" class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] font-mono-num mt-1">0</div>
+            <div class="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1 truncate">Votos de compañeros</div>
           </div>
         </div>
 
@@ -498,16 +514,16 @@
       </section>
 
       <!-- 2. SECCIÓN MURAL DE INTEGRANTES -->
-      <section id="seccion-miembros" class="page-section hidden anim-section space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
+      <section id="seccion-miembros" class="page-section hidden anim-section space-y-4 sm:space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 text-center space-y-1.5">
           <div class="text-xs text-[var(--gold-main)] font-semibold">Anuario Oficial · Promoción 2026</div>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--wine-main)]">Mural de Integrantes Estrella de la Mañana</h1>
+          <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-[var(--wine-main)] break-words">Mural de Integrantes Estrella de la Mañana</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
             Agrega tu retrato oficial con tu nombre, apodo y frase célebre. Puedes editar o descargar cualquier tarjeta como Postal Polaroid.
           </p>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-5 space-y-4">
+        <div class="rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-4 sm:p-5 space-y-4">
           <div>
             <h2 class="text-base font-bold text-[var(--wine-main)]">Añadir integrante al mural de la promoción</h2>
             <p class="text-xs text-[var(--text-muted)]">Completa los datos del compañero(a) y selecciona su foto para publicarla</p>
@@ -531,7 +547,7 @@
           </div>
         </div>
 
-        <div id="memberRoleFilterBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        <div id="memberRoleFilterBar" class="w-full max-w-full flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
           <button type="button" onclick="setRolMiembroFiltro('Todos', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white border-[var(--wine-main)]">Todos los Roles</button>
           <button type="button" onclick="setRolMiembroFiltro('Integrante', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]">Integrantes</button>
           <button type="button" onclick="setRolMiembroFiltro('Directiva', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]">★ Junta Directiva</button>
@@ -540,32 +556,32 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <input id="memberSearchInput" type="text" oninput="renderMiembros()" placeholder="Buscar integrante por nombre, apodo o frase..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+          <input id="memberSearchInput" type="text" oninput="renderMiembros()" placeholder="Buscar integrante por nombre, apodo o frase..." class="w-full sm:flex-1 sm:max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
           <span id="memberCountLabel" class="text-xs text-[var(--text-muted)] font-mono-num">Mostrando 0 integrantes</span>
         </div>
 
-        <div id="miembrosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        <div id="miembrosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
       </section>
 
       <!-- 3. SECCIÓN GALERÍA & ÁLBUMES -->
-      <section id="seccion-galeria" class="page-section hidden anim-section space-y-5">
+      <section id="seccion-galeria" class="page-section hidden anim-section space-y-4 sm:space-y-5">
         <!-- Barra de Historias por Álbum (Estilo Social + Gala) -->
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-2.5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[var(--wine-main)] uppercase tracking-wider">Historias y Álbumes de la Promo</span>
-            <button type="button" onclick="document.getElementById('uploadPanelWrapper').classList.toggle('hidden')" class="btn-interactive px-3.5 py-1.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-bold cursor-pointer">
+        <div class="w-full max-w-full overflow-hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3.5 sm:p-4 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[11px] sm:text-xs font-bold text-[var(--wine-main)] uppercase tracking-wider">Historias y Álbumes</span>
+            <button type="button" onclick="document.getElementById('uploadPanelWrapper').classList.toggle('hidden')" class="btn-interactive px-3 py-1.5 rounded-xl bg-[var(--wine-main)] text-white text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap">
               + Subir Foto o Video
             </button>
           </div>
-          <div id="storiesAlbumBar" class="flex items-center gap-4 overflow-x-auto no-scrollbar pt-1 pb-0.5"></div>
+          <div id="storiesAlbumBar" class="w-full max-w-full flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar pt-1 pb-0.5"></div>
         </div>
 
-        <div id="featuredContainer" class="hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 space-y-3">
-          <div class="flex items-center justify-between">
-            <h2 class="text-sm font-bold text-[var(--wine-main)]">Recuerdos Más Votados de la Promo</h2>
-            <span class="text-xs text-[var(--text-muted)]">Destacados</span>
+        <div id="featuredContainer" class="hidden w-full max-w-full overflow-hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3.5 sm:p-4 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="text-xs sm:text-sm font-bold text-[var(--wine-main)] truncate">Recuerdos Más Votados de la Promo</h2>
+            <span class="text-[11px] sm:text-xs text-[var(--text-muted)] shrink-0">Destacados</span>
           </div>
-          <div id="carouselTrack" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
+          <div id="carouselTrack" class="w-full max-w-full flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
         </div>
 
         <div id="uploadPanelWrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -600,7 +616,7 @@
                 Pega un enlace público de <strong>Google Drive</strong> (Cualquier persona con el enlace), <strong>YouTube</strong> o un link <code>.mp4</code> directo. Se reproducirá dentro de esta página sin límite de megas y sin instalar nada:
               </p>
               <div class="flex flex-col sm:flex-row gap-2">
-                <input id="externalVideoUrlInput" type="url" placeholder="https://drive.google.com/file/d/... o YouTube..." class="flex-1 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+                <input id="externalVideoUrlInput" type="url" placeholder="https://drive.google.com/file/d/... o YouTube..." class="flex-1 min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
                 <button type="button" onclick="publicarVideoPorEnlace()" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer whitespace-nowrap">
                   Publicar Video en Galería
                 </button>
@@ -631,45 +647,49 @@
           </div>
         </div>
 
-        <div id="albumFilterBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
+        <div id="albumFilterBar" class="w-full max-w-full flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
 
-        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-          <input type="text" id="searchInput" oninput="renderGaleria(true)" placeholder="Buscar recuerdo por título, álbum o dedicatoria..." class="flex-1 max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
-          <div class="flex flex-wrap items-center gap-2">
-            <button type="button" onclick="alternarVistaPolaroid()" id="btnPolaroidToggle" class="btn-interactive px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-dark)] text-xs font-semibold cursor-pointer whitespace-nowrap">
-              🖼 Vista Polaroid
-            </button>
-            <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--gold-main)] text-[var(--wine-main)] text-xs font-semibold cursor-pointer whitespace-nowrap">
-              ✨ Al Azar
-            </button>
-            <button type="button" onclick="iniciarModoPresentacion()" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-dark)] border border-[var(--gold-main)] text-[var(--gold-bright)] text-xs font-semibold cursor-pointer whitespace-nowrap">
-              ▶ Presentación
-            </button>
-            <div class="flex items-center p-1 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)]">
-              <button onclick="setFiltro('todos', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer">Todos</button>
-              <button onclick="setFiltro('image', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Fotos</button>
-              <button onclick="setFiltro('video', this)" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Videos</button>
+        <div class="w-full max-w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3">
+          <input type="text" id="searchInput" oninput="renderGaleria(true)" placeholder="Buscar recuerdo por título, álbum o dedicatoria..." class="w-full md:flex-1 md:max-w-md rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-3.5 py-2 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
+          <div class="w-full md:w-auto flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2">
+            <div class="grid grid-cols-3 sm:flex items-center gap-1.5 sm:gap-2">
+              <button type="button" onclick="alternarVistaPolaroid()" id="btnPolaroidToggle" class="btn-interactive px-2.5 sm:px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-dark)] text-[11px] sm:text-xs font-semibold cursor-pointer truncate text-center">
+                🖼 Polaroid
+              </button>
+              <button type="button" onclick="abrirRecuerdoAlAzar()" class="btn-interactive px-2.5 sm:px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--gold-main)] text-[var(--wine-main)] text-[11px] sm:text-xs font-semibold cursor-pointer truncate text-center">
+                ✨ Al Azar
+              </button>
+              <button type="button" onclick="iniciarModoPresentacion()" class="btn-interactive px-2.5 sm:px-3.5 py-2 rounded-xl bg-[var(--wine-dark)] border border-[var(--gold-main)] text-[var(--gold-bright)] text-[11px] sm:text-xs font-semibold cursor-pointer truncate text-center">
+                ▶ Presentación
+              </button>
             </div>
-            <select id="sortSelect" onchange="renderGaleria(true)" class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-3 py-2 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer">
-              <option value="recientes">Más recientes</option>
-              <option value="populares">Más gustados</option>
-              <option value="comentados">Más comentados</option>
-            </select>
+            <div class="flex items-center justify-between sm:justify-start gap-2">
+              <div class="flex-1 sm:flex-initial flex items-center p-1 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)]">
+                <button onclick="setFiltro('todos', this)" class="filter-btn flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer text-center">Todos</button>
+                <button onclick="setFiltro('image', this)" class="filter-btn flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer text-center">Fotos</button>
+                <button onclick="setFiltro('video', this)" class="filter-btn flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer text-center">Videos</button>
+              </div>
+              <select id="sortSelect" onchange="renderGaleria(true)" class="rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] px-2.5 sm:px-3 py-2 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer shrink-0">
+                <option value="recientes">Más recientes</option>
+                <option value="populares">Más gustados</option>
+                <option value="comentados">Más comentados</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div id="galeria" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        <div id="galeria" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
       </section>
 
       <!-- 4. SECCIÓN PREMIOS DE LA PROMO '26 -->
-      <section id="seccion-premios" class="page-section hidden anim-section space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
+      <section id="seccion-premios" class="page-section hidden anim-section space-y-4 sm:space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+          <div class="min-w-0">
             <div class="text-xs font-semibold text-[var(--gold-main)]">Votaciones Interactivas del Salón</div>
-            <h1 class="text-2xl font-bold text-[var(--wine-main)]">Los Premios de la Promo ’26</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] break-words">Los Premios de la Promo ’26</h1>
             <p class="text-xs md:text-sm text-[var(--text-muted)]">Nomina a tus compañeros y vota en cada categoría para coronar a los ganadores.</p>
           </div>
-          <button onclick="document.getElementById('newCategoryBox').classList.toggle('hidden')" class="btn-interactive px-4 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer self-start sm:self-auto whitespace-nowrap">
+          <button onclick="document.getElementById('newCategoryBox').classList.toggle('hidden')" class="btn-interactive w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer text-center whitespace-nowrap">
             + Nueva Categoría
           </button>
         </div>
@@ -700,21 +720,21 @@
       </section>
 
       <!-- 5. SECCIÓN CÁPSULA DEL TIEMPO -->
-      <section id="seccion-capsula" class="page-section hidden anim-section space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
+      <section id="seccion-capsula" class="page-section hidden anim-section space-y-4 sm:space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 text-center space-y-1.5">
           <div class="text-xs font-semibold text-[var(--gold-main)]">Mensajes hacia el Futuro</div>
-          <h1 class="text-2xl font-bold text-[var(--wine-main)]">Cápsula del Tiempo EDM ’26</h1>
+          <h1 class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] break-words">Cápsula del Tiempo EDM ’26</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
             Sella una carta, promesa o predicción para el día de nuestra graduación o reencuentro. Los mensajes permanecen protegidos con candado hasta su fecha de apertura.
           </p>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-4">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-4">
           <h2 class="text-base font-bold text-[var(--wine-main)]">Sellar nuevo recuerdo en la cápsula</h2>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <input id="capRecipientInput" type="text" value="Para toda la Promo ’26" maxlength="40" placeholder="Destinatario..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
-            <input id="capDateInput" type="date" value="2026-12-18" class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
-            <button onclick="sellarCapsula()" class="btn-interactive px-5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Sellar en la Cápsula</button>
+            <input id="capRecipientInput" type="text" value="Para toda la Promo ’26" maxlength="40" placeholder="Destinatario..." class="w-full min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
+            <input id="capDateInput" type="date" value="2026-12-18" class="w-full min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2 text-xs outline-none" />
+            <button onclick="sellarCapsula()" class="btn-interactive w-full px-5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Sellar en la Cápsula</button>
           </div>
           <textarea id="capMessageInput" rows="3" maxlength="500" placeholder="Escribe tu carta o predicción para el futuro de la promoción..." class="w-full rounded-xl border border-[var(--border-color)] bg-white p-3.5 text-xs outline-none resize-none"></textarea>
         </div>
@@ -723,37 +743,37 @@
       </section>
 
       <!-- 6. SECCIÓN EVENTOS & SOUNDTRACK -->
-      <section id="seccion-eventos" class="page-section hidden anim-section space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
-          <h1 class="text-2xl font-bold text-[var(--wine-main)]">Cronograma 2026 & Soundtrack Oficial</h1>
+      <section id="seccion-eventos" class="page-section hidden anim-section space-y-4 sm:space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 text-center space-y-1.5">
+          <h1 class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] break-words">Cronograma 2026 & Soundtrack Oficial</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)]">Configura libremente las fechas importantes de nuestro año y la música que nos acompaña</p>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-4">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-4">
           <div class="flex items-center justify-between gap-2">
             <div>
               <h2 class="text-base font-bold text-[var(--wine-main)]">Cronograma de Eventos 2026</h2>
               <p class="text-xs text-[var(--text-muted)]">Agrega, edita o borra libremente las fechas reales de la promoción</p>
             </div>
           </div>
-          <div id="addEventForm" class="p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <input id="evTitleInput" type="text" placeholder="Evento (ej. Viaje de Promo)..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-            <input id="evDateInput" type="datetime-local" value="2026-12-18T19:00" class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-            <div class="flex gap-2">
-              <input id="evLocInput" type="text" placeholder="Lugar..." class="flex-1 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-              <button onclick="agregarEventoPromo()" class="btn-interactive px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
+          <div id="addEventForm" class="p-3.5 sm:p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input id="evTitleInput" type="text" placeholder="Evento (ej. Viaje de Promo)..." class="w-full min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+            <input id="evDateInput" type="datetime-local" value="2026-12-18T19:00" class="w-full min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+            <div class="flex gap-2 min-w-0">
+              <input id="evLocInput" type="text" placeholder="Lugar..." class="flex-1 min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+              <button onclick="agregarEventoPromo()" class="btn-interactive px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Guardar</button>
             </div>
           </div>
           <div id="eventsTimelineGrid" class="grid grid-cols-1 md:grid-cols-3 gap-3.5"></div>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-3">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-3">
           <h2 class="text-base font-bold text-[var(--wine-main)]">Playlist Oficial en Spotify</h2>
           <div id="spotifyContainer" class="rounded-xl overflow-hidden border border-[var(--border-color)] bg-black"></div>
         </div>
 
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-4">
-          <div class="flex items-center justify-between gap-2">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h2 class="text-base font-bold text-[var(--wine-main)]">Himnos del Salón</h2>
               <p class="text-xs text-[var(--text-muted)]">Canciones votadas y sugeridas por la promoción</p>
@@ -762,12 +782,12 @@
               + Añadir canción
             </button>
           </div>
-          <form id="addHimnoForm" onsubmit="agregarHimno(event)" class="hidden p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <input id="himnoTitulo" type="text" placeholder="Título de la canción..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-            <input id="himnoArtista" type="text" placeholder="Artista o grupo..." class="rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-            <div class="flex items-center gap-2">
-              <input id="himnoEtiqueta" type="text" value="Himno del Salón" placeholder="Categoría..." class="flex-1 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-              <button type="submit" class="btn-interactive px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
+          <form id="addHimnoForm" onsubmit="agregarHimno(event)" class="hidden p-3.5 sm:p-4 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input id="himnoTitulo" type="text" placeholder="Título de la canción..." class="w-full min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+            <input id="himnoArtista" type="text" placeholder="Artista o grupo..." class="w-full min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+            <div class="flex items-center gap-2 min-w-0">
+              <input id="himnoEtiqueta" type="text" value="Himno del Salón" placeholder="Categoría..." class="flex-1 min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+              <button type="submit" class="btn-interactive px-4 py-2 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Guardar</button>
             </div>
           </form>
           <div id="himnosContainer" class="divide-y divide-[var(--border-color)]"></div>
@@ -775,21 +795,21 @@
       </section>
 
       <!-- 7. SECCIÓN BUZÓN DE ANÉCDOTAS -->
-      <section id="seccion-mensajes" class="page-section hidden anim-section space-y-6">
-        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-6 text-center space-y-1.5">
-          <h1 class="text-2xl font-bold text-[var(--wine-main)]">Buzón de Anécdotas</h1>
+      <section id="seccion-mensajes" class="page-section hidden anim-section space-y-4 sm:space-y-6">
+        <div class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-6 text-center space-y-1.5">
+          <h1 class="text-xl sm:text-2xl font-bold text-[var(--wine-main)] break-words">Buzón de Anécdotas</h1>
           <p class="text-xs md:text-sm text-[var(--text-muted)]">Comparte tus palabras, recuerdos de salón y dedicatorias con la Promoción 2026</p>
         </div>
 
-        <form onsubmit="publicarTweet(event)" class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-5 space-y-3">
-          <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
-            <span>Publicando como <strong id="composerAuthor" class="text-[var(--wine-main)]"></strong></span>
-            <button type="button" onclick="abrirEditorNombre()" class="text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Cambiar firma</button>
+        <form onsubmit="publicarTweet(event)" class="rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-4 sm:p-5 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-1 text-xs text-[var(--text-muted)]">
+            <span class="truncate">Publicando como <strong id="composerAuthor" class="text-[var(--wine-main)]"></strong></span>
+            <button type="button" onclick="abrirEditorNombre()" class="text-[var(--wine-main)] font-semibold hover:underline cursor-pointer shrink-0">Cambiar firma</button>
           </div>
           <textarea id="tweetInput" maxlength="280" oninput="actualizarContador()" placeholder="¿Qué quieres decirle a la promo hoy?..." class="w-full h-24 rounded-xl border border-[var(--border-color)] bg-white p-3.5 text-sm text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)] resize-none"></textarea>
-          <div class="flex items-center justify-between pt-1">
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
             <span id="tweetCounter" class="text-xs font-mono-num font-semibold text-[var(--text-muted)]">280 caracteres disponibles</span>
-            <button type="submit" class="btn-interactive px-5 py-2 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">Publicar en el Buzón</button>
+            <button type="submit" class="btn-interactive px-4 sm:px-5 py-2 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-semibold whitespace-nowrap cursor-pointer">Publicar en el Buzón</button>
           </div>
         </form>
 
@@ -804,51 +824,53 @@
     Promoción Estrella de la Mañana 2026 (EDM) · Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial
   </footer>
 
-  <!-- BARRA DE NAVEGACIÓN INFERIOR NATIVA EN CELULARES (Mejora #1) -->
-  <nav id="mobileBottomNav" aria-label="Navegación móvil rápida" class="md:hidden fixed bottom-0 inset-x-0 z-30 h-16 header-glass border-t border-[var(--border-color)] px-2 flex items-center justify-around">
-    <button type="button" data-mob="inicio" onclick="cambiarSeccion('inicio')" class="mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-bold text-[var(--wine-main)] cursor-pointer">
+  <!-- BARRA DE NAVEGACIÓN INFERIOR NATIVA EN CELULARES (Adaptable a cualquier ancho de pantalla) -->
+  <nav id="mobileBottomNav" aria-label="Navegación móvil rápida" class="md:hidden fixed bottom-0 inset-x-0 w-full max-w-full z-30 h-16 header-glass border-t border-[var(--border-color)] px-1 grid grid-cols-5 items-center">
+    <button type="button" data-mob="inicio" onclick="cambiarSeccion('inicio')" class="mob-link min-w-0 flex flex-col items-center justify-center py-1 px-1 rounded-xl text-[10px] sm:text-[11px] font-bold text-[var(--wine-main)] cursor-pointer">
       <span class="text-base leading-none mb-0.5">⌂</span>
-      <span>Inicio</span>
+      <span class="truncate max-w-full">Inicio</span>
     </button>
-    <button type="button" data-mob="miembros" onclick="cambiarSeccion('miembros')" class="mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
+    <button type="button" data-mob="miembros" onclick="cambiarSeccion('miembros')" class="mob-link min-w-0 flex flex-col items-center justify-center py-1 px-1 rounded-xl text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
       <span class="text-base leading-none mb-0.5">★</span>
-      <span>Anuario</span>
+      <span class="truncate max-w-full">Anuario</span>
     </button>
-    <button type="button" onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive -mt-4 px-4 py-2.5 rounded-2xl bg-[var(--wine-main)] text-white border-2 border-[var(--gold-bright)] shadow-md text-xs font-bold flex items-center gap-1 cursor-pointer">
-      <span>+ Subir</span>
-    </button>
-    <button type="button" data-mob="galeria" onclick="cambiarSeccion('galeria')" class="mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
+    <div class="flex items-center justify-center min-w-0">
+      <button type="button" onclick="cambiarSeccion('galeria'); setTimeout(() => document.getElementById('fileInput').click(), 120);" class="btn-interactive -mt-3.5 px-3 py-2 rounded-2xl bg-[var(--wine-main)] text-white border-2 border-[var(--gold-bright)] shadow-md text-[11px] font-bold flex items-center justify-center gap-0.5 whitespace-nowrap cursor-pointer">
+        <span>+ Subir</span>
+      </button>
+    </div>
+    <button type="button" data-mob="galeria" onclick="cambiarSeccion('galeria')" class="mob-link min-w-0 flex flex-col items-center justify-center py-1 px-1 rounded-xl text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
       <span class="text-base leading-none mb-0.5">▣</span>
-      <span>Galería</span>
+      <span class="truncate max-w-full">Galería</span>
     </button>
-    <button type="button" data-mob="premios" onclick="cambiarSeccion('premios')" class="mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
+    <button type="button" data-mob="premios" onclick="cambiarSeccion('premios')" class="mob-link min-w-0 flex flex-col items-center justify-center py-1 px-1 rounded-xl text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer">
       <span class="text-base leading-none mb-0.5">♛</span>
-      <span>Premios</span>
+      <span class="truncate max-w-full">Premios</span>
     </button>
   </nav>
 
   <!-- MODAL LIGHTBOX CINEMATOGRÁFICO + ZOOM INTERACTIVO + MODO PRESENTACIÓN -->
-  <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-between bg-black/95 p-2.5 sm:p-5 select-none" style="touch-action: none;">
-    <!-- Barra superior del visor -->
-    <div class="w-full max-w-5xl flex flex-wrap items-center justify-between gap-2 pb-2 z-20" onclick="event.stopPropagation()">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <span id="modalCounter" class="px-2.5 py-1 rounded-lg bg-white/10 text-white text-xs font-mono-num font-semibold shrink-0">1 / 1</span>
-        <div class="min-w-0">
-          <div id="modalTitle" class="text-sm sm:text-base font-bold text-white truncate">Recuerdo de la Promo</div>
-          <div id="modalSubtitle" class="text-[11px] text-[var(--gold-bright)] truncate">#General</div>
+  <div id="modal" onclick="cerrarModal(event)" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-between bg-black/95 p-2 sm:p-5 select-none" style="touch-action: none;">
+    <!-- Barra superior del visor adaptable a celulares -->
+    <div class="w-full max-w-5xl flex items-center justify-between gap-1.5 sm:gap-2 pb-2 z-20" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2 min-w-0 flex-1">
+        <span id="modalCounter" class="px-2 py-1 rounded-lg bg-white/10 text-white text-[11px] sm:text-xs font-mono-num font-semibold shrink-0">1 / 1</span>
+        <div class="min-w-0 flex-1">
+          <div id="modalTitle" class="text-xs sm:text-base font-bold text-white truncate">Recuerdo de la Promo</div>
+          <div id="modalSubtitle" class="text-[10px] sm:text-[11px] text-[var(--gold-bright)] truncate">#General</div>
         </div>
       </div>
-      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+      <div class="flex items-center gap-1 sm:gap-2 shrink-0">
         <!-- Controles de Zoom exclusivos para fotografías -->
         <div id="modalZoomControls" class="flex items-center bg-white/10 border border-white/20 rounded-xl p-0.5">
-          <button type="button" onclick="ajustarZoomModal(-0.5, event)" title="Alejar foto" class="w-7 h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer">−</button>
-          <button type="button" id="modalZoomBadge" onclick="resetearZoomModal(event)" title="Restablecer zoom" class="px-2 h-7 rounded-lg hover:bg-white/20 text-[var(--gold-bright)] text-[11px] font-mono-num font-bold cursor-pointer">100%</button>
-          <button type="button" onclick="ajustarZoomModal(0.5, event)" title="Acercar foto" class="w-7 h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer">+</button>
+          <button type="button" onclick="ajustarZoomModal(-0.5, event)" title="Alejar foto" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer">−</button>
+          <button type="button" id="modalZoomBadge" onclick="resetearZoomModal(event)" title="Restablecer zoom" class="px-1.5 sm:px-2 h-6 sm:h-7 rounded-lg hover:bg-white/20 text-[var(--gold-bright)] text-[10px] sm:text-[11px] font-mono-num font-bold cursor-pointer">100%</button>
+          <button type="button" onclick="ajustarZoomModal(0.5, event)" title="Acercar foto" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer">+</button>
         </div>
-        <button id="btnSlideshowToggle" type="button" onclick="toggleSlideshow(event)" class="btn-interactive px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
-          <span>▶ Presentación</span>
+        <button id="btnSlideshowToggle" type="button" onclick="toggleSlideshow(event)" class="btn-interactive px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1 cursor-pointer">
+          <span>▶</span><span class="hidden sm:inline">Presentación</span>
         </button>
-        <button type="button" onclick="cerrarModal(event, true)" class="btn-interactive w-9 h-9 rounded-full bg-white/15 hover:bg-[var(--wine-main)] text-white text-base font-bold flex items-center justify-center cursor-pointer">✕</button>
+        <button type="button" onclick="cerrarModal(event, true)" class="btn-interactive w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-[var(--wine-main)] text-white text-sm sm:text-base font-bold flex items-center justify-center cursor-pointer">✕</button>
       </div>
     </div>
 
@@ -2319,11 +2341,11 @@
       const isHidden = sb.classList.contains('hidden');
       if (isHidden) {
         sb.classList.remove('hidden');
-        sb.classList.add('fixed', 'inset-y-0', 'left-0', 'z-40', 'w-72', 'flex');
+        sb.classList.add('fixed', 'inset-y-0', 'left-0', 'z-40', 'w-72', 'max-w-[85vw]', 'overflow-y-auto', 'flex');
         bd.classList.remove('hidden');
       } else {
         sb.classList.add('hidden');
-        sb.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-40', 'w-72', 'flex');
+        sb.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-40', 'w-72', 'max-w-[85vw]', 'overflow-y-auto', 'flex');
         bd.classList.add('hidden');
       }
     }
@@ -2354,9 +2376,9 @@
 
       document.querySelectorAll('.mob-link').forEach(btn => {
         if (btn.dataset.mob === seccionId) {
-          btn.className = 'mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-bold text-[var(--wine-main)] cursor-pointer';
+          btn.className = 'mob-link min-w-0 flex flex-col items-center justify-center py-1 px-1 rounded-xl text-[10px] sm:text-[11px] font-bold text-[var(--wine-main)] cursor-pointer';
         } else {
-          btn.className = 'mob-link flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer';
+          btn.className = 'mob-link min-w-0 flex flex-col items-center justify-center py-1 px-1 rounded-xl text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)] cursor-pointer';
         }
       });
 
@@ -2786,8 +2808,8 @@
       }
       if (btn) {
         btn.className = vistaPolaroidActiva
-          ? 'btn-interactive px-3 py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-xs font-semibold cursor-pointer whitespace-nowrap'
-          : 'btn-interactive px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-dark)] text-xs font-semibold cursor-pointer whitespace-nowrap';
+          ? 'btn-interactive px-2.5 sm:px-3 py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-[11px] sm:text-xs font-semibold cursor-pointer truncate text-center'
+          : 'btn-interactive px-2.5 sm:px-3 py-2 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-dark)] text-[11px] sm:text-xs font-semibold cursor-pointer truncate text-center';
       }
       mostrarToast(vistaPolaroidActiva ? '🖼 Vista Polaroid activada' : 'Vista Estándar activada');
     }
@@ -2933,9 +2955,9 @@
     function setFiltro(tipo, btn) {
       filtroActual = tipo;
       document.querySelectorAll('.filter-btn').forEach(b => {
-        b.className = 'filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer';
+        b.className = 'filter-btn flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-muted)] cursor-pointer text-center';
       });
-      btn.className = 'filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer';
+      btn.className = 'filter-btn flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--wine-main)] text-white cursor-pointer text-center';
       renderGaleria(true);
     }
 
@@ -3049,11 +3071,11 @@
             </div>
             <div id="edit-item-${index}" class="hidden space-y-2 p-2.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)]">
               <input id="edit-item-name-${index}" type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="Título del recuerdo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
-              <div class="flex gap-1.5">
-                <select id="edit-item-album-${index}" class="flex-1 rounded-lg border border-[var(--border-color)] bg-white px-2 py-1.5 text-xs font-semibold outline-none">
+              <div class="flex gap-1.5 min-w-0">
+                <select id="edit-item-album-${index}" class="flex-1 min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-2 py-1.5 text-xs font-semibold outline-none">
                   ${albumSelectOptions.map(a => `<option value="${a}" ${itemAlb === a ? 'selected' : ''}>Álbum: ${a}</option>`).join('')}
                 </select>
-                <button type="button" onclick="guardarEdicionItem(${index})" class="btn-interactive px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Guardar</button>
+                <button type="button" onclick="guardarEdicionItem(${index})" class="btn-interactive px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Guardar</button>
               </div>
             </div>
             <div class="flex items-center justify-between gap-2">
@@ -3072,9 +3094,9 @@
                     <button onclick="eliminarComentario(${index}, '${c.id}')" class="text-[var(--danger)] font-bold cursor-pointer">✕</button>
                   </div>`).join('')}
               </div>
-              <form onsubmit="agregarComentario(event, ${index})" class="flex gap-1.5">
-                <input type="text" id="comment-input-${index}" placeholder="Escribe una dedicatoria..." class="flex-1 bg-white border border-[#e6d8b5] rounded-lg px-2.5 py-1 text-xs outline-none" />
-                <button type="submit" class="btn-interactive px-3 py-1 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Enviar</button>
+              <form onsubmit="agregarComentario(event, ${index})" class="flex gap-1.5 min-w-0">
+                <input type="text" id="comment-input-${index}" placeholder="Escribe una dedicatoria..." class="flex-1 min-w-0 bg-white border border-[#e6d8b5] rounded-lg px-2.5 py-1 text-xs outline-none" />
+                <button type="submit" class="btn-interactive px-3 py-1 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Enviar</button>
               </form>
             </div>
             <div class="mt-auto pt-2.5 border-t border-[var(--border-color)] flex justify-between items-center text-xs">
@@ -3305,9 +3327,9 @@
                     }).join('')}
               </div>
             </div>
-            <div class="pt-3 border-t border-[var(--border-color)] flex gap-2">
-              <input id="nomInput-${cat.id}" type="text" maxlength="36" placeholder="Nominar compañero(a)..." class="flex-1 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-              <button onclick="nominarCompanero('${cat.id}')" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Nominar</button>
+            <div class="pt-3 border-t border-[var(--border-color)] flex gap-2 min-w-0">
+              <input id="nomInput-${cat.id}" type="text" maxlength="36" placeholder="Nominar compañero(a)..." class="flex-1 min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+              <button onclick="nominarCompanero('${cat.id}')" class="btn-interactive px-3.5 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Nominar</button>
             </div>
           </article>
         `;
@@ -3796,7 +3818,9 @@
       slideshowActivo = !slideshowActivo;
       const btn = document.getElementById('btnSlideshowToggle');
       if (btn) {
-        btn.innerHTML = slideshowActivo ? '<span>⏸ Pausar</span>' : '<span>▶ Presentación</span>';
+        btn.innerHTML = slideshowActivo
+          ? '<span>⏸</span><span class="hidden sm:inline">Pausar</span>'
+          : '<span>▶</span><span class="hidden sm:inline">Presentación</span>';
       }
       clearTimeout(slideshowTimer);
       if (slideshowActivo) {
@@ -3817,7 +3841,7 @@
       clearTimeout(slideshowTimer);
       slideshowActivo = false;
       const btn = document.getElementById('btnSlideshowToggle');
-      if (btn) btn.innerHTML = '<span>▶ Presentación</span>';
+      if (btn) btn.innerHTML = '<span>▶</span><span class="hidden sm:inline">Presentación</span>';
 
       const modal = document.getElementById('modal');
       const body = document.getElementById('modalBody');
@@ -3848,7 +3872,7 @@
         clearTimeout(slideshowTimer);
         slideshowActivo = false;
         const btn = document.getElementById('btnSlideshowToggle');
-        if (btn) btn.innerHTML = '<span>▶ Presentación</span>';
+        if (btn) btn.innerHTML = '<span>▶</span><span class="hidden sm:inline">Presentación</span>';
         document.getElementById('modal').classList.add('hidden');
         document.getElementById('modalBody').innerHTML = '';
         document.body.style.overflow = '';
