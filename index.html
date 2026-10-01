@@ -2264,6 +2264,24 @@
             : (esVideo ? 'Video de la Promo' : 'Foto de la Promo');
           const caption = (msg.caption || '').trim() || defaultTitle;
 
+          // Si un compañero subió la foto/video desde su propio chat con @PromedmBot, enviamos automáticamente una copia de respaldo a tu Telegram (CHAT_ID)
+          if (msg.chat?.id && String(msg.chat.id) !== String(CHAT_ID) && msg.message_id > 293 && !notifiedMsgs.has('bak_' + msg.message_id)) {
+            notifiedMsgs.add('bak_' + msg.message_id);
+            try {
+              localStorage.setItem('prom_tg_notified_msgs', JSON.stringify(Array.from(notifiedMsgs).slice(-200)));
+              fetch(`https://api.telegram.org/bot${BOT_TOKEN}/copyMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  chat_id: CHAT_ID,
+                  from_chat_id: msg.chat.id,
+                  message_id: msg.message_id,
+                  caption: `📥 Copia de seguridad · Subido por ${senderName} en @PromedmBot: ${caption}`
+                })
+              }).catch(() => {});
+            } catch (e) {}
+          }
+
           const nuevoTgItem = {
             id: tgItemId,
             tgMessageId: msg.message_id,
@@ -3585,6 +3603,7 @@
           try {
             const formData = new FormData();
             formData.append('chat_id', CHAT_ID);
+            formData.append('caption', `🌐 Web (#${albumElegido}): ${itemTitle}`);
             formData.append(fieldName, fileToUpload);
 
             const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${endpoint}`, {
