@@ -89,9 +89,22 @@
       try {
         const nuevoUrl = await window.renovarUrlTelegramPorItem(rawUrl, itemId, explicitFileId);
         if (nuevoUrl) {
-          videoEl.dataset.src = nuevoUrl;
-          videoEl.src = nuevoUrl;
+          const srcConFrame = nuevoUrl.includes('#t=') ? nuevoUrl : (nuevoUrl + '#t=0.001');
+          videoEl.dataset.src = srcConFrame;
+          videoEl.src = videoEl.id === 'modalVideoPlayer' ? nuevoUrl : srcConFrame;
           videoEl.load();
+          if (videoEl.id === 'modalVideoPlayer') videoEl.play().catch(() => {});
+          return;
+        }
+        if (window.renovarUrlTikTokPorItem) {
+          const nuevoTikTokMp4 = await window.renovarUrlTikTokPorItem(rawUrl, itemId);
+          if (nuevoTikTokMp4) {
+            const srcConFrame = nuevoTikTokMp4.includes('#t=') ? nuevoTikTokMp4 : (nuevoTikTokMp4 + '#t=0.001');
+            videoEl.dataset.src = srcConFrame;
+            videoEl.src = videoEl.id === 'modalVideoPlayer' ? nuevoTikTokMp4 : srcConFrame;
+            videoEl.load();
+            if (videoEl.id === 'modalVideoPlayer') videoEl.play().catch(() => {});
+          }
         }
       } catch (e) {}
     };
@@ -643,10 +656,10 @@
             </div>
             <div id="externalVideoBox" class="hidden p-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] space-y-2">
               <p class="text-[11px] text-[var(--text-muted)]">
-                🔒 <strong>Protegido con contraseña:</strong> Pega un enlace de <strong>TikTok</strong> (<code>tiktok.com/...</code> o <code>vm.tiktok.com/...</code>) o de <strong>Google Drive</strong> (Cualquier persona con el enlace). Se reproducirá dentro de la galería:
+                🔒 <strong>Protegido con contraseña:</strong> Pega un enlace de <strong>TikTok</strong> (<code>tiktok.com/...</code> o <code>vm.tiktok.com/...</code>) o de <strong>Google Drive</strong>. Los videos de TikTok se extraen en <strong>MP4 limpio (sin marcas ni botones de TikTok)</strong>:
               </p>
               <div class="flex flex-col sm:flex-row gap-2">
-                <input id="externalVideoUrlInput" type="url" placeholder="https://www.tiktok.com/... o https://drive.google.com/file/d/..." class="flex-1 min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+                <input id="externalVideoUrlInput" type="text" onkeydown="if(event.key==='Enter'){event.preventDefault();publicarVideoPorEnlace();}" placeholder="https://www.tiktok.com/... o https://vm.tiktok.com/... o Google Drive" class="flex-1 min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
                 <button type="button" id="btnPublishExternalVideo" onclick="publicarVideoPorEnlace()" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer whitespace-nowrap">
                   🔒 Publicar con Contraseña
                 </button>
@@ -1450,6 +1463,7 @@
     function registrarEliminado(idOrUrl) {
       if (!idOrUrl) return;
       const k = String(idOrUrl);
+      if (k.startsWith('data:image/svg+xml')) return;
       deletedIds.add(k);
       Object.values(cambiosActivosUsuario).forEach(mapa => mapa.delete(k));
       try {
@@ -1815,11 +1829,12 @@
           id: itemId,
           tgMessageId: i.tgMessageId,
           fileId: finalFileId,
-          externalEmbedUrl: i.externalEmbedUrl || '',
+          externalEmbedUrl: (i.externalEmbedUrl && !String(i.externalEmbedUrl).includes('tiktok.com')) ? i.externalEmbedUrl : '',
+          externalOriginalUrl: i.externalOriginalUrl || (String(i.externalEmbedUrl || '').includes('tiktok.com') ? i.externalEmbedUrl : ''),
           isHeavyVideo: rescuedMp4 ? false : Boolean(i.isHeavyVideo),
           url: finalUrl,
           name: i.name || 'Recuerdo de la Promo',
-          type: rescuedMp4 ? 'video/mp4' : (i.type || (String(finalUrl).match(/\.(mp4|mov|webm)$/i) || i.externalEmbedUrl ? 'video/mp4' : 'image/jpeg')),
+          type: rescuedMp4 ? 'video/mp4' : (i.type || (String(finalUrl).match(/\.(mp4|mov|webm)$/i) || i.externalEmbedUrl || i.externalOriginalUrl ? 'video/mp4' : 'image/jpeg')),
           album: inferirAlbum(i),
           date: i.date || new Date().toISOString(),
           updatedAt: (rescuedMp4 || mappedUrl) ? Math.max(Number(i.updatedAt || 0), 1790734500000) : (i.updatedAt || Date.now()),
@@ -1946,53 +1961,63 @@
       }
     }
 
-    /* Convertidor de enlaces de TikTok y Google Drive para reproducir videos dentro de la galería */
-    async function convertirEnlaceVideoExterno(rawUrl) {
-      const u = String(rawUrl || '').trim();
-      if (!u) return null;
-
-      // 1. TikTok: soporta links largos (tiktok.com/@user/video/ID) y links cortos de celular (vm.tiktok.com/..., vt.tiktok.com/...)
-      if (/tiktok\.com/i.test(u)) {
-        let videoId = '';
-        let thumbUrl = '';
-        let suggestedTitle = '';
-
-        const directMatch = u.match(/\/(?:video|photo|v|embed\/v2|player\/v1)\/(\d{15,22})/i);
-        if (directMatch && directMatch[1]) {
-          videoId = directMatch[1];
-        }
-
-        // Consultamos el endpoint público oEmbed de TikTok (soporta CORS y resuelve links cortos vm.tiktok.com / vt.tiktok.com)
-        try {
-          const oembedRes = await fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(u)}`);
-          if (oembedRes.ok) {
-            const oembedData = await oembedRes.json();
-            if (oembedData.embed_product_id) {
-              videoId = String(oembedData.embed_product_id);
-            } else if (!videoId && oembedData.html) {
-              const htmlMatch = String(oembedData.html).match(/data-video-id="(\d{15,22})"/i);
-              if (htmlMatch && htmlMatch[1]) videoId = htmlMatch[1];
-            }
-            if (oembedData.thumbnail_url) thumbUrl = oembedData.thumbnail_url;
-            if (oembedData.title) {
-              suggestedTitle = String(oembedData.title).trim().slice(0, 65);
-            } else if (oembedData.author_name) {
-              suggestedTitle = `TikTok de ${oembedData.author_name}`;
-            }
+    /* Extractor de MP4 limpio de TikTok (sin marca de agua ni interfaz de TikTok) + Google Drive */
+    async function extraerDatosTikTokLimpio(tiktokUrl) {
+      try {
+        const apiRes = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(tiktokUrl)}&hd=1`);
+        if (!apiRes.ok) return null;
+        const json = await apiRes.json();
+        if (json && json.code === 0 && json.data) {
+          const d = json.data;
+          const directMp4 = d.play || d.hdplay || d.wmplay || '';
+          if (directMp4) {
+            const rawTitle = String(d.title || '').replace(/#[^\s#]+/g, '').trim();
+            const cleanTitle = (rawTitle || String(d.title || '').trim()).slice(0, 60);
+            return {
+              directMp4,
+              thumbUrl: d.cover || d.origin_cover || '',
+              originalUrl: tiktokUrl,
+              suggestedTitle: cleanTitle || (d.author?.nickname ? `Video de ${d.author.nickname}` : 'Video Promo ’26'),
+              provider: 'TikTok'
+            };
           }
-        } catch (e) {
-          console.warn('No se pudo consultar oEmbed de TikTok:', e);
         }
+      } catch (e) {
+        console.warn('Error consultando extractor limpio de TikTok:', e);
+      }
+      return null;
+    }
 
-        if (videoId) {
-          return {
-            embedUrl: `https://www.tiktok.com/player/v1/${videoId}?music_info=1&description=1&autoplay=1`,
-            thumbUrl: thumbUrl || window.DEFAULT_LOGO_SVG,
-            originalUrl: u,
-            suggestedTitle: suggestedTitle || 'Video de TikTok Promo ’26',
-            provider: 'TikTok'
-          };
+    window.renovarUrlTikTokPorItem = async function(rawUrl, itemId) {
+      const targetItem = items.find(i => (itemId && i.id === itemId) || i.url === rawUrl);
+      const sourceUrl = targetItem?.externalOriginalUrl || (String(rawUrl || '').includes('tiktok.com') ? rawUrl : '');
+      if (!sourceUrl || !/tiktok\.com/i.test(sourceUrl)) return null;
+      const info = await extraerDatosTikTokLimpio(sourceUrl);
+      if (info && info.directMp4) {
+        if (targetItem) {
+          targetItem.url = info.directMp4;
+          targetItem.externalEmbedUrl = '';
+          targetItem.type = 'video/mp4';
+          guardarRespaldoLocal(false);
         }
+        return info.directMp4;
+      }
+      return null;
+    };
+
+    async function convertirEnlaceVideoExterno(rawInput) {
+      const rawStr = String(rawInput || '').trim();
+      if (!rawStr) return null;
+      const urlMatch = rawStr.match(/https?:\/\/[^\s"'<>]+/i);
+      const u = urlMatch ? urlMatch[0] : rawStr;
+
+      // 1. TikTok: extrae el archivo .mp4 directo y limpio (sin marcas de agua ni botones de TikTok)
+      if (/tiktok\.com/i.test(u)) {
+        const tkInfo = await extraerDatosTikTokLimpio(u);
+        if (tkInfo && tkInfo.directMp4) {
+          return tkInfo;
+        }
+        return null;
       }
 
       // 2. Google Drive: https://drive.google.com/file/d/ID/view...
@@ -2040,24 +2065,96 @@
       }
 
       const btn = document.getElementById('btnPublishExternalVideo');
+      const progBox = document.getElementById('uploadProgressBox');
+      const progText = document.getElementById('uploadProgressText');
+      const progPct = document.getElementById('uploadProgressPct');
+      const progBar = document.getElementById('uploadProgressBar');
+
       if (btn) {
         btn.disabled = true;
-        btn.innerText = 'Verificando enlace...';
+        btn.innerText = 'Extrayendo video limpio...';
       }
+      if (progBox) progBox.classList.remove('hidden');
+      if (progText) progText.innerText = 'Verificando enlace y extrayendo video limpio...';
+      if (progPct) progPct.innerText = '25%';
+      if (progBar) progBar.style.width = '25%';
 
       try {
         const info = await convertirEnlaceVideoExterno(rawUrl);
         if (!info) {
-          return mostrarToast('Enlace no reconocido. Usa un link válido de TikTok o Google Drive');
+          return mostrarToast('No se pudo extraer el video. Verifica que el link de TikTok o Google Drive sea público.');
         }
 
         const customName = document.getElementById('customFileName').value.trim() || info.suggestedTitle || `Video (${info.provider})`;
         const albumElegido = document.getElementById('uploadAlbumSelect').value || 'General';
 
+        let finalVideoUrl = info.directMp4 || info.thumbUrl || '';
+        let finalFileId = '';
+        let finalTgMessageId = undefined;
+        let finalEmbedUrl = info.embedUrl || '';
+
+        // Si tenemos el archivo .mp4 limpio (ej. TikTok), lo subimos directo al almacenamiento permanente de la galería para que se reproduzca 100% nativo y nunca caduque
+        if (info.directMp4) {
+          try {
+            if (progText) progText.innerText = 'Descargando video MP4 limpio (sin marcas ni botones de TikTok)...';
+            if (progPct) progPct.innerText = '50%';
+            if (progBar) progBar.style.width = '50%';
+
+            const mp4Res = await fetch(info.directMp4);
+            if (mp4Res.ok) {
+              const mp4Blob = await mp4Res.blob();
+              let videoFile = new File([mp4Blob], `tiktok_${Date.now()}.mp4`, { type: 'video/mp4' });
+
+              if (videoFile.size > 20 * 1024 * 1024) {
+                if (progText) progText.innerText = 'Optimizando tamaño del video en HD...';
+                videoFile = await comprimirVideoPesadoEnNavegador(videoFile, (pct) => {
+                  if (progPct) progPct.innerText = `${pct}%`;
+                  if (progBar) progBar.style.width = `${pct}%`;
+                });
+              }
+
+              if (progText) progText.innerText = 'Guardando video limpio en la nube de la promoción...';
+              if (progPct) progPct.innerText = '85%';
+              if (progBar) progBar.style.width = '85%';
+
+              const formData = new FormData();
+              formData.append('chat_id', CHAT_ID);
+              formData.append('video', videoFile);
+
+              const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, {
+                method: 'POST',
+                body: formData
+              });
+              const tgData = await tgRes.json();
+              if (tgData && tgData.ok) {
+                const mediaResult = tgData.result.video || tgData.result.document;
+                const fid = mediaResult?.file_id;
+                if (fid) {
+                  const fileInfoRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fid}`);
+                  const fileInfoData = await fileInfoRes.json().catch(() => ({}));
+                  if (fileInfoData.ok && fileInfoData.result?.file_path) {
+                    finalVideoUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfoData.result.file_path}`;
+                    finalFileId = fid;
+                    finalTgMessageId = tgData.result.message_id;
+                    finalEmbedUrl = '';
+                  }
+                }
+              }
+            }
+          } catch (uploadErr) {
+            console.warn('Usando stream MP4 directo de respaldo:', uploadErr);
+          }
+        }
+
+        if (progPct) progPct.innerText = '100%';
+        if (progBar) progBar.style.width = '100%';
+
         const nuevoItemVideo = {
-          id: 'ext_' + Math.random().toString(36).substring(2, 9),
-          url: info.directMp4 || info.thumbUrl || window.DEFAULT_LOGO_SVG,
-          externalEmbedUrl: info.embedUrl || '',
+          id: finalTgMessageId ? ('tg_msg_' + finalTgMessageId) : ('ext_' + Math.random().toString(36).substring(2, 9)),
+          tgMessageId: finalTgMessageId,
+          fileId: finalFileId,
+          url: finalVideoUrl,
+          externalEmbedUrl: finalEmbedUrl,
           externalOriginalUrl: info.originalUrl || rawUrl,
           name: customName,
           type: 'video/mp4',
@@ -2079,12 +2176,16 @@
         renderCarrusel();
         lanzarConfetiDorado();
         await sincronizarNube();
-        mostrarToast(`Video de ${info.provider} publicado en #${albumElegido}`);
+        mostrarToast(`✨ Video limpio de ${info.provider} publicado en #${albumElegido}`);
       } finally {
         if (btn) {
           btn.disabled = false;
           btn.innerText = '🔒 Publicar con Contraseña';
         }
+        setTimeout(() => {
+          if (progBox) progBox.classList.add('hidden');
+          if (progBar) progBar.style.width = '0%';
+        }, 900);
       }
     }
 
@@ -3647,13 +3748,13 @@
           <div onclick="manejarToqueMediaGaleria(event, ${index})" class="media-thumb-box w-full h-52 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
             ${esImagen
               ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />`
-              : item.externalEmbedUrl
-                ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src=window.DEFAULT_LOGO_SVG;" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
+              : (item.externalEmbedUrl && !item.externalEmbedUrl.includes('tiktok.com'))
+                ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.classList.add('hidden');" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]" />
                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                      <span class="w-11 h-11 rounded-full bg-black/75 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
                    </div>
                    <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/80 text-[var(--gold-bright)] text-[10px] font-bold tracking-wide">VIDEO HD</span>`
-                : `<video data-src="${item.url}" preload="none" muted loop playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
+                : `<video data-src="${item.url.includes('#t=') ? item.url : (item.url + '#t=0.001')}" preload="none" muted loop playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0.001;" class="lazy-video w-full h-full object-cover"></video>
                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                      <span class="w-11 h-11 rounded-full bg-black/70 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-md group-hover:scale-110 transition-transform">▶</span>
                    </div>
@@ -4392,19 +4493,8 @@
         if (slideshowActivo) {
           slideshowTimer = setTimeout(() => navegarModal(1), 4200);
         }
-      } else if (item.externalEmbedUrl) {
-        const esTikTok = item.externalEmbedUrl.includes('tiktok.com');
-        const linkOriginal = item.externalOriginalUrl || item.externalEmbedUrl;
-        body.innerHTML = esTikTok
-          ? `<div class="flex flex-col items-center justify-center gap-2 w-full h-full">
-               <div class="w-[82vw] max-w-[345px] h-[68vh] max-h-[610px] bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
-                 <iframe src="${item.externalEmbedUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen class="w-full h-full"></iframe>
-               </div>
-               <a href="${linkOriginal}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-[var(--wine-main)] text-white text-xs font-semibold border border-white/20">
-                 Abrir en TikTok ↗
-               </a>
-             </div>`
-          : `<div class="w-[92vw] max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
+      } else if (item.externalEmbedUrl && !item.externalEmbedUrl.includes('tiktok.com')) {
+        body.innerHTML = `<div class="w-[92vw] max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
                <iframe src="${item.externalEmbedUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
              </div>`;
       } else {
