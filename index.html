@@ -227,13 +227,25 @@
       padding: 2.5px;
     }
     .polaroid-grid article {
-      padding: 10px 10px 14px 10px;
-      background: #fffdf9;
-      box-shadow: 0 10px 26px -10px rgba(67, 16, 25, 0.2);
-      border-color: rgba(216, 178, 88, 0.45);
+      padding: 12px 12px 18px 12px;
+      background: linear-gradient(180deg, #fffefb 0%, #f9f3e5 100%);
+      box-shadow: 0 14px 30px -10px rgba(67, 16, 25, 0.24), 0 2px 6px rgba(0, 0, 0, 0.06);
+      border: 1.5px solid rgba(216, 178, 88, 0.65);
+      position: relative;
+    }
+    .polaroid-grid article::before {
+      content: '✦ EDM ’26 ✦';
+      display: block;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: var(--gold-main);
+      padding-bottom: 6px;
     }
     .polaroid-grid article .media-thumb-box {
-      border-radius: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(104, 27, 40, 0.14);
     }
     .modal-zoom-stage {
       touch-action: none;
@@ -569,9 +581,27 @@
         <div class="w-full max-w-full overflow-hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-3.5 sm:p-4 space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <span class="text-[11px] sm:text-xs font-bold text-[var(--wine-main)] uppercase tracking-wider">Historias y Álbumes</span>
-            <button type="button" onclick="document.getElementById('uploadPanelWrapper').classList.toggle('hidden')" class="btn-interactive px-3 py-1.5 rounded-xl bg-[var(--wine-main)] text-white text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap">
-              + Subir Foto o Video
-            </button>
+            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <button type="button" onclick="document.getElementById('newAlbumBox').classList.toggle('hidden')" class="btn-interactive px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] text-[var(--wine-main)] text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap">
+                🔒 + Nuevo Álbum
+              </button>
+              <button type="button" onclick="document.getElementById('uploadPanelWrapper').classList.toggle('hidden')" class="btn-interactive px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--wine-main)] text-white text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap">
+                + Subir Foto o Video
+              </button>
+            </div>
+          </div>
+          <!-- Panel protegido con contraseña para crear o administrar álbumes -->
+          <div id="newAlbumBox" class="hidden p-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-bold text-[var(--wine-main)]">🔒 Crear nuevo álbum oficial (requiere clave de administrador)</span>
+              <button type="button" onclick="document.getElementById('newAlbumBox').classList.add('hidden')" class="text-xs text-[var(--text-muted)] hover:text-[var(--wine-main)] font-bold cursor-pointer">✕</button>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input id="newAlbumNameInput" type="text" maxlength="28" placeholder="Nombre del nuevo álbum (ej. Paseo, Retiro, Graduación)..." class="flex-1 min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none focus:border-[var(--wine-main)]" />
+              <button type="button" onclick="crearNuevoAlbumAdmin()" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer whitespace-nowrap">
+                Crear Álbum con Contraseña
+              </button>
+            </div>
           </div>
           <div id="storiesAlbumBar" class="w-full max-w-full flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar pt-1 pb-0.5"></div>
         </div>
@@ -585,14 +615,14 @@
         </div>
 
         <div id="uploadPanelWrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          <div class="lg:col-span-7 rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-5 flex flex-col justify-between gap-4">
+          <div class="lg:col-span-7 rounded-2xl bg-[var(--card-bg)] border-2 border-dashed border-[var(--border-color)] p-4 sm:p-5 flex flex-col justify-between gap-4">
             <div>
               <h2 class="text-base font-bold text-[var(--wine-main)]">Sube una o varias fotos y videos por álbum</h2>
               <p class="text-xs text-[var(--text-muted)] mt-0.5">Compresor inteligente activo: si eliges un video pesado (>20 MB), la web reduce su peso automáticamente en HD para subirlo directo.</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
               <input type="text" id="customFileName" placeholder="Título opcional (o automático)..." class="sm:col-span-5 rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
-              <select id="uploadAlbumSelect" class="sm:col-span-3 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2.5 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer">
+              <select id="uploadAlbumSelect" onchange="if(this.value==='__nuevo__'){this.value='General';document.getElementById('newAlbumBox').classList.remove('hidden');document.getElementById('newAlbumNameInput').focus();}" class="sm:col-span-3 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2.5 text-xs font-semibold text-[var(--text-dark)] outline-none cursor-pointer">
                 <option value="General">Álbum: General</option>
                 <option value="Jornada">Álbum: Jornada</option>
                 <option value="Semana Santa">Álbum: Semana Santa</option>
@@ -606,19 +636,19 @@
               <input type="file" id="fileInput" accept="image/*,video/*" multiple class="hidden" onchange="subirArchivo(event)" />
             </div>
             <div class="pt-1 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-2">
-              <span class="text-[11px] text-[var(--text-muted)]">¿Video muy largo (100 MB, 1 GB)? También puedes pegarlo por Drive o YouTube:</span>
+              <span class="text-[11px] text-[var(--text-muted)]">¿Video de TikTok o archivo largo en Google Drive?</span>
               <button type="button" onclick="document.getElementById('externalVideoBox').classList.toggle('hidden')" class="text-xs font-bold text-[var(--wine-main)] hover:underline cursor-pointer">
-                + Pegar enlace de Google Drive / YouTube
+                🔒 + Subir link de TikTok o Google Drive
               </button>
             </div>
             <div id="externalVideoBox" class="hidden p-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] space-y-2">
               <p class="text-[11px] text-[var(--text-muted)]">
-                Pega un enlace público de <strong>Google Drive</strong> (Cualquier persona con el enlace), <strong>YouTube</strong> o un link <code>.mp4</code> directo. Se reproducirá dentro de esta página sin límite de megas y sin instalar nada:
+                🔒 <strong>Protegido con contraseña:</strong> Pega un enlace de <strong>TikTok</strong> (<code>tiktok.com/...</code> o <code>vm.tiktok.com/...</code>) o de <strong>Google Drive</strong> (Cualquier persona con el enlace). Se reproducirá dentro de la galería:
               </p>
               <div class="flex flex-col sm:flex-row gap-2">
-                <input id="externalVideoUrlInput" type="url" placeholder="https://drive.google.com/file/d/... o YouTube..." class="flex-1 min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
-                <button type="button" onclick="publicarVideoPorEnlace()" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer whitespace-nowrap">
-                  Publicar Video en Galería
+                <input id="externalVideoUrlInput" type="url" placeholder="https://www.tiktok.com/... o https://drive.google.com/file/d/..." class="flex-1 min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none" />
+                <button type="button" id="btnPublishExternalVideo" onclick="publicarVideoPorEnlace()" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer whitespace-nowrap">
+                  🔒 Publicar con Contraseña
                 </button>
               </div>
             </div>
@@ -894,11 +924,62 @@
   <div id="adminPromptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4">
     <div class="anim-modal w-full max-w-sm rounded-2xl bg-[var(--card-bg)] border border-[var(--gold-main)] p-5 space-y-4">
       <h3 id="adminPromptTitle" class="text-base font-bold text-[var(--wine-main)]">Confirmar acción de administrador</h3>
-      <p id="adminPromptDesc" class="text-xs text-[var(--text-muted)]">Han pasado más de 2 minutos desde su creación. Ingresa la clave de administración para continuar:</p>
-      <input id="adminPromptInput" type="password" placeholder="Contraseña de administración..." class="w-full rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs outline-none focus:border-[var(--wine-main)]" />
+      <p id="adminPromptDesc" class="text-xs text-[var(--text-muted)]">Ingresa la clave de administración para continuar:</p>
+      <input id="adminPromptInput" type="password" onkeydown="if(event.key==='Enter'){event.preventDefault();cerrarAdminPrompt(true);}" placeholder="Contraseña de administración..." class="w-full rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs outline-none focus:border-[var(--wine-main)]" />
       <div class="flex justify-end gap-2">
         <button type="button" onclick="cerrarAdminPrompt(false)" class="btn-interactive px-4 py-2 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-muted)] cursor-pointer">Cancelar</button>
         <button type="button" onclick="cerrarAdminPrompt(true)" class="btn-interactive px-4 py-2 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTUDIO DE POSTALES DE GALA EDM '26 (Vista previa en vivo + 4 Diseños de Colección) -->
+  <div id="postalStudioModal" onclick="if(event.target===this)cerrarPostalStudio()" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 sm:p-5 overflow-y-auto">
+    <div class="anim-modal w-full max-w-lg rounded-2xl bg-[var(--card-bg)] border-2 border-[var(--gold-main)] p-4 sm:p-5 space-y-3.5 my-auto">
+      <div class="flex items-center justify-between gap-2 border-b border-[var(--border-color)] pb-2.5">
+        <div>
+          <div class="text-[11px] font-bold text-[var(--gold-main)] uppercase tracking-wider">Estudio de Recuerdos · HD 1080×1350</div>
+          <h3 class="text-base sm:text-lg font-bold text-[var(--wine-main)]">Diseño de Postal Conmemorativa</h3>
+        </div>
+        <button type="button" onclick="cerrarPostalStudio()" class="w-8 h-8 rounded-full bg-[var(--bg-cream)] text-[var(--wine-main)] font-bold flex items-center justify-center cursor-pointer">✕</button>
+      </div>
+
+      <!-- Selector de 4 estilos de lujo -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-[var(--text-dark)]">Elige el estilo de tu postal:</span>
+          <button type="button" id="btnPostalFitToggle" onclick="alternarEncuadrePostal()" class="text-[11px] font-bold text-[var(--wine-main)] hover:underline cursor-pointer">
+            Encuadre: Foto Completa ↺
+          </button>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+          <button type="button" data-pstyle="imperial" onclick="seleccionarEstiloPostal('imperial')" class="postal-style-btn btn-interactive px-2.5 py-2 rounded-xl text-[11px] font-bold border cursor-pointer bg-[var(--wine-main)] text-white border-[var(--gold-main)]">
+            👑 Gala Vino
+          </button>
+          <button type="button" data-pstyle="polaroid" onclick="seleccionarEstiloPostal('polaroid')" class="postal-style-btn btn-interactive px-2.5 py-2 rounded-xl text-[11px] font-bold border cursor-pointer bg-white text-[var(--text-dark)] border-[var(--border-color)]">
+            📸 Polaroid Oro
+          </button>
+          <button type="button" data-pstyle="azul" onclick="seleccionarEstiloPostal('azul')" class="postal-style-btn btn-interactive px-2.5 py-2 rounded-xl text-[11px] font-bold border cursor-pointer bg-white text-[var(--text-dark)] border-[var(--border-color)]">
+            🌌 Azul Real
+          </button>
+          <button type="button" data-pstyle="editorial" onclick="seleccionarEstiloPostal('editorial')" class="postal-style-btn btn-interactive px-2.5 py-2 rounded-xl text-[11px] font-bold border cursor-pointer bg-white text-[var(--text-dark)] border-[var(--border-color)]">
+            📜 Editorial
+          </button>
+        </div>
+      </div>
+
+      <!-- Lienzo de vista previa en vivo -->
+      <div class="w-full bg-[#150d0f] rounded-xl p-2.5 flex items-center justify-center border border-[var(--border-color)]">
+        <canvas id="postalPreviewCanvas" width="1080" height="1350" class="w-full max-w-[270px] sm:max-w-[300px] h-auto rounded-lg shadow-2xl"></canvas>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-1">
+        <button type="button" onclick="cerrarPostalStudio()" class="btn-interactive px-4 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-muted)] cursor-pointer">
+          Cerrar
+        </button>
+        <button type="button" onclick="confirmarDescargaPostalCanvas()" class="btn-interactive flex-1 sm:flex-initial px-5 py-2.5 rounded-xl bg-[var(--wine-main)] hover:bg-[var(--wine-light)] text-white text-xs font-bold border border-[var(--gold-main)] cursor-pointer text-center">
+          ⬇ Descargar Postal en Alta Calidad
+        </button>
       </div>
     </div>
   </div>
@@ -931,7 +1012,7 @@
     const MASTER_KEY = '$2a$10$Hmai3/Cp0eV7AhrkxNDaHesYsuL36PJNUczcmKhTbS9QIphmrUqBy';
     const BOT_TOKEN = '8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc';
     const CHAT_ID = '8616807953';
-    const ADMIN_PASSWORD = 'prom26admin';
+    const ADMIN_PASSWORD = 'admin22';
 
     const LOCAL_STORAGE_KEY = 'prom_edm26_live_snapshot_v4';
     const DELETED_IDS_KEY = 'prom_edm26_deleted_ids_v4';
@@ -946,8 +1027,52 @@
       try { localStorage.removeItem(k); } catch (e) {}
     });
 
-    const ALBUM_OPTIONS = ['Todos', 'General', 'Jornada', 'Semana Santa', '15 Años', 'Fiesta', 'Viaje'];
+    const DEFAULT_ALBUMS = ['General', 'Jornada', 'Semana Santa', '15 Años', 'Fiesta', 'Viaje'];
+    let customAlbums = [];
     let albumActual = 'Todos';
+
+    function obtenerListaAlbumes(incluirTodos = true) {
+      const vistos = new Set();
+      const resultado = [];
+      if (incluirTodos) {
+        resultado.push('Todos');
+        vistos.add('todos');
+      }
+      const agregar = (nombre) => {
+        const limpio = String(nombre || '').trim();
+        if (!limpio) return;
+        const low = limpio.toLowerCase();
+        if (low === 'todos') return;
+        if (low !== 'general' && deletedIds.has('alb_' + low)) return;
+        if (!vistos.has(low)) {
+          vistos.add(low);
+          resultado.push(limpio);
+        }
+      };
+      DEFAULT_ALBUMS.forEach(agregar);
+      (customAlbums || []).forEach(a => agregar(typeof a === 'object' ? a.name : a));
+      (items || []).forEach(i => {
+        if (i && i.album) agregar(i.album);
+      });
+      return resultado;
+    }
+
+    function actualizarSelectoresAlbum() {
+      const sel = document.getElementById('uploadAlbumSelect');
+      if (!sel) return;
+      const valorPrevio = sel.value;
+      const lista = obtenerListaAlbumes(false);
+      sel.innerHTML =
+        lista.map(alb => `<option value="${alb.replace(/"/g, '&quot;')}">Álbum: ${alb}</option>`).join('') +
+        `<option value="__nuevo__">🔒 + Crear nuevo álbum...</option>`;
+      if (lista.includes(valorPrevio)) {
+        sel.value = valorPrevio;
+      } else if (albumActual !== 'Todos' && lista.includes(albumActual)) {
+        sel.value = albumActual;
+      } else {
+        sel.value = 'General';
+      }
+    }
     let filtroActual = 'todos';
     let rolMiembroActual = 'Todos';
     let modalListaActual = [];
@@ -1290,13 +1415,15 @@
       awards: new Map(),
       capsules: new Map(),
       events: new Map(),
-      himnos: new Map()
+      himnos: new Map(),
+      albums: new Map()
     };
 
     function obtenerClaveDelta(tipo, obj) {
       if (!obj) return '';
       if (tipo === 'items') return String(obtenerIdItem(obj));
       if (tipo === 'himnos') return String(obj.id || `${obj.titulo}_${obj.artista}`);
+      if (tipo === 'albums') return String((typeof obj === 'object' ? obj.name : obj) || '').trim().toLowerCase();
       return String(obj.id || '');
     }
 
@@ -1315,7 +1442,8 @@
         cambiosActivosUsuario.awards.size > 0 ||
         cambiosActivosUsuario.capsules.size > 0 ||
         cambiosActivosUsuario.events.size > 0 ||
-        cambiosActivosUsuario.himnos.size > 0
+        cambiosActivosUsuario.himnos.size > 0 ||
+        cambiosActivosUsuario.albums.size > 0
       );
     }
 
@@ -1362,6 +1490,7 @@
         revision: localRevision,
         savedAt: new Date().toISOString(),
         deletedIds: Array.from(deletedIds),
+        albums: customAlbums,
         items,
         tweets,
         members,
@@ -1387,6 +1516,11 @@
         Object.keys(RESCUED_HEAVY_VIDEOS_MAP).forEach(k => deletedIds.delete(k));
         deletedIds.delete(`${TG_FILE_PREFIX}photos/file_70.jpg`);
         deletedIds.delete(`${TG_FILE_PREFIX}photos/file_165.jpg`);
+        if (Array.isArray(data.albums)) {
+          customAlbums = data.albums
+            .map(a => (typeof a === 'object' ? a.name : String(a || '')).trim())
+            .filter(a => a && !deletedIds.has('alb_' + a.toLowerCase()));
+        }
         if (Array.isArray(data.items)) {
           items = data.items.map(i => aplicarMapaPermanenteAItem(i)).filter(i => i && !i.isHeavyVideo && !estaItemEliminado(i));
         }
@@ -1414,6 +1548,17 @@
       const deltaCapsules = Array.from(cambiosActivosUsuario.capsules.values());
       const deltaEvents = Array.from(cambiosActivosUsuario.events.values());
       const deltaHimnos = Array.from(cambiosActivosUsuario.himnos.values());
+      const deltaAlbums = Array.from(cambiosActivosUsuario.albums.values());
+
+      const albSet = new Map();
+      [...(parsed.cloudAlbums || []), ...customAlbums, ...deltaAlbums].forEach(a => {
+        const name = String((typeof a === 'object' ? a.name : a) || '').trim();
+        if (!name) return;
+        const low = name.toLowerCase();
+        if (deletedIds.has('alb_' + low)) return;
+        if (!albSet.has(low)) albSet.set(low, name);
+      });
+      customAlbums = Array.from(albSet.values());
 
       items = fusionarListasPorId(deltaItems, parsed.cloudItems, obtenerIdItem);
       tweets = fusionarListasPorId(deltaTweets, parsed.cloudTweets, t => t.id);
@@ -1581,7 +1726,8 @@
     let _huellaSoundtrack = '';
 
     function obtenerHuellaGaleria() {
-      return items.map(i => `${i.id}:${i.name}:${i.album}:${i.likes}:${(i.likedBy || []).includes(userId) ? 1 : 0}:${(i.comments || []).map(c => c.id).join(',')}`).join('|');
+      const hAlb = obtenerListaAlbumes(true).join(',');
+      return hAlb + '||' + items.map(i => `${i.id}:${i.name}:${i.album}:${i.likes}:${(i.likedBy || []).includes(userId) ? 1 : 0}:${(i.comments || []).map(c => c.id).join(',')}`).join('|');
     }
 
     function renderTodo(forzar = false) {
@@ -1594,6 +1740,7 @@
       const hGaleria = obtenerHuellaGaleria();
       if (forzar || hGaleria !== _huellaGaleria) {
         _huellaGaleria = hGaleria;
+        actualizarSelectoresAlbum();
         renderBarraAlbumes();
         renderHistoriasAlbumes();
         renderGaleria();
@@ -1713,6 +1860,11 @@
       const cloudHimnos = (record.music && Array.isArray(record.music.himnos))
         ? record.music.himnos.map((h, idx) => ({ id: h.id || `${h.titulo}_${h.artista}_${idx}`, ...h })).filter(h => !deletedIds.has(h.id))
         : [];
+      const cloudAlbums = Array.isArray(record.albums)
+        ? record.albums
+            .map(a => String((typeof a === 'object' ? a.name : a) || '').trim())
+            .filter(a => a && !deletedIds.has('alb_' + a.toLowerCase()))
+        : [];
 
       return {
         esItemUnicoMake,
@@ -1723,6 +1875,7 @@
         cloudCapsules,
         cloudEvents,
         cloudHimnos,
+        cloudAlbums,
         playlistUrl: record.music?.playlistUrl
       };
     }
@@ -1793,35 +1946,81 @@
       }
     }
 
-    /* Convertidor de enlaces de Google Drive / YouTube para reproducir videos gigantes (>20MB hasta 2GB+) dentro de la web */
-    function convertirEnlaceVideoExterno(rawUrl) {
+    /* Convertidor de enlaces de TikTok y Google Drive para reproducir videos dentro de la galería */
+    async function convertirEnlaceVideoExterno(rawUrl) {
       const u = String(rawUrl || '').trim();
       if (!u) return null;
 
-      // Google Drive: https://drive.google.com/file/d/ID/view...
+      // 1. TikTok: soporta links largos (tiktok.com/@user/video/ID) y links cortos de celular (vm.tiktok.com/..., vt.tiktok.com/...)
+      if (/tiktok\.com/i.test(u)) {
+        let videoId = '';
+        let thumbUrl = '';
+        let suggestedTitle = '';
+
+        const directMatch = u.match(/\/(?:video|photo|v|embed\/v2|player\/v1)\/(\d{15,22})/i);
+        if (directMatch && directMatch[1]) {
+          videoId = directMatch[1];
+        }
+
+        // Consultamos el endpoint público oEmbed de TikTok (soporta CORS y resuelve links cortos vm.tiktok.com / vt.tiktok.com)
+        try {
+          const oembedRes = await fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(u)}`);
+          if (oembedRes.ok) {
+            const oembedData = await oembedRes.json();
+            if (oembedData.embed_product_id) {
+              videoId = String(oembedData.embed_product_id);
+            } else if (!videoId && oembedData.html) {
+              const htmlMatch = String(oembedData.html).match(/data-video-id="(\d{15,22})"/i);
+              if (htmlMatch && htmlMatch[1]) videoId = htmlMatch[1];
+            }
+            if (oembedData.thumbnail_url) thumbUrl = oembedData.thumbnail_url;
+            if (oembedData.title) {
+              suggestedTitle = String(oembedData.title).trim().slice(0, 65);
+            } else if (oembedData.author_name) {
+              suggestedTitle = `TikTok de ${oembedData.author_name}`;
+            }
+          }
+        } catch (e) {
+          console.warn('No se pudo consultar oEmbed de TikTok:', e);
+        }
+
+        if (videoId) {
+          return {
+            embedUrl: `https://www.tiktok.com/player/v1/${videoId}?music_info=1&description=1&autoplay=1`,
+            thumbUrl: thumbUrl || window.DEFAULT_LOGO_SVG,
+            originalUrl: u,
+            suggestedTitle: suggestedTitle || 'Video de TikTok Promo ’26',
+            provider: 'TikTok'
+          };
+        }
+      }
+
+      // 2. Google Drive: https://drive.google.com/file/d/ID/view...
       const driveMatch = u.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i) || u.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i);
       if (driveMatch && driveMatch[1]) {
         return {
           embedUrl: `https://drive.google.com/file/d/${driveMatch[1]}/preview`,
           thumbUrl: `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800`,
+          originalUrl: u,
           provider: 'Google Drive'
         };
       }
 
-      // YouTube: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/shorts/ID
+      // 3. Enlace directo .mp4 / .webm / .mov (o YouTube por compatibilidad)
       const ytMatch = u.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
       if (ytMatch && ytMatch[1]) {
         return {
           embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`,
           thumbUrl: `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`,
+          originalUrl: u,
           provider: 'YouTube'
         };
       }
 
-      // Enlace directo .mp4 / .webm / .mov
       if (u.match(/\.(mp4|webm|mov)(\?.*)?$/i)) {
         return {
           directMp4: u,
+          originalUrl: u,
           provider: 'MP4 Directo'
         };
       }
@@ -1832,40 +2031,61 @@
     async function publicarVideoPorEnlace() {
       const inp = document.getElementById('externalVideoUrlInput');
       const rawUrl = (inp?.value || '').trim();
-      if (!rawUrl) return mostrarToast('Pega primero el enlace de Google Drive o YouTube');
+      if (!rawUrl) return mostrarToast('Pega primero el enlace de TikTok o Google Drive');
 
-      const info = convertirEnlaceVideoExterno(rawUrl);
-      if (!info) {
-        return mostrarToast('Enlace no reconocido. Usa un link de Google Drive, YouTube o .mp4');
+      const pass = await solicitarClaveAdmin('Ingresa la contraseña de administrador para publicar un video por enlace de TikTok o Google Drive:');
+      if (pass === null) return;
+      if (pass !== ADMIN_PASSWORD) {
+        return mostrarToast('Contraseña de administrador incorrecta');
       }
 
-      const customName = document.getElementById('customFileName').value.trim() || `Video (${info.provider})`;
-      const albumElegido = document.getElementById('uploadAlbumSelect').value || 'General';
+      const btn = document.getElementById('btnPublishExternalVideo');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = 'Verificando enlace...';
+      }
 
-      const nuevoItemVideo = {
-        id: 'ext_' + Math.random().toString(36).substring(2, 9),
-        url: info.directMp4 || info.thumbUrl || window.DEFAULT_LOGO_SVG,
-        externalEmbedUrl: info.embedUrl || '',
-        name: customName,
-        type: 'video/mp4',
-        album: albumElegido,
-        date: new Date().toISOString(),
-        updatedAt: Date.now(),
-        likes: 0,
-        likedBy: [],
-        comments: []
-      };
-      items.unshift(nuevoItemVideo);
-      registrarCambioUsuario('items', nuevoItemVideo);
+      try {
+        const info = await convertirEnlaceVideoExterno(rawUrl);
+        if (!info) {
+          return mostrarToast('Enlace no reconocido. Usa un link válido de TikTok o Google Drive');
+        }
 
-      inp.value = '';
-      document.getElementById('customFileName').value = '';
-      document.getElementById('externalVideoBox').classList.add('hidden');
-      renderGaleria();
-      renderCarrusel();
-      lanzarConfetiDorado();
-      await sincronizarNube();
-      mostrarToast(`Video de ${info.provider} publicado en #${albumElegido}`);
+        const customName = document.getElementById('customFileName').value.trim() || info.suggestedTitle || `Video (${info.provider})`;
+        const albumElegido = document.getElementById('uploadAlbumSelect').value || 'General';
+
+        const nuevoItemVideo = {
+          id: 'ext_' + Math.random().toString(36).substring(2, 9),
+          url: info.directMp4 || info.thumbUrl || window.DEFAULT_LOGO_SVG,
+          externalEmbedUrl: info.embedUrl || '',
+          externalOriginalUrl: info.originalUrl || rawUrl,
+          name: customName,
+          type: 'video/mp4',
+          album: albumElegido,
+          date: new Date().toISOString(),
+          updatedAt: Date.now(),
+          likes: 0,
+          likedBy: [],
+          comments: []
+        };
+        items.unshift(nuevoItemVideo);
+        registrarCambioUsuario('items', nuevoItemVideo);
+
+        inp.value = '';
+        document.getElementById('customFileName').value = '';
+        document.getElementById('externalVideoBox').classList.add('hidden');
+        renderHistoriasAlbumes();
+        renderGaleria();
+        renderCarrusel();
+        lanzarConfetiDorado();
+        await sincronizarNube();
+        mostrarToast(`Video de ${info.provider} publicado en #${albumElegido}`);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = '🔒 Publicar con Contraseña';
+        }
+      }
     }
 
     async function sincronizarBotTelegramDirecto() {
@@ -2011,11 +2231,12 @@
         // Paso 2: Tomamos el último estado de la nube como base absoluta y aplicamos SOLO las acciones puntuales de este usuario activo
         aplicarDeltasSobreNube(parsed);
 
-        // Paso 3: Guardamos el estado unificado + registro de borrados (deletedIds) en JSONBin
+        // Paso 3: Guardamos el estado unificado + registro de borrados (deletedIds) y álbumes en JSONBin
         const payload = {
           revision: Date.now(),
           updatedAt: new Date().toISOString(),
           deletedIds: Array.from(deletedIds).slice(-500),
+          albums: customAlbums,
           items,
           tweets,
           members,
@@ -2221,25 +2442,21 @@
       });
     }
 
-    async function descargarPostalPolaroid(imageUrl, title, subtitle, dateStr) {
-      mostrarToast('Generando Postal Polaroid...');
-      const canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1350;
-      const ctx = canvas.getContext('2d');
+    /* =========================================================
+       ESTUDIO DE POSTALES CONMEMORATIVAS EDM '26 (4 DISEÑOS DE LUJO)
+    ========================================================= */
+    let postalStudioState = {
+      imageUrl: '',
+      title: '',
+      subtitle: '',
+      dateStr: '',
+      style: 'imperial',
+      fitMode: 'contain', // 'contain' = Foto completa con fondo difuminado de estudio, 'cover' = Retrato 1:1
+      loadedImg: null
+    };
 
-      ctx.fillStyle = '#FCF9F2';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.strokeStyle = '#D8B258';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(36, 36, canvas.width - 72, canvas.height - 72);
-
-      const bx = 78, by = 78, bw = 924, bh = 924;
-      ctx.fillStyle = '#181214';
-      ctx.fillRect(bx, by, bw, bh);
-
-      const cargarImg = (u) => new Promise((res, rej) => {
+    async function cargarImagenParaPostal(rawUrl) {
+      const intentarCargar = (u) => new Promise((res, rej) => {
         const im = new Image();
         im.crossOrigin = 'anonymous';
         im.onload = () => res(im);
@@ -2247,39 +2464,346 @@
         im.src = u;
       });
 
+      let urlActual = rawUrl;
       try {
-        let img;
-        try { img = await cargarImg(imageUrl); }
-        catch { img = await cargarImg('https://images.weserv.nl/?url=' + encodeURIComponent(imageUrl) + '&w=1000&output=jpg'); }
-        const ir = img.width / img.height;
-        let sx = 0, sy = 0, sw = img.width, sh = img.height;
-        if (ir > 1) { sw = img.height; sx = (img.width - sw) / 2; }
-        else { sh = img.width; sy = (img.height - sh) / 2; }
-        ctx.drawImage(img, sx, sy, sw, sh, bx, by, bw, bh);
-      } catch {
+        if (window.renovarUrlTelegramPorItem && String(rawUrl).includes('api.telegram.org')) {
+          const renovada = await window.renovarUrlTelegramPorItem(rawUrl);
+          if (renovada) urlActual = renovada;
+        }
+      } catch (e) {}
+
+      const candidatos = [
+        `https://wsrv.nl/?url=${encodeURIComponent(urlActual)}&w=1400&output=jpg`,
+        `https://images.weserv.nl/?url=${encodeURIComponent(urlActual)}&w=1400&output=jpg`,
+        urlActual
+      ];
+
+      for (const cand of candidatos) {
+        try {
+          const img = await intentarCargar(cand);
+          if (img && img.width > 0) return img;
+        } catch (e) {}
+      }
+      return null;
+    }
+
+    function dibujarRectanguloRedondeado(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function dibujarEsquinasOrnamentales(ctx, x, y, w, h, color, len = 34) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 4;
+      const corners = [
+        [x, y, 1, 1],
+        [x + w, y, -1, 1],
+        [x, y + h, 1, -1],
+        [x + w, y + h, -1, -1]
+      ];
+      corners.forEach(([cx, cy, dx, dy]) => {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy + dy * len);
+        ctx.lineTo(cx, cy);
+        ctx.lineTo(cx + dx * len, cy);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+
+    function dibujarFotoEnMarcoPostal(ctx, img, bx, by, bw, bh, radius, fitMode, borderColor) {
+      ctx.save();
+      dibujarRectanguloRedondeado(ctx, bx, by, bw, bh, radius);
+      ctx.clip();
+
+      ctx.fillStyle = '#160d10';
+      ctx.fillRect(bx, by, bw, bh);
+
+      if (img) {
+        const imgRatio = img.width / img.height;
+        const boxRatio = bw / bh;
+
+        // Primero dibujamos un fondo ambiental desenfocado con la propia foto para que nunca queden bordes negros vacíos
+        let bgW, bgH, bgX, bgY;
+        if (imgRatio > boxRatio) {
+          bgH = bh;
+          bgW = bh * imgRatio;
+          bgX = bx - (bgW - bw) / 2;
+          bgY = by;
+        } else {
+          bgW = bw;
+          bgH = bw / imgRatio;
+          bgX = bx;
+          bgY = by - (bgH - bh) / 2;
+        }
+
+        if (fitMode === 'contain') {
+          ctx.save();
+          ctx.filter = 'blur(26px) brightness(0.52)';
+          ctx.drawImage(img, bgX - 24, bgY - 24, bgW + 48, bgH + 48);
+          ctx.restore();
+
+          // Ahora dibujamos la fotografía completa centrada sin cortar cabezas ni bordes
+          let fgW, fgH, fgX, fgY;
+          if (imgRatio > boxRatio) {
+            fgW = bw;
+            fgH = bw / imgRatio;
+            fgX = bx;
+            fgY = by + (bh - fgH) / 2;
+          } else {
+            fgH = bh;
+            fgW = bh * imgRatio;
+            fgX = bx + (bw - fgW) / 2;
+            fgY = by;
+          }
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.45)';
+          ctx.shadowBlur = 24;
+          ctx.drawImage(img, fgX, fgY, fgW, fgH);
+          ctx.restore();
+        } else {
+          // Modo Retrato 1:1 (llena todo el recuadro)
+          ctx.drawImage(img, bgX, bgY, bgW, bgH);
+        }
+      } else {
         ctx.fillStyle = '#D8B258';
-        ctx.font = 'bold 42px Georgia, serif';
+        ctx.font = 'bold 40px Georgia, serif';
         ctx.textAlign = 'center';
-        ctx.fillText('ESTRELLA DE LA MAÑANA ’26', canvas.width / 2, by + bh / 2);
+        ctx.fillText('ESTRELLA DE LA MAÑANA ’26', bx + bw / 2, by + bh / 2);
+      }
+      ctx.restore();
+
+      if (borderColor) {
+        ctx.save();
+        dibujarRectanguloRedondeado(ctx, bx, by, bw, bh, radius);
+        ctx.strokeStyle = borderColor;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    function renderizarPostalEnCanvas() {
+      const canvas = document.getElementById('postalPreviewCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width;
+      const H = canvas.height;
+      const { title, subtitle, dateStr, style, fitMode, loadedImg } = postalStudioState;
+
+      ctx.clearRect(0, 0, W, H);
+
+      const themes = {
+        imperial: {
+          bgGrad: ['#47111c', '#21070c'],
+          cardFill: null,
+          gold: '#e0bc63',
+          goldSoft: 'rgba(224, 188, 99, 0.38)',
+          titleColor: '#fffdf8',
+          subColor: '#f3dfb1',
+          badgeBg: '#681b28',
+          badgeText: '#f8e3a3'
+        },
+        polaroid: {
+          bgGrad: ['#e8dec8', '#d5c5a5'],
+          cardFill: '#fffdf8',
+          gold: '#b89242',
+          goldSoft: 'rgba(184, 146, 66, 0.35)',
+          titleColor: '#681b28',
+          subColor: '#5c4a1e',
+          badgeBg: '#681b28',
+          badgeText: '#fffdf8'
+        },
+        azul: {
+          bgGrad: ['#172554', '#0b1120'],
+          cardFill: null,
+          gold: '#e0bc63',
+          goldSoft: 'rgba(224, 188, 99, 0.38)',
+          titleColor: '#ffffff',
+          subColor: '#dbeafe',
+          badgeBg: '#1e3a8a',
+          badgeText: '#f8e3a3'
+        },
+        editorial: {
+          bgGrad: ['#fbf7ee', '#f2e8d5'],
+          cardFill: '#ffffff',
+          gold: '#9c782b',
+          goldSoft: 'rgba(156, 120, 43, 0.32)',
+          titleColor: '#2a1b1e',
+          subColor: '#681b28',
+          badgeBg: '#431019',
+          badgeText: '#f8e3a3'
+        }
+      };
+
+      const t = themes[style] || themes.imperial;
+
+      // 1. Fondo principal con degradado
+      const grad = ctx.createLinearGradient(0, 0, W, H);
+      grad.addColorStop(0, t.bgGrad[0]);
+      grad.addColorStop(1, t.bgGrad[1]);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Si es estilo Polaroid o Editorial, dibujamos la hoja física con sombra de estudio
+      if (t.cardFill) {
+        ctx.save();
+        ctx.shadowColor = 'rgba(28, 10, 14, 0.22)';
+        ctx.shadowBlur = 38;
+        ctx.shadowOffsetY = 14;
+        dibujarRectanguloRedondeado(ctx, 44, 44, W - 88, H - 88, 28);
+        ctx.fillStyle = t.cardFill;
+        ctx.fill();
+        ctx.restore();
       }
 
-      ctx.fillStyle = '#681B28';
-      ctx.font = 'bold 46px Georgia, serif';
+      // 2. Doble Marco de Filigrana y Esquinas Ornamentales
+      ctx.strokeStyle = t.goldSoft;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(34, 34, W - 68, H - 68);
+
+      ctx.strokeStyle = t.gold;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(52, 52, W - 104, H - 104);
+      dibujarEsquinasOrnamentales(ctx, 44, 44, W - 88, H - 88, t.gold, 38);
+
+      // 3. Encabezado de Gala
+      ctx.fillStyle = t.gold;
+      ctx.font = 'bold 21px "Plus Jakarta Sans", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(String(title || '').slice(0, 36), canvas.width / 2, 1085);
+      ctx.fillText('✦   P R O M O C I Ó N   E S T R E L L A   D E   L A   M A Ñ A N A   ’ 2 6   ✦', W / 2, 104);
 
-      ctx.fillStyle = '#6E5C5F';
+      // 4. Marco de la Fotografía (con paspartú marfil en estilos oscuros)
+      const bx = 92, by = 134, bw = 896, bh = 840;
+      if (!t.cardFill) {
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+        ctx.shadowBlur = 28;
+        dibujarRectanguloRedondeado(ctx, bx - 12, by - 12, bw + 24, bh + 24, 24);
+        ctx.fillStyle = '#fdfaf2';
+        ctx.fill();
+        ctx.restore();
+      }
+
+      dibujarFotoEnMarcoPostal(ctx, loadedImg, bx, by, bw, bh, 18, fitMode, t.gold);
+
+      // 5. Medalla / Sello Oficial superpuesto en el borde inferior de la foto
+      const pillW = 290, pillH = 46, pillX = (W - pillW) / 2, pillY = by + bh - 23;
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.3)';
+      ctx.shadowBlur = 12;
+      dibujarRectanguloRedondeado(ctx, pillX, pillY, pillW, pillH, 23);
+      ctx.fillStyle = t.badgeBg;
+      ctx.fill();
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = t.gold;
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.fillStyle = t.badgeText;
+      ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('★  RECUERDO OFICIAL EDM  ★', W / 2, pillY + 30);
+
+      // 6. Título Principal y Dedicatoria / Subtítulo
+      ctx.fillStyle = t.titleColor;
+      ctx.font = 'bold 48px "Fraunces", Georgia, serif';
+      ctx.textAlign = 'center';
+      const cleanTitle = String(title || 'Recuerdo de la Promo').trim().slice(0, 34);
+      ctx.fillText(cleanTitle, W / 2, 1072);
+
+      ctx.fillStyle = t.subColor;
       ctx.font = 'italic 30px Georgia, serif';
-      ctx.fillText(String(subtitle || '').slice(0, 54), canvas.width / 2, 1142);
+      const cleanSub = String(subtitle || 'Promoción Estrella de la Mañana 2026').trim().slice(0, 56);
+      ctx.fillText(`“${cleanSub}”`, W / 2, 1128);
 
-      ctx.fillStyle = '#B89242';
-      ctx.font = 'bold 22px sans-serif';
-      ctx.fillText(`★ PROMOCIÓN ESTRELLA DE LA MAÑANA ’26  •  ${dateStr || '2026'} ★`, canvas.width / 2, 1245);
+      // Línea divisoria ornamental
+      ctx.strokeStyle = t.goldSoft;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(W / 2 - 180, 1172);
+      ctx.lineTo(W / 2 + 180, 1172);
+      ctx.stroke();
 
+      // 7. Pie de Postal Conmemorativo
+      ctx.fillStyle = t.gold;
+      ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`ANUARIO & GALERÍA OFICIAL   •   ${String(dateStr || '2026').toUpperCase()}`, W / 2, 1222);
+
+      ctx.font = '600 17px "JetBrains Mono", monospace';
+      ctx.fillStyle = t.subColor;
+      ctx.globalAlpha = 0.8;
+      ctx.fillText('EDM ’26 — SIEMPRE BRILLANDO', W / 2, 1262);
+      ctx.globalAlpha = 1;
+    }
+
+    async function descargarPostalPolaroid(imageUrl, title, subtitle, dateStr) {
+      const modal = document.getElementById('postalStudioModal');
+      postalStudioState.imageUrl = imageUrl;
+      postalStudioState.title = title || 'Recuerdo de la Promo';
+      postalStudioState.subtitle = subtitle || 'Promoción EDM ’26';
+      postalStudioState.dateStr = dateStr || '2026';
+      postalStudioState.style = document.body.classList.contains('blue-theme') ? 'azul' : 'imperial';
+      postalStudioState.fitMode = 'contain';
+      postalStudioState.loadedImg = null;
+
+      actualizarBotonesEstiloPostal();
+      if (modal) modal.classList.remove('hidden');
+
+      renderizarPostalEnCanvas();
+      mostrarToast('Cargando foto en el Estudio de Postales...');
+      postalStudioState.loadedImg = await cargarImagenParaPostal(imageUrl);
+      renderizarPostalEnCanvas();
+    }
+
+    function seleccionarEstiloPostal(nuevoEstilo) {
+      postalStudioState.style = nuevoEstilo;
+      actualizarBotonesEstiloPostal();
+      renderizarPostalEnCanvas();
+    }
+
+    function alternarEncuadrePostal() {
+      postalStudioState.fitMode = postalStudioState.fitMode === 'contain' ? 'cover' : 'contain';
+      const btn = document.getElementById('btnPostalFitToggle');
+      if (btn) {
+        btn.innerText = postalStudioState.fitMode === 'contain'
+          ? 'Encuadre: Foto Completa ↺'
+          : 'Encuadre: Retrato 1:1 ↺';
+      }
+      renderizarPostalEnCanvas();
+    }
+
+    function actualizarBotonesEstiloPostal() {
+      document.querySelectorAll('.postal-style-btn').forEach(btn => {
+        const activo = btn.dataset.pstyle === postalStudioState.style;
+        btn.className = activo
+          ? 'postal-style-btn btn-interactive px-2.5 py-2 rounded-xl text-[11px] font-bold border cursor-pointer bg-[var(--wine-main)] text-white border-[var(--gold-main)]'
+          : 'postal-style-btn btn-interactive px-2.5 py-2 rounded-xl text-[11px] font-bold border cursor-pointer bg-white text-[var(--text-dark)] border-[var(--border-color)]';
+      });
+    }
+
+    function cerrarPostalStudio() {
+      document.getElementById('postalStudioModal')?.classList.add('hidden');
+    }
+
+    function confirmarDescargaPostalCanvas() {
+      const canvas = document.getElementById('postalPreviewCanvas');
+      if (!canvas) return;
       const a = document.createElement('a');
       a.href = canvas.toDataURL('image/png');
-      a.download = 'Postal_EDM26_' + String(title || 'Recuerdo').replace(/[^a-z0-9]/gi, '_').slice(0, 18) + '.png';
+      a.download = 'Postal_EDM26_' + String(postalStudioState.title || 'Recuerdo').replace(/[^a-z0-9]/gi, '_').slice(0, 20) + '.png';
       a.click();
+      mostrarToast('✨ Postal descargada en alta calidad');
     }
 
     function actualizarUIUsuario() {
@@ -2750,45 +3274,123 @@
     function renderBarraAlbumes() {
       const bar = document.getElementById('albumFilterBar');
       if (!bar) return;
-      bar.innerHTML = ALBUM_OPTIONS.map(alb => {
-        const activo = albumActual === alb;
-        return `
-          <button onclick="setAlbumFiltro('${alb}')" class="btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer ${activo ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)] hover:border-[var(--wine-main)]'}">
-            ${alb === 'Todos' ? 'Todos los Álbumes' : '#' + alb}
-          </button>
-        `;
-      }).join('');
+      const lista = obtenerListaAlbumes(true);
+      const esPersonalizado = albumActual !== 'Todos' && !DEFAULT_ALBUMS.includes(albumActual);
+      bar.innerHTML =
+        lista.map(alb => {
+          const safeAlb = alb.replace(/'/g, "\\'");
+          const activo = albumActual === alb;
+          return `
+            <button onclick="setAlbumFiltro('${safeAlb}')" class="btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer ${activo ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)] hover:border-[var(--wine-main)]'}">
+              ${alb === 'Todos' ? 'Todos los Álbumes' : '#' + alb}
+            </button>
+          `;
+        }).join('') +
+        (esPersonalizado
+          ? `<button type="button" onclick="eliminarAlbumActualAdmin()" class="btn-interactive px-3 py-1.5 rounded-xl text-xs font-semibold border border-[var(--danger)] text-[var(--danger)] bg-white whitespace-nowrap cursor-pointer">
+               🔒 Borrar #${albumActual}
+             </button>`
+          : '');
     }
 
     function renderHistoriasAlbumes() {
       const container = document.getElementById('storiesAlbumBar');
       if (!container) return;
 
-      container.innerHTML = ALBUM_OPTIONS.map(alb => {
-        const itemsAlbum = alb === 'Todos'
-          ? items
-          : items.filter(i => (i.album || inferirAlbum(i)) === alb);
-        const count = itemsAlbum.length;
-        const firstImgItem = itemsAlbum.find(i => !i.type || i.type.startsWith('image/')) || itemsAlbum[0];
-        const coverUrl = firstImgItem?.url || window.DEFAULT_LOGO_SVG;
-        const fid = firstImgItem?.fileId || '';
-        const iid = firstImgItem?.id || '';
-        const activo = albumActual === alb;
+      const lista = obtenerListaAlbumes(true);
+      container.innerHTML =
+        lista.map(alb => {
+          const safeAlb = alb.replace(/'/g, "\\'");
+          const itemsAlbum = alb === 'Todos'
+            ? items
+            : items.filter(i => (i.album || inferirAlbum(i)) === alb);
+          const count = itemsAlbum.length;
+          const firstImgItem = itemsAlbum.find(i => !i.type || i.type.startsWith('image/')) || itemsAlbum[0];
+          const coverUrl = firstImgItem?.url || window.DEFAULT_LOGO_SVG;
+          const fid = firstImgItem?.fileId || '';
+          const iid = firstImgItem?.id || '';
+          const activo = albumActual === alb;
 
-        return `
-          <button type="button" onclick="abrirHistoriaOFiltrarAlbum('${alb}')" class="group flex flex-col items-center gap-1.5 shrink-0 cursor-pointer focus:outline-none">
-            <div class="story-ring rounded-full ${activo ? 'ring-2 ring-[var(--wine-main)] scale-105' : 'opacity-90 hover:opacity-100'} transition-transform">
-              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#181214] border-2 border-[var(--card-bg)] overflow-hidden relative flex items-center justify-center">
-                <img src="${coverUrl}" alt="${alb}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${coverUrl}', '${iid}', '${fid}')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" />
-                <span class="absolute bottom-0 inset-x-0 bg-black/70 text-[10px] font-mono-num font-bold text-[var(--gold-bright)] text-center leading-tight py-0.5">${count}</span>
+          return `
+            <button type="button" onclick="abrirHistoriaOFiltrarAlbum('${safeAlb}')" class="group flex flex-col items-center gap-1.5 shrink-0 cursor-pointer focus:outline-none">
+              <div class="story-ring rounded-full ${activo ? 'ring-2 ring-[var(--wine-main)] scale-105' : 'opacity-90 hover:opacity-100'} transition-transform">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#181214] border-2 border-[var(--card-bg)] overflow-hidden relative flex items-center justify-center">
+                  <img src="${coverUrl}" alt="${alb}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${coverUrl}', '${iid}', '${fid}')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" />
+                  <span class="absolute bottom-0 inset-x-0 bg-black/70 text-[10px] font-mono-num font-bold text-[var(--gold-bright)] text-center leading-tight py-0.5">${count}</span>
+                </div>
               </div>
-            </div>
-            <span class="text-[11px] font-bold ${activo ? 'text-[var(--wine-main)] underline' : 'text-[var(--text-dark)]'} max-w-[76px] truncate">
-              ${alb === 'Todos' ? 'Todos' : alb}
-            </span>
-          </button>
-        `;
-      }).join('');
+              <span class="text-[11px] font-bold ${activo ? 'text-[var(--wine-main)] underline' : 'text-[var(--text-dark)]'} max-w-[76px] truncate">
+                ${alb === 'Todos' ? 'Todos' : alb}
+              </span>
+            </button>
+          `;
+        }).join('') +
+        `<button type="button" onclick="document.getElementById('newAlbumBox').classList.toggle('hidden'); document.getElementById('newAlbumNameInput')?.focus();" class="group flex flex-col items-center gap-1.5 shrink-0 cursor-pointer focus:outline-none">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[var(--bg-cream)] border-2 border-dashed border-[var(--gold-main)] flex items-center justify-center text-lg font-bold text-[var(--wine-main)] group-hover:scale-105 transition-transform">
+            +
+          </div>
+          <span class="text-[11px] font-bold text-[var(--wine-main)] max-w-[76px] truncate">Nuevo</span>
+        </button>`;
+    }
+
+    async function crearNuevoAlbumAdmin() {
+      const inp = document.getElementById('newAlbumNameInput');
+      const nombre = (inp?.value || '').trim().replace(/^#+/, '').trim();
+      if (!nombre) return mostrarToast('Escribe primero el nombre del nuevo álbum');
+
+      const existentes = obtenerListaAlbumes(true).map(a => a.toLowerCase());
+      if (existentes.includes(nombre.toLowerCase())) {
+        return mostrarToast('Ese álbum ya existe en la galería');
+      }
+
+      const pass = await solicitarClaveAdmin(`Ingresa la contraseña de administrador para crear el álbum #${nombre}:`);
+      if (pass === null) return;
+      if (pass !== ADMIN_PASSWORD) {
+        return mostrarToast('Contraseña de administrador incorrecta');
+      }
+
+      deletedIds.delete('alb_' + nombre.toLowerCase());
+      customAlbums.push(nombre);
+      registrarCambioUsuario('albums', { name: nombre, updatedAt: Date.now() });
+
+      if (inp) inp.value = '';
+      document.getElementById('newAlbumBox')?.classList.add('hidden');
+      albumActual = nombre;
+      actualizarSelectoresAlbum();
+      const sel = document.getElementById('uploadAlbumSelect');
+      if (sel) sel.value = nombre;
+      renderBarraAlbumes();
+      renderHistoriasAlbumes();
+      renderGaleria(true);
+      await sincronizarNube();
+      mostrarToast(`✨ Álbum #${nombre} creado y sincronizado`);
+    }
+
+    async function eliminarAlbumActualAdmin() {
+      if (albumActual === 'Todos' || DEFAULT_ALBUMS.includes(albumActual)) return;
+      const albBorrar = albumActual;
+      const pass = await solicitarClaveAdmin(`Ingresa la contraseña de administrador para eliminar el álbum #${albBorrar} (sus recuerdos pasarán a #General):`);
+      if (pass === null) return;
+      if (pass !== ADMIN_PASSWORD) {
+        return mostrarToast('Contraseña de administrador incorrecta');
+      }
+
+      registrarEliminado('alb_' + albBorrar.toLowerCase());
+      customAlbums = customAlbums.filter(a => String((typeof a === 'object' ? a.name : a) || '').toLowerCase() !== albBorrar.toLowerCase());
+      items.forEach(i => {
+        if ((i.album || '') === albBorrar) {
+          i.album = 'General';
+          i.updatedAt = Date.now();
+          registrarCambioUsuario('items', i);
+        }
+      });
+      albumActual = 'Todos';
+      actualizarSelectoresAlbum();
+      renderBarraAlbumes();
+      renderHistoriasAlbumes();
+      renderGaleria(true);
+      await sincronizarNube();
+      mostrarToast(`Álbum #${albBorrar} eliminado`);
     }
 
     function abrirHistoriaOFiltrarAlbum(alb) {
@@ -3026,7 +3628,7 @@
       }
 
       galeria.innerHTML = '';
-      const albumSelectOptions = ALBUM_OPTIONS.filter(a => a !== 'Todos');
+      const albumSelectOptions = obtenerListaAlbumes(false);
       const ahoraMs = Date.now();
       lista.forEach(({ item, index }, visualIdx) => {
         const esImagen = !item.type || item.type.startsWith('image/');
@@ -3791,10 +4393,20 @@
           slideshowTimer = setTimeout(() => navegarModal(1), 4200);
         }
       } else if (item.externalEmbedUrl) {
-        body.innerHTML = `
-          <div class="w-[92vw] max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
-            <iframe src="${item.externalEmbedUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
-          </div>`;
+        const esTikTok = item.externalEmbedUrl.includes('tiktok.com');
+        const linkOriginal = item.externalOriginalUrl || item.externalEmbedUrl;
+        body.innerHTML = esTikTok
+          ? `<div class="flex flex-col items-center justify-center gap-2 w-full h-full">
+               <div class="w-[82vw] max-w-[345px] h-[68vh] max-h-[610px] bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
+                 <iframe src="${item.externalEmbedUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen class="w-full h-full"></iframe>
+               </div>
+               <a href="${linkOriginal}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-[var(--wine-main)] text-white text-xs font-semibold border border-white/20">
+                 Abrir en TikTok ↗
+               </a>
+             </div>`
+          : `<div class="w-[92vw] max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
+               <iframe src="${item.externalEmbedUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
+             </div>`;
       } else {
         body.innerHTML = `<video id="modalVideoPlayer" src="${item.url}" controls autoplay playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
         const vid = document.getElementById('modalVideoPlayer');
