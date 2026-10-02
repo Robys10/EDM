@@ -16,6 +16,8 @@
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://api.telegram.org" crossorigin />
+  <link rel="preconnect" href="https://wsrv.nl" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -62,11 +64,35 @@
       }
     };
 
+    /* Generador de miniaturas WebP ultraligeras (25-40 KB) con caché mundial para que la cuadrícula y las historias carguen al instante */
+    window.obtenerUrlMiniatura = function(rawUrl, ancho = 500) {
+      if (!rawUrl || typeof rawUrl !== 'string') return window.DEFAULT_LOGO_SVG;
+      if (rawUrl.startsWith('data:') || rawUrl.startsWith('blob:')) return rawUrl;
+      if (/\.(mp4|mov|webm)(\?.*|#.*)?$/i.test(rawUrl)) return rawUrl;
+      if (rawUrl.includes('wsrv.nl') || rawUrl.includes('weserv.nl')) return rawUrl;
+      return `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=${ancho}&q=76&output=webp&il`;
+    };
+
     window.repararImagenTelegram = async function(img, rawUrl, itemId, explicitFileId) {
       if (!img || !rawUrl) return;
       const step = Number(img.dataset.errStep || '0');
       if (step === 0) {
         img.dataset.errStep = '1';
+        // Si falló la miniatura comprimida WebP, probamos primero la URL directa o renovada de Telegram
+        if (img.src && (img.src.includes('wsrv.nl') || img.src.includes('weserv.nl')) && rawUrl.startsWith('http')) {
+          img.src = rawUrl;
+          return;
+        }
+        try {
+          const nuevoUrl = await window.renovarUrlTelegramPorItem(rawUrl, itemId, explicitFileId);
+          if (nuevoUrl && nuevoUrl !== img.src) {
+            img.src = window.obtenerUrlMiniatura(nuevoUrl, 520);
+            return;
+          }
+        } catch (e) {}
+        img.src = 'https://wsrv.nl/?url=' + encodeURIComponent(rawUrl) + '&w=800&output=jpg';
+      } else if (step === 1) {
+        img.dataset.errStep = '2';
         try {
           const nuevoUrl = await window.renovarUrlTelegramPorItem(rawUrl, itemId, explicitFileId);
           if (nuevoUrl && nuevoUrl !== img.src) {
@@ -74,10 +100,7 @@
             return;
           }
         } catch (e) {}
-        img.src = 'https://wsrv.nl/?url=' + encodeURIComponent(rawUrl) + '&w=1000&output=jpg';
-      } else if (step === 1) {
-        img.dataset.errStep = '2';
-        img.src = 'https://images.weserv.nl/?url=' + encodeURIComponent(rawUrl) + '&w=1000&output=jpg';
+        img.src = 'https://images.weserv.nl/?url=' + encodeURIComponent(rawUrl) + '&w=800&output=jpg';
       } else {
         img.onerror = null;
         img.src = window.DEFAULT_LOGO_SVG;
@@ -906,6 +929,11 @@
         </div>
 
         <div id="galeria" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
+        <div id="galeriaLoadMoreBox" class="hidden pt-2 pb-4 flex flex-col items-center justify-center gap-2">
+          <button type="button" id="btnLoadMoreGaleria" onclick="cargarMasRecuerdosGaleria()" class="btn-interactive px-5 py-2.5 rounded-xl bg-[var(--card-bg)] border border-[var(--gold-main)] text-xs font-bold text-[var(--wine-main)] shadow-xs cursor-pointer">
+            Mostrar más recuerdos
+          </button>
+        </div>
       </section>
 
       <!-- 4. SECCIÓN PREMIOS DE LA PROMO '26 -->
@@ -3894,7 +3922,7 @@
         return `
           <article style="--i:${idx}" class="anim-card rounded-2xl bg-[var(--card-bg)] border ${esDistinguido ? 'border-[var(--gold-main)]' : 'border-[var(--border-color)]'} overflow-hidden flex flex-col">
             <div onclick="abrirModal('${m.photoUrl}', 'image/jpeg', '${safeName}', '${obtenerEtiquetaRol(mRole)}', '${m.id}', '${m.fileId || ''}')" class="w-full h-76 sm:h-84 bg-[#181214] overflow-hidden cursor-pointer relative group">
-              <img src="${m.photoUrl}" alt="${m.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${m.photoUrl}', '${m.id}', '${m.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />
+              <img src="${window.obtenerUrlMiniatura(m.photoUrl, 520)}" alt="${m.name}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${m.photoUrl}', '${m.id}', '${m.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />
               <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none"></div>
               <span class="absolute bottom-3 left-3.5 text-[11px] font-bold uppercase tracking-wider ${esDistinguido ? 'text-[var(--gold-bright)]' : 'text-white/95'}">
                 ${obtenerEtiquetaRol(mRole)}
@@ -4135,6 +4163,7 @@
           const count = itemsAlbum.length;
           const firstImgItem = itemsAlbum.find(i => !i.type || i.type.startsWith('image/')) || itemsAlbum[0];
           const coverUrl = firstImgItem?.url || window.DEFAULT_LOGO_SVG;
+          const thumbStoryUrl = firstImgItem?.url ? window.obtenerUrlMiniatura(coverUrl, 160) : window.DEFAULT_LOGO_SVG;
           const fid = firstImgItem?.fileId || '';
           const iid = firstImgItem?.id || '';
           const activo = albumActual === alb;
@@ -4144,7 +4173,7 @@
               <div class="relative">
                 <div class="story-ring rounded-full ${activo ? 'ring-2 ring-[var(--wine-main)] scale-105 shadow-md' : 'opacity-95 hover:opacity-100'} transition-transform">
                   <div class="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-full bg-[#181214] border-2 border-[var(--card-bg)] overflow-hidden relative flex items-center justify-center">
-                    <img src="${coverUrl}" alt="${alb}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${coverUrl}', '${iid}', '${fid}')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                    <img src="${thumbStoryUrl}" alt="${alb}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${coverUrl}', '${iid}', '${fid}')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                   </div>
                 </div>
                 <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[var(--wine-dark)] text-[var(--gold-bright)] border border-[var(--gold-main)] text-[10px] font-mono-num font-bold leading-none shadow-xs">${count}</span>
@@ -4488,9 +4517,10 @@
       box.classList.remove('hidden');
       grid.innerHTML = curados.map(({ item, idx }) => {
         const alb = item.album || inferirAlbum(item);
+        const thumbUrl = window.obtenerUrlMiniatura(item.url, 480);
         return `
           <div onclick="abrirModalPorIndice(${idx})" class="group h-44 sm:h-52 rounded-2xl overflow-hidden relative cursor-pointer bg-[#181214] border border-[var(--gold-hairline)] shadow-xs">
-            <img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]" />
+            <img src="${thumbUrl}" alt="${item.name}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]" />
             <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-xs border border-white/15 text-[var(--gold-bright)] text-[10px] font-semibold">#${alb}</span>
             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent p-3 text-white">
               <div class="font-display text-xs sm:text-sm font-bold truncate">${item.name}</div>
@@ -4517,11 +4547,12 @@
       container.classList.remove('hidden');
       track.innerHTML = destacados.map(({ item, idx }, rankIdx) => {
         const esImagen = !item.type || item.type.startsWith('image/');
+        const posterGuardado = !esImagen ? obtenerPosterVideoCacheado(item) : '';
         return `
           <div onclick="abrirModalPorIndice(${idx})" class="w-60 sm:w-72 h-38 sm:h-44 rounded-2xl overflow-hidden relative shrink-0 border border-[var(--gold-hairline)] cursor-pointer bg-[#181214] group shadow-sm">
             ${esImagen
-              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]" />`
-              : `<video data-src="${item.url}" muted playsinline preload="none" onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0;" class="lazy-video w-full h-full object-cover"></video>
+              ? `<img src="${window.obtenerUrlMiniatura(item.url, 480)}" alt="${item.name}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]" />`
+              : `<video data-src="${item.url.includes('#t=') ? item.url : (item.url + '#t=0.001')}" data-item-id="${item.id || ''}" ${posterGuardado ? `poster="${posterGuardado}"` : ''} muted playsinline preload="none" onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="activarPreviewVideoHover(this)" onmouseleave="detenerPreviewVideoHover(this)" class="lazy-video w-full h-full object-cover"></video>
                  <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/75 text-[var(--gold-bright)] text-[10px] font-semibold">▶ Video</span>`}
             <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/75 border border-[var(--gold-main)]/60 text-[var(--gold-bright)] text-[10px] font-mono-num font-bold">#${rankIdx + 1}</span>
             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent px-3.5 pt-7 pb-3 text-xs text-white flex items-end justify-between gap-2">
@@ -4533,10 +4564,154 @@
       observarVideosGaleria();
     }
 
+    const CANTIDAD_BLOQUE_GALERIA = 24;
+    let _cantidadMostradaGaleria = CANTIDAD_BLOQUE_GALERIA;
+    let _listaFiltradaActualGaleria = [];
+    let _galeriaScrollObserver = null;
+
+    function crearTarjetaDomGaleria({ item, index }, visualIdx, albumSelectOptions, ahoraMs) {
+      const esImagen = !item.type || item.type.startsWith('image/');
+      const dioLike = (item.likedBy || []).includes(userId);
+      const comentarios = item.comments || [];
+      const itemAlb = item.album || inferirAlbum(item);
+      const itemDateMs = new Date(item.date).getTime() || 0;
+      const esReciente = (ahoraMs - itemDateMs) >= 0 && (ahoraMs - itemDateMs) < 86400000;
+      const fecha = new Date(item.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+      const safeTitle = (item.name || 'Recuerdo').replace(/'/g, "\\'");
+
+      const itemKey = obtenerIdItem(item);
+      const estaSeleccionadoLote = modoOrganizarLote && seleccionadosLoteIds.has(itemKey);
+      const thumbImgUrl = esImagen ? window.obtenerUrlMiniatura(item.url, 500) : '';
+      const posterGuardado = !esImagen ? obtenerPosterVideoCacheado(item) : '';
+      const prioridadAlta = visualIdx < 4 ? 'fetchpriority="high"' : 'loading="lazy"';
+
+      const card = document.createElement('article');
+      card.style.setProperty('--i', Math.min(visualIdx % CANTIDAD_BLOQUE_GALERIA, 10));
+      card.className = `anim-card rounded-2xl bg-[var(--card-bg)] ${estaSeleccionadoLote ? 'border-2 border-[var(--gold-bright)] ring-2 ring-[var(--wine-main)]' : 'border border-[var(--border-color)]'} overflow-hidden flex flex-col`;
+      card.innerHTML = `
+        <div onclick="manejarToqueMediaGaleria(event, ${index})" class="media-thumb-box w-full h-64 sm:h-72 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
+          ${esImagen
+            ? `<img src="${thumbImgUrl}" alt="${item.name}" ${prioridadAlta} decoding="async" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />`
+            : (item.externalEmbedUrl && !item.externalEmbedUrl.includes('tiktok.com'))
+              ? `<img src="${window.obtenerUrlMiniatura(item.url, 500)}" alt="${item.name}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.classList.add('hidden');" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />
+                 <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent flex items-center justify-center pointer-events-none">
+                   <span class="w-12 h-12 rounded-full bg-black/75 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-lg group-hover:scale-110 transition-transform">▶</span>
+                 </div>
+                 <span class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/75 text-[var(--gold-bright)] text-[10px] font-semibold tracking-wide">▶ Video HD</span>`
+              : `<video data-src="${item.url.includes('#t=') ? item.url : (item.url + '#t=0.001')}" data-item-id="${item.id || ''}" ${posterGuardado ? `poster="${posterGuardado}"` : ''} preload="none" muted loop playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="activarPreviewVideoHover(this)" onmouseleave="detenerPreviewVideoHover(this)" class="lazy-video w-full h-full object-cover"></video>
+                 <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent flex items-center justify-center pointer-events-none">
+                   <span class="w-12 h-12 rounded-full bg-black/70 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-lg group-hover:scale-110 transition-transform">▶</span>
+                 </div>
+                 <span class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/70 text-[var(--gold-bright)] text-[10px] font-semibold tracking-wide">▶ Video</span>`}
+          ${modoOrganizarLote
+            ? `<span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg ${estaSeleccionadoLote ? 'bg-[var(--wine-main)] text-white border border-[var(--gold-bright)]' : 'bg-black/75 text-white border border-white/40'} text-xs font-bold shadow">${estaSeleccionadoLote ? '✓ Seleccionado' : '☐ Toca para elegir'}</span>`
+            : (esReciente ? `<span class="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-[var(--wine-main)]/90 border border-[var(--gold-bright)] text-[var(--gold-bright)] text-[10px] font-semibold shadow">✨ Nuevo</span>` : '')}
+          <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-black/65 backdrop-blur-xs border border-white/15 text-[var(--gold-bright)] text-[10px] font-semibold pointer-events-none">#${itemAlb}</span>
+          <span class="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-2.5 right-2.5 w-7 h-7 rounded-lg bg-black/65 border border-white/20 text-white text-xs flex items-center justify-center pointer-events-none">⤢</span>
+          <div id="heart-burst-${index}" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <span class="double-tap-heart text-5xl text-white drop-shadow-lg">♥</span>
+          </div>
+        </div>
+        <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+          <div class="space-y-1">
+            <h3 class="font-display text-[15.5px] font-bold text-[var(--text-dark)] tracking-tight truncate" title="${(item.name || '').replace(/"/g, '&quot;')}">${item.name}</h3>
+            <div class="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
+              <span class="font-semibold text-[var(--gold-main)]">${esImagen ? 'Fotografía' : 'Video'}</span>
+              <span aria-hidden="true">·</span>
+              <span class="font-mono-num">${fecha}</span>
+            </div>
+          </div>
+          <div id="edit-item-${index}" class="hidden space-y-2 p-2.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)]">
+            <input id="edit-item-name-${index}" type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="Título del recuerdo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
+            <div class="flex gap-1.5 min-w-0">
+              <select id="edit-item-album-${index}" class="flex-1 min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-2 py-1.5 text-xs font-semibold outline-none">
+                ${albumSelectOptions.map(a => `<option value="${a}" ${itemAlb === a ? 'selected' : ''}>Álbum: ${a}</option>`).join('')}
+              </select>
+              <button type="button" onclick="guardarEdicionItem(${index})" class="btn-interactive px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Guardar</button>
+            </div>
+          </div>
+          <div id="comments-${index}" class="hidden rounded-xl p-3 border border-[#e6d8b5] space-y-2 text-xs" style="background:var(--crema-fijo);color:var(--crema-text);">
+            <div class="max-h-28 overflow-y-auto space-y-1.5">
+              ${comentarios.length === 0 ? '<div class="text-center opacity-75">Sé el primero en dejar una dedicatoria</div>' : comentarios.map(c => `
+                <div class="bg-white rounded-lg px-2.5 py-1.5 border border-[#e6d8b5] flex justify-between gap-2">
+                  <span class="break-words"><strong>${c.author || ''}:</strong> ${c.text}</span>
+                  <button onclick="eliminarComentario(${index}, '${c.id}')" class="text-[var(--danger)] font-bold cursor-pointer">✕</button>
+                </div>`).join('')}
+            </div>
+            <form onsubmit="agregarComentario(event, ${index})" class="flex gap-1.5 min-w-0">
+              <input type="text" id="comment-input-${index}" placeholder="Escribe una dedicatoria..." class="flex-1 min-w-0 bg-white border border-[#e6d8b5] rounded-lg px-2.5 py-1 text-xs outline-none" />
+              <button type="submit" class="btn-interactive px-3 py-1 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Enviar</button>
+            </form>
+          </div>
+          <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2">
+              <button onclick="toggleLike(${index}, this)" class="btn-interactive px-2.5 py-1 rounded-lg font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)] hover:border-[var(--wine-main)]'}">
+                ♥ <span class="font-mono-num">${item.likes || 0}</span>
+              </button>
+              <button onclick="document.getElementById('comments-${index}').classList.toggle('hidden')" class="btn-interactive px-2 py-1 rounded-lg font-medium text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
+                Dedicatorias (<span class="font-mono-num">${comentarios.length}</span>)
+              </button>
+            </div>
+            <div class="flex items-center gap-2 text-[11px] sm:text-xs">
+              ${esImagen ? `<button onclick="descargarPostalPolaroid('${item.url}', '${safeTitle}', 'Álbum: ${itemAlb}', '${fecha}')" class="btn-interactive text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Postal</button>` : ''}
+              <button onclick="document.getElementById('edit-item-${index}').classList.toggle('hidden')" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-medium cursor-pointer">Editar</button>
+              <button onclick="eliminarItem(${index})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-medium cursor-pointer" title="Eliminar recuerdo">Borrar</button>
+            </div>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    function actualizarBotonCargarMasGaleria() {
+      const box = document.getElementById('galeriaLoadMoreBox');
+      const btn = document.getElementById('btnLoadMoreGaleria');
+      if (!box || !btn) return;
+      const restantes = _listaFiltradaActualGaleria.length - _cantidadMostradaGaleria;
+      if (restantes > 0) {
+        box.classList.remove('hidden');
+        btn.innerText = `Mostrar más recuerdos (${restantes} restantes)`;
+        if ('IntersectionObserver' in window) {
+          if (!_galeriaScrollObserver) {
+            _galeriaScrollObserver = new IntersectionObserver((entries) => {
+              if (entries.some(e => e.isIntersecting)) {
+                cargarMasRecuerdosGaleria();
+              }
+            }, { rootMargin: '550px 0px' });
+          }
+          _galeriaScrollObserver.observe(box);
+        }
+      } else {
+        box.classList.add('hidden');
+        if (_galeriaScrollObserver) _galeriaScrollObserver.unobserve(box);
+      }
+    }
+
+    function cargarMasRecuerdosGaleria() {
+      const galeria = document.getElementById('galeria');
+      if (!galeria || _cantidadMostradaGaleria >= _listaFiltradaActualGaleria.length) return;
+      const desde = _cantidadMostradaGaleria;
+      const hasta = Math.min(_listaFiltradaActualGaleria.length, desde + CANTIDAD_BLOQUE_GALERIA);
+      _cantidadMostradaGaleria = hasta;
+      const albumSelectOptions = obtenerListaAlbumes(false);
+      const ahoraMs = Date.now();
+      const frag = document.createDocumentFragment();
+      for (let i = desde; i < hasta; i++) {
+        frag.appendChild(crearTarjetaDomGaleria(_listaFiltradaActualGaleria[i], i, albumSelectOptions, ahoraMs));
+      }
+      galeria.appendChild(frag);
+      actualizarBotonCargarMasGaleria();
+      observarVideosGaleria();
+    }
+
     function renderGaleria(esFiltroManual = false) {
       _huellaGaleria = obtenerHuellaGaleria();
       const galeria = document.getElementById('galeria');
       if (!galeria) return;
+
+      if (esFiltroManual) {
+        _cantidadMostradaGaleria = CANTIDAD_BLOQUE_GALERIA;
+      }
 
       if (galeriaYaPintadaPrimeraVez && !esFiltroManual) {
         galeria.classList.add('no-reanim');
@@ -4559,120 +4734,125 @@
       if (sort === 'populares') lista.sort((a, b) => (b.item.likes || 0) - (a.item.likes || 0));
       if (sort === 'comentados') lista.sort((a, b) => (b.item.comments?.length || 0) - (a.item.comments?.length || 0));
 
+      _listaFiltradaActualGaleria = lista;
       modalListaActual = lista.map(x => x.index);
 
       if (lista.length === 0) {
         galeria.innerHTML = `<div class="col-span-full rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] p-12 text-center text-xs text-[var(--text-muted)]">No se encontraron recuerdos en este álbum o vista.</div>`;
+        actualizarBotonCargarMasGaleria();
         return;
       }
 
       galeria.innerHTML = '';
       const albumSelectOptions = obtenerListaAlbumes(false);
       const ahoraMs = Date.now();
-      lista.forEach(({ item, index }, visualIdx) => {
-        const esImagen = !item.type || item.type.startsWith('image/');
-        const dioLike = (item.likedBy || []).includes(userId);
-        const comentarios = item.comments || [];
-        const itemAlb = item.album || inferirAlbum(item);
-        const itemDateMs = new Date(item.date).getTime() || 0;
-        const esReciente = (ahoraMs - itemDateMs) >= 0 && (ahoraMs - itemDateMs) < 86400000;
-        const fecha = new Date(item.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-        const safeTitle = (item.name || 'Recuerdo').replace(/'/g, "\\'");
+      const limite = Math.min(lista.length, Math.max(CANTIDAD_BLOQUE_GALERIA, _cantidadMostradaGaleria));
+      _cantidadMostradaGaleria = limite;
 
-        const itemKey = obtenerIdItem(item);
-        const estaSeleccionadoLote = modoOrganizarLote && seleccionadosLoteIds.has(itemKey);
-
-        const card = document.createElement('article');
-        card.style.setProperty('--i', Math.min(visualIdx, 12));
-        card.className = `anim-card rounded-2xl bg-[var(--card-bg)] ${estaSeleccionadoLote ? 'border-2 border-[var(--gold-bright)] ring-2 ring-[var(--wine-main)]' : 'border border-[var(--border-color)]'} overflow-hidden flex flex-col`;
-        card.innerHTML = `
-          <div onclick="manejarToqueMediaGaleria(event, ${index})" class="media-thumb-box w-full h-64 sm:h-72 bg-[#181214] overflow-hidden cursor-pointer relative group select-none">
-            ${esImagen
-              ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />`
-              : (item.externalEmbedUrl && !item.externalEmbedUrl.includes('tiktok.com'))
-                ? `<img src="${item.url}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.classList.add('hidden');" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.035]" />
-                   <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent flex items-center justify-center pointer-events-none">
-                     <span class="w-12 h-12 rounded-full bg-black/75 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-lg group-hover:scale-110 transition-transform">▶</span>
-                   </div>
-                   <span class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/75 text-[var(--gold-bright)] text-[10px] font-semibold tracking-wide">▶ Video HD</span>`
-                : `<video data-src="${item.url.includes('#t=') ? item.url : (item.url + '#t=0.001')}" preload="none" muted loop playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" onmouseenter="if(!this.src)this.src=this.dataset.src;this.play().catch(()=>{})" onmouseleave="this.pause();this.currentTime=0.001;" class="lazy-video w-full h-full object-cover"></video>
-                   <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent flex items-center justify-center pointer-events-none">
-                     <span class="w-12 h-12 rounded-full bg-black/70 border border-[var(--gold-bright)] text-white flex items-center justify-center text-sm shadow-lg group-hover:scale-110 transition-transform">▶</span>
-                   </div>
-                   <span class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/70 text-[var(--gold-bright)] text-[10px] font-semibold tracking-wide">▶ Video</span>`}
-            ${modoOrganizarLote
-              ? `<span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg ${estaSeleccionadoLote ? 'bg-[var(--wine-main)] text-white border border-[var(--gold-bright)]' : 'bg-black/75 text-white border border-white/40'} text-xs font-bold shadow">${estaSeleccionadoLote ? '✓ Seleccionado' : '☐ Toca para elegir'}</span>`
-              : (esReciente ? `<span class="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-[var(--wine-main)]/90 border border-[var(--gold-bright)] text-[var(--gold-bright)] text-[10px] font-semibold shadow">✨ Nuevo</span>` : '')}
-            <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-black/65 backdrop-blur-xs border border-white/15 text-[var(--gold-bright)] text-[10px] font-semibold pointer-events-none">#${itemAlb}</span>
-            <span class="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-2.5 right-2.5 w-7 h-7 rounded-lg bg-black/65 border border-white/20 text-white text-xs flex items-center justify-center pointer-events-none">⤢</span>
-            <div id="heart-burst-${index}" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-              <span class="double-tap-heart text-5xl text-white drop-shadow-lg">♥</span>
-            </div>
-          </div>
-          <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
-            <div class="space-y-1">
-              <h3 class="font-display text-[15.5px] font-bold text-[var(--text-dark)] tracking-tight truncate" title="${(item.name || '').replace(/"/g, '&quot;')}">${item.name}</h3>
-              <div class="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
-                <span class="font-semibold text-[var(--gold-main)]">${esImagen ? 'Fotografía' : 'Video'}</span>
-                <span aria-hidden="true">·</span>
-                <span class="font-mono-num">${fecha}</span>
-              </div>
-            </div>
-            <div id="edit-item-${index}" class="hidden space-y-2 p-2.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)]">
-              <input id="edit-item-name-${index}" type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="Título del recuerdo..." class="w-full rounded-lg border border-[var(--border-color)] bg-white px-2.5 py-1.5 text-xs outline-none" />
-              <div class="flex gap-1.5 min-w-0">
-                <select id="edit-item-album-${index}" class="flex-1 min-w-0 rounded-lg border border-[var(--border-color)] bg-white px-2 py-1.5 text-xs font-semibold outline-none">
-                  ${albumSelectOptions.map(a => `<option value="${a}" ${itemAlb === a ? 'selected' : ''}>Álbum: ${a}</option>`).join('')}
-                </select>
-                <button type="button" onclick="guardarEdicionItem(${index})" class="btn-interactive px-3 py-1.5 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Guardar</button>
-              </div>
-            </div>
-            <div id="comments-${index}" class="hidden rounded-xl p-3 border border-[#e6d8b5] space-y-2 text-xs" style="background:var(--crema-fijo);color:var(--crema-text);">
-              <div class="max-h-28 overflow-y-auto space-y-1.5">
-                ${comentarios.length === 0 ? '<div class="text-center opacity-75">Sé el primero en dejar una dedicatoria</div>' : comentarios.map(c => `
-                  <div class="bg-white rounded-lg px-2.5 py-1.5 border border-[#e6d8b5] flex justify-between gap-2">
-                    <span class="break-words"><strong>${c.author || ''}:</strong> ${c.text}</span>
-                    <button onclick="eliminarComentario(${index}, '${c.id}')" class="text-[var(--danger)] font-bold cursor-pointer">✕</button>
-                  </div>`).join('')}
-              </div>
-              <form onsubmit="agregarComentario(event, ${index})" class="flex gap-1.5 min-w-0">
-                <input type="text" id="comment-input-${index}" placeholder="Escribe una dedicatoria..." class="flex-1 min-w-0 bg-white border border-[#e6d8b5] rounded-lg px-2.5 py-1 text-xs outline-none" />
-                <button type="submit" class="btn-interactive px-3 py-1 rounded-lg bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer shrink-0">Enviar</button>
-              </form>
-            </div>
-            <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2 text-xs">
-              <div class="flex items-center gap-2">
-                <button onclick="toggleLike(${index}, this)" class="btn-interactive px-2.5 py-1 rounded-lg font-semibold border cursor-pointer ${dioLike ? 'bg-[var(--wine-main)] text-white border-[var(--wine-main)]' : 'border-[var(--border-color)] text-[var(--wine-main)] hover:border-[var(--wine-main)]'}">
-                  ♥ <span class="font-mono-num">${item.likes || 0}</span>
-                </button>
-                <button onclick="document.getElementById('comments-${index}').classList.toggle('hidden')" class="btn-interactive px-2 py-1 rounded-lg font-medium text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">
-                  Dedicatorias (<span class="font-mono-num">${comentarios.length}</span>)
-                </button>
-              </div>
-              <div class="flex items-center gap-2 text-[11px] sm:text-xs">
-                ${esImagen ? `<button onclick="descargarPostalPolaroid('${item.url}', '${safeTitle}', 'Álbum: ${itemAlb}', '${fecha}')" class="btn-interactive text-[var(--wine-main)] font-semibold hover:underline cursor-pointer">Postal</button>` : ''}
-                <button onclick="document.getElementById('edit-item-${index}').classList.toggle('hidden')" class="btn-interactive text-[var(--text-muted)] hover:text-[var(--wine-main)] font-medium cursor-pointer">Editar</button>
-                <button onclick="eliminarItem(${index})" class="btn-interactive text-[#b54a4a] hover:text-[var(--danger)] font-medium cursor-pointer" title="Eliminar recuerdo">Borrar</button>
-              </div>
-            </div>
-          </div>
-        `;
-        galeria.appendChild(card);
-      });
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < limite; i++) {
+        frag.appendChild(crearTarjetaDomGaleria(lista[i], i, albumSelectOptions, ahoraMs));
+      }
+      galeria.appendChild(frag);
+      actualizarBotonCargarMasGaleria();
       observarVideosGaleria();
     }
 
-    /* IntersectionObserver para cargar videos únicamente cuando entran en pantalla (Ahorro de datos y batería) */
+    /* =========================================================
+       PORTADAS DE VIDEO EN CACHÉ Y COLA DE CARGA DE 1 EN 1
+       Evita que múltiples videos descarguen megabytes al mismo tiempo
+    ========================================================= */
+    const VIDEO_POSTER_CACHE_KEY = 'prom_edm26_video_posters_v1';
+    let _videoPosterMap = {};
+    try {
+      _videoPosterMap = JSON.parse(localStorage.getItem(VIDEO_POSTER_CACHE_KEY) || '{}') || {};
+    } catch (e) {
+      _videoPosterMap = {};
+    }
+
+    function obtenerPosterVideoCacheado(item) {
+      if (!item) return '';
+      return _videoPosterMap[item.id] || _videoPosterMap[item.url] || '';
+    }
+
+    function intentarGuardarPosterVideo(videoEl) {
+      try {
+        if (!videoEl || !videoEl.videoWidth || !videoEl.videoHeight) return;
+        const itemId = videoEl.dataset.itemId || videoEl.dataset.src || '';
+        if (!itemId || _videoPosterMap[itemId]) return;
+        const canvas = document.createElement('canvas');
+        const w = 240;
+        const h = Math.max(135, Math.round((videoEl.videoHeight / videoEl.videoWidth) * w));
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(videoEl, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+        if (dataUrl && dataUrl.length > 200 && dataUrl.length < 35000) {
+          _videoPosterMap[itemId] = dataUrl;
+          videoEl.poster = dataUrl;
+          const keys = Object.keys(_videoPosterMap);
+          if (keys.length > 75) {
+            delete _videoPosterMap[keys[0]];
+          }
+          localStorage.setItem(VIDEO_POSTER_CACHE_KEY, JSON.stringify(_videoPosterMap));
+        }
+      } catch (e) {}
+    }
+
+    function activarPreviewVideoHover(videoEl) {
+      if (!videoEl) return;
+      if (!videoEl.src && videoEl.dataset.src) {
+        videoEl.src = videoEl.dataset.src;
+      }
+      videoEl.play().catch(() => {});
+    }
+
+    function detenerPreviewVideoHover(videoEl) {
+      if (!videoEl) return;
+      videoEl.pause();
+      try { videoEl.currentTime = 0.001; } catch (e) {}
+    }
+
     let videoObserver = null;
+    const _colaMiniaturasVideo = [];
+    let _cargandoMiniaturaVideoAhora = false;
+
+    function procesarSiguienteMiniaturaVideo() {
+      if (_cargandoMiniaturaVideoAhora || _colaMiniaturasVideo.length === 0) return;
+      const v = _colaMiniaturasVideo.shift();
+      if (!v || !v.isConnected || v.src || v.poster) {
+        procesarSiguienteMiniaturaVideo();
+        return;
+      }
+      _cargandoMiniaturaVideoAhora = true;
+      let finalizado = false;
+      const liberar = () => {
+        if (finalizado) return;
+        finalizado = true;
+        _cargandoMiniaturaVideoAhora = false;
+        setTimeout(procesarSiguienteMiniaturaVideo, 120);
+      };
+      v.addEventListener('loadeddata', () => {
+        v.pause();
+        intentarGuardarPosterVideo(v);
+        liberar();
+      }, { once: true });
+      v.addEventListener('error', liberar, { once: true });
+      setTimeout(liberar, 2800);
+      v.preload = 'metadata';
+      v.src = v.dataset.src;
+    }
+
     function observarVideosGaleria() {
       const vids = document.querySelectorAll('video.lazy-video');
       if (!('IntersectionObserver' in window)) {
         vids.forEach(v => {
-          if (!v.src && v.dataset.src) {
-            v.src = v.dataset.src;
-            v.preload = 'metadata';
+          if (!v.src && !v.poster && v.dataset.src) {
+            _colaMiniaturasVideo.push(v);
           }
         });
+        procesarSiguienteMiniaturaVideo();
         return;
       }
       if (!videoObserver) {
@@ -4680,16 +4860,20 @@
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               const v = entry.target;
-              if (!v.src && v.dataset.src) {
-                v.src = v.dataset.src;
-                v.preload = 'metadata';
-              }
               obs.unobserve(v);
+              // Si ya tiene poster guardado en caché local, no descargamos nada de video hasta que el usuario lo reproduzca
+              if (v.poster) return;
+              if (!v.src && v.dataset.src && !_colaMiniaturasVideo.includes(v)) {
+                _colaMiniaturasVideo.push(v);
+                procesarSiguienteMiniaturaVideo();
+              }
             }
           });
-        }, { rootMargin: '160px 0px' });
+        }, { rootMargin: '120px 0px' });
       }
-      vids.forEach(v => videoObserver.observe(v));
+      vids.forEach(v => {
+        if (!v.src && !v.poster) videoObserver.observe(v);
+      });
     }
 
     /* Doble toque para dar ♥ Me gusta o 1 toque para abrir el Visor */
