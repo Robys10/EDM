@@ -1,0 +1,32 @@
+{
+  "id": "./",
+  "name": "Promoción Estrella de la Mañana ’26 — Anuario & Galería Oficial",
+  "short_name": "EDM ’26",
+  "description": "Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM).",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#681b28",
+  "background_color": "#22070c",
+  "icons": [
+    {
+      "src": "pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
