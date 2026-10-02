@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="only light" />
   <meta name="supported-color-schemes" content="light" />
-  <meta name="theme-color" content="#f4eee2" />
+  <meta name="theme-color" content="#681b28" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="EDM ’26" />
   <meta name="referrer" content="no-referrer" />
   <title>PROM ESTRELLA DE LA MAÑANA '26 — Mural Digital, Anuario & Galería Oficial</title>
   <meta name="description" content="Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM) con sincronización en la nube sin pérdida de datos." />
@@ -13,6 +17,9 @@
   <meta property="og:description" content="Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM)." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
+  <link rel="manifest" href="manifest.json" id="pwaManifestLink" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" id="pwaAppleTouchIcon" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -756,6 +763,11 @@
     </nav>
 
     <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <button id="btnPwaInstallTop" type="button" onclick="instalarAppPWA()" class="btn-interactive px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-xl border border-[var(--gold-main)] bg-[var(--bg-cream)] text-[var(--wine-main)] hover:bg-[var(--wine-main)] hover:text-white flex items-center gap-1.5 whitespace-nowrap cursor-pointer shadow-xs">
+        <span>📲</span>
+        <span class="hidden xs:inline sm:inline">Instalar App</span>
+      </button>
+
       <button type="button" onclick="alternarTemaAzul()" class="btn-interactive px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-xl border border-[var(--border-color)] bg-white/80 text-[var(--text-dark)] hover:border-[var(--wine-main)] hover:text-[var(--wine-main)] flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
         <span class="w-2 h-2 rounded-full bg-[var(--wine-main)]"></span>
         <span id="themeBtnTopText">Tema Azul</span>
@@ -839,11 +851,15 @@
       </div>
 
       <!-- Estado de Nube y Tema -->
-      <div class="pt-4 border-t border-[var(--border-color)] space-y-3">
+      <div class="pt-4 border-t border-[var(--border-color)] space-y-2.5">
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
           <span id="statusText" class="truncate">Sincronizando...</span>
           <button type="button" onclick="cargarDesdeNube(true)" class="btn-interactive font-semibold hover:text-[var(--wine-main)] cursor-pointer shrink-0">Recargar</button>
         </div>
+        <button id="btnPwaInstallSide" type="button" onclick="instalarAppPWA()" class="btn-interactive w-full px-3.5 py-2.5 rounded-xl bg-[var(--wine-main)] text-white border border-[var(--gold-main)]/40 text-xs font-semibold flex items-center justify-between cursor-pointer shadow-xs">
+          <span>📲 Instalar App en Celular</span>
+          <span class="text-[10px] text-[#f2d078] font-bold">PWA</span>
+        </button>
         <button type="button" onclick="alternarTemaAzul()" class="btn-interactive w-full px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-dark)] hover:border-[var(--wine-main)] flex items-center justify-between cursor-pointer">
           <span id="themeBtnSideText">Tema Azul Real</span>
           <span class="text-[11px] text-[var(--text-muted)]">Cambiar</span>
@@ -6351,6 +6367,220 @@
       }
     });
 
+    /* =========================================================
+       INSTALACIÓN DE APP (PWA) EN CELULAR Y PC (CHROME / SAFARI / GITHUB PAGES)
+    ========================================================= */
+    let _deferredPwaPrompt = null;
+
+    function esModoStandaloneInstalado() {
+      return (
+        (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+        window.navigator.standalone === true
+      );
+    }
+
+    function actualizarVisibilidadBotonesPWA() {
+      const instalado = esModoStandaloneInstalado();
+      const topBtn = document.getElementById('btnPwaInstallTop');
+      const sideBtn = document.getElementById('btnPwaInstallSide');
+      if (topBtn) topBtn.classList.toggle('hidden', instalado);
+      if (sideBtn) sideBtn.classList.toggle('hidden', instalado);
+    }
+
+    // Genera íconos PNG 192x192 y 512x512 dinámicos a partir del escudo por si el usuario solo sube index.html a GitHub Pages
+    function generarIconoPngDesdeCanvas(size) {
+      return new Promise((resolve) => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          const grad = ctx.createLinearGradient(0, 0, size, size);
+          grad.addColorStop(0, '#681b28');
+          grad.addColorStop(1, '#22070c');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, size, size);
+
+          ctx.strokeStyle = '#d8b258';
+          ctx.lineWidth = Math.max(4, size * 0.028);
+          ctx.beginPath();
+          ctx.arc(size / 2, size / 2, size * 0.43, 0, Math.PI * 2);
+          ctx.stroke();
+
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            const pad = size * 0.14;
+            ctx.drawImage(img, pad, pad, size - pad * 2, size - pad * 2);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = () => {
+            const fallbackImg = new Image();
+            fallbackImg.onload = () => {
+              const pad = size * 0.12;
+              ctx.drawImage(fallbackImg, pad, pad, size - pad * 2, size - pad * 2);
+              resolve(canvas.toDataURL('image/png'));
+            };
+            fallbackImg.onerror = () => resolve('');
+            fallbackImg.src = window.DEFAULT_LOGO_SVG;
+          };
+          img.src = 'logo.png';
+        } catch (e) {
+          resolve('');
+        }
+      });
+    }
+
+    async function asegurarManifestYServiceWorkerGitHubPages() {
+      // 1. Registrar Service Worker (tanto en Vite como en GitHub Pages)
+      if ('serviceWorker' in navigator) {
+        try {
+          await navigator.serviceWorker.register('./sw.js', { scope: './' });
+        } catch (err) {
+          // Si en GitHub Pages el usuario no subió sw.js, el navegador sigue funcionando normal
+        }
+      }
+
+      // 2. Verificar si manifest.json carga; si no existe en el repo de GitHub Pages, inyectar un Manifest dinámico con íconos 192 y 512 PNG
+      try {
+        const res = await fetch('./manifest.json', { method: 'HEAD' });
+        if (res.ok) return;
+      } catch (e) {}
+
+      const [icon192, icon512] = await Promise.all([
+        generarIconoPngDesdeCanvas(192),
+        generarIconoPngDesdeCanvas(512)
+      ]);
+      if (!icon192 || !icon512) return;
+
+      const appleLink = document.getElementById('pwaAppleTouchIcon');
+      if (appleLink) appleLink.href = icon192;
+
+      const dynManifest = {
+        id: window.location.pathname || './',
+        name: 'Promoción Estrella de la Mañana ’26 — Anuario & Galería Oficial',
+        short_name: 'EDM ’26',
+        description: 'Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026.',
+        start_url: window.location.href.split('#')[0],
+        scope: window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1),
+        display: 'standalone',
+        theme_color: '#681b28',
+        background_color: '#22070c',
+        icons: [
+          { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' }
+        ]
+      };
+      const blob = new Blob([JSON.stringify(dynManifest)], { type: 'application/manifest+json' });
+      const manifestLink = document.getElementById('pwaManifestLink');
+      if (manifestLink) manifestLink.href = URL.createObjectURL(blob);
+    }
+
+    function inicializarPWAInstalable() {
+      actualizarVisibilidadBotonesPWA();
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        _deferredPwaPrompt = e;
+        actualizarVisibilidadBotonesPWA();
+      });
+
+      window.addEventListener('appinstalled', () => {
+        _deferredPwaPrompt = null;
+        actualizarVisibilidadBotonesPWA();
+        cerrarModalGuiaPWA();
+        lanzarConfetiDorado();
+        mostrarToast('🎉 ¡App EDM ’26 instalada en tu dispositivo!');
+      });
+
+      asegurarManifestYServiceWorkerGitHubPages();
+    }
+
+    async function instalarAppPWA() {
+      // Si Google Chrome ya tiene listo el aviso nativo de instalación, lo lanzamos al instante
+      if (_deferredPwaPrompt) {
+        try {
+          await _deferredPwaPrompt.prompt();
+          const choice = await _deferredPwaPrompt.userChoice;
+          if (choice && choice.outcome === 'accepted') {
+            _deferredPwaPrompt = null;
+            actualizarVisibilidadBotonesPWA();
+          }
+          return;
+        } catch (err) {}
+      }
+      // Si estamos en iPhone (Safari) o Chrome aún requiere abrir desde el menú ⋮, mostramos la guía paso a paso
+      abrirModalGuiaPWA();
+    }
+
+    function abrirModalGuiaPWA() {
+      let modal = document.getElementById('pwaInstallGuideModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'pwaInstallGuideModal';
+        modal.className = 'fixed inset-0 z-[130] bg-black/70 backdrop-blur-xs flex items-center justify-center p-4';
+        modal.onclick = (e) => { if (e.target === modal) cerrarModalGuiaPWA(); };
+        document.body.appendChild(modal);
+      }
+      const ua = (navigator.userAgent || '').toLowerCase();
+      const esIOS = /iphone|ipad|ipod/.test(ua);
+      const enIframe = window.self !== window.top;
+
+      modal.innerHTML = `
+        <div class="anim-modal max-w-md w-full rounded-2xl bg-[var(--card-bg)] border-2 border-[var(--gold-main)] p-5 sm:p-6 shadow-2xl space-y-4 text-[var(--text-dark)]">
+          <div class="flex items-center justify-between gap-3 border-b border-[var(--border-color)] pb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-xl bg-[var(--wine-main)] text-[#f2d078] flex items-center justify-center text-lg font-bold shrink-0">📲</div>
+              <div>
+                <h3 class="font-display text-base sm:text-lg font-bold text-[var(--wine-main)]">Instalar App «EDM ’26»</h3>
+                <p class="text-[11px] text-[var(--text-muted)]">Acceso directo a pantalla completa en tu celular</p>
+              </div>
+            </div>
+            <button type="button" onclick="cerrarModalGuiaPWA()" class="w-8 h-8 rounded-lg border border-[var(--border-color)] text-xs font-bold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">✕</button>
+          </div>
+
+          ${enIframe ? `
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-900 leading-relaxed">
+              <strong>Nota importante:</strong> Estás viendo la página dentro de una ventana de vista previa. Para que Google Chrome te deje instalar la App en tu celular, ábrela desde tu <strong>enlace directo de GitHub Pages</strong> (o abre el enlace compartido en una pestaña directa de Chrome).
+            </div>
+          ` : ''}
+
+          ${esIOS ? `
+            <div class="space-y-2.5 text-xs sm:text-sm leading-relaxed">
+              <p class="font-semibold text-[var(--wine-main)]">Cómo instalarla en tu iPhone / iPad (Safari):</p>
+              <ol class="list-decimal list-inside space-y-2 text-[var(--text-dark)] bg-[var(--bg-cream)] p-3.5 rounded-xl border border-[var(--border-color)]">
+                <li>Toca el botón <strong>Compartir</strong> <span class="px-1.5 py-0.5 rounded bg-white border text-[11px] font-mono">↑</span> en la barra de Safari.</li>
+                <li>Desliza hacia abajo y selecciona <strong>«Agregar a inicio»</strong>.</li>
+                <li>Toca <strong>«Agregar»</strong> arriba a la derecha ¡y listo!</li>
+              </ol>
+            </div>
+          ` : `
+            <div class="space-y-2.5 text-xs sm:text-sm leading-relaxed">
+              <p class="font-semibold text-[var(--wine-main)]">Cómo instalarla en Android con Google Chrome:</p>
+              <ol class="list-decimal list-inside space-y-2 text-[var(--text-dark)] bg-[var(--bg-cream)] p-3.5 rounded-xl border border-[var(--border-color)]">
+                <li>Abre tu enlace directo en <strong>Google Chrome</strong>.</li>
+                <li>Toca los tres puntos <strong>⋮</strong> arriba a la derecha del navegador.</li>
+                <li>Elige <strong>«Instalar aplicación»</strong> o <strong>«Agregar a la pantalla principal»</strong>.</li>
+              </ol>
+              <p class="text-[11px] text-[var(--text-muted)]">
+                💡 <em>Si subes tu código a <strong>GitHub Pages</strong>, asegúrate de subir también los archivos <code>manifest.json</code>, <code>sw.js</code>, <code>pwa-192x192.png</code> y <code>pwa-512x512.png</code> junto a tu <code>index.html</code> para que aparezca el instalador oficial de Android.</em>
+              </p>
+            </div>
+          `}
+
+          <button type="button" onclick="cerrarModalGuiaPWA()" class="btn-interactive w-full py-2.5 rounded-xl bg-[var(--wine-main)] text-white text-xs font-semibold cursor-pointer">
+            Entendido
+          </button>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function cerrarModalGuiaPWA() {
+      const modal = document.getElementById('pwaInstallGuideModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
     let _splashCerrado = false;
     const _splashInicioTs = Date.now();
 
@@ -6435,6 +6665,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       actualizarUIUsuario();
       inicializarTemaAzul();
+      inicializarPWAInstalable();
       restaurarSeccionYAlbumAlCargar();
       habilitarScrollMouseYArrastrePC();
       inicializarTilt3DEnPC();
