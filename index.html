@@ -357,7 +357,7 @@
     }
     @keyframes crestFloat {
       0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); box-shadow: 0 10px 24px -6px rgba(184, 146, 66, 0.28); }
-      50% { transform: translate3d(0, -6px, 0) rotate(1.5deg); box-shadow: 0 18px 32px -6px rgba(184, 146, 66, 0.48); }
+      50% { transform: translate3d(0, -6px, 0) rotate(0deg); box-shadow: 0 18px 32px -6px rgba(184, 146, 66, 0.48); }
     }
     @keyframes liquidGoldText {
       0% { background-position: 0% 50%; }
@@ -703,8 +703,8 @@
         <!-- Anillo astral interior punteado (gira en sentido antihorario) -->
         <div class="splash-orbit-ring-reverse pointer-events-none absolute -inset-3.5 sm:-inset-4 rounded-full border-[1.5px] border-dashed border-[#f2d078]/75"></div>
         <!-- Escudo con barrido de lámina de oro -->
-        <div class="splash-shield-box w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-[#fffdf9] border-2 border-[#f2d078] p-3 flex items-center justify-center relative">
-          <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
+<div class="splash-shield-box w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-[#fffdf9] border-2 border-[#f2d078] p-0 overflow-hidden flex items-center justify-center relative">
+          <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-cover" />
         </div>
       </div>
 
@@ -745,8 +745,8 @@
   <!-- TOP BAR (3-Zone Contract adaptable a cualquier pantalla de celular) -->
   <header class="sticky top-0 z-30 h-14 sm:h-16 w-full max-w-full header-glass border-b border-[var(--border-color)] px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
     <a href="#inicio" onclick="cambiarSeccion('inicio'); return false;" class="flex items-center gap-2.5 min-w-0 group">
-      <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white border border-[var(--gold-main)] p-1 flex items-center justify-center shrink-0 shadow-xs">
-        <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo EDM 26" class="logo-dinamico w-full h-full object-contain" />
+<div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white border border-[var(--gold-main)] p-0 overflow-hidden flex items-center justify-center shrink-0 shadow-xs">
+        <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo EDM 26" class="logo-dinamico w-full h-full object-cover" />
       </div>
       <div class="min-w-0">
         <div class="font-display text-sm sm:text-base md:text-lg font-bold tracking-tight text-[var(--wine-main)] truncate">
@@ -790,8 +790,8 @@
       <div class="space-y-6">
         <div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]">
           <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl bg-white border border-[var(--gold-main)] p-1 flex items-center justify-center shrink-0">
-              <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
+<div class="w-12 h-12 rounded-xl bg-white border border-[var(--gold-main)] p-0 overflow-hidden flex items-center justify-center shrink-0">
+              <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-cover" />
             </div>
             <div>
               <div class="text-xs font-extrabold text-[var(--wine-main)]">Estrella ’26</div>
@@ -871,8 +871,8 @@
       <!-- 1. SECCIÓN INICIO -->
       <section id="seccion-inicio" class="page-section anim-section space-y-5 sm:space-y-7">
         <div class="editorial-hero rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-5 sm:gap-7 md:gap-9 relative overflow-hidden">
-          <div class="crest-float w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl bg-white border-2 border-[var(--gold-main)] p-2.5 shadow-md ring-4 ring-[var(--gold-main)]/15 flex items-center justify-center shrink-0">
-            <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
+         <div class="crest-float w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl bg-white border-2 border-[var(--gold-main)] p-0 overflow-hidden shadow-md ring-4 ring-[var(--gold-main)]/15 flex items-center justify-center shrink-0">
+            <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-cover" />
           </div>
           <div class="flex-1 min-w-0 w-full text-center md:text-left space-y-3">
             <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--gold-main)]">
