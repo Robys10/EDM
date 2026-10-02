@@ -496,9 +496,238 @@
       user-select: none;
       -webkit-user-drag: none;
     }
+
+    /* Telón de Apertura Épica de Gala (Doble Cortina Real + Sello Astral 3D + Destello Supernova) */
+    #galaEntranceSplash {
+      perspective: 1200px;
+      transition: visibility 950ms;
+    }
+    .splash-curtain-panel {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50.5%;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(216, 178, 88, 0.16) 0%, rgba(216, 178, 88, 0) 68%),
+        linear-gradient(165deg, var(--wine-dark) 0%, #2a0910 52%, #160408 100%);
+      transition: transform 880ms cubic-bezier(0.77, 0, 0.175, 1), opacity 820ms ease;
+      will-change: transform, opacity;
+      z-index: 1;
+      overflow: hidden;
+    }
+    body.blue-theme .splash-curtain-panel {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(216, 178, 88, 0.16) 0%, rgba(216, 178, 88, 0) 68%),
+        linear-gradient(165deg, #0f172a 0%, #0b1324 52%, #050811 100%);
+    }
+    /* Textura sutil de pliegues de terciopelo de gala */
+    .splash-curtain-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.018) 0px,
+        rgba(0, 0, 0, 0.16) 28px,
+        rgba(216, 178, 88, 0.03) 56px
+      );
+      pointer-events: none;
+    }
+    .splash-curtain-left {
+      left: 0;
+      border-right: 1.5px solid rgba(216, 178, 88, 0.65);
+      box-shadow: 12px 0 42px rgba(0, 0, 0, 0.65);
+    }
+    .splash-curtain-right {
+      right: 0;
+      border-left: 1.5px solid rgba(216, 178, 88, 0.65);
+      box-shadow: -12px 0 42px rgba(0, 0, 0, 0.65);
+    }
+    /* Apertura dramática de las dos hojas del telón real */
+    #galaEntranceSplash.splash-hide {
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #galaEntranceSplash.splash-hide .splash-curtain-left {
+      transform: translate3d(-104%, 0, 0) rotateY(8deg);
+    }
+    #galaEntranceSplash.splash-hide .splash-curtain-right {
+      transform: translate3d(104%, 0, 0) rotateY(-8deg);
+    }
+    #galaEntranceSplash.splash-hide .splash-center-stage {
+      opacity: 0;
+      transform: scale3d(1.28, 1.28, 1) translate3d(0, -12px, 0);
+      filter: blur(4px);
+    }
+    #galaEntranceSplash.splash-hide .splash-supernova-flash {
+      animation: splashSupernovaBurst 760ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes splashSupernovaBurst {
+      0% { opacity: 0; transform: scale3d(0.4, 0.4, 1); }
+      32% { opacity: 0.95; transform: scale3d(1.35, 1.35, 1); }
+      100% { opacity: 0; transform: scale3d(2.4, 2.4, 1); }
+    }
+    @keyframes splashCrestReveal3D {
+      0% { opacity: 0; transform: perspective(900px) translate3d(0, 34px, -90px) rotateY(-28deg) rotateX(14deg) scale3d(0.68, 0.68, 1); }
+      65% { opacity: 1; transform: perspective(900px) translate3d(0, -4px, 18px) rotateY(5deg) rotateX(-3deg) scale3d(1.05, 1.05, 1); }
+      100% { opacity: 1; transform: perspective(900px) translate3d(0, 0, 0) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1); }
+    }
+    @keyframes splashOrbitSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes splashOrbitSpinReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    @keyframes splashSunbeamsPulse {
+      0%, 100% { opacity: 0.38; transform: scale3d(0.94, 0.94, 1) rotate(0deg); }
+      50% { opacity: 0.72; transform: scale3d(1.08, 1.08, 1) rotate(18deg); }
+    }
+    @keyframes splashShieldFoilSweep {
+      0% { transform: translate3d(-150%, 0, 0) skewX(-24deg); }
+      45%, 100% { transform: translate3d(230%, 0, 0) skewX(-24deg); }
+    }
+    @keyframes splashTrackingExpand {
+      0% { opacity: 0; letter-spacing: 0.04em; transform: translate3d(0, 10px, 0); }
+      100% { opacity: 1; letter-spacing: 0.26em; transform: translate3d(0, 0, 0); }
+    }
+    .splash-center-stage {
+      transition: opacity 460ms cubic-bezier(0.22, 1, 0.36, 1), transform 640ms cubic-bezier(0.22, 1, 0.36, 1), filter 460ms ease;
+      will-change: opacity, transform;
+    }
+    .splash-card-enter {
+      animation: splashCrestReveal3D 860ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+    .splash-orbit-ring {
+      animation: splashOrbitSpin 14s linear infinite;
+    }
+    .splash-orbit-ring-reverse {
+      animation: splashOrbitSpinReverse 9.5s linear infinite;
+    }
+    .splash-sunbeams {
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(242, 208, 120, 0.22) 15deg,
+        transparent 30deg,
+        transparent 60deg,
+        rgba(242, 208, 120, 0.18) 75deg,
+        transparent 90deg,
+        transparent 120deg,
+        rgba(242, 208, 120, 0.22) 135deg,
+        transparent 150deg,
+        transparent 180deg,
+        rgba(242, 208, 120, 0.18) 195deg,
+        transparent 210deg,
+        transparent 240deg,
+        rgba(242, 208, 120, 0.22) 255deg,
+        transparent 270deg,
+        transparent 300deg,
+        rgba(242, 208, 120, 0.18) 315deg,
+        transparent 330deg,
+        transparent 360deg
+      );
+      animation: splashSunbeamsPulse 6s ease-in-out infinite;
+    }
+    .splash-shield-box {
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 50px rgba(216, 178, 88, 0.38), 0 20px 45px rgba(0, 0, 0, 0.65);
+    }
+    .splash-shield-box::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 55%;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255, 244, 206, 0.72) 50%, rgba(255,255,255,0) 100%);
+      animation: splashShieldFoilSweep 2.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      pointer-events: none;
+    }
+    .splash-kicker-expand {
+      animation: splashTrackingExpand 900ms cubic-bezier(0.22, 1, 0.36, 1) 120ms backwards;
+    }
+    .splash-title-gold {
+      background: linear-gradient(110deg, #fffdf9 0%, #f7e2a4 28%, #d8b258 48%, #fffdf9 54%, #c99833 72%, #fffdf9 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: liquidGoldText 4.2s ease-in-out infinite;
+      filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.45));
+    }
   </style>
 </head>
 <body class="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col pb-20 md:pb-0 relative">
+  <!-- TELÓN DE ENTRADA ÉPICA DE GALA (Doble Cortina Real + Sello Astral 3D + Sincronización en Vivo) -->
+  <div id="galaEntranceSplash" class="fixed inset-0 z-[120] flex flex-col items-center justify-center p-6 select-none overflow-hidden">
+    <!-- Hoja Izquierda del Telón Real -->
+    <div class="splash-curtain-panel splash-curtain-left">
+      <div class="pointer-events-none absolute top-4 bottom-4 left-4 right-0 rounded-l-2xl border-y border-l border-[#d8b258]/35"></div>
+      <div class="pointer-events-none absolute top-7 left-7 text-[#d8b258]/45 text-xs font-display tracking-[0.25em] hidden sm:block">✦ MMXXVI</div>
+      <div class="pointer-events-none absolute bottom-7 left-7 text-[#d8b258]/45 text-xs font-display tracking-[0.25em] hidden sm:block">✦ EDM ’26</div>
+    </div>
+    <!-- Hoja Derecha del Telón Real -->
+    <div class="splash-curtain-panel splash-curtain-right">
+      <div class="pointer-events-none absolute top-4 bottom-4 right-4 left-0 rounded-r-2xl border-y border-r border-[#d8b258]/35"></div>
+      <div class="pointer-events-none absolute top-7 right-7 text-[#d8b258]/45 text-xs font-display tracking-[0.25em] hidden sm:block">PROMO ’26 ✦</div>
+      <div class="pointer-events-none absolute bottom-7 right-7 text-[#d8b258]/45 text-xs font-display tracking-[0.25em] hidden sm:block">ANUARIO OFICIAL ✦</div>
+    </div>
+
+    <!-- Destello Supernova Dorado al abrirse las puertas -->
+    <div class="splash-supernova-flash pointer-events-none absolute w-[460px] h-[460px] sm:w-[680px] sm:h-[680px] rounded-full opacity-0 z-[15]" style="background: radial-gradient(circle, rgba(255,248,220,0.95) 0%, rgba(216,178,88,0.55) 32%, rgba(216,178,88,0) 70%);"></div>
+
+    <!-- Escenario Central de Ceremonia -->
+    <div class="splash-center-stage splash-card-enter max-w-lg w-full flex flex-col items-center text-center space-y-6 relative z-20">
+      <!-- Astrolabio de la Estrella de la Mañana + Escudo Oficial -->
+      <div class="relative flex items-center justify-center my-2">
+        <!-- Halo de rayos dorados -->
+        <div class="splash-sunbeams pointer-events-none absolute -inset-12 sm:-inset-16 rounded-full blur-md"></div>
+        <!-- Anillo astral exterior (gira en sentido horario) -->
+        <div class="splash-orbit-ring pointer-events-none absolute -inset-7 sm:-inset-9 rounded-full border border-[#d8b258]/40 flex items-center justify-between px-1">
+          <span class="text-[10px] text-[#f2d078] drop-shadow">✦</span>
+          <span class="text-[10px] text-[#f2d078] drop-shadow">✦</span>
+        </div>
+        <!-- Anillo astral interior punteado (gira en sentido antihorario) -->
+        <div class="splash-orbit-ring-reverse pointer-events-none absolute -inset-3.5 sm:-inset-4 rounded-full border-[1.5px] border-dashed border-[#f2d078]/75"></div>
+        <!-- Escudo con barrido de lámina de oro -->
+        <div class="splash-shield-box w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-[#fffdf9] border-2 border-[#f2d078] p-3 flex items-center justify-center relative">
+          <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
+        </div>
+      </div>
+
+      <!-- Tipografía de Gala -->
+      <div class="space-y-2">
+        <div class="splash-kicker-expand text-[10px] sm:text-xs font-extrabold uppercase text-[#f2d078]">
+          ✦ Anuario &amp; Archivo Oficial · 2026 ✦
+        </div>
+        <h2 class="splash-title-gold font-display text-3xl sm:text-5xl font-bold tracking-tight leading-tight">
+          Estrella de la Mañana ’26
+        </h2>
+        <p class="font-display italic text-xs sm:text-sm text-[#f4eee2]/85 tracking-wide">
+          &ldquo;Una generación que brilla con luz propia para la historia&rdquo;
+        </p>
+      </div>
+
+      <!-- Barra de Progreso Real + Contador Digital -->
+      <div class="w-64 sm:w-72 space-y-2 pt-1">
+        <div class="flex items-center justify-between text-[11px] font-semibold text-[#f2d078]">
+          <span id="galaSplashStatus" class="truncate pr-2 text-[#f4eee2]/85">Abriendo archivo de la promoción...</span>
+          <span id="galaSplashPercent" class="font-mono-num font-bold text-[#f2d078] shrink-0">28%</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-black/35 overflow-hidden border border-[#d8b258]/50 p-0.5 shadow-inner">
+          <div id="galaSplashBar" class="h-full rounded-full bg-gradient-to-r from-[#b58d3d] via-[#fff2c2] to-[#d8b258] transition-all duration-300 shadow-[0_0_12px_rgba(242,208,120,0.8)]" style="width: 28%"></div>
+        </div>
+      </div>
+
+      <!-- Botón opcional para abrir el telón al instante -->
+      <button type="button" onclick="cerrarTelonEntradaGala(true)" class="mt-1 px-4 py-1.5 rounded-full border border-[#d8b258]/40 bg-white/5 hover:bg-[#d8b258]/20 text-[11px] font-semibold tracking-wider uppercase text-[#f2d078] transition-colors cursor-pointer">
+        Abrir Telón Ahora ✦
+      </button>
+    </div>
+  </div>
+
   <!-- Polvo Estelar Dorado Flotante (Estrella de la Mañana ’26) -->
   <canvas id="starlightCanvas" aria-hidden="true" class="fixed inset-0 pointer-events-none z-[1] w-full h-full opacity-85"></canvas>
 
@@ -6122,13 +6351,109 @@
       }
     });
 
+    let _splashCerrado = false;
+    const _splashInicioTs = Date.now();
+
+    function actualizarProgresoSplash(pct, texto) {
+      if (_splashCerrado) return;
+      const bar = document.getElementById('galaSplashBar');
+      const pctEl = document.getElementById('galaSplashPercent');
+      const st = document.getElementById('galaSplashStatus');
+      if (bar) bar.style.width = `${pct}%`;
+      if (pctEl) pctEl.innerText = `${pct}%`;
+      if (texto && st) st.innerText = texto;
+    }
+
+    function lanzarDestelloAperturaGala() {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const canvas = document.createElement('canvas');
+      canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:125;';
+      document.body.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const colores = ['#fffdf9', '#f2d078', '#d8b258', '#c99833'];
+      const chispas = Array.from({ length: 42 }, (_, i) => {
+        const ang = (Math.PI * 2 * i) / 42 + (Math.random() - 0.5) * 0.25;
+        const vel = 4 + Math.random() * 11;
+        return {
+          x: cx,
+          y: cy,
+          vx: Math.cos(ang) * vel,
+          vy: Math.sin(ang) * vel,
+          r: 2 + Math.random() * 3.5,
+          alpha: 1,
+          color: colores[i % colores.length]
+        };
+      });
+      let frame = 0;
+      function step() {
+        frame++;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        chispas.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.96;
+          p.vy *= 0.96;
+          p.alpha = Math.max(0, 1 - frame / 44);
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+        if (frame < 44) requestAnimationFrame(step);
+        else canvas.remove();
+      }
+      requestAnimationFrame(step);
+    }
+
+    function cerrarTelonEntradaGala(inmediato = false) {
+      if (_splashCerrado) return;
+      _splashCerrado = true;
+      const splash = document.getElementById('galaEntranceSplash');
+      actualizarProgresoSplash(100, '✦ ¡Bienvenidos a la Promoción 2026! ✦');
+      if (!splash) return;
+      const transcurrido = Date.now() - _splashInicioTs;
+      const esperaMinima = inmediato ? 60 : Math.max(220, 1150 - transcurrido);
+      setTimeout(() => {
+        // Reiniciamos el conteo numérico justo al abrir el telón para que el usuario vea subir los números en vivo
+        Object.keys(_valoresPreviosContadores).forEach(k => { _valoresPreviosContadores[k] = 0; });
+        actualizarEstadisticas();
+        lanzarDestelloAperturaGala();
+        splash.classList.add('splash-hide');
+        setTimeout(() => {
+          try { splash.remove(); } catch (e) {}
+        }, 940);
+      }, esperaMinima);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       actualizarUIUsuario();
       inicializarTemaAzul();
       restaurarSeccionYAlbumAlCargar();
       habilitarScrollMouseYArrastrePC();
       inicializarTilt3DEnPC();
-      cargarDesdeNube();
+
+      // Animación progresiva de la barra dorada y porcentaje del telón mientras responde la nube
+      setTimeout(() => actualizarProgresoSplash(54, 'Cargando retratos y álbumes...'), 180);
+      setTimeout(() => actualizarProgresoSplash(78, 'Sincronizando votos y anécdotas...'), 480);
+      setTimeout(() => actualizarProgresoSplash(92, 'Preparando gala oficial...'), 820);
+      // Límite máximo de seguridad (2.2s) por si el internet del usuario está lento
+      setTimeout(() => cerrarTelonEntradaGala(), 2200);
+
+      // Si ya existe respaldo local en el navegador, pre-hidratamos al instante para que nunca se vean ceros
+      if (restaurarDesdeRespaldoLocal()) {
+        renderTodo();
+      }
+
+      cargarDesdeNube().finally(() => {
+        cerrarTelonEntradaGala();
+      });
 
       // Si el usuario vuelve a una pestaña que dejó abierta hace rato, actualizamos desde JSONBin de inmediato
       document.addEventListener('visibilitychange', () => {
