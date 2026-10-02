@@ -217,6 +217,22 @@
       outline: 1px solid rgba(184, 146, 66, 0.24);
       outline-offset: -7px;
       box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .editorial-hero::after,
+    .section-banner::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 38%;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(216, 178, 88, 0.14) 50%, rgba(255,255,255,0) 100%);
+      transform: translate3d(-160%, 0, 0) skewX(-22deg);
+      animation: goldShimmerSweep 7.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      pointer-events: none;
     }
 
     .section-banner {
@@ -224,12 +240,16 @@
       background-image: radial-gradient(circle at 50% 0%, rgba(216, 178, 88, 0.11) 0%, rgba(216, 178, 88, 0) 65%);
       border-top: 3px solid var(--gold-main);
       box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
     }
 
     .editorial-stat-card {
       background-color: var(--card-bg);
       box-shadow: var(--card-shadow);
       border-top: 2.5px solid var(--gold-main);
+      transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 200ms ease;
+      will-change: transform;
     }
 
     .countdown-tile {
@@ -300,17 +320,53 @@
     }
 
     @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translate3d(0, 10px, 0); }
-      to { opacity: 1; transform: translate3d(0, 0, 0); }
+      0% { opacity: 0; transform: perspective(900px) translate3d(0, 26px, 0) rotateX(8deg) scale3d(0.95, 0.95, 1); }
+      70% { opacity: 1; transform: perspective(900px) translate3d(0, -2px, 0) rotateX(-1deg) scale3d(1.005, 1.005, 1); }
+      100% { opacity: 1; transform: perspective(900px) translate3d(0, 0, 0) rotateX(0deg) scale3d(1, 1, 1); }
+    }
+    @keyframes sectionCurtainReveal {
+      0% { opacity: 0; transform: translate3d(0, 22px, 0) scale3d(0.98, 0.98, 1); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
     }
     @keyframes modalZoomIn {
-      from { opacity: 0; transform: scale3d(0.95, 0.95, 1); }
-      to { opacity: 1; transform: scale3d(1, 1, 1); }
+      0% { opacity: 0; transform: scale3d(0.88, 0.88, 1) translate3d(0, 14px, 0); }
+      100% { opacity: 1; transform: scale3d(1, 1, 1) translate3d(0, 0, 0); }
+    }
+    @keyframes modalSlideNext {
+      from { opacity: 0; transform: translate3d(38px, 0, 0) scale3d(0.95, 0.95, 1); }
+      to { opacity: 1; transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
+    }
+    @keyframes modalSlidePrev {
+      from { opacity: 0; transform: translate3d(-38px, 0, 0) scale3d(0.95, 0.95, 1); }
+      to { opacity: 1; transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
+    }
+    @keyframes goldShimmerSweep {
+      0%, 18% { transform: translate3d(-160%, 0, 0) skewX(-22deg); }
+      48%, 100% { transform: translate3d(340%, 0, 0) skewX(-22deg); }
+    }
+    @keyframes crestFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); box-shadow: 0 10px 24px -6px rgba(184, 146, 66, 0.28); }
+      50% { transform: translate3d(0, -6px, 0) rotate(1.5deg); box-shadow: 0 18px 32px -6px rgba(184, 146, 66, 0.48); }
+    }
+    @keyframes liquidGoldText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes flipDigitTick {
+      0% { transform: perspective(400px) rotateX(-65deg) scale3d(0.88, 0.88, 1); opacity: 0.45; }
+      60% { transform: perspective(400px) rotateX(12deg) scale3d(1.06, 1.06, 1); opacity: 1; }
+      100% { transform: perspective(400px) rotateX(0deg) scale3d(1, 1, 1); opacity: 1; }
+    }
+    @keyframes storyRingPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(216, 178, 88, 0.45); }
+      50% { box-shadow: 0 0 0 5px rgba(216, 178, 88, 0); }
     }
     @keyframes heartPop {
       0% { transform: scale3d(1, 1, 1); }
-      45% { transform: scale3d(1.26, 1.26, 1); }
-      100% { transform: scale3d(1, 1, 1); }
+      40% { transform: scale3d(1.38, 1.38, 1) rotate(-6deg); }
+      75% { transform: scale3d(0.92, 0.92, 1) rotate(3deg); }
+      100% { transform: scale3d(1, 1, 1) rotate(0deg); }
     }
     @keyframes doubleTapHeartBurst {
       0% { opacity: 0; transform: scale3d(0.4, 0.4, 1); }
@@ -319,19 +375,64 @@
       100% { opacity: 0; transform: scale3d(1.4, 1.4, 1); }
     }
 
+    .gold-foil-title {
+      background: linear-gradient(110deg, var(--wine-main) 0%, var(--wine-main) 32%, #c99833 48%, #f2d078 53%, #b58d3d 60%, var(--wine-main) 75%, var(--wine-main) 100%);
+      background-size: 240% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: liquidGoldText 6.5s ease-in-out infinite;
+    }
+
+    .digit-flip-tick {
+      display: inline-block;
+      animation: flipDigitTick 380ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .crest-float {
+      animation: crestFloat 4.2s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .modal-slide-next {
+      animation: modalSlideNext 260ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+    .modal-slide-prev {
+      animation: modalSlidePrev 260ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+
     /* Usamos backwards en vez de both/forwards para no bloquear :hover transform en GitHub Pages */
     .anim-section {
-      animation: fadeSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+      animation: sectionCurtainReveal 360ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
     }
     .anim-card {
-      animation: fadeSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
-      animation-delay: calc(var(--i, 0) * 22ms);
+      position: relative;
+      animation: fadeSlideUp 460ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+      animation-delay: calc(var(--i, 0) * 42ms);
       box-shadow: var(--card-shadow);
-      transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease, box-shadow 180ms ease;
+      transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), border-color 200ms ease, box-shadow 220ms ease;
+      will-change: transform;
+    }
+    /* Reflejo holográfico dorado que sigue al cursor en PC */
+    .anim-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), rgba(216, 178, 88, 0.19), rgba(255, 255, 255, 0) 65%);
+      opacity: var(--glare-op, 0);
+      transition: opacity 220ms ease;
+      pointer-events: none;
+      z-index: 2;
     }
     .anim-card:hover {
-      transform: translate3d(0, -3px, 0);
+      transform: translate3d(0, -5px, 0);
       box-shadow: var(--card-shadow-hover);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .anim-section, .anim-card, .crest-float, .gold-foil-title, .editorial-hero::after, .gala-podium::after {
+        animation: none !important;
+      }
     }
     .anim-modal {
       animation: modalZoomIn 180ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
@@ -358,6 +459,7 @@
     .story-ring {
       background: linear-gradient(135deg, var(--gold-bright), var(--wine-main), #f8e3a3);
       padding: 2.5px;
+      animation: storyRingPulse 3.2s ease-in-out infinite;
     }
     .polaroid-grid article {
       padding: 12px 12px 18px 12px;
@@ -396,7 +498,9 @@
     }
   </style>
 </head>
-<body class="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col pb-20 md:pb-0">
+<body class="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col pb-20 md:pb-0 relative">
+  <!-- Polvo Estelar Dorado Flotante (Estrella de la Mañana ’26) -->
+  <canvas id="starlightCanvas" aria-hidden="true" class="fixed inset-0 pointer-events-none z-[1] w-full h-full opacity-85"></canvas>
 
   <!-- TOP BAR (3-Zone Contract adaptable a cualquier pantalla de celular) -->
   <header class="sticky top-0 z-30 h-14 sm:h-16 w-full max-w-full header-glass border-b border-[var(--border-color)] px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
@@ -527,7 +631,7 @@
       <!-- 1. SECCIÓN INICIO -->
       <section id="seccion-inicio" class="page-section anim-section space-y-5 sm:space-y-7">
         <div class="editorial-hero rounded-2xl border border-[var(--gold-hairline)] p-5 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-5 sm:gap-7 md:gap-9 relative overflow-hidden">
-          <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl bg-white border-2 border-[var(--gold-main)] p-2.5 shadow-md ring-4 ring-[var(--gold-main)]/15 flex items-center justify-center shrink-0">
+          <div class="crest-float w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl bg-white border-2 border-[var(--gold-main)] p-2.5 shadow-md ring-4 ring-[var(--gold-main)]/15 flex items-center justify-center shrink-0">
             <img src="logo.png" onerror="window.manejarErrorLogo(this)" alt="Escudo Oficial Promoción Estrella de la Mañana 2026" class="logo-dinamico w-full h-full object-contain" />
           </div>
           <div class="flex-1 min-w-0 w-full text-center md:text-left space-y-3">
@@ -538,7 +642,7 @@
               <span aria-hidden="true">·</span>
               <span id="heroSyncBadge" class="text-[var(--text-muted)] font-medium normal-case tracking-normal">Sincronizado</span>
             </div>
-            <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-bold text-[var(--wine-main)] tracking-tight leading-[1.12] break-words">Promoción Estrella de la Mañana ’26</h1>
+            <h1 class="gold-foil-title text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-bold text-[var(--wine-main)] tracking-tight leading-[1.12] break-words">Promoción Estrella de la Mañana ’26</h1>
             <p class="text-xs sm:text-sm md:text-[15px] text-[var(--text-muted)] max-w-2xl leading-relaxed">
               Edición conmemorativa digital: explora los álbumes fotográficos y videos de la promoción, retratos del salón, votaciones en vivo y cartas selladas hacia el futuro.
             </p>
@@ -3671,6 +3775,175 @@
       });
     }
 
+    const _valoresPreviosContadores = {};
+    function animarContadorNumerico(elId, valorFinal) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      const fin = Number(valorFinal) || 0;
+      const inicio = _valoresPreviosContadores[elId] ?? 0;
+      _valoresPreviosContadores[elId] = fin;
+      if (inicio === fin) {
+        el.innerText = fin;
+        return;
+      }
+      const duracion = 520;
+      const t0 = performance.now();
+      function paso(ahora) {
+        const p = Math.min(1, (ahora - t0) / duracion);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.innerText = Math.round(inicio + (fin - inicio) * ease);
+        if (p < 1) requestAnimationFrame(paso);
+        else el.innerText = fin;
+      }
+      requestAnimationFrame(paso);
+    }
+
+    /* Efecto Relieve 3D + Reflejo Holográfico Dorado + Polvo Estelar + Explosión de Corazones */
+    function lanzarChispasCorazon(origenEl) {
+      if (!origenEl) return;
+      const rect = origenEl.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const simbolos = ['♥', '✦', '★', '♥', '✦'];
+
+      for (let i = 0; i < 8; i++) {
+        const sp = document.createElement('span');
+        const ang = (Math.PI * 2 * i) / 8 + (Math.random() - 0.5) * 0.4;
+        const dist = 28 + Math.random() * 34;
+        const dx = Math.cos(ang) * dist;
+        const dy = Math.sin(ang) * dist - 18;
+        sp.innerText = simbolos[i % simbolos.length];
+        sp.style.cssText = `position:fixed;left:${cx}px;top:${cy}px;pointer-events:none;z-index:9999;font-size:${11 + (i % 3) * 3}px;font-weight:bold;color:${i % 2 === 0 ? 'var(--gold-bright)' : 'var(--wine-main)'};transform:translate3d(-50%,-50%,0) scale(0.5);opacity:1;transition:transform 560ms cubic-bezier(0.16,1,0.3,1),opacity 560ms ease;`;
+        document.body.appendChild(sp);
+        requestAnimationFrame(() => {
+          sp.style.transform = `translate3d(calc(-50% + ${dx.toFixed(1)}px), calc(-50% + ${dy.toFixed(1)}px), 0) scale(1.25)`;
+          sp.style.opacity = '0';
+        });
+        setTimeout(() => sp.remove(), 580);
+      }
+    }
+
+    function inicializarPolvoEstelar() {
+      const canvas = document.getElementById('starlightCanvas');
+      if (!canvas) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const ctx = canvas.getContext('2d');
+      let w = (canvas.width = window.innerWidth);
+      let h = (canvas.height = window.innerHeight);
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }, { passive: true });
+
+      const cantidad = window.innerWidth < 640 ? 18 : 30;
+      const estrellas = Array.from({ length: cantidad }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2.2 + 1.1,
+        vy: -(Math.random() * 0.32 + 0.12),
+        vx: (Math.random() - 0.5) * 0.22,
+        fase: Math.random() * Math.PI * 2,
+        velFase: 0.02 + Math.random() * 0.025,
+        esCruz: Math.random() > 0.45
+      }));
+
+      let mouseX = -999;
+      let mouseY = -999;
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
+
+      function dibujar() {
+        if (document.visibilityState === 'visible') {
+          ctx.clearRect(0, 0, w, h);
+          for (let i = 0; i < estrellas.length; i++) {
+            const s = estrellas[i];
+            s.fase += s.velFase;
+            s.y += s.vy;
+            s.x += s.vx;
+
+            const dx = s.x - mouseX;
+            const dy = s.y - mouseY;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < 12000 && d2 > 1) {
+              const dist = Math.sqrt(d2);
+              s.x += (dx / dist) * 0.75;
+              s.y += (dy / dist) * 0.75;
+            }
+
+            if (s.y < -10) { s.y = h + 10; s.x = Math.random() * w; }
+            if (s.x < -10) s.x = w + 10;
+            if (s.x > w + 10) s.x = -10;
+
+            const alpha = 0.16 + ((Math.sin(s.fase) + 1) * 0.5) * 0.42;
+            ctx.save();
+            ctx.translate(s.x, s.y);
+            ctx.fillStyle = `rgba(184, 146, 66, ${alpha.toFixed(3)})`;
+            if (s.esCruz) {
+              const sz = s.r * 2.1;
+              ctx.beginPath();
+              ctx.moveTo(0, -sz);
+              ctx.quadraticCurveTo(0, 0, sz, 0);
+              ctx.quadraticCurveTo(0, 0, 0, sz);
+              ctx.quadraticCurveTo(0, 0, -sz, 0);
+              ctx.quadraticCurveTo(0, 0, 0, -sz);
+              ctx.fill();
+            } else {
+              ctx.beginPath();
+              ctx.arc(0, 0, s.r, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+          }
+        }
+        requestAnimationFrame(dibujar);
+      }
+      requestAnimationFrame(dibujar);
+    }
+
+    function inicializarTilt3DEnPC() {
+      inicializarPolvoEstelar();
+      if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      let activeCard = null;
+      let rafId = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        const card = e.target.closest('.anim-card, .editorial-stat-card');
+        if (activeCard && activeCard !== card) {
+          activeCard.style.transform = '';
+          activeCard.style.setProperty('--glare-op', '0');
+          activeCard = null;
+        }
+        if (!card) return;
+        activeCard = card;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          if (!rect.width || !rect.height) return;
+          const px = e.clientX - rect.left;
+          const py = e.clientY - rect.top;
+          const x = px / rect.width - 0.5;
+          const y = py / rect.height - 0.5;
+          const rotX = (-y * 7.2).toFixed(2);
+          const rotY = (x * 7.2).toFixed(2);
+          card.style.setProperty('--mx', `${px.toFixed(0)}px`);
+          card.style.setProperty('--my', `${py.toFixed(0)}px`);
+          card.style.setProperty('--glare-op', '1');
+          card.style.transform = `perspective(850px) translate3d(0, -6px, 0) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.012, 1.012, 1)`;
+        });
+      }, { passive: true });
+
+      document.addEventListener('mouseout', (e) => {
+        if (activeCard && (!e.relatedTarget || !activeCard.contains(e.relatedTarget))) {
+          activeCard.style.transform = '';
+          activeCard.style.setProperty('--glare-op', '0');
+          activeCard = null;
+        }
+      }, { passive: true });
+    }
+
     function actualizarEstadisticas() {
       const fotos = items.filter(i => !i.type || i.type.startsWith('image')).length;
       const videos = items.filter(i => i.type && i.type.startsWith('video')).length;
@@ -3681,11 +3954,11 @@
         members.reduce((a, m) => a + (m.likes || 0), 0) +
         votosPremios;
 
-      document.getElementById('statMembers').innerText = members.length;
-      document.getElementById('statTotalItems').innerText = items.length;
+      animarContadorNumerico('statMembers', members.length);
+      animarContadorNumerico('statTotalItems', items.length);
       document.getElementById('statBreakdown').innerText = `${fotos} fotos · ${videos} videos`;
-      document.getElementById('statTweets').innerText = tweets.length + capsules.length;
-      document.getElementById('statLikes').innerText = likes;
+      animarContadorNumerico('statTweets', tweets.length + capsules.length);
+      animarContadorNumerico('statLikes', likes);
 
       document.getElementById('sideCountMiembros').innerText = members.length;
       document.getElementById('sideCountGaleria').innerText = items.length;
@@ -3723,10 +3996,21 @@
       }
 
       const diff = Math.max(0, proximo.ts - ahora);
-      document.getElementById('cdDays').innerText = String(Math.floor(diff / 86400000)).padStart(2, '0');
-      document.getElementById('cdHours').innerText = String(Math.floor((diff / 3600000) % 24)).padStart(2, '0');
-      document.getElementById('cdMins').innerText = String(Math.floor((diff / 60000) % 60)).padStart(2, '0');
-      document.getElementById('cdSecs').innerText = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+      const paresReloj = [
+        ['cdDays', String(Math.floor(diff / 86400000)).padStart(2, '0')],
+        ['cdHours', String(Math.floor((diff / 3600000) % 24)).padStart(2, '0')],
+        ['cdMins', String(Math.floor((diff / 60000) % 60)).padStart(2, '0')],
+        ['cdSecs', String(Math.floor((diff / 1000) % 60)).padStart(2, '0')]
+      ];
+      paresReloj.forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el && el.innerText !== val) {
+          el.innerText = val;
+          el.classList.remove('digit-flip-tick');
+          void el.offsetWidth;
+          el.classList.add('digit-flip-tick');
+        }
+      });
     }
     setInterval(actualizarCuentaRegresiva, 1000);
 
@@ -3997,6 +4281,7 @@
         btn.classList.remove('like-pop');
         void btn.offsetWidth;
         btn.classList.add('like-pop');
+        lanzarChispasCorazon(btn);
       }
       const m = members.find(x => x.id === memberId);
       if (!m) return;
@@ -4932,6 +5217,7 @@
         btn.classList.remove('like-pop');
         void btn.offsetWidth;
         btn.classList.add('like-pop');
+        lanzarChispasCorazon(btn);
       }
       if (!items[index].likedBy) items[index].likedBy = [];
       const dioLike = items[index].likedBy.includes(userId);
@@ -5518,6 +5804,8 @@
       aplicarTransformZoomModal(true);
     }
 
+    let _ultimaDireccionModal = 0;
+
     function mostrarItemModalActual() {
       clearTimeout(slideshowTimer);
       const realIndex = modalListaActual[modalIndiceActual];
@@ -5544,17 +5832,24 @@
       if (prevBtn) prevBtn.classList.remove('hidden');
       if (nextBtn) nextBtn.classList.remove('hidden');
 
+      const animClass = _ultimaDireccionModal > 0
+        ? 'modal-slide-next'
+        : _ultimaDireccionModal < 0
+          ? 'modal-slide-prev'
+          : 'anim-modal';
+      _ultimaDireccionModal = 0;
+
       if (esImagen) {
-        body.innerHTML = `<img id="modalZoomTargetImg" src="${item.url}" alt="${item.name || ''}" draggable="false" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="modal-zoom-img max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl cursor-zoom-in" />`;
+        body.innerHTML = `<img id="modalZoomTargetImg" src="${item.url}" alt="${item.name || ''}" draggable="false" referrerpolicy="no-referrer" onerror="window.repararImagenTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="${animClass} modal-zoom-img max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl cursor-zoom-in" />`;
         if (slideshowActivo) {
           slideshowTimer = setTimeout(() => navegarModal(1), 4200);
         }
       } else if (item.externalEmbedUrl && !item.externalEmbedUrl.includes('tiktok.com')) {
-        body.innerHTML = `<div class="w-[92vw] max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
+        body.innerHTML = `<div class="${animClass} w-[92vw] max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden border border-[var(--gold-main)] shadow-2xl">
                <iframe src="${item.externalEmbedUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
              </div>`;
       } else {
-        body.innerHTML = `<video id="modalVideoPlayer" src="${item.url}" controls autoplay playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
+        body.innerHTML = `<video id="modalVideoPlayer" src="${item.url}" controls autoplay playsinline onerror="window.repararVideoTelegram(this, '${item.url}', '${item.id}', '${item.fileId || ''}')" class="${animClass} max-w-full max-h-[76vh] object-contain rounded-xl shadow-2xl"></video>`;
         const vid = document.getElementById('modalVideoPlayer');
         if (vid && slideshowActivo) {
           vid.onended = () => navegarModal(1);
@@ -5567,6 +5862,7 @@
     function navegarModal(direccion, e) {
       if (e) e.stopPropagation();
       if (!modalListaActual.length) return;
+      _ultimaDireccionModal = direccion;
       modalIndiceActual = (modalIndiceActual + direccion + modalListaActual.length) % modalListaActual.length;
       mostrarItemModalActual();
     }
@@ -5831,6 +6127,7 @@
       inicializarTemaAzul();
       restaurarSeccionYAlbumAlCargar();
       habilitarScrollMouseYArrastrePC();
+      inicializarTilt3DEnPC();
       cargarDesdeNube();
 
       // Si el usuario vuelve a una pestaña que dejó abierta hace rato, actualizamos desde JSONBin de inmediato
