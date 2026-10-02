@@ -240,6 +240,32 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+    /* En PC mostramos una barra horizontal sutil al pasar el mouse y cursor de arrastre en carruseles */
+    @media (min-width: 640px) {
+      .pc-scroll-row {
+        cursor: grab;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(184, 146, 66, 0.45) transparent;
+      }
+      .pc-scroll-row:active {
+        cursor: grabbing;
+      }
+      .pc-scroll-row::-webkit-scrollbar {
+        display: block;
+        height: 6px;
+      }
+      .pc-scroll-row::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .pc-scroll-row::-webkit-scrollbar-thumb {
+        background-color: rgba(184, 146, 66, 0.38);
+        border-radius: 9999px;
+      }
+      .pc-scroll-row:hover::-webkit-scrollbar-thumb {
+        background-color: rgba(104, 27, 40, 0.65);
+      }
+    }
+
     /* Clases compatibles tanto con Tailwind v3 CDN (GitHub Pages) como Tailwind v4 */
     .header-glass {
       background-color: rgba(255, 253, 248, 0.94);
@@ -683,7 +709,7 @@
           </div>
         </div>
 
-        <div id="memberRoleFilterBar" class="w-full max-w-full flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        <div id="memberRoleFilterBar" class="w-full max-w-full flex sm:flex-wrap items-center gap-2 overflow-x-auto sm:overflow-visible no-scrollbar pb-1">
           <button type="button" onclick="setRolMiembroFiltro('Todos', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--wine-main)] text-white border-[var(--wine-main)]">Todos los Roles</button>
           <button type="button" onclick="setRolMiembroFiltro('Integrante', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]">Integrantes</button>
           <button type="button" onclick="setRolMiembroFiltro('Directiva', this)" class="role-filter-btn btn-interactive px-3.5 py-1.5 rounded-xl text-xs font-semibold border whitespace-nowrap cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)]">★ Junta Directiva</button>
@@ -709,6 +735,10 @@
               <h1 class="font-display text-lg sm:text-xl font-bold text-[var(--wine-main)]">Historias y Álbumes de la Promoción</h1>
             </div>
             <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <div class="hidden sm:inline-flex items-center gap-1 mr-1">
+                <button type="button" onclick="desplazarCarruselHorizontal('storiesAlbumBar', -320)" title="Desplazar álbumes a la izquierda" class="btn-interactive w-8 h-8 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] hover:border-[var(--wine-main)] text-[var(--wine-main)] text-base font-bold flex items-center justify-center cursor-pointer">‹</button>
+                <button type="button" onclick="desplazarCarruselHorizontal('storiesAlbumBar', 320)" title="Desplazar álbumes a la derecha" class="btn-interactive w-8 h-8 rounded-xl bg-[var(--bg-cream)] border border-[var(--border-color)] hover:border-[var(--wine-main)] text-[var(--wine-main)] text-base font-bold flex items-center justify-center cursor-pointer">›</button>
+              </div>
               <button type="button" onclick="document.getElementById('newAlbumBox').classList.toggle('hidden')" class="btn-interactive px-3 py-1.5 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] text-[var(--wine-main)] text-[11px] sm:text-xs font-bold cursor-pointer whitespace-nowrap">
                 🔒 + Nuevo Álbum
               </button>
@@ -730,7 +760,7 @@
               </button>
             </div>
           </div>
-          <div id="storiesAlbumBar" class="w-full max-w-full flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar pt-1 pb-0.5"></div>
+          <div id="storiesAlbumBar" class="pc-scroll-row w-full max-w-full flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar pt-1 pb-1.5 select-none"></div>
         </div>
 
         <div id="featuredContainer" class="hidden w-full max-w-full overflow-hidden editorial-surface rounded-2xl border border-[var(--gold-hairline)] p-4 sm:p-5 space-y-3">
@@ -739,9 +769,15 @@
               <div class="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold-main)]">Selección de la Promo</div>
               <h2 class="font-display text-sm sm:text-base font-bold text-[var(--wine-main)] truncate">Recuerdos Más Votados</h2>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-[var(--bg-cream)] border border-[var(--border-color)] text-[11px] font-semibold text-[var(--wine-main)] shrink-0">★ Top Favoritos</span>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <div class="hidden sm:inline-flex items-center gap-1">
+                <button type="button" onclick="desplazarCarruselHorizontal('carouselTrack', -340)" title="Anterior" class="btn-interactive w-7 h-7 rounded-lg bg-[var(--bg-cream)] border border-[var(--border-color)] hover:border-[var(--wine-main)] text-[var(--wine-main)] text-sm font-bold flex items-center justify-center cursor-pointer">‹</button>
+                <button type="button" onclick="desplazarCarruselHorizontal('carouselTrack', 340)" title="Siguiente" class="btn-interactive w-7 h-7 rounded-lg bg-[var(--bg-cream)] border border-[var(--border-color)] hover:border-[var(--wine-main)] text-[var(--wine-main)] text-sm font-bold flex items-center justify-center cursor-pointer">›</button>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[var(--bg-cream)] border border-[var(--border-color)] text-[11px] font-semibold text-[var(--wine-main)] shrink-0">★ Top Favoritos</span>
+            </div>
           </div>
-          <div id="carouselTrack" class="w-full max-w-full flex gap-3.5 overflow-x-auto no-scrollbar pb-1"></div>
+          <div id="carouselTrack" class="pc-scroll-row w-full max-w-full flex gap-3.5 overflow-x-auto no-scrollbar pb-1.5 select-none"></div>
         </div>
 
         <div id="uploadPanelWrapper" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -807,7 +843,7 @@
           </div>
         </div>
 
-        <div id="albumFilterBar" class="w-full max-w-full flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
+        <div id="albumFilterBar" class="w-full max-w-full flex sm:flex-wrap items-center gap-2 overflow-x-auto sm:overflow-visible no-scrollbar pb-1"></div>
 
         <div class="editorial-surface rounded-2xl border border-[var(--border-color)] p-3 sm:p-4 w-full max-w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3">
           <input type="text" id="searchInput" oninput="renderGaleria(true)" placeholder="🔍 Buscar recuerdo por título, #álbum o dedicatoria..." class="w-full md:flex-1 md:max-w-md rounded-xl bg-[var(--bg-cream)]/60 border border-[var(--border-color)] px-3.5 py-2 text-xs text-[var(--text-dark)] outline-none focus:bg-white focus:border-[var(--wine-main)]" />
@@ -2084,6 +2120,10 @@
       const hGaleria = obtenerHuellaGaleria();
       if (forzar || hGaleria !== _huellaGaleria) {
         _huellaGaleria = hGaleria;
+        if (albumActual !== 'Todos' && !obtenerListaAlbumes(true).includes(albumActual)) {
+          albumActual = 'Todos';
+          try { localStorage.setItem('promo_active_album_v1', 'Todos'); } catch (e) {}
+        }
         actualizarSelectoresAlbum();
         renderBarraAlbumes();
         renderHistoriasAlbumes();
@@ -3468,13 +3508,25 @@
       }
     }
 
-    function cambiarSeccion(seccionId) {
-      document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
+    const SECCIONES_VALIDAS = ['inicio', 'miembros', 'galeria', 'premios', 'capsula', 'eventos', 'mensajes'];
+
+    function cambiarSeccion(seccionId, hacerScroll = true) {
+      if (!SECCIONES_VALIDAS.includes(seccionId)) seccionId = 'inicio';
       const target = document.getElementById('seccion-' + seccionId);
+      if (!target) return;
+
+      document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
       target.classList.remove('hidden');
       target.classList.remove('anim-section');
       void target.offsetWidth;
       target.classList.add('anim-section');
+
+      try {
+        localStorage.setItem('promo_active_section_v1', seccionId);
+        if (window.location.hash !== '#' + seccionId) {
+          history.replaceState(null, '', '#' + seccionId);
+        }
+      } catch (e) {}
 
       document.querySelectorAll('.nav-link').forEach(btn => {
         if (btn.dataset.nav === seccionId) {
@@ -3503,7 +3555,92 @@
       if (window.innerWidth < 1024 && !document.getElementById('appSidebar').classList.contains('hidden')) {
         toggleMobileSidebar();
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (hacerScroll) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function restaurarSeccionYAlbumAlCargar() {
+      try {
+        const albGuardado = localStorage.getItem('promo_active_album_v1');
+        if (albGuardado) {
+          albumActual = albGuardado;
+        }
+        const hashSec = (window.location.hash || '').replace(/^#/, '').trim();
+        const secGuardada = SECCIONES_VALIDAS.includes(hashSec)
+          ? hashSec
+          : (localStorage.getItem('promo_active_section_v1') || 'inicio');
+        if (SECCIONES_VALIDAS.includes(secGuardada)) {
+          cambiarSeccion(secGuardada, false);
+        }
+      } catch (e) {}
+    }
+
+    window.addEventListener('hashchange', () => {
+      const hashSec = (window.location.hash || '').replace(/^#/, '').trim();
+      if (SECCIONES_VALIDAS.includes(hashSec)) {
+        cambiarSeccion(hashSec, false);
+      }
+    });
+
+    function desplazarCarruselHorizontal(containerId, deltaPx) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.scrollBy({ left: deltaPx, behavior: 'smooth' });
+    }
+
+    function habilitarScrollMouseYArrastrePC() {
+      ['storiesAlbumBar', 'carouselTrack', 'albumFilterBar', 'memberRoleFilterBar'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el || el.dataset.pcScrollReady === '1') return;
+        el.dataset.pcScrollReady = '1';
+
+        // Permite usar la ruedita del mouse en PC para desplazar horizontalmente cuando hay más elementos
+        el.addEventListener('wheel', (e) => {
+          if (el.scrollWidth <= el.clientWidth + 4) return;
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            e.preventDefault();
+            el.scrollLeft += e.deltaY;
+          }
+        }, { passive: false });
+
+        // Permite mantener clic izquierdo y arrastrar a los lados en PC igual que en pantalla táctil
+        let isDown = false;
+        let startX = 0;
+        let scrollStart = 0;
+        let movedDist = 0;
+
+        el.addEventListener('mousedown', (e) => {
+          if (e.button !== 0 || el.scrollWidth <= el.clientWidth + 4) return;
+          isDown = true;
+          movedDist = 0;
+          startX = e.pageX - el.offsetLeft;
+          scrollStart = el.scrollLeft;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          const x = e.pageX - el.offsetLeft;
+          const walk = x - startX;
+          movedDist = Math.max(movedDist, Math.abs(walk));
+          if (movedDist > 4) {
+            el.scrollLeft = scrollStart - walk * 1.25;
+          }
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (!isDown) return;
+          isDown = false;
+        });
+
+        el.addEventListener('click', (e) => {
+          if (movedDist > 8) {
+            e.preventDefault();
+            e.stopPropagation();
+            movedDist = 0;
+          }
+        }, true);
+      });
     }
 
     function actualizarEstadisticas() {
@@ -4049,6 +4186,7 @@
       if (inp) inp.value = '';
       document.getElementById('newAlbumBox')?.classList.add('hidden');
       albumActual = nombre;
+      try { localStorage.setItem('promo_active_album_v1', nombre); } catch (e) {}
       actualizarSelectoresAlbum();
       const sel = document.getElementById('uploadAlbumSelect');
       if (sel) sel.value = nombre;
@@ -4078,6 +4216,7 @@
         }
       });
       albumActual = 'Todos';
+      try { localStorage.setItem('promo_active_album_v1', 'Todos'); } catch (e) {}
       actualizarSelectoresAlbum();
       renderBarraAlbumes();
       renderHistoriasAlbumes();
@@ -4111,6 +4250,7 @@
 
     function setAlbumFiltro(alb) {
       albumActual = alb;
+      try { localStorage.setItem('promo_active_album_v1', alb); } catch (e) {}
       renderBarraAlbumes();
       renderHistoriasAlbumes();
       renderGaleria(true);
@@ -5505,6 +5645,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       actualizarUIUsuario();
       inicializarTemaAzul();
+      restaurarSeccionYAlbumAlCargar();
+      habilitarScrollMouseYArrastrePC();
       cargarDesdeNube();
 
       // Si el usuario vuelve a una pestaña que dejó abierta hace rato, actualizamos desde JSONBin de inmediato
