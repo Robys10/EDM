@@ -890,8 +890,11 @@
           <button id="firebaseAuthBtn" type="button" onclick="iniciarGoogleAuth()" class="btn-interactive text-[11px] font-bold text-[var(--wine-main)] hover:text-[var(--gold-main)] shrink-0 cursor-pointer">Conectar Google</button>
         </div>
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
-          <span id="statusText" class="truncate">Sincronizando...</span>
-          <button type="button" onclick="cargarDesdeNube(true)" class="btn-interactive font-semibold hover:text-[var(--wine-main)] cursor-pointer shrink-0">Recargar</button>
+          <span id="statusText" class="truncate font-medium">Sincronizando...</span>
+          <div class="flex items-center gap-2 shrink-0">
+            <button type="button" onclick="forzarSubidaNube()" class="btn-interactive font-bold text-[var(--wine-main)] hover:text-[var(--gold-main)] cursor-pointer" title="Subir títulos y fotos de este equipo a la nube">Subir Nube</button>
+            <button type="button" onclick="cargarDesdeNube(true)" class="btn-interactive font-semibold hover:text-[var(--wine-main)] cursor-pointer">Recargar</button>
+          </div>
         </div>
         <button type="button" onclick="alternarTemaAzul()" class="btn-interactive w-full px-3.5 py-2.5 rounded-xl border border-[var(--border-color)] text-xs font-semibold text-[var(--text-dark)] hover:border-[var(--wine-main)] flex items-center justify-between cursor-pointer">
           <span id="themeBtnSideText">Tema Azul Real</span>
@@ -3549,6 +3552,7 @@
       customAlbums = Array.from(albSet.values());
 
       items = fusionarListasPorId(deltaItems, parsed.cloudItems, obtenerIdItem);
+      items = fusionarListasPorId(BASE_CLOUD_ITEMS, items, obtenerIdItem);
       tweets = fusionarListasPorId(deltaTweets, parsed.cloudTweets, t => t.id);
       members = fusionarListasPorId(deltaMembers, parsed.cloudMembers, m => m.id);
       awards = fusionarPremios(deltaAwards, parsed.cloudAwards);
@@ -3811,7 +3815,9 @@
         record = record.record;
       }
       if (Array.isArray(record.deletedIds)) {
-        record.deletedIds.forEach(id => deletedIds.add(String(id)));
+        deletedIds = new Set(record.deletedIds.map(String));
+      } else {
+        deletedIds = new Set();
       }
       const esItemUnicoMake = Boolean(record && typeof record === 'object' && !Array.isArray(record) && record.url && !Array.isArray(record.items));
       const rawRecordItems = Array.isArray(record)
@@ -3822,6 +3828,9 @@
       Object.keys(RESCUED_HEAVY_VIDEOS_MAP).forEach(id => deletedIds.delete(id));
       deletedIds.delete(`${TG_FILE_PREFIX}photos/file_70.jpg`);
       deletedIds.delete(`${TG_FILE_PREFIX}photos/file_165.jpg`);
+      try {
+        localStorage.setItem(DELETED_IDS_KEY, JSON.stringify(Array.from(deletedIds)));
+      } catch (e) {}
 
       // Blindaje contra pestañas antiguas: siempre fusionamos BASE_CLOUD_ITEMS para que ninguna pestaña con caché viejo pueda hacer desaparecer fotos o videos
       const rawItems = [...rawRecordItems];
@@ -3965,6 +3974,8 @@
           if (window.firebaseBridge) await window.firebaseBridge.logout();
           mostrarToast('Sesión cerrada');
         };
+        // Al detectar sesión con Google, sincronizamos automáticamente con la nube global
+        ejecutarSincronizacionNube();
       } else {
         userText.innerText = 'Firebase Cloud Activo';
         authBtn.innerText = 'Conectar Google';
@@ -3985,10 +3996,19 @@
             try { localStorage.setItem('prom_user_name', userName); } catch(e){}
             actualizarUIUsuario();
           }
+          await ejecutarSincronizacionNube();
         }
       } catch (err) {
         console.warn('Inicio de sesión cancelado o cerrado:', err);
       }
+    };
+
+    window.forzarSubidaNube = async function() {
+      document.getElementById('statusText').innerText = 'Subiendo a la nube...';
+      mostrarToast('Subiendo fotos, álbumes y títulos a Firebase...');
+      cambiosPendientes = true;
+      await ejecutarSincronizacionNube();
+      mostrarToast('¡Sincronizado con éxito en la nube de Firebase!');
     };
 
     let _firestoreUnsub = null;
@@ -4027,7 +4047,7 @@
                 const liveParsed = normalizarRecordNube(liveRecord);
                 aplicarDeltasSobreNube(liveParsed);
                 guardarRespaldoLocal(false);
-                renderTodo();
+                renderTodo(true);
                 document.getElementById('statusText').innerText = 'Firebase en vivo ✓';
                 document.getElementById('heroSyncBadge').innerText = 'En vivo ✓';
               }
@@ -5165,6 +5185,17 @@
       mostrarToast('Has salido del Modo Administrador. Sección oculta.');
       cambiarSeccion('inicio');
     }
+
+    window.restaurarTodasLasFotosEliminadas = async function() {
+      const pass = await solicitarClaveAdmin('Ingresa la contraseña de administrador (admin22) para vaciar la papelera y restaurar los 477 recuerdos:');
+      if (pass !== ADMIN_PASSWORD) return mostrarToast('Contraseña incorrecta');
+      deletedIds.clear();
+      try { localStorage.removeItem(DELETED_IDS_KEY); } catch(e){}
+      items = fusionarListasPorId(BASE_CLOUD_ITEMS, items, obtenerIdItem);
+      renderTodo(true);
+      await ejecutarSincronizacionNube();
+      mostrarToast(`✨ ¡Se restauraron todos los ${items.length} recuerdos en vivo!`);
+    };
 
     function inicializarTemaAzul() {
       const esAzul = localStorage.getItem('promo-theme') === 'blue';
