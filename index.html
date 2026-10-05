@@ -1695,7 +1695,13 @@
 
     function esTituloGenerico(nombre) {
       const n = String(nombre || '').trim();
-      return !n || /^(Foto|Video|Recuerdo) de (Fabricio|la Promo|Compañero\(a\))$/i.test(n);
+      if (!n) return true;
+      if (/^(Foto|Video|Recuerdo) de (Fabricio|la Promo|Compañero\(a\))$/i.test(n)) return true;
+      if (/^CIMG\d+$/i.test(n)) return true;
+      if (/^file_\d+(\.jpg|\.mp4)?$/i.test(n)) return true;
+      if (/^(XD|JJ|\?|Video|Foto|Recuerdo)$/i.test(n)) return true;
+      if (n.startsWith('📥 Copia de seguridad')) return true;
+      return false;
     }
 
     let titlesVault = {};
@@ -1717,6 +1723,7 @@
             if (it.id) titlesVault[it.id] = { ...(titlesVault[it.id] || {}), ...entry };
             if (it.url) titlesVault[it.url] = { ...(titlesVault[it.url] || {}), ...entry };
             if (it.fileId) titlesVault[it.fileId] = { ...(titlesVault[it.fileId] || {}), ...entry };
+            if (it.tgMessageId) titlesVault['tg_msg_' + it.tgMessageId] = { ...(titlesVault['tg_msg_' + it.tgMessageId] || {}), ...entry };
           }
         });
         localStorage.setItem(TITLES_VAULT_KEY, JSON.stringify(titlesVault));
@@ -1727,12 +1734,13 @@
       if (!item) return;
       const entry = {
         name: item.name,
-        album: item.album,
+        album: item.album || 'General',
         updatedAt: Number(item.updatedAt || Date.now())
       };
       if (item.id) titlesVault[item.id] = entry;
       if (item.url) titlesVault[item.url] = entry;
       if (item.fileId) titlesVault[item.fileId] = entry;
+      if (item.tgMessageId) titlesVault['tg_msg_' + item.tgMessageId] = entry;
       try {
         localStorage.setItem(TITLES_VAULT_KEY, JSON.stringify(titlesVault));
       } catch (e) {}
@@ -1740,13 +1748,19 @@
 
     function aplicarBovedaTitulosAItem(item) {
       if (!item) return item;
-      const v = (item.id && titlesVault[item.id]) || (item.fileId && titlesVault[item.fileId]) || (item.url && titlesVault[item.url]);
+      const v = (item.id && titlesVault[item.id]) ||
+                (item.fileId && titlesVault[item.fileId]) ||
+                (item.url && titlesVault[item.url]) ||
+                (item.tgMessageId && titlesVault['tg_msg_' + item.tgMessageId]);
       if (v) {
-        if (v.name && (esTituloGenerico(item.name) || Number(v.updatedAt || 0) >= Number(item.updatedAt || 0))) {
-          item.name = v.name;
+        if (v.name && v.name.trim()) {
+          item.name = v.name.trim();
         }
-        if (v.album && v.album !== 'General' && (!item.album || item.album === 'General' || Number(v.updatedAt || 0) >= Number(item.updatedAt || 0))) {
+        if (v.album && v.album !== 'General') {
           item.album = v.album;
+        }
+        if (v.updatedAt) {
+          item.updatedAt = Math.max(Number(item.updatedAt || 0), Number(v.updatedAt));
         }
       }
       return item;
@@ -3552,7 +3566,17 @@
       customAlbums = Array.from(albSet.values());
 
       items = fusionarListasPorId(deltaItems, parsed.cloudItems, obtenerIdItem);
-      items = fusionarListasPorId(BASE_CLOUD_ITEMS, items, obtenerIdItem);
+      // Solo agregamos de BASE_CLOUD_ITEMS los recuerdos base que nunca hayan estado en la nube ni hayan sido borrados
+      const existingItemKeys = new Set(items.map(i => String(obtenerIdItem(i))));
+      (BASE_CLOUD_ITEMS || []).forEach(baseIt => {
+        if (!baseIt) return;
+        const k = String(obtenerIdItem(baseIt));
+        if (k && !existingItemKeys.has(k) && !deletedIds.has(k) && !estaItemEliminado(baseIt)) {
+          existingItemKeys.add(k);
+          items.push(JSON.parse(JSON.stringify(baseIt)));
+        }
+      });
+      items.forEach(it => aplicarBovedaTitulosAItem(it));
       tweets = fusionarListasPorId(deltaTweets, parsed.cloudTweets, t => t.id);
       members = fusionarListasPorId(deltaMembers, parsed.cloudMembers, m => m.id);
       awards = fusionarPremios(deltaAwards, parsed.cloudAwards);
@@ -3815,9 +3839,22 @@
         record = record.record;
       }
       if (Array.isArray(record.deletedIds)) {
-        deletedIds = new Set(record.deletedIds.map(String));
-      } else {
-        deletedIds = new Set();
+        record.deletedIds.forEach(id => deletedIds.add(String(id)));
+      }
+      if (record.titlesVault && typeof record.titlesVault === 'object') {
+        Object.entries(record.titlesVault).forEach(([k, v]) => {
+          if (v && typeof v === 'object' && v.name) {
+            const loc = titlesVault[k];
+            const cloudUp = Number(v.updatedAt || 0);
+            const locUp = Number(loc?.updatedAt || 0);
+            if (!loc || cloudUp >= locUp || esTituloGenerico(loc.name)) {
+              titlesVault[k] = v;
+            }
+          }
+        });
+        try {
+          localStorage.setItem(TITLES_VAULT_KEY, JSON.stringify(titlesVault));
+        } catch (e) {}
       }
       const esItemUnicoMake = Boolean(record && typeof record === 'object' && !Array.isArray(record) && record.url && !Array.isArray(record.items));
       const rawRecordItems = Array.isArray(record)
@@ -3832,7 +3869,7 @@
         localStorage.setItem(DELETED_IDS_KEY, JSON.stringify(Array.from(deletedIds)));
       } catch (e) {}
 
-      // Blindaje contra pestañas antiguas: siempre fusionamos BASE_CLOUD_ITEMS para que ninguna pestaña con caché viejo pueda hacer desaparecer fotos o videos
+      // Blindaje: conservamos siempre los items y títulos vivos de la nube, agregando de BASE_CLOUD_ITEMS solo los no presentes ni borrados
       const rawItems = [...rawRecordItems];
       if (!esItemUnicoMake) {
         const seenIds = new Set();
@@ -3849,20 +3886,6 @@
           if ((baseIt.id && seenIds.has(String(baseIt.id))) ||
               (baseIt.url && seenUrls.has(String(baseIt.url))) ||
               (baseIt.fileId && seenFids.has(String(baseIt.fileId)))) {
-            // Si una pestaña antigua pisó el título o álbum con valores genéricos, rescatamos el título y álbum personalizados de BASE_CLOUD_ITEMS
-            const match = rawItems.find(it => it && (
-              (baseIt.id && String(it.id) === String(baseIt.id)) ||
-              (baseIt.url && String(it.url) === String(baseIt.url)) ||
-              (baseIt.fileId && String(it.fileId) === String(baseIt.fileId))
-            ));
-            if (match) {
-              if (esTituloGenerico(match.name) && !esTituloGenerico(baseIt.name)) {
-                match.name = baseIt.name;
-              }
-              if ((!match.album || match.album === 'General') && baseIt.album && baseIt.album !== 'General') {
-                match.album = baseIt.album;
-              }
-            }
             return;
           }
           rawItems.push(JSON.parse(JSON.stringify(baseIt)));
@@ -4006,9 +4029,10 @@
     window.forzarSubidaNube = async function() {
       document.getElementById('statusText').innerText = 'Subiendo a la nube...';
       mostrarToast('Subiendo fotos, álbumes y títulos a Firebase...');
+      items.forEach(it => guardarEnBovedaTitulos(it));
       cambiosPendientes = true;
       await ejecutarSincronizacionNube();
-      mostrarToast('¡Sincronizado con éxito en la nube de Firebase!');
+      mostrarToast(`¡Sincronizado con éxito! ${items.length} recuerdos y títulos están en vivo en Firebase.`);
     };
 
     let _firestoreUnsub = null;
@@ -4028,19 +4052,60 @@
       if (fb) {
         try {
           const docData = await fb.cargarEstadoFirestore();
-          if (docData && typeof docData === 'object') {
+          if (docData && typeof docData === 'object' && Array.isArray(docData.items) && docData.items.length > 0) {
             const parsed = normalizarRecordNube(docData);
             aplicarDeltasSobreNube(parsed);
             sincronizadoConNube = true;
+
+            // Si este navegador (por ejemplo la PC del usuario) tiene títulos o elementos en su instantánea local
+            // que Firestore no tenía o que fueron editados aquí, sincronizamos de inmediato para que todos los celulares los tengan
+            const prevSnap = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || 'null');
+            let hayNuevosTitulosLocales = false;
+            if (prevSnap && Array.isArray(prevSnap.items)) {
+              prevSnap.items.forEach(locIt => {
+                if (!locIt) return;
+                const locKey = obtenerIdItem(locIt);
+                const cloudIt = items.find(ci => obtenerIdItem(ci) === locKey);
+                if (cloudIt) {
+                  if (!esTituloGenerico(locIt.name) && (esTituloGenerico(cloudIt.name) || Number(locIt.updatedAt || 0) > Number(cloudIt.updatedAt || 0))) {
+                    cloudIt.name = locIt.name;
+                    guardarEnBovedaTitulos(cloudIt);
+                    hayNuevosTitulosLocales = true;
+                  }
+                  if (locIt.album && locIt.album !== 'General' && (!cloudIt.album || cloudIt.album === 'General')) {
+                    cloudIt.album = locIt.album;
+                    guardarEnBovedaTitulos(cloudIt);
+                    hayNuevosTitulosLocales = true;
+                  }
+                } else if (!deletedIds.has(String(locKey))) {
+                  items.unshift(locIt);
+                  guardarEnBovedaTitulos(locIt);
+                  hayNuevosTitulosLocales = true;
+                }
+              });
+            }
+
+            if (hayNuevosTitulosLocales) {
+              console.log('Sincronizando automáticamente títulos y elementos locales de esta PC con Firebase...');
+              setTimeout(() => ejecutarSincronizacionNube(), 400);
+            }
           } else {
-            // Primer arranque de Firestore: inicializamos con BASE_CLOUD_ITEMS y respaldo local
+            // Primer arranque de Firestore: inicializamos con respaldo local y BASE_CLOUD_ITEMS
             restaurarDesdeRespaldoLocal();
-            items = fusionarListasPorId(BASE_CLOUD_ITEMS, items, obtenerIdItem);
+            const existingKeys = new Set(items.map(i => String(obtenerIdItem(i))));
+            (BASE_CLOUD_ITEMS || []).forEach(b => {
+              const k = String(obtenerIdItem(b));
+              if (k && !existingKeys.has(k) && !deletedIds.has(k) && !estaItemEliminado(b)) {
+                existingKeys.add(k);
+                items.push(JSON.parse(JSON.stringify(b)));
+              }
+            });
+            items.forEach(it => aplicarBovedaTitulosAItem(it));
             sincronizadoConNube = true;
-            setTimeout(() => ejecutarSincronizacionNube(), 1000);
+            setTimeout(() => ejecutarSincronizacionNube(), 600);
           }
 
-          // Listener en tiempo real oficial (Firestore onSnapshot): actualiza al instante si otro compañero comenta o vota
+          // Listener en tiempo real oficial (Firestore onSnapshot): actualiza al instante entre PC y celulares
           if (!_firestoreUnsub) {
             _firestoreUnsub = fb.suscribirCambiosFirestore((liveRecord) => {
               if (liveRecord && !sincronizandoAhora && !cambiosPendientes) {
@@ -4060,7 +4125,15 @@
 
       if (!sincronizadoConNube) {
         restaurarDesdeRespaldoLocal();
-        items = fusionarListasPorId(BASE_CLOUD_ITEMS, items, obtenerIdItem);
+        const existingKeys = new Set(items.map(i => String(obtenerIdItem(i))));
+        (BASE_CLOUD_ITEMS || []).forEach(b => {
+          const k = String(obtenerIdItem(b));
+          if (k && !existingKeys.has(k) && !deletedIds.has(k) && !estaItemEliminado(b)) {
+            existingKeys.add(k);
+            items.push(JSON.parse(JSON.stringify(b)));
+          }
+        });
+        items.forEach(it => aplicarBovedaTitulosAItem(it));
       }
 
       nubeCargada = true;
@@ -4488,34 +4561,26 @@
     }
 
     function prepararItemsParaGuardarNube(listaItems) {
-      const baseMap = new Map();
-      (BASE_CLOUD_ITEMS || []).forEach(b => {
-        if (b && b.id) baseMap.set(b.id, b);
-      });
-      const recientes = new Set((listaItems || []).slice(0, 30).map(i => i.id));
-      return (listaItems || []).filter(it => {
-        if (!it) return false;
-        if (recientes.has(it.id)) return true;
-        const base = baseMap.get(it.id);
-        if (!base) return true;
-        if (Array.isArray(it.comments) && it.comments.length > 0) return true;
-        if (typeof it.likes === 'number' && it.likes > 0) return true;
-        if (it.name !== base.name || it.album !== base.album) return true;
-        return false;
-      }).map(it => ({
-        id: it.id,
-        name: it.name,
-        url: it.url,
-        fileId: it.fileId || '',
-        tgMessageId: it.tgMessageId,
-        album: it.album || 'General',
-        type: it.type || 'image/jpeg',
-        date: it.date,
-        updatedAt: it.updatedAt || Date.now(),
-        ...(it.likes ? { likes: it.likes } : {}),
-        ...(it.likedBy && it.likedBy.length > 0 ? { likedBy: it.likedBy } : {}),
-        ...(it.comments && it.comments.length > 0 ? { comments: it.comments } : {})
-      }));
+      return (listaItems || [])
+        .filter(it => it && it.url && !it.isHeavyVideo && !estaItemEliminado(it))
+        .slice(0, 750)
+        .map(it => {
+          const applied = aplicarBovedaTitulosAItem({ ...it });
+          return {
+            id: applied.id,
+            name: applied.name || 'Recuerdo de la Promo',
+            url: applied.url,
+            fileId: applied.fileId || '',
+            tgMessageId: applied.tgMessageId,
+            album: applied.album || 'General',
+            type: applied.type || 'image/jpeg',
+            date: applied.date || new Date().toISOString(),
+            updatedAt: applied.updatedAt || Date.now(),
+            likes: typeof applied.likes === 'number' ? applied.likes : 0,
+            likedBy: Array.isArray(applied.likedBy) ? applied.likedBy : [],
+            comments: Array.isArray(applied.comments) ? applied.comments.filter(c => !deletedIds.has(c.id)) : []
+          };
+        });
     }
 
     async function sincronizarNube() {
@@ -4525,7 +4590,7 @@
       document.getElementById('statusText').innerText = 'Guardando cambios...';
       document.getElementById('heroSyncBadge').innerText = 'Guardando...';
 
-      // Cola con debounce (450ms) para agrupar ediciones rápidas y evitar que peticiones PUT compitan entre sí
+      // Cola con debounce (450ms) para agrupar ediciones rápidas y evitar que peticiones compitan entre sí
       clearTimeout(syncTimer);
       syncTimer = setTimeout(() => {
         ejecutarSincronizacionNube();
@@ -4551,7 +4616,8 @@
           awards,
           capsules,
           events,
-          music: musicConfig
+          music: musicConfig,
+          titlesVault: titlesVault || {}
         };
 
         let guardadoFb = false;
