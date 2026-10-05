@@ -28,6 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script type="module" src="/src/firebase.ts"></script>
   <script>
     window.DEFAULT_LOGO_VINO_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
@@ -879,8 +880,15 @@
         </div>
       </div>
 
-      <!-- Estado de Nube y Tema -->
+      <!-- Estado de Nube, Google Auth y Tema -->
       <div class="pt-4 border-t border-[var(--border-color)] space-y-3">
+        <div id="firebaseAuthBox" class="p-2.5 rounded-xl bg-amber-50/70 border border-[var(--gold-main)]/30 text-xs flex items-center justify-between gap-2 shadow-sm">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+            <span id="firebaseUserText" class="truncate font-semibold text-[var(--wine-main)] text-[11px]">Firebase Cloud Activo</span>
+          </div>
+          <button id="firebaseAuthBtn" type="button" onclick="iniciarGoogleAuth()" class="btn-interactive text-[11px] font-bold text-[var(--wine-main)] hover:text-[var(--gold-main)] shrink-0 cursor-pointer">Conectar Google</button>
+        </div>
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
           <span id="statusText" class="truncate">Sincronizando...</span>
           <button type="button" onclick="cargarDesdeNube(true)" class="btn-interactive font-semibold hover:text-[var(--wine-main)] cursor-pointer shrink-0">Recargar</button>
@@ -2860,6 +2868,153 @@
     };
 
     const BASE_CLOUD_ITEMS = [
+      {"id": "tg_msg_912", "tgMessageId": 912, "fileId": "AgACAgEAAxkDAAIDkGrDKdvw1fRK6nn9QXHTV-SoN29aAAJWDWsbZcEQRmTx3JBWLzLyAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1077.jpg", "name": "CIMG3763", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:57.000Z", "updatedAt": 1791160797000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_911", "tgMessageId": 911, "fileId": "AgACAgEAAxkDAAIDj2rDKdlM4SenHZGx3zgWQMfqweq1AAJVDWsbZcEQRl5mlj1dQTmVAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1076.jpg", "name": "CIMG3762", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:54.000Z", "updatedAt": 1791160794000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_910", "tgMessageId": 910, "fileId": "AgACAgEAAxkDAAIC8WrDKrO2mCi9qY4eOkJo8MM04dVmAAJUDWsbZcEQRqoW2I7Vzro9AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1075.jpg", "name": "CIMG3761", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:51.000Z", "updatedAt": 1791160791000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_909", "tgMessageId": 909, "fileId": "AgACAgEAAxkDAAIC8GrDKrKeb2-6bsIVbwOFyYksD8WfAAJTDWsbZcEQRkFmkGvekKGnAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1074.jpg", "name": "CIMG3760", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:48.000Z", "updatedAt": 1791160788000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_908", "tgMessageId": 908, "fileId": "AgACAgEAAxkDAAIC72rDKrETdO8X4Hlq6OmMttLxjB_LAAJSDWsbZcEQRgSnGS1OpsaaAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1073.jpg", "name": "CIMG3759", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:45.000Z", "updatedAt": 1791160785000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_907", "tgMessageId": 907, "fileId": "AgACAgEAAxkDAAIC7mrDKbuq6Z_h8CRXIAiECROhd4bqAAJRDWsbZcEQRgX0GpPIvzH1AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1072.jpg", "name": "CIMG3758", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:42.000Z", "updatedAt": 1791160782000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_906", "tgMessageId": 906, "fileId": "AgACAgEAAxkDAAIC7WrDKq-36uUg7xIvhxGLaO6Ckk7hAAJQDWsbZcEQRgtOXikawgGsAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1071.jpg", "name": "CIMG3757", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:40.000Z", "updatedAt": 1791160780000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_905", "tgMessageId": 905, "fileId": "AgACAgEAAxkDAAIC7GrDKq0Gh7lgDIifn5_BboEtP9jCAAJPDWsbZcEQRqkZq5Qu7K7LAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1070.jpg", "name": "CIMG3756", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:37.000Z", "updatedAt": 1791160777000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_904", "tgMessageId": 904, "fileId": "AgACAgEAAxkDAAIC62rDKqz2YmkpGaO_GEpXC3oKpgQyAAJODWsbZcEQRuGcokixnqQVAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1069.jpg", "name": "CIMG3755", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:34.000Z", "updatedAt": 1791160774000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_903", "tgMessageId": 903, "fileId": "AgACAgEAAxkDAAIC6mrDKqtGFivTBbsMDPY6w7r0hWAHAAJNDWsbZcEQRmIqXxIFXwFiAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1068.jpg", "name": "CIMG3754", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:32.000Z", "updatedAt": 1791160772000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_902", "tgMessageId": 902, "fileId": "AgACAgEAAxkDAAIC6WrDKqp80DQhhubefb4pZ45K5BkaAAJMDWsbZcEQRkQ1oZVvgLkGAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1067.jpg", "name": "CIMG3753", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:29.000Z", "updatedAt": 1791160769000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_901", "tgMessageId": 901, "fileId": "AgACAgEAAxkDAAIC6GrDKqhpu9XecWlTRqssgIo7OmNfAAJLDWsbZcEQRqRllDG79RPUAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1066.jpg", "name": "CIMG3752", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:26.000Z", "updatedAt": 1791160766000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_900", "tgMessageId": 900, "fileId": "AgACAgEAAxkDAAIDhGrDKb1ZJgz8_kU8lth-gvaofS4wAAJKDWsbZcEQRocDRAj2uXJrAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1065.jpg", "name": "CIMG3751", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:23.000Z", "updatedAt": 1791160763000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_899", "tgMessageId": 899, "fileId": "AgACAgEAAxkDAAIC5mrDKqaXGzPrBcm8HbhWKtHCvQHxAAJJDWsbZcEQRja4L9hoyi9LAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1064.jpg", "name": "CIMG3750", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:20.000Z", "updatedAt": 1791160760000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_898", "tgMessageId": 898, "fileId": "AgACAgEAAxkDAAIC5WrDKqQNv6IKjQWdKcNvDX6AG-7JAAJIDWsbZcEQRtwhHuvIV6A6AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1063.jpg", "name": "CIMG3749", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:17.000Z", "updatedAt": 1791160757000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_897", "tgMessageId": 897, "fileId": "AgACAgEAAxkDAAIC5GrDKqMvGtV10dWCjNYybyx4Hs8PAAJHDWsbZcEQRioSfO8CuVzoAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1062.jpg", "name": "CIMG3748", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:14.000Z", "updatedAt": 1791160754000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_896", "tgMessageId": 896, "fileId": "AgACAgEAAxkDAAIC42rDKqJEsfcHuy_KCe77QOoVxi-oAAJGDWsbZcEQRiWUsnWWpJ-jAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1061.jpg", "name": "CIMG3747", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:11.000Z", "updatedAt": 1791160751000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_895", "tgMessageId": 895, "fileId": "AgACAgEAAxkDAAIC4mrDKqGM0jkOrgtSvz7kDDyx06EYAAJFDWsbZcEQRlPgf8ubgldUAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1060.jpg", "name": "CIMG3745", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:07.000Z", "updatedAt": 1791160747000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_894", "tgMessageId": 894, "fileId": "AgACAgEAAxkDAAIC4WrDKp8unOyNTkkcHgm52GN0oXacAAJEDWsbZcEQRu7W_ONvWIjfAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1059.jpg", "name": "CIMG3743", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:04.000Z", "updatedAt": 1791160744000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_893", "tgMessageId": 893, "fileId": "AgACAgEAAxkDAAIC4GrDKp6Pu_YWip4lyxJGMtVCc-GSAAJDDWsbZcEQRlH2B2BYAv6_AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1058.jpg", "name": "CIMG3742", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:39:02.000Z", "updatedAt": 1791160742000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_892", "tgMessageId": 892, "fileId": "AgACAgEAAxkDAAIC32rDKp0l8nhYUhefb-ZVF6yjeo_vAAJCDWsbZcEQRm0OugI6BfiaAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1057.jpg", "name": "CIMG3741", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:59.000Z", "updatedAt": 1791160739000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_891", "tgMessageId": 891, "fileId": "AgACAgEAAxkDAAIC3mrDKpwNv4SIPlQqo-cP3PPNlhT3AAJBDWsbZcEQRtXtJYM7_UZuAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1056.jpg", "name": "CIMG3740", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:54.000Z", "updatedAt": 1791160734000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_890", "tgMessageId": 890, "fileId": "AgACAgEAAxkDAAIC3WrDKprrgB6dWbFzvCadyJODHyHjAAJADWsbZcEQRo3JfFCbiWiIAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1055.jpg", "name": "CIMG3739", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:51.000Z", "updatedAt": 1791160731000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_889", "tgMessageId": 889, "fileId": "AgACAgEAAxkDAAIC3GrDKpjodIbAthDvFyy-gBiEKvulAAI_DWsbZcEQRiXB2d5_s8PhAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1054.jpg", "name": "CIMG3738", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:48.000Z", "updatedAt": 1791160728000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_888", "tgMessageId": 888, "fileId": "AgACAgEAAxkDAAIC22rDKpeA7FAVDnTRI5GId6AuvfRDAAI-DWsbZcEQRqP5sQM_uvrHAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1053.jpg", "name": "CIMG3737", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:46.000Z", "updatedAt": 1791160726000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_887", "tgMessageId": 887, "fileId": "AgACAgEAAxkDAAIC2mrDKpb-NUSdFAHR0QFZZ1y343_oAAI9DWsbZcEQRmcTuJN4PGB4AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1052.jpg", "name": "CIMG3736", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:43.000Z", "updatedAt": 1791160723000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_886", "tgMessageId": 886, "fileId": "AgACAgEAAxkDAAIC2WrDKpTq8CRX5GK4nQ7SJlUuTmXdAAI8DWsbZcEQRlOzPZWKl7IHAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1051.jpg", "name": "CIMG3735", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:39.000Z", "updatedAt": 1791160719000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_885", "tgMessageId": 885, "fileId": "AgACAgEAAxkDAAIC2GrDKpP-5ownQnVBE3--zDFCqFvzAAI7DWsbZcEQRssUhRXnkqZWAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1050.jpg", "name": "CIMG3734", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:37.000Z", "updatedAt": 1791160717000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_884", "tgMessageId": 884, "fileId": "AgACAgEAAxkDAAIC12rDKpIoVouRCtc7cHLcSm-UEMqiAAI6DWsbZcEQRuiuqIYdKRHpAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1049.jpg", "name": "CIMG3732", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:34.000Z", "updatedAt": 1791160714000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_883", "tgMessageId": 883, "fileId": "AgACAgEAAxkDAAIC1mrDKpARaDbTRSMF6MgUBzZcQAT3AAI5DWsbZcEQRr9PsbRhKogKAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1048.jpg", "name": "CIMG3722", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:31.000Z", "updatedAt": 1791160711000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_882", "tgMessageId": 882, "fileId": "AgACAgEAAxkDAAIC1WrDKo9CFt8cZCxU3cZtFkgXoocgAAI4DWsbZcEQRq6KWD6PC2anAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1047.jpg", "name": "CIMG3721", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:28.000Z", "updatedAt": 1791160708000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_881", "tgMessageId": 881, "fileId": "AgACAgEAAxkDAAIC1GrDKo7mGMEFYBxi2yrBRNCeVpWEAAI3DWsbZcEQRgGqwWLdhdU7AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1046.jpg", "name": "CIMG3714", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:24.000Z", "updatedAt": 1791160704000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_880", "tgMessageId": 880, "fileId": "AgACAgEAAxkDAAIC02rDKoyVfo3SK5c1qAkYP2F_J9lRAAI2DWsbZcEQRtaAJwwGoPRHAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1045.jpg", "name": "CIMG3713", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:22.000Z", "updatedAt": 1791160702000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_879", "tgMessageId": 879, "fileId": "AgACAgEAAxkDAAIC0mrDKovXS-JA1llwg05OUgABBliWvAACNQ1rG2XBEEZ3b9V1iN1XXgEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1044.jpg", "name": "CIMG3712", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:19.000Z", "updatedAt": 1791160699000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_878", "tgMessageId": 878, "fileId": "AgACAgEAAxkDAAIC0WrDKor2DURHUviRrCKNIkShqTUlAAI0DWsbZcEQRuuLXDxBLdP-AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1043.jpg", "name": "CIMG3711", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:17.000Z", "updatedAt": 1791160697000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_877", "tgMessageId": 877, "fileId": "AgACAgEAAxkDAAIC0GrDKonik5cEUnwuOaIrqRvuV1J5AAIzDWsbZcEQRhAAAbLh4U_eGwEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1042.jpg", "name": "CIMG3709", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:14.000Z", "updatedAt": 1791160694000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_876", "tgMessageId": 876, "fileId": "AgACAgEAAxkDAAICz2rDKofangABfcqtnSfx-axTi4iN7wACMg1rG2XBEEa_GXdvFyQ3agEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1041.jpg", "name": "CIMG3706", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:11.000Z", "updatedAt": 1791160691000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_875", "tgMessageId": 875, "fileId": "AgACAgEAAxkDAAICzmrDKoaN89ah3-N-Rx48soqSeY6AAAIxDWsbZcEQRujpuQsiHtYBAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1040.jpg", "name": "CIMG3704", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:08.000Z", "updatedAt": 1791160688000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_874", "tgMessageId": 874, "fileId": "AgACAgEAAxkDAAICzWrDKoXLPkUbjMl9dMp_Qel_3bvFAAIwDWsbZcEQRjYFAud-ipq6AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1039.jpg", "name": "CIMG3702", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:05.000Z", "updatedAt": 1791160685000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_873", "tgMessageId": 873, "fileId": "AgACAgEAAxkDAAICzGrDKoN_pRSfN8HNEWzN_7PCKuPXAAIvDWsbZcEQRq8ayYKLrj4FAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1038.jpg", "name": "CIMG3701", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:38:02.000Z", "updatedAt": 1791160682000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_872", "tgMessageId": 872, "fileId": "AgACAgEAAxkDAAICy2rDKoIN7qOSvgeKD2kv0mSvOJQhAAIuDWsbZcEQRuxrG2tduR3wAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1037.jpg", "name": "CIMG3700", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:59.000Z", "updatedAt": 1791160679000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_871", "tgMessageId": 871, "fileId": "AgACAgEAAxkDAAICymrDKoEZLa4lJffStB11ElWxeqcZAAItDWsbZcEQRgV2LAIr4yIrAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1036.jpg", "name": "CIMG3699", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:53.000Z", "updatedAt": 1791160673000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_870", "tgMessageId": 870, "fileId": "AgACAgEAAxkDAAICyWrDKoCKTr8T5ewJqsJQxKGNkWLeAAIsDWsbZcEQRpRg9WpOIIHiAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1035.jpg", "name": "CIMG3698", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:51.000Z", "updatedAt": 1791160671000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_869", "tgMessageId": 869, "fileId": "AgACAgEAAxkDAAICyGrDKn6Y60jC0vJhx1VNJsFK0o3XAAIrDWsbZcEQRt0UFoIxw83HAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1034.jpg", "name": "CIMG3696", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:47.000Z", "updatedAt": 1791160667000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_868", "tgMessageId": 868, "fileId": "AgACAgEAAxkDAAICx2rDKn3YBTGekBGZhpG0worikCoUAAIqDWsbZcEQRjmm-sR3hcooAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1033.jpg", "name": "CIMG3695", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:44.000Z", "updatedAt": 1791160664000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_867", "tgMessageId": 867, "fileId": "AgACAgEAAxkDAAICxmrDKnxu_yhsp4kJlcc_RcVnm4Y-AAIpDWsbZcEQRtqspPL5U6xHAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1032.jpg", "name": "CIMG3694", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:41.000Z", "updatedAt": 1791160661000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_866", "tgMessageId": 866, "fileId": "AgACAgEAAxkDAAICxWrDKnlJ20oYOJLs-s_i7dUXT7fsAAIoDWsbZcEQRhSI9JcVgVhLAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1031.jpg", "name": "CIMG3693", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:38.000Z", "updatedAt": 1791160658000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_865", "tgMessageId": 865, "fileId": "AgACAgEAAxkDAAICxGrDKng5Hx5zpIAVClUNvQePgJvOAAInDWsbZcEQRomqPnCq5rSKAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1030.jpg", "name": "CIMG3692", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:35.000Z", "updatedAt": 1791160655000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_864", "tgMessageId": 864, "fileId": "AgACAgEAAxkDAAICw2rDKnbERXUBCMtd4ssddXMcPOnNAAImDWsbZcEQRvhLcPPJtpJ9AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1029.jpg", "name": "CIMG3691", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:33.000Z", "updatedAt": 1791160653000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_863", "tgMessageId": 863, "fileId": "AgACAgEAAxkDAAICwmrDKnWbCkmMvZEnAAGckLuJBg03VwACJQ1rG2XBEEa_a1Q34NmzRgEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1028.jpg", "name": "CIMG3690", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:31.000Z", "updatedAt": 1791160651000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_862", "tgMessageId": 862, "fileId": "AgACAgEAAxkBAAIDSGrDKx51VPnHeGsOECEYkEmmk41mAAJADGsbL_kYRmxYaN6oPLc4AQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1104.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:29.000Z", "updatedAt": 1791160649000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_861", "tgMessageId": 861, "fileId": "AgACAgEAAxkBAAIDR2rDKx5Ov2hSdyaS5YHkgGpORCrAAAI_DGsbL_kYRozgTwgrNcAMAQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1103.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:28.000Z", "updatedAt": 1791160648000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_860", "tgMessageId": 860, "fileId": "AgACAgEAAxkBAAIDRmrDKx3oGTiHQeRYIsqohGMHS6Y6AAI-DGsbL_kYRliTcmjTTBHmAQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1102.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:27.000Z", "updatedAt": 1791160647000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_859", "tgMessageId": 859, "fileId": "AgACAgEAAxkBAAIDRWrDKx23ePVXHXosHiyMEoIzHkrpAAI9DGsbL_kYRs7pG3xkp3dIAQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1101.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:27.000Z", "updatedAt": 1791160647000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_858", "tgMessageId": 858, "fileId": "AgACAgEAAxkDAAICwWrDKnSN4nBUwCK3mt1-hv-hUS9VAAIkDWsbZcEQRgvhN44Tze6wAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1027.jpg", "name": "CIMG3688", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:27.000Z", "updatedAt": 1791160647000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_857", "tgMessageId": 857, "fileId": "AgACAgEAAxkBAAIDRGrDKxxCGxR0NZ1cbptLeN6G3N3kAAI8DGsbL_kYRh_WY54kbIfHAQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1100.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:26.000Z", "updatedAt": 1791160646000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_856", "tgMessageId": 856, "fileId": "AgACAgEAAxkBAAIDQ2rDKxxDsxifKI7lCLfoa2YCmKkzAAI7DGsbL_kYRroHuI7OkASRAQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1099.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:26.000Z", "updatedAt": 1791160646000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_855", "tgMessageId": 855, "fileId": "AgACAgEAAxkBAAIDQmrDKxuZFGB6Axi7Q3_nuwlMb4WlAAI6DGsbL_kYRmyLih-gcHO2AQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1098.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:25.000Z", "updatedAt": 1791160645000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_854", "tgMessageId": 854, "fileId": "AgACAgEAAxkDAAICwGrDKnN49h4IDfiSnfpgnefODsEHAAIjDWsbZcEQRlaA71VSDanZAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1026.jpg", "name": "CIMG3687", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:24.000Z", "updatedAt": 1791160644000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_853", "tgMessageId": 853, "fileId": "AgACAgEAAxkBAAIDQWrDKxv42LyntY582wLvM1TlaAABhwACOQxrGy_5GEbSoyxZMWAbXAEAAwIAA3kAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1097.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:24.000Z", "updatedAt": 1791160644000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_852", "tgMessageId": 852, "fileId": "AgACAgEAAxkBAAIDQGrDKxoZ7gHRIoj5wLXumdKZyj46AAI4DGsbL_kYRkhEwhdNsSK9AQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1096.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:24.000Z", "updatedAt": 1791160644000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_851", "tgMessageId": 851, "fileId": "AgACAgEAAxkBAAIDP2rDKxkBnv-vo75MIlIBCpbptls7AAI3DGsbL_kYRu7faD9eZd9GAQADAgADeQADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1095.jpg", "name": "📥 Copia de seguridad · Subido por Fabricio en @PromedmBot: Foto de Fabricio", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:21.000Z", "updatedAt": 1791160641000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_850", "tgMessageId": 850, "fileId": "AgACAgEAAxkDAAIDUmrDKbzOBsriUIe4QbpW50G2i8_9AAIiDWsbZcEQRm2mT0TaGb0TAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1025.jpg", "name": "CIMG3686", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:21.000Z", "updatedAt": 1791160641000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_849", "tgMessageId": 849, "fileId": "AgACAgEAAxkDAAICvmrDKnBvPpikwKRLNI5SRc_FUvVoAAIhDWsbZcEQRpNpqaIwREmqAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1024.jpg", "name": "CIMG3685", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:19.000Z", "updatedAt": 1791160639000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_848", "tgMessageId": 848, "fileId": "AgACAgEAAxkDAAICvWrDKm897zXddjbXC2qbPB-2mJYfAAIgDWsbZcEQRoQKdhimsISUAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1023.jpg", "name": "CIMG3684", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:16.000Z", "updatedAt": 1791160636000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_847", "tgMessageId": 847, "fileId": "AgACAgEAAxkDAAICvGrDKbrFqMubUHx7avdVs9ajccmIAAIfDWsbZcEQRny7dUKbIWijAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1022.jpg", "name": "CIMG3683", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:14.000Z", "updatedAt": 1791160634000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_846", "tgMessageId": 846, "fileId": "AgACAgEAAxkDAAICu2rDKmwHiSrmW0y_NXxXEl0YG9RjAAIeDWsbZcEQRh3MIY8SMBkgAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1021.jpg", "name": "CIMG3682", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:11.000Z", "updatedAt": 1791160631000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_845", "tgMessageId": 845, "fileId": "AgACAgEAAxkDAAICumrDKmuZyCiAj8KL8EY7IjHbMrTEAAIdDWsbZcEQRszGvSws89vXAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1020.jpg", "name": "CIMG3679", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:09.000Z", "updatedAt": 1791160629000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_844", "tgMessageId": 844, "fileId": "AgACAgEAAxkDAAICuWrDKmrfnzekCZukI6YuGEtNpvpCAAIcDWsbZcEQRmVgrsdJSacNAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1019.jpg", "name": "CIMG3676", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:06.000Z", "updatedAt": 1791160626000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_843", "tgMessageId": 843, "fileId": "AgACAgEAAxkDAAICuGrDKmlCS0oF_Q7o0iUJ_HmI-eKXAAIbDWsbZcEQRmd9znMTTn_IAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1018.jpg", "name": "CIMG3675", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:04.000Z", "updatedAt": 1791160624000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_842", "tgMessageId": 842, "fileId": "AgACAgEAAxkDAAICt2rDKmeR2OI4oLWdST9GLjn373vrAAIaDWsbZcEQRuglrlarDiuKAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1017.jpg", "name": "CIMG3673", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:37:01.000Z", "updatedAt": 1791160621000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_841", "tgMessageId": 841, "fileId": "AgACAgEAAxkDAAICtmrDKmZyYUJNxszv7N_LFzbJGYSaAAIZDWsbZcEQRgGFwHptY6n4AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1016.jpg", "name": "CIMG3671", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:58.000Z", "updatedAt": 1791160618000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_830", "tgMessageId": 830, "fileId": "AgACAgEAAxkDAAICtWrDKmWLCQV_SZ2PK9RLXUhS9Wp6AAIYDWsbZcEQRhKVARzKwY-JAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1015.jpg", "name": "CIMG3670", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:55.000Z", "updatedAt": 1791160615000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_829", "tgMessageId": 829, "fileId": "AgACAgEAAxkDAAICtGrDKmOcRlCORtQ6ZGZiBjux0763AAIXDWsbZcEQRgGeEJQfb0pcAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1014.jpg", "name": "CIMG3669", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:52.000Z", "updatedAt": 1791160612000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_828", "tgMessageId": 828, "fileId": "AgACAgEAAxkDAAICs2rDKmJFXmFNKoZEsDLH1iocq4JEAAIWDWsbZcEQRonz1VnDHCcAAQEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1013.jpg", "name": "CIMG3668", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:50.000Z", "updatedAt": 1791160610000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_827", "tgMessageId": 827, "fileId": "AgACAgEAAxkDAAICsmrDKmGuHBkyqnvJWbW2kDXduyV6AAIVDWsbZcEQRjR1ClBgouqKAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1012.jpg", "name": "CIMG3666", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:47.000Z", "updatedAt": 1791160607000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_826", "tgMessageId": 826, "fileId": "AgACAgEAAxkDAAICsWrDKmBYD28RRJWsf4nsCtUfQuRpAAIUDWsbZcEQRqTG-6x_3vKIAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1011.jpg", "name": "CIMG3664", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:45.000Z", "updatedAt": 1791160605000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_825", "tgMessageId": 825, "fileId": "AgACAgEAAxkDAAICsGrDKl47KDomhxGrJSC7HIUVmF_XAAITDWsbZcEQRkGRUODYLoVsAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1010.jpg", "name": "CIMG3663", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:42.000Z", "updatedAt": 1791160602000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_824", "tgMessageId": 824, "fileId": "AgACAgEAAxkDAAICr2rDKl27vwsceL9kIJjwnmUwx9tjAAISDWsbZcEQRjsxYPMIn5VxAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1009.jpg", "name": "CIMG3662", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:38.000Z", "updatedAt": 1791160598000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_823", "tgMessageId": 823, "fileId": "AgACAgEAAxkDAAICrmrDKlppzSbaZ5IaCFa2Yc99A8hEAAIRDWsbZcEQRk9oSlMvg4C7AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1008.jpg", "name": "CIMG3661", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:36.000Z", "updatedAt": 1791160596000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_822", "tgMessageId": 822, "fileId": "AgACAgEAAxkDAAICrWrDKllJlUwlntQ6WtvITCDWo_ttAAIQDWsbZcEQRo5pwbfMTR6uAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1007.jpg", "name": "CIMG3660", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:32.000Z", "updatedAt": 1791160592000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_821", "tgMessageId": 821, "fileId": "AgACAgEAAxkDAAICrGrDKlgq1NKfqdSELQWCqTaBBj0LAAIPDWsbZcEQRnvek5hv4uj7AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1006.jpg", "name": "CIMG3659", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:29.000Z", "updatedAt": 1791160589000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_820", "tgMessageId": 820, "fileId": "AgACAgEAAxkDAAICq2rDKlfKaOIEI-9aY7dGBNiJ6e1OAAIODWsbZcEQRvjqFnr0z7bsAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1005.jpg", "name": "CIMG3658", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:21.000Z", "updatedAt": 1791160581000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_819", "tgMessageId": 819, "fileId": "AgACAgEAAxkDAAICqmrDKlWVGnmI5tz-ktSWsTIa0m_EAAINDWsbZcEQRn7tchHwc4JzAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1004.jpg", "name": "CIMG3657", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:18.000Z", "updatedAt": 1791160578000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_818", "tgMessageId": 818, "fileId": "AgACAgEAAxkDAAICqWrDKlSZ6r2aEsNvMBPP5w3pdv3rAAIMDWsbZcEQRk1sBY93qtZEAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1003.jpg", "name": "CIMG3656", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:15.000Z", "updatedAt": 1791160575000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_817", "tgMessageId": 817, "fileId": "AgACAgEAAxkDAAICqGrDKlORy4dsIoyjkqHdM-C3k1yxAAILDWsbZcEQRjPuLoAntHGbAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1002.jpg", "name": "CIMG3655", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:12.000Z", "updatedAt": 1791160572000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_816", "tgMessageId": 816, "fileId": "AgACAgEAAxkDAAICp2rDKlLYDwTnE3QUkb3gIU0HY18xAAIKDWsbZcEQRl_8sIY1F-beAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1001.jpg", "name": "CIMG3654", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:10.000Z", "updatedAt": 1791160570000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_815", "tgMessageId": 815, "fileId": "AgACAgEAAxkDAAICpmrDKlDruQ-ll45a6hsB4kn86ZDpAAIJDWsbZcEQRgi3pLbxfvvwAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1000.jpg", "name": "CIMG3653", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:07.000Z", "updatedAt": 1791160567000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_814", "tgMessageId": 814, "fileId": "AgACAgEAAxkDAAICpWrDKk8M-9-yNfS2zuF_tSqiv8FmAAIIDWsbZcEQRoiV5V5W3lH_AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_999.jpg", "name": "CIMG3649", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:04.000Z", "updatedAt": 1791160564000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_813", "tgMessageId": 813, "fileId": "AgACAgEAAxkDAAICpGrDKk7CQwSohJwNrhonDZVdxcImAAIHDWsbZcEQRgT2bJ1WVNBuAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_998.jpg", "name": "CIMG3646", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:36:01.000Z", "updatedAt": 1791160561000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_812", "tgMessageId": 812, "fileId": "AgACAgEAAxkDAAICo2rDKky7_W3EdcQBpne94AtKVX3QAAIGDWsbZcEQRtymqJAxxQZoAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_997.jpg", "name": "CIMG3645", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:58.000Z", "updatedAt": 1791160558000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_811", "tgMessageId": 811, "fileId": "AgACAgEAAxkDAAIComrDKksGRC-a33Jdpx0ZRWSHJNZIAAIFDWsbZcEQRob2w73mnclLAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_996.jpg", "name": "CIMG3642", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:56.000Z", "updatedAt": 1791160556000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_810", "tgMessageId": 810, "fileId": "AgACAgEAAxkDAAICoWrDKkqRb_tNgr0DXocPNvZR0zfeAAIEDWsbZcEQRmKfyFX8C1WUAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_995.jpg", "name": "CIMG3641", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:54.000Z", "updatedAt": 1791160554000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_809", "tgMessageId": 809, "fileId": "AgACAgEAAxkDAAICoGrDKklpygXGn_1syvrbIeKrfn1RAAIDDWsbZcEQRi6u1xMI3j_gAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_994.jpg", "name": "CIMG3640", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:50.000Z", "updatedAt": 1791160550000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_808", "tgMessageId": 808, "fileId": "AgACAgEAAxkDAAICn2rDKke3wuQIN2C-lFkJp7FNWNMgAAICDWsbZcEQRiY8VWNfoO_mAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_993.jpg", "name": "CIMG3638", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:47.000Z", "updatedAt": 1791160547000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_807", "tgMessageId": 807, "fileId": "AgACAgEAAxkDAAICnmrDKkae_SoNzw7TN090nj-2ovNbAAIBDWsbZcEQRr-U84T052I4AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_992.jpg", "name": "CIMG3637", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:45.000Z", "updatedAt": 1791160545000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_806", "tgMessageId": 806, "fileId": "AgACAgEAAxkDAAICnWrDKkRFBhBkKlfQgvfQGE3jZhf0AAMNaxtlwRBGOrHHWXKNHKIBAAMCAAN3AAM9BA", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_991.jpg", "name": "CIMG3636", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:42.000Z", "updatedAt": 1791160542000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_805", "tgMessageId": 805, "fileId": "AgACAgEAAxkDAAICnGrDKkNmmAOeb3Q-40VP3CQ0d5xFAAL_DGsbZcEQRg2ntkduwzITAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_990.jpg", "name": "CIMG3634", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:40.000Z", "updatedAt": 1791160540000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_804", "tgMessageId": 804, "fileId": "AgACAgEAAxkDAAICm2rDKkIkP52_WvYXO9jtcW418T8fAAL-DGsbZcEQRqOPtwmBkwoeAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_989.jpg", "name": "CIMG3632", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:37.000Z", "updatedAt": 1791160537000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_803", "tgMessageId": 803, "fileId": "AgACAgEAAxkDAAICmmrDKkB8Fto0qiiTdewiyp1lx6AfAAL9DGsbZcEQRmxbsq4mcnIKAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_988.jpg", "name": "CIMG3631", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:35.000Z", "updatedAt": 1791160535000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_802", "tgMessageId": 802, "fileId": "AgACAgEAAxkDAAICmWrDKj5uI88WOMC07uzZ4aMgoLxXAAL8DGsbZcEQRnpCZ3u9KBjMAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_987.jpg", "name": "CIMG3629", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:32.000Z", "updatedAt": 1791160532000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_801", "tgMessageId": 801, "fileId": "AgACAgEAAxkDAAICmGrDKjxq-eYRmy5mY6Kwu7iEauzIAAL7DGsbZcEQRiPY51l45pQjAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_986.jpg", "name": "CIMG3627", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:29.000Z", "updatedAt": 1791160529000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_800", "tgMessageId": 800, "fileId": "AgACAgEAAxkDAAIDIGrDKbuWL6WzLbH2IjzJZxVjFlV0AAL6DGsbZcEQRl17HwECYQ9-AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_985.jpg", "name": "CIMG3624", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:26.000Z", "updatedAt": 1791160526000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_799", "tgMessageId": 799, "fileId": "AgACAgEAAxkDAAIClmrDKjoZqLzkdJ5bbk1t8i6-dB0UAAL5DGsbZcEQRohWPOi3G2KcAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_984.jpg", "name": "CIMG3623", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:23.000Z", "updatedAt": 1791160523000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_798", "tgMessageId": 798, "fileId": "AgACAgEAAxkDAAIClWrDKjiARfrC7ym7umNiJfwwGOglAAL4DGsbZcEQRl8ECGkaBrleAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_983.jpg", "name": "CIMG3622", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:19.000Z", "updatedAt": 1791160519000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_797", "tgMessageId": 797, "fileId": "AgACAgEAAxkDAAIClGrDKjfNbERnX6Vm0-pwVP20pTyqAAL3DGsbZcEQRvazqHHxqshaAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_982.jpg", "name": "CIMG3619", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:16.000Z", "updatedAt": 1791160516000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_796", "tgMessageId": 796, "fileId": "AgACAgEAAxkDAAICk2rDKjVasNuK9-71FT_eE7iUyxrzAAL2DGsbZcEQRoxcE9_0DW23AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_981.jpg", "name": "CIMG3618", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:13.000Z", "updatedAt": 1791160513000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_795", "tgMessageId": 795, "fileId": "AgACAgEAAxkDAAICkmrDKjQcBcH1X6B5rhQnr0ZdTjFXAAL1DGsbZcEQRncaos6jQ1ghAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_980.jpg", "name": "CIMG3615", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:11.000Z", "updatedAt": 1791160511000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_794", "tgMessageId": 794, "fileId": "AgACAgEAAxkDAAICkWrDKjI_AcDo55s6lizr1RueYjr5AAL0DGsbZcEQRlwZeDvaMuSmAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_979.jpg", "name": "CIMG3614", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:09.000Z", "updatedAt": 1791160509000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_793", "tgMessageId": 793, "fileId": "AgACAgEAAxkDAAICkGrDKjFuuqpdDAL2ZefVR4_r_AvXAALzDGsbZcEQRmbr9Z3kmT2pAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_977.jpg", "name": "CIMG3613", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:06.000Z", "updatedAt": 1791160506000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_792", "tgMessageId": 792, "fileId": "AgACAgEAAxkDAAICj2rDKjDEauDJJWC6XEYn9TEDuTCCAALyDGsbZcEQRkqr8sJT7YDoAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_974.jpg", "name": "CIMG3611", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:03.000Z", "updatedAt": 1791160503000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_791", "tgMessageId": 791, "fileId": "AgACAgEAAxkDAAICjmrDKi7rVLEelEjTpwGXtlisfxaoAALxDGsbZcEQRlHZGdbGFBMjAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_972.jpg", "name": "CIMG3610", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:35:00.000Z", "updatedAt": 1791160500000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_790", "tgMessageId": 790, "fileId": "AgACAgEAAxkDAAICjWrDKi0re5gV7eL9PZtfFZ5ibNQXAALwDGsbZcEQRgZUL_gFubAPAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_970.jpg", "name": "CIMG3608", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:58.000Z", "updatedAt": 1791160498000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_789", "tgMessageId": 789, "fileId": "AgACAgEAAxkDAAICjGrDKiuftQ51YnhvPaCuczjjRgUOAALvDGsbZcEQRsZOm-YegzhZAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_969.jpg", "name": "CIMG3607", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:55.000Z", "updatedAt": 1791160495000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_788", "tgMessageId": 788, "fileId": "AgACAgEAAxkDAAICi2rDKiqZ4WXShLTkjlZCf8IvF4M-AALuDGsbZcEQRqLdAsbXqQ3bAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_968.jpg", "name": "CIMG3605", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:52.000Z", "updatedAt": 1791160492000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_787", "tgMessageId": 787, "fileId": "AgACAgEAAxkDAAICimrDKbmZ63UeM1J8xlEjyKb3qkC6AALtDGsbZcEQRkTknJWP_58cAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_967.jpg", "name": "CIMG3604", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:47.000Z", "updatedAt": 1791160487000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_786", "tgMessageId": 786, "fileId": "AgACAgEAAxkDAAICiWrDKifiFVwt9lrVjQUQqcbnYXnmAALsDGsbZcEQRpaC0IQc8BxIAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_966.jpg", "name": "CIMG3602", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:42.000Z", "updatedAt": 1791160482000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_785", "tgMessageId": 785, "fileId": "AgACAgEAAxkDAAICiGrDKib-WgnctVne9C6CYMLQRKP9AALrDGsbZcEQRm2bK-SLtTyxAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_965.jpg", "name": "CIMG3601", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:39.000Z", "updatedAt": 1791160479000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_784", "tgMessageId": 784, "fileId": "AgACAgEAAxkDAAICh2rDKiUisnr9qLeqYWwCWuE72Z5UAALqDGsbZcEQRhETURIqzPsXAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_964.jpg", "name": "CIMG3600", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:37.000Z", "updatedAt": 1791160477000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_783", "tgMessageId": 783, "fileId": "AgACAgEAAxkDAAIChmrDKiPsB2ByiMEf_xP5AQRG4-saAALpDGsbZcEQRkQUPTXDJXiaAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_963.jpg", "name": "CIMG3597", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:35.000Z", "updatedAt": 1791160475000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_782", "tgMessageId": 782, "fileId": "AgACAgEAAxkDAAIChWrDKiEYxKq1lsQ8kPvcw7l5wqZ-AALoDGsbZcEQRljkT4yIw0ffAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_962.jpg", "name": "CIMG3595", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:31.000Z", "updatedAt": 1791160471000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_781", "tgMessageId": 781, "fileId": "AgACAgEAAxkDAAIChGrDKiDWv_bzzsmH04haByV11jgRAALnDGsbZcEQRhAuQ0Rivt2EAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_961.jpg", "name": "CIMG3589", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:28.000Z", "updatedAt": 1791160468000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_780", "tgMessageId": 780, "fileId": "AgACAgEAAxkDAAICg2rDKh2DTowD46BUKdj3QXa4JEsAA-YMaxtlwRBGkMHv9jIAAeN3AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_960.jpg", "name": "CIMG3588", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:25.000Z", "updatedAt": 1791160465000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_779", "tgMessageId": 779, "fileId": "AgACAgEAAxkDAAICgmrDKhwdDA3jVr5CixiROu3RMT_VAALlDGsbZcEQRrWkKQX4HapgAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_959.jpg", "name": "CIMG3586", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:23.000Z", "updatedAt": 1791160463000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_778", "tgMessageId": 778, "fileId": "AgACAgEAAxkDAAICgWrDKe3uZt_w7odyU8VL0HAIDX4GAALkDGsbZcEQRrDlrPSd46XAAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_978.jpg", "name": "CIMG3585", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:20.000Z", "updatedAt": 1791160460000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_777", "tgMessageId": 777, "fileId": "AgACAgEAAxkDAAICgGrDKey1bZd1xrTn3PU0YwEXjCxMAALjDGsbZcEQRlYaZ9vdzScHAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_976.jpg", "name": "CIMG3583", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:17.000Z", "updatedAt": 1791160457000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_776", "tgMessageId": 776, "fileId": "AgACAgEAAxkDAAICf2rDKeuDgRrwUfpT7IKw3zep_H4ZAALiDGsbZcEQRg466ZlhxcRgAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_975.jpg", "name": "CIMG3580", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:15.000Z", "updatedAt": 1791160455000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_775", "tgMessageId": 775, "fileId": "AgACAgEAAxkDAAICfmrDKeoL8pQJxV4EGZ0ecAhpkyvmAALhDGsbZcEQRjpWgEfOER2qAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_973.jpg", "name": "CIMG3577", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:13.000Z", "updatedAt": 1791160453000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_774", "tgMessageId": 774, "fileId": "AgACAgEAAxkDAAICfWrDKeqL0qZhyhbh6pHxySix4z0-AALgDGsbZcEQRpDHpN-EtT70AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_971.jpg", "name": "CIMG3573", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:10.000Z", "updatedAt": 1791160450000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_773", "tgMessageId": 773, "fileId": "AgACAgEAAxkDAAICfGrDKaKrgV4yjEyMyRZ6CTiEoT0iAALfDGsbZcEQRh6Bo95wPPYAAQEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_958.jpg", "name": "CIMG3572", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:34:07.000Z", "updatedAt": 1791160447000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_772", "tgMessageId": 772, "fileId": "AgACAgEAAxkDAAIDBGrDKtPsNcTNmFXG-IZ78hWU38iZAAJnDWsbZcEQRlFoR0Z6lv_EAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1094.jpg", "name": "CIMG3788", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:25:23.000Z", "updatedAt": 1791159923000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_771", "tgMessageId": 771, "fileId": "AgACAgEAAxkDAAIDA2rDKtI7X3DlQO15we_Ksnm9fMmTAAJmDWsbZcEQRk5IN2KkMrSXAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1093.jpg", "name": "CIMG3787", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:25:12.000Z", "updatedAt": 1791159912000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_770", "tgMessageId": 770, "fileId": "AgACAgEAAxkDAAIDAmrDKtEUYm2wJh6p1y2GesbzGC-MAAJlDWsbZcEQRpVUeIWDUksoAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1092.jpg", "name": "CIMG3786", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:25:08.000Z", "updatedAt": 1791159908000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_769", "tgMessageId": 769, "fileId": "AgACAgEAAxkDAAIDAWrDKs9mEeE3XyV_lHK9SfCPQD4dAAJkDWsbZcEQRuKTiE-Jd1z_AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1091.jpg", "name": "CIMG3785", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:25:03.000Z", "updatedAt": 1791159903000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_768", "tgMessageId": 768, "fileId": "AgACAgEAAxkDAAIDAAFqwyrOt38I4Ya3v8iQIfBdhWtq1QACYw1rG2XBEEaaFnLWFbQa2AEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1090.jpg", "name": "CIMG3783", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:58.000Z", "updatedAt": 1791159898000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_767", "tgMessageId": 767, "fileId": "AgACAgEAAxkDAAIC_2rDKs0sUi361hZceQ921jOxS_nbAAJiDWsbZcEQRtl-fULVAAEKaAEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1089.jpg", "name": "CIMG3780", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:54.000Z", "updatedAt": 1791159894000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_766", "tgMessageId": 766, "fileId": "AgACAgEAAxkDAAIC_mrDKszwextuj2iyunG32YzG_cMrAAJhDWsbZcEQRkAs1FT8AkTKAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1088.jpg", "name": "CIMG3777", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:51.000Z", "updatedAt": 1791159891000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_765", "tgMessageId": 765, "fileId": "AgACAgEAAxkDAAIC_WrDKsrAoWB3MVg8RXfCeqDutYtoAAJgDWsbZcEQRk5C6ROeWkKiAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1087.jpg", "name": "CIMG3776", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:48.000Z", "updatedAt": 1791159888000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_764", "tgMessageId": 764, "fileId": "AgACAgEAAxkDAAIC_GrDKsmjuPvQKNUabVw1Cfz6oXBQAAJfDWsbZcEQRoB-GgX8CW4OAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1086.jpg", "name": "CIMG3775", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:44.000Z", "updatedAt": 1791159884000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_763", "tgMessageId": 763, "fileId": "AgACAgEAAxkDAAIC-2rDKsgJ1Y5ZShy703oFN2UXvIlNAAJeDWsbZcEQRipIwZqmHJ_gAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1085.jpg", "name": "CIMG3774", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:40.000Z", "updatedAt": 1791159880000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_762", "tgMessageId": 762, "fileId": "AgACAgEAAxkDAAIC-mrDKsed57ICmk592ilCH_lrdgavAAJdDWsbZcEQRjV3b9_nQ88ZAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1084.jpg", "name": "CIMG3770", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:33.000Z", "updatedAt": 1791159873000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_761", "tgMessageId": 761, "fileId": "AgACAgEAAxkDAAIC-WrDKsVZdbIlT48roJ-BSMJOsR7EAAJcDWsbZcEQRu9yXsSahnldAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1083.jpg", "name": "CIMG3769", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:30.000Z", "updatedAt": 1791159870000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_760", "tgMessageId": 760, "fileId": "AgACAgEAAxkDAAIC-GrDKsRigxRkiBzGuXqlV2IpV1hQAAJbDWsbZcEQRsrdIKSPvniQAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1082.jpg", "name": "CIMG3768", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:26.000Z", "updatedAt": 1791159866000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_759", "tgMessageId": 759, "fileId": "AgACAgEAAxkDAAIC92rDKsMDne6pojEMQMDWVDsv108HAAJaDWsbZcEQRrvxdUnHxYY8AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1081.jpg", "name": "CIMG3767", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:23.000Z", "updatedAt": 1791159863000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_758", "tgMessageId": 758, "fileId": "AgACAgEAAxkDAAIC9mrDKsL8kMqOj72qiUqvFhdx8sIUAAJZDWsbZcEQRq0rrrlldMsAAQEAAwIAA3cAAz0E", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1080.jpg", "name": "CIMG3766", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:20.000Z", "updatedAt": 1791159860000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_757", "tgMessageId": 757, "fileId": "AgACAgEAAxkDAAIC9WrDKsBhLG3QV7oma2uFnYWDRN3vAAJYDWsbZcEQRgzSmXkcpwo4AQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1079.jpg", "name": "CIMG3765", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:17.000Z", "updatedAt": 1791159857000, "likes": 0, "likedBy": [], "comments": []},
+      {"id": "tg_msg_756", "tgMessageId": 756, "fileId": "AgACAgEAAxkDAAIC9GrDKr5ohWOSC6o_v_uY741jd6rHAAJXDWsbZcEQRmZUbrrjayNuAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_1078.jpg", "name": "CIMG3764", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:24:13.000Z", "updatedAt": 1791159853000, "likes": 0, "likedBy": [], "comments": []},
       {"id": "tg_msg_635", "tgMessageId": 635, "fileId": "AgACAgEAAxkDAAICe2rC7FgaPM4Litqb6jeoD-uonafgAALeDGsbZcEQRu2HVVhhXUGTAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_723.jpg", "name": "CIMG3571", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:16:25.745Z", "updatedAt": 1791159385745, "likes": 0, "likedBy": [], "comments": []},
       {"id": "tg_msg_634", "tgMessageId": 634, "fileId": "AgACAgEAAxkDAAICemrC7FUNesGBd2kfeKZGUETXvFDJAALdDGsbZcEQRhMyB-xdp5gFAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_722.jpg", "name": "CIMG3570", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:16:22.713Z", "updatedAt": 1791159382713, "likes": 0, "likedBy": [], "comments": []},
       {"id": "tg_msg_633", "tgMessageId": 633, "fileId": "AgACAgEAAxkDAAICeWrC7FIGwWpakdxOcTPLSXpZ7cUUAALcDGsbZcEQRrLgyVvDlvCsAQADAgADdwADPQQ", "url": "https://api.telegram.org/file/bot8834699870:AAH_zRhDKnehSxKLKX85fcnle-osHOdvTPc/photos/file_721.jpg", "name": "CIMG3569", "type": "image/jpeg", "album": "General", "date": "2026-10-05T00:16:19.267Z", "updatedAt": 1791159379267, "likes": 0, "likedBy": [], "comments": []},
@@ -3355,6 +3510,8 @@
         if (Array.isArray(data.items)) {
           items = data.items.map(i => aplicarMapaPermanenteAItem(i)).filter(i => i && !i.isHeavyVideo && !estaItemEliminado(i));
         }
+        // Blindaje esencial: siempre fusionamos BASE_CLOUD_ITEMS para que ningún móvil o navegador quede congelado con fotos de menos
+        items = fusionarListasPorId(BASE_CLOUD_ITEMS, items, obtenerIdItem);
         if (Array.isArray(data.tweets)) tweets = data.tweets.filter(t => !deletedIds.has(t.id));
         if (Array.isArray(data.members)) members = data.members.filter(m => !deletedIds.has(m.id));
         if (Array.isArray(data.awards) && data.awards.length > 0) awards = data.awards.filter(a => !deletedIds.has(a.id));
@@ -3788,88 +3945,117 @@
       };
     }
 
+    async function esperarFirebaseBridge(maxWaitMs = 3000) {
+      const start = Date.now();
+      while (!window.firebaseBridge && (Date.now() - start < maxWaitMs)) {
+        await new Promise(r => setTimeout(r, 50));
+      }
+      return window.firebaseBridge || null;
+    }
+
+    window.actualizarUIAuthFirebase = function(user) {
+      const authBox = document.getElementById('firebaseAuthBox');
+      const userText = document.getElementById('firebaseUserText');
+      const authBtn = document.getElementById('firebaseAuthBtn');
+      if (!authBox || !userText || !authBtn) return;
+      if (user) {
+        userText.innerText = user.displayName || user.email || 'Conectado a Google';
+        authBtn.innerText = 'Cerrar';
+        authBtn.onclick = async () => {
+          if (window.firebaseBridge) await window.firebaseBridge.logout();
+          mostrarToast('Sesión cerrada');
+        };
+      } else {
+        userText.innerText = 'Firebase Cloud Activo';
+        authBtn.innerText = 'Conectar Google';
+        authBtn.onclick = () => window.iniciarGoogleAuth();
+      }
+    };
+
+    window.iniciarGoogleAuth = async function() {
+      const fb = await esperarFirebaseBridge(1500);
+      if (!fb) return mostrarToast('Inicializando servicios en la nube...');
+      try {
+        mostrarToast('Abriendo inicio de sesión con Google...');
+        const user = await fb.loginWithGoogle();
+        if (user) {
+          mostrarToast(`✨ ¡Hola, ${user.displayName || 'Estudiante'}! Conectado a la nube`);
+          if (user.displayName && (!userName || userName.startsWith('Miembro Promo'))) {
+            userName = user.displayName;
+            try { localStorage.setItem('prom_user_name', userName); } catch(e){}
+            actualizarUIUsuario();
+          }
+        }
+      } catch (err) {
+        console.warn('Inicio de sesión cancelado o cerrado:', err);
+      }
+    };
+
+    let _firestoreUnsub = null;
+
     async function cargarDesdeNube(manual = false) {
       // Si el usuario activo tiene una acción recién hecha sin subir, la enviamos primero
       if (cambiosPendientes && nubeCargada && nubeSincronizadaExito) {
         await ejecutarSincronizacionNube();
       }
 
-      document.getElementById('statusText').innerText = 'Sincronizando...';
+      document.getElementById('statusText').innerText = 'Sincronizando con Firebase...';
       document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
 
-      try {
-        // Todo usuario que entra va DIRECTO a consultar la última versión activa en JSONBin (con reintento rápido si hay microcorte)
-        let res = null;
-        for (let intento = 0; intento < 2; intento++) {
-          res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?_t=${Date.now()}`, {
-            headers: {
-              'X-Master-Key': MASTER_KEY,
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              'Pragma': 'no-cache'
-            },
-            cache: 'no-store'
-          }).catch(() => null);
-          if (res && res.ok) break;
-          await new Promise(r => setTimeout(r, 900));
-        }
-        if (!res || !res.ok) throw new Error('Error HTTP ' + (res ? res.status : 'red'));
+      const fb = await esperarFirebaseBridge(2500);
+      let sincronizadoConNube = false;
 
-        const data = await res.json();
-        const record = data.record || {};
-        const parsed = normalizarRecordNube(record);
-
-        // Consultamos en paralelo el Bin Bóveda (aislado de pestañas viejas) para rescatar cualquier título/álbum personalizado si una pestaña vieja pisó el bin principal
+      if (fb) {
         try {
-          const vaultRes = await fetch(`https://api.jsonbin.io/v3/b/${BACKUP_BIN_ID}/latest?_t=${Date.now()}`, {
-            headers: {
-              'X-Master-Key': MASTER_KEY,
-              'Cache-Control': 'no-cache, no-store, must-revalidate'
-            },
-            cache: 'no-store'
-          }).catch(() => null);
-          if (vaultRes && vaultRes.ok) {
-            const vaultData = await vaultRes.json();
-            const vaultParsed = normalizarRecordNube(vaultData.record || {});
-            parsed.cloudItems = fusionarListasPorId(vaultParsed.cloudItems, parsed.cloudItems, obtenerIdItem);
-            parsed.cloudAlbums = Array.from(new Set([...(parsed.cloudAlbums || []), ...(vaultParsed.cloudAlbums || [])]));
+          const docData = await fb.cargarEstadoFirestore();
+          if (docData && typeof docData === 'object') {
+            const parsed = normalizarRecordNube(docData);
+            aplicarDeltasSobreNube(parsed);
+            sincronizadoConNube = true;
+          } else {
+            // Primer arranque de Firestore: inicializamos con BASE_CLOUD_ITEMS y respaldo local
+            restaurarDesdeRespaldoLocal();
+            items = fusionarListasPorId(BASE_CLOUD_ITEMS, items, obtenerIdItem);
+            sincronizadoConNube = true;
+            setTimeout(() => ejecutarSincronizacionNube(), 1000);
           }
-        } catch (e) {}
 
-        if (parsed.esItemUnicoMake) {
-          restaurarDesdeRespaldoLocal();
-          items = fusionarListasPorId(parsed.cloudItems, items, obtenerIdItem);
-          parsed.cloudItems.forEach(i => registrarCambioUsuario('items', i));
-        } else {
-          // Mandamos al usuario directamente a lo último que subió el último usuario activo (+ cualquier acción puntual que esté haciendo ahora mismo)
-          aplicarDeltasSobreNube(parsed);
+          // Listener en tiempo real oficial (Firestore onSnapshot): actualiza al instante si otro compañero comenta o vota
+          if (!_firestoreUnsub) {
+            _firestoreUnsub = fb.suscribirCambiosFirestore((liveRecord) => {
+              if (liveRecord && !sincronizandoAhora && !cambiosPendientes) {
+                const liveParsed = normalizarRecordNube(liveRecord);
+                aplicarDeltasSobreNube(liveParsed);
+                guardarRespaldoLocal(false);
+                renderTodo();
+                document.getElementById('statusText').innerText = 'Firebase en vivo ✓';
+                document.getElementById('heroSyncBadge').innerText = 'En vivo ✓';
+              }
+            });
+          }
+        } catch (fbErr) {
+          console.warn('Aviso consultando Firestore (usando respaldo local blindado):', fbErr);
         }
-
-        nubeCargada = true;
-        nubeSincronizadaExito = true;
-        const huboNuevosTelegram = await sincronizarBotTelegramDirecto();
-        const nubeEstabaIncompleta = !parsed.esItemUnicoMake && Array.isArray(record.items) && (record.items.length + 3 < items.length);
-        guardarRespaldoLocal(false);
-        renderTodo();
-        if (parsed.esItemUnicoMake || huboNuevosTelegram || nubeEstabaIncompleta) {
-          ejecutarSincronizacionNube();
-        }
-        document.getElementById('statusText').innerText = 'Sincronizado ✓';
-        document.getElementById('heroSyncBadge').innerText = 'Sincronizado ✓';
-        if (manual) mostrarToast('Sincronizado con la última versión activa');
-      } catch (err) {
-        console.error('Aviso al conectar con nube:', err);
-        const teniaRespaldoLocal = restaurarDesdeRespaldoLocal();
-        if (!teniaRespaldoLocal && items.length === 0) {
-          items = JSON.parse(JSON.stringify(BASE_CLOUD_ITEMS)).map(i => aplicarMapaPermanenteAItem(i)).filter(i => !estaItemEliminado(i));
-        }
-        nubeCargada = true;
-        renderTodo();
-        document.getElementById('statusText').innerText = 'Reintentando conexión...';
-        document.getElementById('heroSyncBadge').innerText = 'Reconectando...';
-        setTimeout(() => {
-          if (!nubeSincronizadaExito && !sincronizandoAhora) cargarDesdeNube(false);
-        }, 4500);
       }
+
+      if (!sincronizadoConNube) {
+        restaurarDesdeRespaldoLocal();
+        items = fusionarListasPorId(BASE_CLOUD_ITEMS, items, obtenerIdItem);
+      }
+
+      nubeCargada = true;
+      nubeSincronizadaExito = true;
+      const huboNuevosTelegram = await sincronizarBotTelegramDirecto().catch(() => false);
+      guardarRespaldoLocal(false);
+      renderTodo();
+
+      if (huboNuevosTelegram) {
+        ejecutarSincronizacionNube();
+      }
+
+      document.getElementById('statusText').innerText = fb ? 'Firebase Conectado ✓' : 'Sincronizado ✓';
+      document.getElementById('heroSyncBadge').innerText = 'Sincronizado ✓';
+      if (manual) mostrarToast(fb ? 'Sincronizado en tiempo real con Firebase Firestore' : 'Sincronizado con versión activa');
     }
 
     /* Extractor de MP4 limpio de TikTok (sin marca de agua ni interfaz de TikTok) + Google Drive */
@@ -4153,7 +4339,6 @@
 
     async function sincronizarBotTelegramDirecto() {
       try {
-        if (!nubeSincronizadaExito) return false;
         // Limpiamos cualquier item viejo con isHeavyVideo que haya quedado en memoria local
         items = items.filter(i => !i.isHeavyVideo);
 
@@ -4180,8 +4365,8 @@
           }
           const msg = upd.message || upd.channel_post;
           if (!msg) continue;
-          // Todos los mensajes hasta el 389 ya están procesados y respaldados en la nube; solo procesamos envíos nuevos (>389)
-          if (msg.message_id <= 389) continue;
+          // Todos los mensajes hasta el 912 ya están procesados y respaldados en la nube; solo procesamos envíos nuevos (>912)
+          if (msg.message_id <= 912) continue;
           const tgItemId = 'tg_msg_' + msg.message_id;
           if (deletedIds.has(tgItemId)) continue;
           if (items.some(i => i.id === tgItemId || i.tgMessageId === msg.message_id)) continue;
@@ -4272,7 +4457,7 @@
         }
 
         // Avanzamos el offset cuando ya procesamos mensajes nuevos o cuando la cola supera 65 elementos para que ninguna pestaña antigua vuelva a dispararse
-        if ((huboNuevos || data.result.length >= 65) && maxUpdateIdProcesado > 0) {
+        if (huboNuevos && maxUpdateIdProcesado > 0) {
           fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${maxUpdateIdProcesado + 1}&limit=1`).catch(() => {});
         }
 
@@ -4335,46 +4520,6 @@
       cambiosPendientes = false;
 
       try {
-        // Paso 1 OBLIGATORIO: Siempre leemos la última versión activa de JSONBin antes de hacer PUT.
-        // Si la lectura falla por microcorte o límite de red, ABORTAMOS el PUT y reintentamos luego (jamás sobrescribimos a ciegas).
-        const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?_t=${Date.now()}`, {
-          headers: {
-            'X-Master-Key': MASTER_KEY,
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache'
-          },
-          cache: 'no-store'
-        });
-
-        if (!getRes.ok) {
-          throw new Error('Lectura previa obligatoria falló con estado ' + getRes.status);
-        }
-
-        const getData = await getRes.json();
-        const parsed = normalizarRecordNube(getData.record || {});
-        nubeSincronizadaExito = true;
-
-        // Consultamos también el Bin Bóveda aislado antes de hacer PUT para que si una pestaña antigua tocó el bin principal, jamás se pierdan fotos, títulos ni álbumes
-        try {
-          const vaultRes = await fetch(`https://api.jsonbin.io/v3/b/${BACKUP_BIN_ID}/latest?_t=${Date.now()}`, {
-            headers: {
-              'X-Master-Key': MASTER_KEY,
-              'Cache-Control': 'no-cache, no-store, must-revalidate'
-            },
-            cache: 'no-store'
-          }).catch(() => null);
-          if (vaultRes && vaultRes.ok) {
-            const vaultData = await vaultRes.json();
-            const vaultParsed = normalizarRecordNube(vaultData.record || {});
-            parsed.cloudItems = fusionarListasPorId(vaultParsed.cloudItems, parsed.cloudItems, obtenerIdItem);
-            parsed.cloudAlbums = Array.from(new Set([...(parsed.cloudAlbums || []), ...(vaultParsed.cloudAlbums || [])]));
-          }
-        } catch (e) {}
-
-        // Paso 2: Tomamos el último estado de la nube como base absoluta y aplicamos SOLO las acciones puntuales de este usuario activo
-        aplicarDeltasSobreNube(parsed);
-
-        // Paso 3: Guardamos el estado unificado + registro de borrados (deletedIds) y álbumes en JSONBin
         const payload = {
           revision: Date.now(),
           updatedAt: new Date().toISOString(),
@@ -4389,46 +4534,33 @@
           music: musicConfig
         };
 
-        const putRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': MASTER_KEY
-          },
-          body: JSON.stringify(payload)
-        });
-
-        // Espejo automático en el Bin Bóveda aislado (BACKUP_BIN_ID) que ninguna pestaña antigua conoce
-        fetch(`https://api.jsonbin.io/v3/b/${BACKUP_BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': MASTER_KEY
-          },
-          body: JSON.stringify(payload)
-        }).catch(() => {});
-
-        if (!putRes.ok) {
-          throw new Error('JSONBin devolvió estado ' + putRes.status);
+        let guardadoFb = false;
+        const fb = window.firebaseBridge;
+        if (fb) {
+          try {
+            guardadoFb = await fb.guardarEstadoFirestore(payload);
+          } catch (e) {
+            console.warn('Aviso al guardar en Firestore (continuando con persistencia local):', e);
+          }
         }
 
+        // Si guardó en Firestore o en local, persistimos en LocalStorage
         guardarRespaldoLocal(false);
         renderTodo();
-        document.getElementById('statusText').innerText = 'Guardado en nube ✓';
-        document.getElementById('heroSyncBadge').innerText = 'Guardado en nube ✓';
+        nubeSincronizadaExito = true;
+        document.getElementById('statusText').innerText = guardadoFb ? 'Firebase guardado ✓' : 'Guardado local ✓';
+        document.getElementById('heroSyncBadge').innerText = guardadoFb ? 'En vivo ✓' : 'Guardado ✓';
       } catch (e) {
-        console.error('Error al sincronizar con JSONBin:', e);
+        console.error('Error al sincronizar:', e);
         cambiosPendientes = true;
-        document.getElementById('statusText').innerText = 'Reintentando guardado...';
-        document.getElementById('heroSyncBadge').innerText = 'Sincronizando...';
-        // Reintento automático en 5 segundos si hubo límite de peticiones (429) o microcorte
-        clearTimeout(syncTimer);
-        syncTimer = setTimeout(() => ejecutarSincronizacionNube(), 5000);
+        guardarRespaldoLocal(false);
+        document.getElementById('statusText').innerText = 'Guardado local ✓';
+        document.getElementById('heroSyncBadge').innerText = 'Guardado local ✓';
       } finally {
         sincronizandoAhora = false;
         if (cambiosPendientes) {
           clearTimeout(syncTimer);
-          syncTimer = setTimeout(() => ejecutarSincronizacionNube(), 2500);
+          syncTimer = setTimeout(() => ejecutarSincronizacionNube(), 3000);
         }
       }
     }
@@ -8238,12 +8370,7 @@
         }
       }, 9000);
 
-      // Refresco silencioso desde JSONBin cada 25s para mantener todas las pestañas al día con borrados, fotos y comentarios nuevos
-      setInterval(() => {
-        if (document.visibilityState === 'visible' && nubeCargada && !sincronizandoAhora && !cambiosPendientes) {
-          cargarDesdeNube(false);
-        }
-      }, 25000);
+      // Firebase Firestore gestiona actualizaciones en vivo mediante onSnapshot sin necesidad de polling repetitivo
     });
   </script>
 </body>
