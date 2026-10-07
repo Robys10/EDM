@@ -3418,10 +3418,9 @@
     let deletedIds = new Set(LEGACY_PURGED_IDS);
 
     try {
-      const savedDeletedV4 = JSON.parse(localStorage.getItem(DELETED_IDS_KEY) || '[]');
-      const savedDeletedV2 = JSON.parse(localStorage.getItem('prom_edm26_deleted_ids_v2') || '[]');
-      [...(Array.isArray(savedDeletedV4) ? savedDeletedV4 : []), ...(Array.isArray(savedDeletedV2) ? savedDeletedV2 : [])]
-        .forEach(id => deletedIds.add(String(id)));
+      localStorage.removeItem('prom_edm26_deleted_ids_v4');
+      localStorage.removeItem('prom_edm26_deleted_ids_v2');
+      localStorage.removeItem('prom_edm26_live_snapshot_v4');
     } catch (e) {}
 
     /* Cola de deltas atómicos: solo contiene lo que ESTE usuario modificó/creó explícitamente en su sesión activa */
@@ -3586,43 +3585,73 @@
       }
     }
 
-    /* Aplica ÚNICAMENTE las acciones explícitas del usuario activo encima del último estado vivo de la nube */
+    /* =========================================================
+       SINCRONIZACIÓN Y CONTEO UNIFICADO (PC Y MÓVIL AL 100% IDÉNTICOS)
+    ========================================================= */
+    function actualizarContadoresUnificados() {
+      const total = items.length;
+      const fotos = items.filter(i => !i.type || i.type.startsWith('image/')).length;
+      const videos = items.filter(i => i.type && i.type.startsWith('video/')).length;
+
+      // Marcadores de Inicio y Sidebar
+      const elTotal = document.getElementById('statTotalItems');
+      if (elTotal) elTotal.innerText = total;
+
+      const elBreakdown = document.getElementById('statBreakdown');
+      if (elBreakdown) elBreakdown.innerText = `${fotos} fotos · ${videos} videos`;
+
+      const elSide = document.getElementById('sideCountGaleria');
+      if (elSide) elSide.innerText = total;
+
+      const elSideEventos = document.getElementById('sideCountHimnos');
+      if (elSideEventos) elSideEventos.innerText = events.length;
+
+      const elSideBuzon = document.getElementById('sideCountBuzon');
+      if (elSideBuzon) elSideBuzon.innerText = tweets.length;
+    }
+
+    /* Aplica con autoridad absoluta el último estado de Firestore eliminando divergencias locales */
     function aplicarDeltasSobreNube(parsed) {
-      const deltaItems = Array.from(cambiosActivosUsuario.items.values());
-      const deltaTweets = Array.from(cambiosActivosUsuario.tweets.values());
-      const deltaMembers = Array.from(cambiosActivosUsuario.members.values());
-      const deltaAwards = Array.from(cambiosActivosUsuario.awards.values());
-      const deltaCapsules = Array.from(cambiosActivosUsuario.capsules.values());
-      const deltaEvents = Array.from(cambiosActivosUsuario.events.values());
-      const deltaHimnos = Array.from(cambiosActivosUsuario.himnos.values());
-      const deltaAlbums = Array.from(cambiosActivosUsuario.albums.values());
+      if (!parsed || typeof parsed !== 'object') return;
+
+      const cloudDeletedIds = new Set((parsed.deletedIds || []).map(String));
+      deletedIds = cloudDeletedIds;
 
       const albSet = new Map();
-      [...(parsed.cloudAlbums || []), ...customAlbums, ...deltaAlbums].forEach(a => {
+      (parsed.cloudAlbums || []).forEach(a => {
         const name = String((typeof a === 'object' ? a.name : a) || '').trim();
         if (!name) return;
         const low = name.toLowerCase();
-        if (deletedIds.has('alb_' + low)) return;
+        if (cloudDeletedIds.has('alb_' + low)) return;
         if (!albSet.has(low)) albSet.set(low, name);
       });
       customAlbums = Array.from(albSet.values());
 
-      if (Array.isArray(parsed.cloudItems) && parsed.cloudItems.length > 0) {
-        items = fusionarListasPorId(deltaItems, parsed.cloudItems, obtenerIdItem);
-      } else {
-        items = fusionarListasPorId(deltaItems, BASE_CLOUD_ITEMS, obtenerIdItem);
-      }
+      const itemsBrutos = (Array.isArray(parsed.cloudItems) && parsed.cloudItems.length > 0)
+        ? parsed.cloudItems
+        : (BASE_CLOUD_ITEMS || []);
+
+      items = itemsBrutos.filter(it => {
+        if (!it || !it.url) return false;
+        const idVal = String(it.id || '');
+        const fidVal = String(it.fileId || '');
+        return !cloudDeletedIds.has(idVal) && (!fidVal || !cloudDeletedIds.has(fidVal));
+      });
       items.forEach(it => aplicarBovedaTitulosAItem(it));
 
-      tweets = fusionarListasPorId(deltaTweets, parsed.cloudTweets || [], t => t.id);
-      members = fusionarListasPorId(deltaMembers, parsed.cloudMembers || [], m => m.id);
-      awards = fusionarPremios(deltaAwards, parsed.cloudAwards || []);
-      capsules = fusionarListasPorId(deltaCapsules, parsed.cloudCapsules || [], c => c.id);
-      events = fusionarListasPorId(deltaEvents, parsed.cloudEvents || [], ev => ev.id);
-      if ((parsed.cloudHimnos && parsed.cloudHimnos.length > 0) || deltaHimnos.length > 0) {
-        musicConfig.himnos = fusionarListasPorId(deltaHimnos, parsed.cloudHimnos || [], h => h.id || `${h.titulo}_${h.artista}`);
+      tweets = (Array.isArray(parsed.cloudTweets) ? parsed.cloudTweets : []).filter(t => t && !cloudDeletedIds.has(String(t.id)));
+      members = (Array.isArray(parsed.cloudMembers) ? parsed.cloudMembers : []).filter(m => m && !cloudDeletedIds.has(String(m.id)));
+      awards = fusionarPremios([], parsed.cloudAwards || []);
+      capsules = (Array.isArray(parsed.cloudCapsules) ? parsed.cloudCapsules : []).filter(c => c && !cloudDeletedIds.has(String(c.id)));
+      events = (Array.isArray(parsed.cloudEvents) ? parsed.cloudEvents : []).filter(ev => ev && !cloudDeletedIds.has(String(ev.id)));
+
+      if (parsed.cloudHimnos && parsed.cloudHimnos.length > 0) {
+        musicConfig.himnos = parsed.cloudHimnos;
       }
       if (parsed.playlistUrl) musicConfig.playlistUrl = parsed.playlistUrl;
+
+      // Actualizar contadores inmediatamente con precisión idéntica en PC y móvil
+      actualizarContadoresUnificados();
     }
 
     function fusionarListasPorId(listaLocal, listaNube, getKey) {
