@@ -10,13 +10,19 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="EDM ’26" />
-  <meta name="referrer" content="no-referrer" />
-  <title>PROM ESTRELLA DE LA MAÑANA '26 — Mural Digital, Anuario & Galería Oficial</title>
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://robys10.github.io/EDM/" />
+  <title>PROM ESTRELLA DE LA MAÑANA ’26 — Mural Digital, Anuario & Galería Oficial</title>
   <meta name="description" content="Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM) con sincronización en la nube sin pérdida de datos." />
-  <meta property="og:title" content="PROM ESTRELLA DE LA MAÑANA '26 — Mural Digital, Anuario & Galería Oficial" />
+  <meta property="og:title" content="PROM ESTRELLA DE LA MAÑANA ’26 — Mural Digital, Anuario & Galería Oficial" />
   <meta property="og:description" content="Mural Digital, Anuario, Premios, Cápsula del Tiempo y Galería Oficial de la Promoción Estrella de la Mañana 2026 (EDM)." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://robys10.github.io/EDM/" />
+  <meta property="og:image" content="https://robys10.github.io/EDM/logo.png" />
+  <meta property="og:image:alt" content="Escudo Promoción Estrella de la Mañana 2026" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://robys10.github.io/EDM/logo.png" />
   <link rel="manifest" href="manifest.json" id="pwaManifestLink" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" id="pwaAppleTouchIcon" />
   <link rel="icon" type="image/svg+xml" href="icon.svg" />
@@ -28,8 +34,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script type="module" src="/src/firebase.ts"></script>
-  <script src="/promo-sync.js"></script>
+  <script type="module" src="src/firebase.ts"></script>
+  <script src="promo-sync.js"></script>
   <script>
     window.DEFAULT_LOGO_VINO_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
@@ -702,11 +708,16 @@
       animation: liquidGoldText 4.2s ease-in-out infinite;
       filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.45));
     }
+  
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    }
   </style>
 </head>
 <body class="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col pb-20 md:pb-0 relative">
+  <noscript><div style="padding:24px;font-family:sans-serif;text-align:center">PROM ESTRELLA DE LA MAÑANA ’26 — Anuario digital de la Promoción EDM. Activa JavaScript para ver la galería, los integrantes y los premios. Ceremonia de Graduación: 18 de diciembre de 2026.</div></noscript>
   <!-- TELÓN DE ENTRADA ÉPICA DE GALA (Doble Cortina Real + Sello Astral 3D + Sincronización en Vivo) -->
-  <div id="galaEntranceSplash" class="fixed inset-0 z-[120] flex flex-col items-center justify-center p-6 select-none overflow-hidden">
+  <div id="galaEntranceSplash" role="status" aria-live="polite" class="fixed inset-0 z-[120] flex flex-col items-center justify-center p-6 select-none overflow-hidden">
     <!-- Hoja Izquierda del Telón Real -->
     <div class="splash-curtain-panel splash-curtain-left">
       <div class="pointer-events-none absolute top-4 bottom-4 left-4 right-0 rounded-l-2xl border-y border-l border-[#d8b258]/35"></div>
@@ -833,7 +844,7 @@
               <div class="text-[11px] font-semibold text-[var(--gold-main)]">Promoción EDM</div>
             </div>
           </div>
-          <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 text-[var(--text-muted)] hover:text-[var(--text-dark)] cursor-pointer">✕</button>
+          <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 text-[var(--text-muted)] hover:text-[var(--text-dark)] cursor-pointer" aria-label="Cerrar">✕</button>
         </div>
 
         <div class="space-y-1">
@@ -981,7 +992,7 @@
             </div>
           </div>
           <div class="mt-4 pt-3 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span id="countdownFooterHint" class="text-[var(--text-muted)]">Agrega las fechas reales de tu promo en Eventos &amp; Soundtrack</span>
+            <span id="countdownFooterHint" class="text-[var(--text-muted)]">Consulta el cronograma completo en Eventos &amp; Soundtrack</span>
             <button type="button" onclick="cambiarSeccion('eventos')" class="font-semibold text-[var(--wine-main)] hover:underline cursor-pointer">
               Editar Cronograma 2026 →
             </button>
@@ -1105,7 +1116,7 @@
               <h2 class="font-display text-base font-bold text-[var(--wine-main)]">Ficha de Inscripción al Anuario</h2>
               <p class="text-xs text-[var(--text-muted)]">Completa los datos del compañero(a) y selecciona su retrato para publicarlo</p>
             </div>
-            <button type="button" onclick="document.getElementById('memberFormDrawer').classList.add('hidden')" class="text-xs font-bold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer">✕</button>
+            <button type="button" onclick="document.getElementById('memberFormDrawer').classList.add('hidden')" class="text-xs font-bold text-[var(--text-muted)] hover:text-[var(--wine-main)] cursor-pointer" aria-label="Cerrar">✕</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <input id="memberNameInput" type="text" maxlength="50" placeholder="Nombre completo (obligatorio)..." class="rounded-xl border border-[var(--border-color)] bg-white px-3.5 py-2.5 text-xs text-[var(--text-dark)] outline-none focus:border-[var(--wine-main)]" />
@@ -1168,7 +1179,7 @@
           <div id="newAlbumBox" class="hidden p-3 rounded-xl bg-[var(--bg-cream)] border border-[var(--gold-main)] space-y-2">
             <div class="flex items-center justify-between gap-2">
               <span class="text-[11px] font-bold text-[var(--wine-main)]">🔒 Crear nuevo álbum oficial (requiere clave de administrador)</span>
-              <button type="button" onclick="document.getElementById('newAlbumBox').classList.add('hidden')" class="text-xs text-[var(--text-muted)] hover:text-[var(--wine-main)] font-bold cursor-pointer">✕</button>
+              <button type="button" onclick="document.getElementById('newAlbumBox').classList.add('hidden')" class="text-xs text-[var(--text-muted)] hover:text-[var(--wine-main)] font-bold cursor-pointer" aria-label="Cerrar">✕</button>
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
               <input id="newAlbumNameInput" type="text" maxlength="28" placeholder="Nombre del nuevo álbum (ej. Paseo, Retiro, Graduación)..." class="flex-1 min-w-0 rounded-xl border border-[var(--border-color)] bg-white px-3 py-2 text-xs outline-none focus:border-[var(--wine-main)]" />
@@ -1576,14 +1587,14 @@
       <div class="flex items-center gap-1 sm:gap-2 shrink-0">
         <!-- Controles de Zoom exclusivos para fotografías -->
         <div id="modalZoomControls" class="flex items-center bg-white/10 border border-white/20 rounded-xl p-0.5">
-          <button type="button" onclick="ajustarZoomModal(-0.5, event)" title="Alejar foto" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer">−</button>
+          <button type="button" onclick="ajustarZoomModal(-0.5, event)" title="Alejar foto" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer" aria-label="Alejar foto">−</button>
           <button type="button" id="modalZoomBadge" onclick="resetearZoomModal(event)" title="Restablecer zoom" class="px-1.5 sm:px-2 h-6 sm:h-7 rounded-lg hover:bg-white/20 text-[var(--gold-bright)] text-[10px] sm:text-[11px] font-mono-num font-bold cursor-pointer">100%</button>
-          <button type="button" onclick="ajustarZoomModal(0.5, event)" title="Acercar foto" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer">+</button>
+          <button type="button" onclick="ajustarZoomModal(0.5, event)" title="Acercar foto" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center cursor-pointer" aria-label="Acercar foto">+</button>
         </div>
         <button id="btnSlideshowToggle" type="button" onclick="toggleSlideshow(event)" class="btn-interactive px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-[var(--wine-main)] border border-[var(--gold-main)] text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1 cursor-pointer">
           <span>▶</span><span class="hidden sm:inline">Presentación</span>
         </button>
-        <button type="button" onclick="cerrarModal(event, true)" class="btn-interactive w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-[var(--wine-main)] text-white text-sm sm:text-base font-bold flex items-center justify-center cursor-pointer">✕</button>
+        <button type="button" onclick="cerrarModal(event, true)" class="btn-interactive w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-[var(--wine-main)] text-white text-sm sm:text-base font-bold flex items-center justify-center cursor-pointer" aria-label="Cerrar">✕</button>
       </div>
     </div>
 
@@ -1624,7 +1635,7 @@
           <div class="text-[11px] font-bold text-[var(--gold-main)] uppercase tracking-wider">Estudio de Recuerdos · HD 1080×1350</div>
           <h3 class="text-base sm:text-lg font-bold text-[var(--wine-main)]">Diseño de Postal Conmemorativa</h3>
         </div>
-        <button type="button" onclick="cerrarPostalStudio()" class="w-8 h-8 rounded-full bg-[var(--bg-cream)] text-[var(--wine-main)] font-bold flex items-center justify-center cursor-pointer">✕</button>
+        <button type="button" onclick="cerrarPostalStudio()" class="w-8 h-8 rounded-full bg-[var(--bg-cream)] text-[var(--wine-main)] font-bold flex items-center justify-center cursor-pointer" aria-label="Cerrar">✕</button>
       </div>
 
       <!-- Selector de 4 estilos de lujo -->
@@ -5760,7 +5771,7 @@
       if (hint) {
         hint.innerText = events.length > 0
           ? `Mostrando el próximo de ${events.length} eventos programados`
-          : 'Agrega las fechas reales de tu promo en Eventos & Soundtrack';
+          : 'Consulta el cronograma completo en Eventos & Soundtrack';
       }
 
       const diff = Math.max(0, proximo.ts - ahora);
@@ -5805,7 +5816,7 @@
                 <span class="px-2 py-0.5 rounded-md bg-white border border-[var(--border-color)] text-[10px] font-bold text-[var(--wine-main)] font-mono-num">
                   ${dias > 0 ? `Faltan ${dias} días` : dias === 0 ? '¡Es hoy!' : 'Realizado'}
                 </span>
-                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+                <button onclick="eliminarEventoPromo('${ev.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer" aria-label="Eliminar">✕</button>
               </div>
               <h4 class="font-display text-sm font-bold text-[var(--wine-main)] truncate">${ev.title}</h4>
               <p class="text-xs text-[var(--text-muted)] mt-0.5 truncate">📍 ${ev.location}</p>
@@ -6696,7 +6707,7 @@
               ${comentarios.length === 0 ? '<div class="text-center opacity-75">Sé el primero en dejar una dedicatoria</div>' : comentarios.map(c => `
                 <div class="bg-white rounded-lg px-2.5 py-1.5 border border-[#e6d8b5] flex justify-between gap-2">
                   <span class="break-words"><strong>${c.author || ''}:</strong> ${c.text}</span>
-                  <button onclick="eliminarComentario(${index}, '${c.id}')" class="text-[var(--danger)] font-bold cursor-pointer">✕</button>
+                  <button onclick="eliminarComentario(${index}, '${c.id}')" class="text-[var(--danger)] font-bold cursor-pointer" aria-label="Eliminar">✕</button>
                 </div>`).join('')}
             </div>
             <form onsubmit="agregarComentario(event, ${index})" class="flex gap-1.5 min-w-0">
@@ -7114,7 +7125,7 @@
                   </div>
                   ${cat.description ? `<p class="text-xs text-[var(--text-muted)] mt-0.5">${cat.description}</p>` : ''}
                 </div>
-                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+                <button onclick="eliminarCategoriaPremio('${cat.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer" aria-label="Eliminar">✕</button>
               </div>
               <div class="space-y-2 my-3.5">
                 ${ordenados.length === 0
@@ -7260,7 +7271,7 @@
                 <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${abierta ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-[var(--bg-cream)] text-[var(--wine-main)] border border-[var(--gold-main)]'}">
                   ${abierta ? '✦ Carta Desbloqueada' : '🔒 Abre el ' + cap.unlockDate}
                 </span>
-                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer">✕</button>
+                <button onclick="eliminarCapsula('${cap.id}')" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-bold cursor-pointer" aria-label="Eliminar">✕</button>
               </div>
               <h3 class="font-display text-base font-bold text-[var(--wine-main)]">${cap.recipient}</h3>
               <p class="text-xs text-[var(--gold-main)] font-semibold mb-3">De: ${cap.author} · ${cap.createdAt}</p>
@@ -7309,7 +7320,7 @@
               <div class="text-xs text-[var(--text-muted)] mt-0.5 truncate">${h.artista} · <span class="text-[var(--wine-main)] font-semibold">${h.etiqueta || 'Himno'}</span></div>
             </div>
           </div>
-          <button onclick="eliminarHimno('${hid.replace(/'/g, "\\'")}', ${i})" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer shrink-0">✕</button>
+          <button onclick="eliminarHimno('${hid.replace(/'/g, "\\'")}', ${i})" class="text-xs text-[#b54a4a] hover:text-[var(--danger)] font-semibold cursor-pointer shrink-0" aria-label="Eliminar">✕</button>
         </div>
       `;
       }).join('');
