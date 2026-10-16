@@ -12,7 +12,7 @@
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {
-  getFirestore, doc, getDoc, setDoc, onSnapshot
+  getFirestore, doc, getDoc, setDoc, onSnapshot, runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut,
@@ -38,6 +38,67 @@ const COLECCION = 'promo';
 const DOCUMENTO = 'estado';
 const COLECCION_RESPALDOS = 'promo_respaldos';
 const LIMITE_BYTES = 950000; // Firestore admite ~1 MiB por documento
+
+
+/* ---------- Fusión de estados (evita que dos guardados simultáneos se pisen) ---------- */
+const MAX_BORRADOS = 1000;
+const claveItem = (x) => String((x && (x.id || x.url || ((x.name || '') + '_' + (x.date || '')))) || '');
+const claveId = (x) => String((x && x.id) || '');
+function estaBorrado(x, del) {
+  if (!x) return true;
+  if (x.id && del.has(String(x.id))) return true;
+  if (x.url && del.has(String(x.url))) return true;
+  if (x.fileId && del.has(String(x.fileId))) return true;
+  if (x.tgMessageId && del.has('tg_msg_' + x.tgMessageId)) return true;
+  return false;
+}
+function fusionarLista(local, nube, getKey, del) {
+  const mapa = new Map();
+  (nube || []).forEach(x => { if (!x || estaBorrado(x, del)) return; const k = getKey(x); if (k) mapa.set(k, x); });
+  (local || []).forEach(x => {
+    if (!x || estaBorrado(x, del)) return;
+    const k = getKey(x); if (!k) return;
+    const o = mapa.get(k);
+    if (!o || Number(x.updatedAt || 0) >= Number(o.updatedAt || 0)) mapa.set(k, x);
+  });
+  const salida = [], vistos = new Set();
+  (local || []).forEach(x => { const k = x && getKey(x); if (k && mapa.has(k) && !vistos.has(k)) { salida.push(mapa.get(k)); vistos.add(k); } });
+  mapa.forEach((v, k) => { if (!vistos.has(k)) salida.push(v); });
+  return salida;
+}
+function fusionarAlbumes(local, nube, del) {
+  const m = new Map();
+  [...(nube || []), ...(local || [])].forEach(a => {
+    const n = String((a && typeof a === 'object' ? a.name : a) || '').trim();
+    if (!n) return;
+    const low = n.toLowerCase();
+    if (del.has('alb_' + low) || m.has(low)) return;
+    m.set(low, a);
+  });
+  return Array.from(m.values());
+}
+function fusionarEstados(local, nube) {
+  const borrados = Array.from(new Set([...(nube.deletedIds || []), ...(local.deletedIds || [])].map(String))).slice(-MAX_BORRADOS);
+  const del = new Set(borrados);
+  const boveda = { ...(nube.titlesVault || {}) };
+  Object.entries(local.titlesVault || {}).forEach(([k, v]) => {
+    const o = boveda[k];
+    if (!o || Number((v && v.updatedAt) || 0) >= Number((o && o.updatedAt) || 0)) boveda[k] = v;
+  });
+  return {
+    ...local,
+    revision: Date.now(),
+    deletedIds: borrados,
+    albums: fusionarAlbumes(local.albums, nube.albums, del),
+    items: fusionarLista(local.items, nube.items, claveItem, del),
+    tweets: fusionarLista(local.tweets, nube.tweets, claveId, del),
+    members: fusionarLista(local.members, nube.members, claveId, del),
+    awards: fusionarLista(local.awards, nube.awards, claveId, del),
+    capsules: fusionarLista(local.capsules, nube.capsules, claveId, del),
+    events: fusionarLista(local.events, nube.events, claveId, del),
+    titlesVault: boveda
+  };
+}
 
 const sinConfigurar = Object.values(firebaseConfig).some(v => String(v).startsWith('PEGA_AQUI'));
 
@@ -98,15 +159,26 @@ if (sinConfigurar) {
 
     async guardarEstadoFirestore(payload) {
       await listo;
-      const datos = limpiar(payload);
-      const tamano = new Blob([JSON.stringify(datos)]).size;
-      if (tamano > LIMITE_BYTES) {
-        console.error('[EDM] El estado pesa ' + tamano + ' bytes y supera el límite de Firestore (~1 MiB). ' +
-          'No se guardó en la nube. Hay que dividir los datos en varios documentos.');
-        return false;
+      const local = limpiar(payload);
+      let final = null;
+      try {
+        await runTransaction(db, async (tx) => {
+          const snap = await tx.get(ref);
+          final = snap.exists() ? fusionarEstados(local, snap.data()) : local;
+          const tamano = new Blob([JSON.stringify(final)]).size;
+          if (tamano > LIMITE_BYTES) throw new Error('LIMITE_TAMANO:' + tamano);
+          tx.set(ref, limpiar(final));
+        });
+      } catch (e) {
+        if (String(e && e.message).startsWith('LIMITE_TAMANO')) {
+          console.error('[EDM] El estado supera el limite de Firestore (~1 MiB). No se guardo en la nube. ' +
+            'Hay que dividir los datos en varios documentos.', e.message);
+          return false;
+        }
+        throw e;
       }
-      await setDoc(ref, datos);
-      guardarRespaldoDiario(datos);
+      window.firebaseBridge.ultimoEstadoNube = final; // la pagina lo usa para mostrar lo que subieron otros
+      guardarRespaldoDiario(final);
       return true;
     },
 

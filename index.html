@@ -4111,6 +4111,27 @@
       mostrarToast(`¡Sincronizado con éxito! ${items.length} recuerdos y títulos están en vivo en Firebase.`);
     };
 
+    function reaplicarCambiosPrevios() {
+      let n = 0;
+      const subir = (lista, mapa, getKey) => {
+        if (!mapa) return;
+        mapa.forEach((obj, k) => {
+          if (!obj || deletedIds.has(k)) return;
+          const i = lista.findIndex(x => String(getKey(x)) === k);
+          if (i >= 0) lista[i] = obj; else lista.push(obj);
+          n++;
+        });
+      };
+      const c = cambiosActivosUsuario;
+      subir(items, c.items, obtenerIdItem);
+      subir(tweets, c.tweets, x => x.id);
+      subir(members, c.members, x => x.id);
+      subir(awards, c.awards, x => x.id);
+      subir(capsules, c.capsules, x => x.id);
+      subir(events, c.events, x => x.id);
+      if (n > 0) { cambiosPendientes = true; setTimeout(() => ejecutarSincronizacionNube(), 800); }
+    }
+
     let _firestoreUnsub = null;
 
     async function cargarDesdeNube(manual = false) {
@@ -4131,6 +4152,7 @@
           if (docData && typeof docData === 'object' && Array.isArray(docData.items) && docData.items.length > 0) {
             const parsed = normalizarRecordNube(docData);
             aplicarDeltasSobreNube(parsed);
+            if (!nubeCargada) reaplicarCambiosPrevios();
             sincronizadoConNube = true;
 
             // Si este navegador (por ejemplo la PC del usuario) tiene títulos, elementos, eventos o anécdotas en su instantánea local
@@ -4162,12 +4184,14 @@
                 });
               }
               if (Array.isArray(prevSnap.events) && prevSnap.events.length > 0) {
+                const idsNubeEv = new Set(events.map(ev => String(ev.id)));
                 events = fusionarListasPorId(prevSnap.events, events, ev => ev.id);
-                hayNuevosDatosLocales = true;
+                if (events.some(ev => !idsNubeEv.has(String(ev.id)))) hayNuevosDatosLocales = true;
               }
               if (Array.isArray(prevSnap.tweets) && prevSnap.tweets.length > 0) {
+                const idsNubeTw = new Set(tweets.map(t => String(t.id)));
                 tweets = fusionarListasPorId(prevSnap.tweets, tweets, t => t.id);
-                hayNuevosDatosLocales = true;
+                if (tweets.some(t => !idsNubeTw.has(String(t.id)))) hayNuevosDatosLocales = true;
               }
             }
 
@@ -4652,7 +4676,7 @@
     function prepararItemsParaGuardarNube(listaItems) {
       return (listaItems || [])
         .filter(it => it && it.url && !it.isHeavyVideo && !estaItemEliminado(it))
-        .slice(0, 750)
+        .slice(0, 1500)
         .map(it => {
           const applied = aplicarBovedaTitulosAItem({ ...it });
           return {
@@ -4716,17 +4740,30 @@
         if (fb) {
           try {
             guardadoFb = await fb.guardarEstadoFirestore(payload);
+            // Si otra persona subió algo a la vez, el puente lo fusionó: lo mostramos aquí (si no hay cambios nuevos en curso)
+            if (guardadoFb && fb.ultimoEstadoNube && !cambiosPendientes) {
+              aplicarDeltasSobreNube(normalizarRecordNube(fb.ultimoEstadoNube));
+            }
           } catch (e) {
             console.warn('Aviso al guardar en Firestore (continuando con persistencia local):', e);
           }
+        }
+
+        // Si la nube falló, reintentamos solos (hasta 5 veces) en lugar de quedarnos solo en local
+        if (fb && !guardadoFb) {
+          window.__reintentosNube = (window.__reintentosNube || 0) + 1;
+          if (window.__reintentosNube <= 5) cambiosPendientes = true;
+          else if (window.__reintentosNube === 6) mostrarToast('No se pudo guardar en la nube. Revisa tu conexión y recarga la página.');
+        } else {
+          window.__reintentosNube = 0;
         }
 
         // Si guardó en Firestore o en local, persistimos en LocalStorage
         guardarRespaldoLocal(false);
         renderTodo();
         nubeSincronizadaExito = true;
-        document.getElementById('statusText').innerText = guardadoFb ? 'Firebase guardado ✓' : 'Guardado local ✓';
-        document.getElementById('heroSyncBadge').innerText = guardadoFb ? 'En vivo ✓' : 'Guardado ✓';
+        document.getElementById('statusText').innerText = guardadoFb ? 'Firebase guardado ✓' : (fb ? '⚠ Solo guardado en este dispositivo' : 'Guardado local ✓');
+        document.getElementById('heroSyncBadge').innerText = guardadoFb ? 'En vivo ✓' : (fb ? '⚠ Sin nube' : 'Guardado ✓');
       } catch (e) {
         console.error('Error al sincronizar:', e);
         cambiosPendientes = true;
